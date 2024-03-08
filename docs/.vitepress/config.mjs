@@ -9,7 +9,7 @@ import {
 } from "./config/sidebar";
 
 export default defineConfig({
-  base: '/lucas.dev/',
+  base: '/LucasHsu.dev/',
   title: "LucasHsu.dev",
   description: "部落格&作品集&比賽事蹟&演算法筆記",
   head: [
