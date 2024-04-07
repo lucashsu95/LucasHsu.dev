@@ -22,8 +22,11 @@ Dijkstra演算法是一種用於解決**最短路徑問題**的演算法。它�
 ## 實做
 
 ```python
-def dijkstra():
+def dijkstra(maze):
     import heapq
+    
+    w = len(maze[0])
+    h = len(maze)
 
     pq = [(maze[0][0], 0, 0)]
     dist = [[float("inf")] * w for _ in range(h)]
@@ -59,11 +62,10 @@ graph = [
 ]
 
 # 選擇起點節點，這裡選擇節點0作為起點
-start_node = 0
 
-shortest_dists = dijkstra(graph, start_node)
+shortest_dists = dijkstra(graph)
 for node, dist in enumerate(shortest_dists):
-    print(f"從節點 {start_node} 到節點 {node} 的最短路徑長度是 {dist}")
+    print(f"從節點 0,0 到節點 {node} 的最短路徑長度是 {dist}")
 ```
 
 
