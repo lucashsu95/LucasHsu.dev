@@ -37,3 +37,16 @@
 7. TQC-英打-實用級
 8. TQC-中打-進階級
 
+## 相關報導
+
+### 技藝競賽-程式設計
+- [112全國商業技藝競賽 新北9金手28優勝 智光雙料冠軍 穀保年年獲獎-台灣TB新聞網 (tbnews.com.tw)](https://tbnews.com.tw/general/20231205-30546.html)
+- [112全國商業技藝競賽 新北學子獲9金手28優勝 (yahoo.com)](https://tw.news.yahoo.com/112%E5%85%A8%E5%9C%8B%E5%95%86%E6%A5%AD%E6%8A%80%E8%97%9D%E7%AB%B6%E8%B3%BD-%E6%96%B0%E5%8C%97%E5%AD%B8%E5%AD%90%E7%8D%B29%E9%87%91%E6%89%8B28%E5%84%AA%E5%8B%9D-060000626.html)
+- [112全國商業技藝競賽 選手挑戰自我爭取佳績 | 蕃新聞 (yam.com)](https://n.yam.com/Article/20231205381669)
+- [天外天新聞1121207 02穀保許恩綸 獲程式設計金手獎 (youtube.com)](https://www.youtube.com/watch?v=qnCFC7J_CZo)
+
+### 技能競賽-網頁技術
+- [9金11銀18銅共106個獎 新北全國北區青年技賽獲獎數全國最多 - 民眾網 (mypeoplevol.com)](https://www.mypeoplevol.com/Article/70713)
+- [新北榮獲全國北區青年技能競賽獲106個獎 表現優異囊括9金11銀18銅 - 社會新聞 - PChome Online 新聞](https://news.pchome.com.tw/society/twpowernews/20240409/index-17126477975461847002.html)
+- [新北持續培訓技職人才 榮獲全國北區青年技能競賽9金11銀18銅等共106個獎  | 大成報 Great News](https://greatnews.com.tw/home/news_pagein.php?iType=1010&n_id=291098)
+- [天外天新聞1130516 05技藝與體育 誕生「金」獎選手 - YouTube](https://www.youtube.com/watch?v=_le82MFKexw)
