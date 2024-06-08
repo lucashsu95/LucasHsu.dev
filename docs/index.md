@@ -21,12 +21,12 @@ features:
   - icon: 🎨
     title: Languages
     details: Python、JavaScript、PHP
-  - icon: 🚀
+  - icon: 🦭
     title: Skills
-    details: Jquery、Vue、Bootstrap5、Laravel
-  - icon: 🛠️
-    title: Tools
-    details: Git
+    details: Jquery、Bootstrap5、Vue、Laravel
+  - icon: 🚀
+    title: Future
+    details: Java、Docker
 
 head:
   - - meta

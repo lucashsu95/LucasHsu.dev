@@ -1,7 +1,7 @@
 export function sidebarPortfolio() {
   return [
     {
-      text: "網站Web",
+      text: "網站 Web",
       items: [
         { text: "網頁設計模版", link: "portfolio/網站Web/網頁設計模版", activeMatch: "portfolio/網站Web/網頁設計模版" },
         { text: "學生管理系統", link: "portfolio/網站Web/學生管理系統", activeMatch: "portfolio/網站Web/學生管理系統" },
@@ -19,7 +19,7 @@ export function sidebarPortfolio() {
       ],
     },
     {
-      text: "Python小工具",
+      text: "Python 小工具",
       items: [
         { text: "資料夾路徑README生成器", link: "portfolio/python小工具/資料夾路徑README生成器", activeMatch: "portfolio/python小工具/資料夾路徑README生成器" },
         { text: "檔案重新命名器", link: "portfolio/python小工具/檔案重新命名器", activeMatch: "portfolio/python小工具/檔案重新命名器" },
