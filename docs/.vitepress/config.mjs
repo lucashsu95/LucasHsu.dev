@@ -48,5 +48,6 @@ export default defineConfig({
       lazyLoading: true
     },
     // lineNumbers: true
+    math: true
   },
 });

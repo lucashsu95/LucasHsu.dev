@@ -2,6 +2,8 @@
 
 可能會用到的模組
 - [collections、heapq、PriorityQueue](../15-模組/)
+## 牛刀小試
+[a982. 迷宮問題#1](https://zerojudge.tw/ShowProblem?problemid=a982)
 
 ## 1. 迷宮問題#1
 

@@ -174,6 +174,10 @@ export function sidebarPythonNation() {
               text: "最短路徑",
               link: "/python/112全國技藝競賽筆記/12-圖形最短路徑演算法/最短路徑",
             },
+            {
+              text: "曼哈頓路徑",
+              link: "/python/112全國技藝競賽筆記/12-圖形最短路徑演算法/曼哈頓路徑",
+            },
           ],
         },
         {
@@ -260,6 +264,10 @@ export function sidebarPythonNation() {
           items: [
             {
               text: "一元二次方程式的根",
+              link: "/python/112全國技藝競賽筆記/16-其他/一元二次方程式的根",
+            },
+            {
+              text: "曼哈頓路徑",
               link: "/python/112全國技藝競賽筆記/16-其他/一元二次方程式的根",
             },
           ],

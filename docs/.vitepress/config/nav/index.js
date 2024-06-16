@@ -9,10 +9,10 @@ export function nav() {
           text: "新手上路系列",
           link: "/python/新手上路系列/",
         },
-        // {
-        //   text: "112全國技藝競賽筆記",
-        //   link: "/python/112全國技藝競賽筆記/",
-        // },
+        {
+          text: "112全國技藝競賽筆記",
+          link: "/python/112全國技藝競賽筆記/",
+        },
       ],
     },
     { text: "PHP", link: "/php/" },
