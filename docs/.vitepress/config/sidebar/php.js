@@ -4,6 +4,7 @@ export function sidebarPhp() {
             text: "Xampp",
             items: [
                 { text: "xampp 起手式｜下載xampp", link: "php/xampp起手式", activeMatch: "php/xampp起手式" },
+                { text: "xampp mysql mysql開不起來", link: "php/xampp-mysql-err", activeMatch: "php/xampp-mysql-err" },
             ],
         },
         {

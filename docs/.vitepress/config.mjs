@@ -6,6 +6,7 @@ import {
   sidebarPythonNoob,
   sidebarPortfolio,
   sidebarPhp,
+  sidebarCss,
 } from "./config/sidebar";
 
 export default defineConfig({
@@ -29,6 +30,7 @@ export default defineConfig({
       "/python/新手上路系列": sidebarPythonNoob(),
       "/portfolio/": sidebarPortfolio(),
       "/php/": sidebarPhp(),
+      "/css/": sidebarCss(),
       "/git/": sidebarGit(),
     },
     docFooter: {

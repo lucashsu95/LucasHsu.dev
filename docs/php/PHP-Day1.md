@@ -37,11 +37,11 @@ vscode左上角裡有個`檔案`、`開啟資料夾`
 # xampp/htdocs/web01/index.php
 
 <?php
-echo 123;
+echo <h1>123</h1>;
 ?>
 ```
 
-## 結果 Result
+## 結果
 
 打開chrome或是其他遊覽器都可
 

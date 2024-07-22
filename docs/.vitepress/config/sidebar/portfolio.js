@@ -19,7 +19,7 @@ export function sidebarPortfolio() {
       ],
     },
     {
-      text: "Python 小工具",
+      text: "Python 工具",
       items: [
         { text: "資料夾路徑README生成器", link: "portfolio/python小工具/資料夾路徑README生成器", activeMatch: "portfolio/python小工具/資料夾路徑README生成器" },
         { text: "檔案重新命名器", link: "portfolio/python小工具/檔案重新命名器", activeMatch: "portfolio/python小工具/檔案重新命名器" },

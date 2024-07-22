@@ -4,7 +4,7 @@ layout: home
 hero:
   name: "LucasHsu.dev"
   text: "部落格&作品集&比賽事蹟&演算法筆記"
-  tagline: Everything is fine. This is Life.🐛
+  tagline: Everything is fine. This is life.🪲 <br> I dont't really like coding. 🐛
   image: /logo/avatar.gif
   actions:
     - theme: brand

@@ -48,6 +48,17 @@ outline: deep
     ```php
     ksort($person);
     ```
+
+    - 使用 `usort()` 函數，這會對關聯陣列按照鍵進行降序排序。
+    
+    ```php
+    usort($person,function($a,$b) {
+        if($a['date'] == $b['date']){
+            return $a['time'] - $b['time'];
+        }
+        return $a['date'] - $b['date'];
+    });
+    ```
     
     - #### 4-1 降序排序
         
@@ -75,6 +86,7 @@ outline: deep
             ```php
             krsort($person);
             ```
+
             
     - #### 4-2 關聯陣列中的 key 和 value 位置顛倒
     
