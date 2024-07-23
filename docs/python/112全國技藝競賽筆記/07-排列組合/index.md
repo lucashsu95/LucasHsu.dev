@@ -58,4 +58,4 @@ print(a)
 ## itertools 高級迭帶器
 
 可以自己寫,但也可以引用別人己經做好的
-[連結](../15-模組/components/itertools.md)
+[連結](../14-模組/components/itertools)
