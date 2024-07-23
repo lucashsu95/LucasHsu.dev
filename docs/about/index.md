@@ -1,13 +1,13 @@
 # 關於我
-高職畢業於穀保家商，興趣是寫[程式](https://d1dwq032kyr03c.cloudfront.net/upload/images/20230308/2015530772u2KtINPD.png)、聽[音樂](https://www.youtube.com/watch?v=H88kps8X4Mk)和看[動漫](https://www.youtube.com/watch?v=2QDwgqMKk5w)，這裡放了一點程式筆記和作品集，不定期更新。
+高職畢業於穀保家商，目前就讀國立台北商業大學資訊管理系，興趣是寫[程式](https://d1dwq032kyr03c.cloudfront.net/upload/images/20230308/2015530772u2KtINPD.png)、聽[音樂](https://www.youtube.com/watch?v=H88kps8X4Mk)和看[動漫](https://www.youtube.com/watch?v=2QDwgqMKk5w)，這裡放了一點程式筆記和作品集，不定期更新。
 
 ## 🐛 程式競賽
 1. **第54屆全國技能競賽(全國賽)(第三名)**
 2. **第54屆全國技能競賽(北區賽)(第一名)**
 3. 第53屆全國技能競賽(全國賽)(佳作)
-4. **第53屆全國技能競賽(北區賽)(第四名)**
+4. 第53屆全國技能競賽(北區賽)(第四名)
 5. 第52屆全國技能競賽(北區賽)(佳作)
-6. 112全國技藝競賽-程式設計(金手獎第四名)
+6. **112全國技藝競賽-程式設計(金手獎第四名)**
 7. 112年TQC資訊月python程式設計(北區第二名)(全國優勝)
     
 ## 🦥 專題競賽
@@ -23,9 +23,8 @@
 4. TQC-Word2016-進階級
    
 ## 其它
-1.  [開發穀保家商學校校網設備故障報修系統](https://repair.kpvs.ntpc.edu.tw/kpvsequ/)
-2.  [開發穀保家商學校專業教室借用預約系統](https://repair.kpvs.ntpc.edu.tw/reserve-system/)
-
+1.  [開發穀保家商學校校網設備故障報修系統](https://repair.kpvs.ntpc.edu.tw/repair-system/)
+2.  [開發穀保家商學校專業教室借用預約系統](https://repair.kpvs.ntpc.edu.tw/booking-system-frontend/)
 
 ## 相關報導
 

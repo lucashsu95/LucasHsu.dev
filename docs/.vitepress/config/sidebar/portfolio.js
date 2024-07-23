@@ -7,6 +7,8 @@ export function sidebarPortfolio() {
         { text: "學生管理系統", link: "portfolio/網站Web/學生管理系統", activeMatch: "portfolio/網站Web/學生管理系統" },
         { text: "俄羅斯方塊", link: "portfolio/網站Web/俄羅斯方塊", activeMatch: "portfolio/網站Web/俄羅斯方塊" },
         { text: "穀保家商2024成果展網站", link: "portfolio/網站Web/穀保家商2024成果展網站", activeMatch: "portfolio/網站Web/穀保家商2024成果展網站" },
+        { text: "二元樹結構產生器", link: "portfolio/網站Web/二元樹結構產生器", activeMatch: "portfolio/網站Web/二元樹結構產生器" },
+        { text: "圈圈差差", link: "portfolio/網站Web/圈圈差差", activeMatch: "portfolio/網站Web/圈圈差差" },
 
       ],
     },

@@ -23,7 +23,7 @@ export default defineConfig({
     ],
   ],
   themeConfig: {
-    logo: "/logo/favicon.ico",
+    logo: "Lucashsu.dev/logo/favicon.ico",
     nav: nav(),
     sidebar: {
       "/python/112全國技藝競賽筆記": sidebarPythonNation(),

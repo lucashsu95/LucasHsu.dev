@@ -1,4 +1,4 @@
-# 05-堆疊stack 後進先出(LIFO)
+# 堆疊stack 後進先出(LIFO)
 
 ![](./image.png)
 
