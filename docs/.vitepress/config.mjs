@@ -18,7 +18,7 @@ export default defineConfig({
       "link",
       {
         rel: "icon",
-        href: "/Lucashsu.dev/logo/favicon.ico",
+        href: "/LucasHsu.dev/logo/favicon.ico",
       },
     ],
   ],
