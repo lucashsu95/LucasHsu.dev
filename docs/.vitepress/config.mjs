@@ -18,12 +18,12 @@ export default defineConfig({
       "link",
       {
         rel: "icon",
-        href: "/logo/favicon.ico",
+        href: "/Lucashsu.dev/logo/favicon.ico",
       },
     ],
   ],
   themeConfig: {
-    logo: "Lucashsu.dev/logo/favicon.ico",
+    logo: "/logo/favicon.ico",
     nav: nav(),
     sidebar: {
       "/python/112全國技藝競賽筆記": sidebarPythonNation(),
