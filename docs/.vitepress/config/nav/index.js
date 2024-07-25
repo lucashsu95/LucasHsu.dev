@@ -16,6 +16,7 @@ export function nav() {
       ],
     },
     { text: "PHP", link: "/php/" },
+    { text: "JS", link: "/javascript/" },
     { text: "CSS", link: "/css/" },
     { text: "GIT", link: "/git/" },
     { text: "作品集", link: "/portfolio/" },
