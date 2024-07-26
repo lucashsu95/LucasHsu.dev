@@ -6,4 +6,4 @@ outline: deep
 
 [DEMO](https://lucashsu95.github.io/webDesign/chat/chat.html)
 
-![alt text](image.png)
+![alt text](assets/image.png)
