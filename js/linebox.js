@@ -1,5 +1,6 @@
+(() => {
 
-const style = `
+    const style = `
 #preview-image {
     padding:0 20px;
     position: fixed;
@@ -42,47 +43,49 @@ const style = `
 }
 `
 
-const styleTag = document.createElement('style')
-styleTag.innerHTML = style
-document.head.appendChild(styleTag)
+    const styleTag = document.createElement('style')
+    styleTag.innerHTML = style
+    document.head.appendChild(styleTag)
 
-const imgs = document.querySelectorAll('.content-container img');
+    const imgs = document.querySelectorAll('.content-container img');
 
-const previewDiv = document.createElement('div')
-previewDiv.id = 'preview-image'
-previewDiv.innerHTML = `
+    const previewDiv = document.createElement('div')
+    previewDiv.id = 'preview-image'
+    previewDiv.innerHTML = `
     <div class="bg"></div>
     <button class="left"><img src='/LucasHsu.dev/icon/left-arrow.png' alt='&lt;'></button>
     <img src="" alt="">
     <button class="right"><img src='/LucasHsu.dev/icon/right-arrow.png' alt='&gt;'></button>
 `
-document.body.appendChild(previewDiv)
 
-const preview = document.querySelector('#preview-image')
-const srcAry = [];
-const currentImg = document.querySelector('#preview-image > img')
-let currentImgIdx = 0
+    document.body.appendChild(previewDiv)
 
-imgs.forEach((img, index) => {
-    srcAry.push(img.src)
-    img.addEventListener('click', () => {
-        currentImgIdx = index
-        preview.style.display = 'flex'
+    const preview = document.querySelector('#preview-image')
+    const srcAry = [];
+    const currentImg = document.querySelector('#preview-image > img')
+    let currentImgIdx = 0
+
+    imgs.forEach((img, index) => {
+        srcAry.push(img.src)
+        img.addEventListener('click', () => {
+            currentImgIdx = index
+            preview.style.display = 'flex'
+            currentImg.src = srcAry[currentImgIdx]
+        })
+    })
+
+    const len = srcAry.length - 1;
+
+    // console.log(len);
+    document.querySelector('#preview-image > .bg').addEventListener('click', () => {
+        preview.style.display = 'none';
+    })
+    document.querySelector('#preview-image > .left').addEventListener('click', () => {
+        currentImgIdx = currentImgIdx === 0 ? len : currentImgIdx - 1;
         currentImg.src = srcAry[currentImgIdx]
     })
-})
-
-const len = srcAry.length - 1;
-
-// console.log(len);
-document.querySelector('#preview-image > .bg').addEventListener('click', () => {
-    preview.style.display = 'none';
-})
-document.querySelector('#preview-image > .left').addEventListener('click', () => {
-    currentImgIdx = currentImgIdx === 0 ? len : currentImgIdx - 1;
-    currentImg.src = srcAry[currentImgIdx]
-})
-document.querySelector('#preview-image > .right').addEventListener('click', () => {
-    currentImgIdx = currentImgIdx === len ? 0 : currentImgIdx + 1;
-    currentImg.src = srcAry[currentImgIdx]
-})
+    document.querySelector('#preview-image > .right').addEventListener('click', () => {
+        currentImgIdx = currentImgIdx === len ? 0 : currentImgIdx + 1;
+        currentImg.src = srcAry[currentImgIdx]
+    })
+})()
