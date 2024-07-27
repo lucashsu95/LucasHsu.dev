@@ -27,3 +27,9 @@
 .vp-doc h2 {
     font-weight: 700;
 }
+
+
+.content-container img {
+    border-radius: 5px;
+    box-shadow: 2px 3px 10px #666d;
+}

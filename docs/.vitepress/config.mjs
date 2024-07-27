@@ -22,6 +22,7 @@ export default defineConfig({
         href: "/LucasHsu.dev/logo/favicon.ico",
       },
     ],
+    ['script',{src:'/LucasHsu.dev/js/linebox.js'}],
   ],
   themeConfig: {
     logo: "/logo/favicon.ico",

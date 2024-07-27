@@ -14,5 +14,11 @@ export function sidebarPhp() {
                 { text: "Day1", link: "php/PHP-Day1", activeMatch: "php/PHP-Day1" },
             ],
         },
+        {
+            text: "SQL",
+            items: [
+                { text: "JOIN 關聯式", link: "php/sql-join", activeMatch: "php/sql-join" },
+            ],
+        },
     ];
 }

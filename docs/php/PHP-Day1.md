@@ -8,26 +8,26 @@
 
 ## 新增資料夾
 
-預設xampp會在C槽
+預設`xampp`會在C槽
 
-打開xampp裡的htdocs
+打開`xampp`裡的`htdocs`
 
-在htdocs裡創一個資料夾web01
+在`htdocs`裡創一個資料夾`web01`
 
 先打開vscode
 
 vscode左上角裡有個`檔案`、`開啟資料夾`
-然後去選剛剛建立好的web01
+然後去選剛剛建立好的`web01`
 
 之後在按確定
 
 ~~要是找不到請去洗眼睛~~
 
-![Untitled](public/Untitled.png)
+![Untitled](./assets/php-day1/Untitled.png)
 
 ## 創檔案寫程式
 
-在web01的資料夾裡創個檔案index.php
+在`web01`的資料夾裡創個檔案index.php
 
 要寫php的話要在`<?php   ?>`裡面寫
 
@@ -45,6 +45,6 @@ echo <h1>123</h1>;
 
 打開chrome或是其他遊覽器都可
 
-在網址列上打localhost/web01
+在網址列上打`localhost/web01`
 
 就可以看到123了
