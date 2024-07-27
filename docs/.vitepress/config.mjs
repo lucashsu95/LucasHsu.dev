@@ -22,7 +22,13 @@ export default defineConfig({
         href: "/LucasHsu.dev/logo/favicon.ico",
       },
     ],
-    ['script',{src:'/LucasHsu.dev/js/linebox.js'}],
+    [
+      'script',
+      {
+        src: '/LucasHsu.dev/js/linebox.js',
+        defer: true, // 確保腳本在 DOM 加載後執行
+      }
+    ],
   ],
   themeConfig: {
     logo: "/logo/favicon.ico",
