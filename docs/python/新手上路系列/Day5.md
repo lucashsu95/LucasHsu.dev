@@ -2,7 +2,6 @@
 outline: "deep"
 ---
 
-</style>
 # python-新手上路-Day5｜List
 
 > 程式設計師的生物鐘只有兩個狀態：coding和還沒寫完的coding。
