@@ -1,6 +1,0 @@
-import{_ as a,c as s,o as e,V as n}from"./chunks/framework.Y2m55Jsw.js";const t="/LucasHsu.dev/assets/image._LEghnvj.png",g=JSON.parse('{"title":"二元樹結構產生器","description":"","frontmatter":{},"headers":[],"relativePath":"portfolio/網站Web/二元樹結構產生器.md","filePath":"portfolio/網站Web/二元樹結構產生器.md","lastUpdated":1722092170000}'),p={name:"portfolio/網站Web/二元樹結構產生器.md"},o=n(`<h1 id="二元樹結構產生器" tabindex="-1">二元樹結構產生器 <a class="header-anchor" href="#二元樹結構產生器" aria-label="Permalink to &quot;二元樹結構產生器&quot;">​</a></h1><p>可以輸入</p><div class="language- vp-adaptive-theme"><button title="Copy Code" class="copy"></button><span class="lang"></span><pre class="shiki shiki-themes vitesse-light vitesse-dark vp-code"><code><span class="line"><span>a b</span></span>
-<span class="line"><span>a c</span></span>
-<span class="line"><span>b d</span></span>
-<span class="line"><span>b e</span></span>
-<span class="line"><span>c f</span></span>
-<span class="line"><span>c g</span></span></code></pre></div><p><img src="`+t+'" alt="alt text" loading="lazy"></p><p><a href="https://create-tree.vercel.app/" target="_blank" rel="noreferrer">DEMO</a></p>',5),l=[o];function c(r,i,_,d,h,f){return e(),s("div",null,l)}const u=a(p,[["render",c]]);export{g as __pageData,u as default};
