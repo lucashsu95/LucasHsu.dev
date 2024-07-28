@@ -103,6 +103,10 @@ export function sidebarPythonNation() {
           collapsed: true,
           items: [
             {
+              text: "深度和廣度優先搜索",
+              link: "/python/112全國技藝競賽筆記/03-搜尋法/DFS-and-BFS",
+            },
+            {
               text: "二元樹",
               link: "/python/112全國技藝競賽筆記/08-樹Tree/二元樹",
             },
@@ -224,7 +228,7 @@ export function sidebarPythonNation() {
             },
           ],
         },
-        
+
         {
           text: "14-模組",
           collapsed: true,
