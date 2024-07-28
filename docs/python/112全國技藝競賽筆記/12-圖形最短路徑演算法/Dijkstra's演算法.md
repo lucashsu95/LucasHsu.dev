@@ -1,7 +1,5 @@
 # 戴克斯特拉 Dijkstra's演算法
 
-- [達標好文 [演算法] 最短路徑 (Dijkstra 演算法)](https://ithelp.ithome.com.tw/articles/10209593)
-
 ## 介紹
 
 Dijkstra演算法是一種用於解決**最短路徑問題**的演算法。它可以用來找出從一個起點到所有其他節點的最短路徑，或者找出兩個特定節點之間的最短路徑。Dijkstra演算法通常應用在以下情況：
@@ -14,13 +12,19 @@ Dijkstra演算法是一種用於解決**最短路徑問題**的演算法。它�
 
 4. **最短路徑查詢**：你可以使用Dijkstra演算法來回答特定節點對之間的最短路徑查詢，例如找到兩個城市之間的最短路徑。
 
-5. **最小生成樹**：Dijkstra演算法的變體也可用於構建最小生成樹，這在最小生成樹問題中非常有用，也可以使用[併查集 Disjoint Set 與 Union Find](../08-樹Tree/最小成本生成樹.md)。
+5. **最小生成樹**：Dijkstra演算法的變體也可用於<span class='m'>構建最小生成樹</span>，這在最小生成樹問題中非常有用，也可以使用[併查集 Disjoint Set 與 Union Find](../08-樹Tree/最小成本生成樹.md)。
 
-需要注意的是，Dijkstra演算法無法處理包含負權重邊的圖，如果圖中存在負權重邊，則可能需要使用[貝爾曼-福德(Bellman–Ford)演算法](./Bellman–Ford演算法.md)。此外，對於密集圖和大型圖，Dijkstra演算法的效能可能不佳，而其他演算法如A*搜索等可能更為適用。
+需要注意的是，Dijkstra演算法<span class='m'>無法處理包含負權重</span>邊的圖，如果圖中存在負權重邊，則可能需要使用[貝爾曼-福德(Bellman–Ford)演算法](./Bellman–Ford演算法.md)。此外，對於<span class='m'>密集圖和大型圖，Dijkstra演算法的效能可能不佳</span>，而其他演算法如`A*搜索`等可能更為適用。
 
 
-## 實做
+## 學習資源
+- [達標好文 [演算法] 最短路徑 (Dijkstra 演算法)](https://ithelp.ithome.com.tw/articles/10209593)
 
+## 牛刀小試
+Leetcode的
+- [2045. Second Minimum Time to Reach Destination](https://leetcode.com/problems/second-minimum-time-to-reach-destination/description/?envType=daily-question&envId=2024-07-28)~~這題好像用BFS就可以做了...但我還是要放~~
+
+## 程式碼範例
 ```python
 def dijkstra(maze):
     import heapq
@@ -69,9 +73,8 @@ for node, dist in enumerate(shortest_dists):
 ```
 
 
-### Dijkstra 程式碼
+## 程式碼範例2
 ```python
-# Dijkstra 程式碼範例
 import heapq
 
 def dijkstra(graph, start):

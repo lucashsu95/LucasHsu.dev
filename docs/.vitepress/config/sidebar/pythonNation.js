@@ -169,20 +169,20 @@ export function sidebarPythonNation() {
           collapsed: true,
           items: [
             {
-              text: "Bellman–Ford演算法",
-              link: "/python/112全國技藝競賽筆記/12-圖形最短路徑演算法/Bellman–Ford演算法",
+              text: "最短路徑",
+              link: "/python/112全國技藝競賽筆記/12-圖形最短路徑演算法/最短路徑",
             },
             {
               text: "Dijkstra's演算法",
               link: "/python/112全國技藝競賽筆記/12-圖形最短路徑演算法/Dijkstra's演算法",
             },
             {
-              text: "Floyd-Warshall",
-              link: "/python/112全國技藝競賽筆記/12-圖形最短路徑演算法/Floyd-Warshall",
+              text: "Bellman–Ford演算法",
+              link: "/python/112全國技藝競賽筆記/12-圖形最短路徑演算法/Bellman–Ford演算法",
             },
             {
-              text: "最短路徑",
-              link: "/python/112全國技藝競賽筆記/12-圖形最短路徑演算法/最短路徑",
+              text: "Floyd-Warshall",
+              link: "/python/112全國技藝競賽筆記/12-圖形最短路徑演算法/Floyd-Warshall",
             },
             {
               text: "曼哈頓路徑",
