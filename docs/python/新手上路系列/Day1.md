@@ -4,11 +4,6 @@ outline: {
 }
 ---
 
-<style>
-.m{
-    color:tomato;
-}
-</style>
 
 # python-新手上路-Day1｜變數｜if...else
 

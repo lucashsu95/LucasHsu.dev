@@ -1,17 +1,13 @@
 ---
 outline: "deep"
 ---
-<style>
-.mm {
-    color:tomato;
-    font-weight:bold;
-}
+
 </style>
 # python-新手上路-Day6｜dict｜set
 
 > 字典就像是程式設計的魔法書，只要知道了魔咒（鍵），就能召喚出所需的魔法（值）
 
-今天要講的是python 的兩個形態一個是<span class='mm'>字典dict</span>一個是<span class='mm'>集合set</span>
+今天要講的是python 的兩個形態一個是<span class='m'>字典dict</span>一個是<span class='m'>集合set</span>
 
 ## 字典（Dictionary）介紹
 
@@ -19,7 +15,7 @@ outline: "deep"
 key：value
 :::
 
-字典是 Python 中的一種<span class='mm'>資料結構</span>，用於儲存<span class='mm'>鍵（key）</span>與相應的<span class='mm'>值（value）</span>之間的映射關係。
+字典是 Python 中的一種<span class='m'>資料結構</span>，用於儲存<span class='m'>鍵（key）</span>與相應的<span class='m'>值（value）</span>之間的映射關係。
 
 字典的特點包括：
 
@@ -37,7 +33,7 @@ student_scores = {
 }
 ```
 
-在這個示例中，student_scores 是一個字典，每個學生的名字作為鍵，他們的分數作為<span class='mm'>值</span>。你可以通過<span class='mm'>鍵</span>來訪問每個學生的分數，例如 student_scores["Alice"] 將返回 85。
+在這個示例中，student_scores 是一個字典，每個學生的名字作為鍵，他們的分數作為<span class='m'>值</span>。你可以通過<span class='m'>鍵</span>來訪問每個學生的分數，例如 student_scores["Alice"] 將返回 85。
 
 ### 字典的操作範例
 
@@ -137,7 +133,7 @@ english_dictionary = {
 > 集合就像是一場派對，每個人都只能來一次，不管你有多少個相同的名牌。
 
 ::: danger 重要特性
-集合是一種用於存儲多個獨一無二元素的數據結構，它不允許<span class='mm'>重複的值</span>存在其中。在程式設計中，集合常常用於需要確保元素唯一性的場合。
+集合是一種用於存儲多個獨一無二元素的數據結構，它不允許<span class='m'>重複的值</span>存在其中。在程式設計中，集合常常用於需要確保元素唯一性的場合。
 :::
 
 ### 集合的操作範例
@@ -161,7 +157,7 @@ my_set.discard(2)
 ### 集合操作
 > 集合的交集就像是朋友的共同興趣，如果你們共同喜歡吃披薩，那就是你們的交集。
 
-你可以進行集合間的<span class='mm'>交集、聯集、差集</span>等操作。
+你可以進行集合間的<span class='m'>交集、聯集、差集</span>等操作。
 ```py
 set1 = {1, 2, 3, 4, 5}
 set2 = {4, 5, 6, 7, 8}

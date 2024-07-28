@@ -3,9 +3,9 @@ export function sidebarCss() {
       {
         text: 'Css',
         items: [
-
-        //   { text: '導覽列', link: '/css/navbar', activeMatch: '/css/navbar' },
-        //   { text: '響應式', link: '/css/rwd', activeMatch: '/css/rwd' },
+          { text: '關於『&』', link: '/css/關於『&』', activeMatch: '/css/關於『&』' },
+          { text: 'Clamp', link: '/css/clamp', activeMatch: '/css/clamp' },
+          { text: 'Background', link: '/css/background', activeMatch: '/css/background' },
         ],
       },
     ];

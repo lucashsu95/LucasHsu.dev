@@ -1,10 +1,7 @@
 ---
 outline: "deep"
 ---
-<style>
-.mm {
-    color:tomato;
-}
+
 </style>
 # python-新手上路-Day5｜List
 
