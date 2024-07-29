@@ -2,7 +2,6 @@
 outline: "deep"
 ---
 
-</style>
 # python-新手上路-Day6｜dict｜set
 
 > 字典就像是程式設計的魔法書，只要知道了魔咒（鍵），就能召喚出所需的魔法（值）
