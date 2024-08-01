@@ -4,7 +4,7 @@ layout: home
 hero:
   name: "LucasHsu.dev"
   text: "部落格&作品集&比賽事蹟&演算法筆記"
-  tagline: Everything is fine. This is life.🪲 <br> I dont't really like coding. 🐛
+  tagline: Everything is fine. This is life.🪲 <br>I dont't really like coding.
   image: /logo/avatar.gif
   actions:
     - theme: brand
@@ -15,18 +15,18 @@ hero:
       link: https://github.com/lucashsu95
 
 features:
-  - icon: 💡
-    title: About Me
-    details: 哈哈
-  - icon: 🎨
+  - icon: 🐛
     title: Languages
-    details: Python、JavaScript、PHP
-  - icon: 🦭
+    details: Python、PHP、JS、Java
+  - icon: 🔥
     title: Skills
-    details: Jquery、Bootstrap5、Vue、Laravel
+    details: Vue、Bootstrap5、Laravel、React、Tailwind
+  - icon: 🛠
+    title: Tools
+    details: GIT、Docker
   - icon: 🚀
     title: Future
-    details: Java、Docker
+    details: Golang、C#、TS
 
 head:
   - - meta

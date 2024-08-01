@@ -4,8 +4,6 @@ output: "deep"
 
 # python-新手上路-Day0｜建置環境
 
-
-
 ## 這一篇會學到的
 
 1. 安裝python
@@ -21,11 +19,8 @@ output: "deep"
 點exe檔 之後就會看到視窗下方有兩行，把那兩個框框抅起來
 :::
 
-
-
 ## 安裝環境、編輯器
 [安裝vscode](安裝vscode)
-
 
 ## print()
 

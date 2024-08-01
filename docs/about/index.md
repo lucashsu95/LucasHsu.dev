@@ -1,30 +1,36 @@
-# 關於我
-高職畢業於穀保家商，目前就讀國立台北商業大學資訊管理系，興趣是寫[程式](https://d1dwq032kyr03c.cloudfront.net/upload/images/20230308/2015530772u2KtINPD.png)、聽[音樂](https://www.youtube.com/watch?v=H88kps8X4Mk)和看[動漫](https://www.youtube.com/watch?v=2QDwgqMKk5w)，這裡放了一點程式筆記和作品集，不定期更新。
+---
+outline: "deep"
+---
 
-## 🐛 程式競賽
-1. **第54屆全國技能競賽(全國賽)(第三名)**
-2. **第54屆全國技能競賽(北區賽)(第一名)**
-3. 第53屆全國技能競賽(全國賽)(佳作)
-4. 第53屆全國技能競賽(北區賽)(第四名)
-5. 第52屆全國技能競賽(北區賽)(佳作)
-6. **112全國技藝競賽-程式設計(金手獎第四名)**
-7. 112年TQC資訊月python程式設計(北區第二名)(全國優勝)
+# 關於我
+高職畢業於穀保家商，目前就讀國立台北商業大學-資訊管理系，興趣是寫[程式](https://d1dwq032kyr03c.cloudfront.net/upload/images/20230308/2015530772u2KtINPD.png)、聽[音樂](https://www.youtube.com/watch?v=H88kps8X4Mk)和看[動漫](https://www.youtube.com/watch?v=2QDwgqMKk5w)，這裡放了一點程式筆記和作品集，不定期更新。
+
+## 競賽
+### 🐛 程式
+1. 第54屆全國技能競賽(全國賽)(第三名)🔥
+2. 第54屆全國技能競賽(北區賽)(第一名)
+3. 112全國技藝競賽-程式設計(金手獎第四名)🔥
+4. 112年TQC資訊月python程式設計(北區第二名)(全國優勝)
     
-## 🦥 專題競賽
-1.  112年度全國高級中等學校專業群科專題及創意製作競賽(複賽優勝，決賽入選)
-2.  112年度景文全國專題(第五名)
-3.  112年德明財經科技大學策略聯盟高中職專題製作競賽(第四名)
+### 🎉 專題
+1.  112年度全國高級中等學校專業群科專題及創意製作競賽(複賽優勝，決賽入選)🔥
+2.  2024 景文科技大學 全國高中職專題競賽(第三名)
+3.  2024 COOL酷酷比城市盃全國大專校(第二名)
 4.  111年度城市盃專題製作競賽(特優)
 
-## 🔥 烤證照
-1. 乙级技術士證照-網頁設計
+### 👍 其它
+1.  112全國技藝教育績優人員
+2.  112教育部人文社會永續行動創新應用競賽(優選)🔥
+
+## 🧯 烤證照
+1. 乙级技術士證照-網頁設計🔥
 2. 乙级技術士證照-電腦軟體應用
 3. PVQC專業英文詞彙證照-計算機概論
 4. TQC-Word2016-進階級
    
-## 其它
-1.  [開發穀保家商學校校網設備故障報修系統](https://repair.kpvs.ntpc.edu.tw/repair-system/)
-2.  [開發穀保家商學校專業教室借用預約系統](https://repair.kpvs.ntpc.edu.tw/booking-system-frontend/)
+## 🔧 系統(目前有被人使用的)
+1.  [開發穀保家商學校校網設備故障報修系統](https://repair.kpvs.ntpc.edu.tw/repair-system/)🔥
+2.  [開發穀保家商學校專業教室借用預約系統](https://repair.kpvs.ntpc.edu.tw/booking-system-frontend/)🔥
 
 ## 相關報導
 
@@ -39,3 +45,6 @@
 - [新北榮獲全國北區青年技能競賽獲106個獎 表現優異囊括9金11銀18銅 - 社會新聞 - PChome Online 新聞](https://news.pchome.com.tw/society/twpowernews/20240409/index-17126477975461847002.html)
 - [新北持續培訓技職人才 榮獲全國北區青年技能競賽9金11銀18銅等共106個獎  | 大成報 Great News](https://greatnews.com.tw/home/news_pagein.php?iType=1010&n_id=291098)
 - [天外天新聞1130516 05技藝與體育 誕生「金」獎選手 - YouTube](https://www.youtube.com/watch?v=_le82MFKexw)
+
+### 人文社會永續行動創新應用競賽
+- [鼓勵人文社會學生創新應用 教育部首辦競賽](https://news.ltn.com.tw/news/life/breakingnews/4604885)
