@@ -17,21 +17,22 @@ hero:
 features:
   - icon: 🐛
     title: Languages
-    details: Python、PHP、JS、Java
+    details: <img src="https://skillicons.dev/icons?perline=4&theme=light&i=python,html,css,js,php" class="icon-img">
   - icon: 🔥
-    title: Skills
-    details: Vue、Bootstrap5、Laravel、React、Tailwind
+    title: Framework & Library
+    details:  <img src="https://skillicons.dev/icons?perline=4&theme=light&i=vue,pinia,bootstrap,laravel" class="icon-img">
   - icon: 🛠
-    title: Tools
-    details: GIT、Docker
+    title: Skills & Tools
+    details: <img src="https://skillicons.dev/icons?perline=4&theme=light&i=vscode,phpstorm,ps,ai,figma,notion,git,docker" class="icon-img">
   - icon: 🚀
     title: Future
-    details: Golang、C#、TS
+    details: <img src="https://skillicons.dev/icons?perline=4&theme=light&i=nginx,django,go,dotnet,ts" class="icon-img">
+
 
 head:
   - - meta
     - name: keywords
-      content: 許恩綸,LucasHsu,python,vue,web
+      content: 許恩綸,LucasHsu,lucashsu95
   - - meta
     - name: author
       content: LucasHsu

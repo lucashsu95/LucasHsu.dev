@@ -32,6 +32,9 @@ outline: "deep"
 1.  [開發穀保家商學校校網設備故障報修系統](https://repair.kpvs.ntpc.edu.tw/repair-system/)🔥
 2.  [開發穀保家商學校專業教室借用預約系統](https://repair.kpvs.ntpc.edu.tw/booking-system-frontend/)🔥
 
+## ☕ In Learing
+<img src="https://skillicons.dev/icons?perline=4&theme=light&i=java,react,tailwind,spring" class="icon-img">
+
 ## 相關報導
 
 ### 技藝競賽-程式設計

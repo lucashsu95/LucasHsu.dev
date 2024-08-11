@@ -34,7 +34,15 @@
     box-shadow: 2px 3px 10px #666d;
 }
 
-.m{
-    color:tomato;
-    font-weight:700;
+.m {
+    color: tomato;
+    font-weight: 700;
+}
+
+.image-src {
+    border-radius: 50%;
+}
+
+.icon-img {
+    box-shadow: none !important;
 }
