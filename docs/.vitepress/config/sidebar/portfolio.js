@@ -3,17 +3,17 @@ export function sidebarPortfolio() {
     {
       text: "全國技能競賽",
       items: [
-        { text: "52屆 模組E Frontend", link: "portfolio/web-global/52_Module_E_Frontend", activeMatch: "portfolio/web-global/52_Module_E_Frontend" },
+        { text: "49屆 模組A 俄羅斯方塊", link: "portfolio/web-global/49_Module_A_Game", activeMatch: "portfolio/web-global/49_Module_A_Game" },
+        { text: "52屆 模組E 學生管理系統", link: "portfolio/web-global/52_Module_E_Frontend", activeMatch: "portfolio/web-global/52_Module_E_Frontend" },
         { text: "53屆 模組C Design", link: "portfolio/web-global/53_Module_C_Design", activeMatch: "portfolio/web-global/53_Module_C_Design" },
         { text: "54屆 模組A Design", link: "portfolio/web-global/54_Module_A_Design", activeMatch: "portfolio/web-global/54_Module_A_Design" },
-        { text: "54屆 模組E Frontend", link: "portfolio/web-global/54_Module_E_Frontend", activeMatch: "portfolio/web-global/54_Module_E_Frontend" },
+        { text: "54屆 模組E 線上點餐系統", link: "portfolio/web-global/54_Module_E_Frontend", activeMatch: "portfolio/web-global/54_Module_E_Frontend" },
       ],
     },
     {
       text: "網站 Web",
       items: [
         { text: "網頁設計練習", link: "portfolio/網站Web/網頁設計練習", activeMatch: "portfolio/網站Web/網頁設計練習" },
-        { text: "俄羅斯方塊", link: "portfolio/網站Web/俄羅斯方塊", activeMatch: "portfolio/網站Web/俄羅斯方塊" },
         { text: "穀保家商2024成果展網站", link: "portfolio/網站Web/穀保家商2024成果展網站", activeMatch: "portfolio/網站Web/穀保家商2024成果展網站" },
         { text: "二元樹結構產生器", link: "portfolio/網站Web/二元樹結構產生器", activeMatch: "portfolio/網站Web/二元樹結構產生器" },
         { text: "圈圈差差", link: "portfolio/網站Web/圈圈差差", activeMatch: "portfolio/網站Web/圈圈差差" },
