@@ -100,3 +100,5 @@ queue = [(1,'A'),(2,'B'),(3,'C')]
 node = heapq.heappop(queue)
 heapq.heappush(queue,(-5,'D'))
 ```
+
+- [Leetcode 703.](https://leetcode.com/problems/kth-largest-element-in-a-stream)

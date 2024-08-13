@@ -1,7 +1,5 @@
 # 49_Module_A_Game 俄羅斯方塊
 
-
-
 ## Introduction
 
 ### 開始使遊戲畫面
