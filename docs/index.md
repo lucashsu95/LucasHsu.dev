@@ -24,24 +24,24 @@ features:
   - icon: 🛠
     title: Skills & Tools
     details: <img src="https://skillicons.dev/icons?perline=4&theme=light&i=vscode,phpstorm,ps,ai,figma,notion,git,docker" class="icon-img">
-  - icon: 🚀
-    title: Future
-    details: <img src="https://skillicons.dev/icons?perline=4&theme=light&i=nginx,django,go,dotnet,ts" class="icon-img">
+  - icon: ☕
+    title: In Learing
+    details: <img src="https://skillicons.dev/icons?perline=4&theme=light&i=java,react,tailwind,spring" class="icon-img">
 
 
 head:
   - - meta
     - name: keywords
-      content: 許恩綸,LucasHsu,lucashsu95
+      content: 許恩綸,lucas hsu,lucashsu95,LucasHsu,Lucashsu95
   - - meta
     - name: author
-      content: LucasHsu
+      content: 許恩綸
   - - meta
     - name: og:title
-      content: LucasHsu.dev
+      content: LucasHsu.dev部落格&作品集&比賽事蹟&演算法
   - - meta
     - name: og:description
-      content: 部落格&作品集&比賽事蹟&演算法筆記
+      content: 這裡放了一些程式筆記和作品集，不定期更新
 ---
 <style>
 .main .text{

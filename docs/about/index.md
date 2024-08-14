@@ -3,7 +3,7 @@ outline: "deep"
 ---
 
 # 關於我
-高職畢業於穀保家商，目前就讀國立台北商業大學-資訊管理系，興趣是寫[程式](https://d1dwq032kyr03c.cloudfront.net/upload/images/20230308/2015530772u2KtINPD.png)、聽[音樂](https://www.youtube.com/watch?v=H88kps8X4Mk)和看[動漫](https://www.youtube.com/watch?v=2QDwgqMKk5w)，這裡放了一點程式筆記和作品集，不定期更新。
+目前就讀於國立台北商業大學資訊管理系，興趣是寫[程式](https://d1dwq032kyr03c.cloudfront.net/upload/images/20230308/2015530772u2KtINPD.png)、聽[音樂](https://www.youtube.com/watch?v=H88kps8X4Mk)和看[動漫](https://www.youtube.com/watch?v=2QDwgqMKk5w)，這裡放了一些程式筆記和作品集，不定期更新。
 
 ## 競賽
 ### 🐛 程式
@@ -31,9 +31,6 @@ outline: "deep"
 ## 🔧 系統(目前有被人使用的)
 1.  [開發穀保家商學校校網設備故障報修系統](https://repair.kpvs.ntpc.edu.tw/repair-system/)🔥
 2.  [開發穀保家商學校專業教室借用預約系統](https://repair.kpvs.ntpc.edu.tw/booking-system-frontend/)🔥
-
-## ☕ In Learing
-<img src="https://skillicons.dev/icons?perline=4&theme=light&i=java,react,tailwind,spring" class="icon-img">
 
 ## 相關報導
 

@@ -1,5 +1,18 @@
 ---
 outline: "deep"
+head:
+  - - meta
+    - name: author
+      content: 許恩綸
+  - - meta
+    - name: keywords
+      content: git,git commit,git reset
+  - - meta
+    - name: og:title
+      content: git commit 提交
+  - - meta
+    - name: og:description
+      content: git commit 提交,git add .、git commit -m、git push教學
 ---
 
 # git commit 提交
@@ -31,7 +44,7 @@ git commit -m [message]
 ```bash
 git commit [file1] [file2] ... -m [message]
 ```
-
+### reset --hard
 ```bash
 git reset --hard HEAD~1 // 直接銷毀上1個commit
 git checkout HEAD~2 // 回溯到2個commit
