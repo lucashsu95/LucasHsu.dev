@@ -1,3 +1,23 @@
+---
+outline: deep
+head:
+  - - meta
+    - name: author
+      content: 許恩綸
+  - - meta
+    - name: keywords
+      content: xampp, mysql, phpmyadmin
+  - - meta
+    - name: og:title
+      content: xampp 起手式
+  - - meta
+    - name: og:description
+      content: 下載和設定xampp，建立使用者帳號，更改Apache
+  - - meta
+    - name: og:type
+      content: article
+---
+
 # xampp 起手式｜資料庫｜下載xampp
 
 ## 下載

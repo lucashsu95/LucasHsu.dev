@@ -1,5 +1,21 @@
 ---
 outline: "deep"
+head:
+  - - meta
+    - name: author
+      content: 許恩綸
+  - - meta
+    - name: keywords
+      content: Python, python, 新手上路, 字典, 集合, set, dict
+  - - meta
+    - name: og:title
+      content: Python新手上路 Day6 - 字典(dict)與集合(set)
+  - - meta
+    - name: og:description
+      content: 學習Python中的字典和集合的基本概念和操作方法
+  - - meta
+    - name: og:type
+      content: article
 ---
 
 # python-新手上路-Day6｜dict｜set

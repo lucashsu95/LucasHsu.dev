@@ -2,6 +2,23 @@
 outline: {
     level: [2,3],
 }
+
+head:
+  - - meta
+    - name: author
+      content: 許恩綸
+  - - meta
+    - name: keywords
+      content: Python, python, 新手上路, 變數, if...else,if else, input, print
+  - - meta
+    - name: og:title
+      content: Python新手上路 Day1 - 變數和條件判斷
+  - - meta
+    - name: og:description
+      content: 學習Python的變數、輸入輸出函數、條件判斷語句，以及f-string格式化
+  - - meta
+    - name: og:type
+      content: article
 ---
 
 

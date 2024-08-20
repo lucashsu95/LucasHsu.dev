@@ -13,6 +13,12 @@ head:
   - - meta
     - name: og:description
       content: git commit 提交,git add .、git commit -m、git push教學
+  - - meta
+    - name: og:type
+      content: article
+  - - meta
+    - name: og:image
+      content: https://lucashsu95.github.io/LucasHsu.dev/git/git-commit.html
 ---
 
 # git commit 提交

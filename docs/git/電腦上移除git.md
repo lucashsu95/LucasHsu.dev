@@ -1,3 +1,22 @@
+---
+head:
+  - - meta
+    - name: author
+      content: 許恩綸
+  - - meta
+    - name: keywords
+      content: git,移除git,刪除git
+  - - meta
+    - name: og:title
+      content: 電腦上移除git
+  - - meta
+    - name: og:description
+      content: 電腦上移除git
+  - - meta
+    - name: og:type
+      content: article
+---
+
 # 電腦上移除git
 
 概述: 認證管理員

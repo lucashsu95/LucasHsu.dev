@@ -13,6 +13,9 @@ head:
   - - meta
     - name: og:description
       content: git init 初始化｜建立github Repo,電腦第一次裝git要做的事,檢查電腦有無GIT,新增USER 和EMAIL
+  - - meta
+    - name: og:type
+      content: article
 ---
 
 # 初次下載 Git

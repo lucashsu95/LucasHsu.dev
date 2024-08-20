@@ -1,3 +1,23 @@
+---
+outline: deep
+head:
+  - - meta
+    - name: author
+      content: 許恩綸
+  - - meta
+    - name: keywords
+      content: xampp, mysql, 新手上路, xampp mysql 打不開
+  - - meta
+    - name: og:title
+      content: xampp mysql 又壞掉
+  - - meta
+    - name: og:description
+      content: xampp mysql 又壞掉
+  - - meta
+    - name: og:type
+      content: article
+---
+
 # xampp mysql 又壞掉
 ## 將data資料夾先備份
 先到路徑`C:\xampp\mysql\data`

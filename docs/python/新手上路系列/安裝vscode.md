@@ -1,3 +1,22 @@
+---
+head:
+  - - meta
+    - name: author
+      content: 許恩綸
+  - - meta
+    - name: keywords
+      content: Python, python, 新手上路, 安裝VSCode, 開發環境設置
+  - - meta
+    - name: og:title
+      content: Python新手上路 Day0 - 安裝VSCode
+  - - meta
+    - name: og:description
+      content: 學習如何安裝VSCode
+  - - meta
+    - name: og:type
+      content: article
+---
+
 # 安裝vscode
 
 到[官網](https://code.visualstudio.com/)點donwload(下載)<br>

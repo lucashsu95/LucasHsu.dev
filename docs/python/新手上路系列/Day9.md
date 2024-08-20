@@ -1,5 +1,21 @@
 ---
 outline: "deep"
+head:
+  - - meta
+    - name: author
+      content: 許恩綸
+  - - meta
+    - name: keywords
+      content: Python, python, 新手上路, List Comprehension, 列表生成式, python一行寫法
+  - - meta
+    - name: og:title
+      content: Python新手上路 Day9 - List Comprehension
+  - - meta
+    - name: og:description
+      content: 學習如何使用Python中的List Comprehension來創建和操作列表
+  - - meta
+    - name: og:type
+      content: article
 ---
 # python-新手上路-Day9｜List Comprehension
 

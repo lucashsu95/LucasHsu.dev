@@ -1,3 +1,22 @@
+---
+head:
+  - - meta
+    - name: author
+      content: 許恩綸
+  - - meta
+    - name: keywords
+      content: PHP, php, 如何開始php
+  - - meta
+    - name: og:title
+      content: PHP-Day1
+  - - meta
+    - name: og:description
+      content: 學習如何寫php
+  - - meta
+    - name: og:type
+      content: article
+---
+
 # PHP-Day1
 
 想必已經有裝好xampp了吧

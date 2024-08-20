@@ -1,5 +1,22 @@
 ---
 output: "deep"
+
+head:
+  - - meta
+    - name: author
+      content: 許恩綸
+  - - meta
+    - name: keywords
+      content: Python, python, 新手上路, 環境設置, print函數
+  - - meta
+    - name: og:title
+      content: Python新手上路 Day0 - 建置環境
+  - - meta
+    - name: og:description
+      content: 學習如何安裝Python、設置開發環境，以及使用基本的print()函數
+  - - meta
+    - name: og:type
+      content: article
 ---
 
 # python-新手上路-Day0｜建置環境

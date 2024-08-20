@@ -12,6 +12,9 @@ head:
   - - meta
     - name: og:description
       content: position屬性用於控制HTML元素在網頁上的位置和布局方式。這個屬性有幾個不同的值，每個值都控制元素的定位方式。以下是position的主要值
+  - - meta
+    - name: og:type
+      content: article
 ---
 
 # Css Position 定位

@@ -1,5 +1,21 @@
 ---
 outline: "deep"
+head:
+  - - meta
+    - name: author
+      content: 許恩綸
+  - - meta
+    - name: keywords
+      content: Python, python, 新手上路, 函式, def
+  - - meta
+    - name: og:title
+      content: Python新手上路 Day7 - 函式與def
+  - - meta
+    - name: og:description
+      content: 學習如何使用Python中的函式與def關鍵字來定義和呼叫函式
+  - - meta
+    - name: og:type
+      content: article
 ---
 
 # python-新手上路-Day7｜函式｜def

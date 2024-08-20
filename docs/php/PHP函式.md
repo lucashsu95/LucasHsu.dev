@@ -1,5 +1,21 @@
 ---
 outline: deep
+head:
+  - - meta
+    - name: author
+      content: 許恩綸
+  - - meta
+    - name: keywords
+      content: PHP, php, 如何開始php
+  - - meta
+    - name: og:title
+      content: PHP Function
+  - - meta
+    - name: og:description
+      content: PHP Functions: A Comprehensive Guide to Many Useful Functions
+  - - meta
+    - name: og:type
+      content: article
 ---
 
 # PHP Function 函式

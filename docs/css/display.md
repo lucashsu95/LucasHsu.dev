@@ -12,6 +12,9 @@ head:
   - - meta
     - name: og:description
       content: display屬性用於控制HTML元素在網頁上的顯示方式。這個屬性有多個不同的值，每個值都決定了元素的顯示方式。以下是display屬性的一些常見值
+  - - meta
+    - name: og:type
+      content: article
 ---
 
 # Css Display 顯示

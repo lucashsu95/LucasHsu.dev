@@ -1,5 +1,21 @@
 ---
 outline: "deep"
+head:
+  - - meta
+    - name: author
+      content: 許恩綸
+  - - meta
+    - name: keywords
+      content: Python, python, 新手上路, 串列(List), 列表操作, 列表方法
+  - - meta
+    - name: og:title
+      content: Python新手上路 Day5 - 串列(List)與基本操作
+  - - meta
+    - name: og:description
+      content: 學習Python中的串列(List)概念、創建方法、訪問元素以及常用的列表操作方法
+  - - meta
+    - name: og:type
+      content: article
 ---
 
 # python-新手上路-Day5｜List

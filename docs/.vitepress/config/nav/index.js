@@ -20,9 +20,9 @@ export function nav() {
     { text: "CSS", link: "/css/" },
     { text: "GIT", link: "/git/" },
     { text: "作品集", link: "/portfolio/" },
-    // {
-    //   text: "Tools",
-    //   items: [{ text: "Git", link: "/git/" }],
-    // },
+    {
+      text: "Other",
+      items: [{ text: "設定ESLint和Prettier", link: "/other/init-eslint-prettier" }],
+    },
   ];
 }

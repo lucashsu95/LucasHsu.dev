@@ -1,5 +1,21 @@
 ---
 outline: deep
+head:
+  - - meta
+    - name: author
+      content: 許恩綸
+  - - meta
+    - name: keywords
+      content: SQL, sql, sql join,sql 關聯
+  - - meta
+    - name: og:title
+      content: SQL JOIN
+  - - meta
+    - name: og:description
+      content: SQL JOIN
+  - - meta
+    - name: og:type
+      content: article
 ---
 
 # SQL JOIN

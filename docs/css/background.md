@@ -1,3 +1,22 @@
+---
+head:
+  - - meta
+    - name: author
+      content: 許恩綸
+  - - meta
+    - name: keywords
+      content: CSS, 背景圖片, background屬性, CSS縮寫, 視差效果
+  - - meta
+    - name: og:title
+      content: CSS背景圖片設置 - 縮寫屬性詳解
+  - - meta
+    - name: og:description
+      content: 學習使用一行CSS縮寫屬性設置背景圖片，包括置中、不重複、等比例放大及固定位置等效果
+  - - meta
+    - name: og:type
+      content: article
+---
+
 # 背景圖片
 
 主要是想講background可以寫成一行

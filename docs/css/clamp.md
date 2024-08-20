@@ -1,3 +1,22 @@
+---
+head:
+  - - meta
+    - name: author
+      content: 許恩綸
+  - - meta
+    - name: keywords
+      content: CSS, css, clamp函數, 響應式設計, 流動排版
+  - - meta
+    - name: og:title
+      content: CSS技巧 - 使用clamp()函數進行響應式設計
+  - - meta
+    - name: og:description
+      content: 學習如何使用CSS的clamp()函數來實現響應式設計，並在不同視口寬度下自動調整元素大小
+  - - meta
+    - name: og:type
+      content: article
+---
+
 # Clamp
 
 ## 介紹
