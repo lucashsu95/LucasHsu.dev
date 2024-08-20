@@ -12,7 +12,7 @@ head:
       content: PHP Function
   - - meta
     - name: og:description
-      content: PHP Functions: A Comprehensive Guide to Many Useful Functions
+      content: A Comprehensive Guide to Many Useful Functions
   - - meta
     - name: og:type
       content: article
