@@ -138,7 +138,17 @@ export function sidebarPythonNation() {
         },
         {
           text: "09-關於進位法",
-          link: "/python/112全國技藝競賽筆記/09-關於進位法/",
+          collapsed: true,
+          items: [
+            {
+              text: "進位轉換",
+              link: "/python/112全國技藝競賽筆記/09-關於進位法/進位轉換",
+            },
+            {
+              text: "位元運算子",
+              link: "/python/112全國技藝競賽筆記/09-關於進位法/位元運算子",
+            },
+          ],
         },
         {
           text: "10-堆疊、迷宮",
