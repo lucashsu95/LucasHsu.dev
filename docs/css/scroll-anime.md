@@ -1,3 +1,22 @@
+---
+head:
+  - - meta
+    - name: author
+      content: 許恩綸
+  - - meta
+    - name: keywords
+      content: CSS, 滾動時間軸, CSS縮寫, 視差效果
+  - - meta
+    - name: og:title
+      content: CSS 滾動時間軸
+  - - meta
+    - name: og:description
+      content: CSS 滾動時間軸
+  - - meta
+    - name: og:type
+      content: article
+---
+
 # CSS 滾動時間軸
 
 `animation-timeline: scroll()` 是一個 CSS 屬性，讓動畫的進度與頁面滾動相關聯。這意味著當用戶滾動頁面時，動畫會根據滾動位置進行播放，而不是僅依賴時間。
