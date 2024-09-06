@@ -46,10 +46,12 @@ pnpm add -D eslint prettier eslint-plugin-prettier eslint-config-prettier
 
 ```json
 {
-  "trailingComma": "es5",
-  "tabWidth": 2,
+  "$schema": "https://json.schemastore.org/prettierrc",
   "semi": false,
-  "singleQuote": true
+  "tabWidth": 2,
+  "singleQuote": true,
+  "printWidth": 100,
+  "trailingComma": "none"
 }
 ```
 

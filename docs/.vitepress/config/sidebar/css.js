@@ -1,23 +1,31 @@
 export function sidebarCss() {
   return [
     {
-      text: 'CSS',
+      text: "CSS Basic",
+      collapsed: false,
       items: [
-        { text: 'Display 顯示', link: '/css/display', activeMatch: '/css/display' },
-        { text: 'Position 定位', link: '/css/position', activeMatch: '/css/position' },
-        { text: 'CSS 選擇器', link: '/css/選擇器', activeMatch: '/css/選擇器' },
-        { text: '色碼', link: '/css/色碼', activeMatch: '/css/色碼' },
-        { text: '關於『&』', link: '/css/關於『&』', activeMatch: '/css/關於『&』' },
-        { text: 'Clamp', link: '/css/clamp', activeMatch: '/css/clamp' },
-        { text: 'Background', link: '/css/background', activeMatch: '/css/background' },
-        {
-          text: "Tailwind CSS",
-          collapsed: true,
-          items: [
-            { text: "Tailwind 起手式", link: "css/init-tailwind", activeMatch: "css/init-tailwind" },
-            { text: "Tailwind 客製化", link: "css/custom-tailwind", activeMatch: "css/custom-tailwind" },
-          ],
-        },
+        { text: 'Display 顯示', link: '/css/basic/display', activeMatch: '/css/basic/display' },
+        { text: 'Position 定位', link: '/css/basic/position', activeMatch: '/css/basic/position' },
+        { text: 'Background 背景', link: '/css/basic/background', activeMatch: '/css/basic/background' },
+        { text: 'CSS 選擇器', link: '/css/basic/選擇器', activeMatch: '/css/basic/選擇器' },
+      ],
+    },
+    {
+      text: 'Other',
+      collapsed: false,
+      items: [
+        { text: '關於 色碼 #hex rgba', link: '/css/色碼', activeMatch: '/css/色碼' },
+        { text: '關於『&』｜Sass', link: '/css/關於『&』', activeMatch: '/css/關於『&』' },
+        { text: '介紹Clamp 一行寫好RWD?', link: '/css/clamp', activeMatch: '/css/clamp' },
+        { text: 'CSS 滾動時間軸', link: '/css/scroll-anime', activeMatch: '/css/scroll-anime' },
+      ],
+    },
+    {
+      text: "Tailwind CSS",
+      collapsed: false,
+      items: [
+        { text: "Tailwind 起手式", link: "css/tailwindcss/init-tailwind", activeMatch: "css/tailwindcss/init-tailwind" },
+        { text: "Tailwind 客製化", link: "css/tailwindcss/custom-tailwind", activeMatch: "css/tailwindcss/custom-tailwind" },
       ],
     },
   ];
