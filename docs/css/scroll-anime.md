@@ -36,53 +36,35 @@ head:
 ## 使用範例
 
 ```html
-
-<div id="container">
-    <div id="square"></div>
-    <div id="stretcher"></div>
-</div>
-
+<div class="element"></div>
+<div class="other-stuff"></div>
 ```
 
 ```css
-#container {
-    height: 300px;
-    overflow-y: scroll; /* 允許垂直滾動 */
-    scroll-timeline: --squareTimeline y; /* 定義滾動時間軸 */
-    position: relative;
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
 }
-
-#square {
-    background-color: deeppink;
-    width: 100px;
-    height: 100px;
-    animation-name: rotateAnimation; /* 使用旋轉動畫 */
-    animation-duration: 1ms; /* 動畫持續時間 */
-    animation-timeline: --squareTimeline; /* 連結滾動時間軸 */
-    position: absolute;
-    bottom: 0;
+.element {
+  animation: fadeOut 2s forwards;
+  animation-timeline: scroll();
 }
-
-#stretcher {
-    height: 600px;
-    background: #dedede;
+.element {
+  height: 300px;
+  width: 300px;
+  background-color: red;
 }
-
-@keyframes rotateAnimation {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
+.other-stuff {
+  height: 800px;
+  width: 300px;
 }
 ```
 
-1. 容器設定：`#container` 設定了高度和滾動條，並定義了滾動時間軸 `--squareTimeline`。
-2. 方塊動畫：`#square` 使用了旋轉動畫，並將其與滾動時間軸連結。當用戶滾動 `#container` 時，方塊將根據滾動位置旋轉。
-3. 內容溢出：`#stretcher` 的高度設置為 `600px`，確保內容溢出容器以便出現滾動條。
-   
-當用戶滾動容器時，方塊會根據滾動進度進行旋轉，這是使用 `animation-timeline: scroll()` 的一個簡單範例。
+- [更多範例](https://lucashsu95.github.io/webDesign/scroll/scroll-anime/scroll-anime.html)
 
 ## 備註
 因為用**右邊滑到左邊**會**超出畫面**讓x軸的滾軸跑出來

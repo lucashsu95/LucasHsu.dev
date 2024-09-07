@@ -1,3 +1,3 @@
 # JavaScript
 
-放了技藝競賽會考的東西
+網頁中的邏輯擔當，都是由 JavaScript 組成。
