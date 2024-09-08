@@ -51,8 +51,20 @@ pnpm add -D eslint prettier eslint-plugin-prettier eslint-config-prettier
   "tabWidth": 2,
   "singleQuote": true,
   "printWidth": 100,
-  "trailingComma": "none"
+  "trailingComma": "none",
 }
+```
+
+如果使用 tailwindcss 可以加這個
+```json
+{
+  "plugins": ["prettier-plugin-tailwindcss"]
+}
+```
+
+記得要先安裝
+```bash
+npm i -D @prettier/plugin-tailwindcss
 ```
 
 ## 3. 執行 ESLint 和 Prettier
