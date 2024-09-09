@@ -22,7 +22,11 @@ export function nav() {
     { text: "作品集", link: "/portfolio/" },
     {
       text: "Other",
-      items: [{ text: "設定ESLint和Prettier", link: "/other/init-eslint-prettier" }],
+      items: [
+        { text: "安裝vscode", link: "/python/新手上路系列/安裝vscode" },
+        { text: "設定ESLint和Prettier", link: "/other/init-eslint-prettier" },
+      ],
+
     },
   ];
 }

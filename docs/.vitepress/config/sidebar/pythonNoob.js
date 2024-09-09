@@ -3,7 +3,6 @@ export function sidebarPythonNoob() {
     {
       text: "新手上路系列",
       items: [
-        { text: "安裝vscode", link: "/python/新手上路系列/安裝vscode" },
         { text: "Day0 - 建置環境", link: "/python/新手上路系列/Day0" },
         { text: "Day1 - 變數｜if...else", link: "/python/新手上路系列/Day1" },
         { text: "Day2 - for｜while｜字串切片", link: "/python/新手上路系列/Day2" },
