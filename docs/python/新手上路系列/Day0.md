@@ -37,7 +37,7 @@ head:
 :::
 
 ## 安裝環境、編輯器
-[安裝vscode](安裝vscode)
+[安裝vscode](/docs/other/安裝vscode.md)
 
 ## print()
 
