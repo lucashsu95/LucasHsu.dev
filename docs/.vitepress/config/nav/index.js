@@ -23,7 +23,7 @@ export function nav() {
     {
       text: "Other",
       items: [
-        { text: "安裝vscode", link: "/python/新手上路系列/安裝vscode" },
+        { text: "安裝vscode", link: "/other/安裝vscode" },
         { text: "設定ESLint和Prettier", link: "/other/init-eslint-prettier" },
       ],
 
