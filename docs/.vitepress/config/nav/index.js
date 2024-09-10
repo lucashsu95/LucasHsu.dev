@@ -25,7 +25,7 @@ export function nav() {
       items: [
         { text: "安裝vscode", link: "/other/安裝vscode" },
         { text: "設定 ESLint 和 Prettier", link: "/other/init-eslint-prettier" },
-        { text: "設定 jsconfig.json", link: "/other/init-jsconfig" },
+        { text: "設定 jsconfig.json和vite.config.js", link: "/other/init-jsconfig-viteConfig" },
       ],
 
     },
