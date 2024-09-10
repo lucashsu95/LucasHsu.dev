@@ -1,22 +1,4 @@
----
-head:
-  - - meta
-    - name: author
-      content: 許恩綸
-  - - meta
-    - name: keywords
-      content: eslint,prettier,eslin prettier,vite,eslint vite,prettier vite
-  - - meta
-    - name: og:title
-      content: 設定 ESLint 和 Prettier
-  - - meta
-    - name: og:description
-      content: 在 npm / pnpm 的專案中設定 ESLint 和 Prettier, 並且在 vite 中使用
-  - - meta
-    - name: og:type
-      content: article
----
-
+田
 # 使用 npm / pnpm 的專案中設定 ESLint 和 Prettier
 
 ## 1. 安裝 ESLint 和 Prettier
@@ -92,3 +74,4 @@ pnpm prettier --write src/
   "preview": "vite preview"
 },
 ```
+

@@ -32,7 +32,7 @@ export function sidebarPortfolio() {
     },
     {
       text: "Python 工具",
-      collapsed: false,
+      collapsed: true,
       items: [
         { text: "資料夾路徑README生成器", link: "portfolio/python小工具/資料夾路徑README生成器", activeMatch: "portfolio/python小工具/資料夾路徑README生成器" },
         { text: "檔案分類器", link: "portfolio/python小工具/檔案分類器", activeMatch: "portfolio/python小工具/檔案分類器" },

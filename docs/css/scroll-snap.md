@@ -5,7 +5,7 @@ head:
       content: 許恩綸
   - - meta
     - name: keywords
-      content: css,滾動時間軸,滾動快照
+      content: css,滾動時間軸,滾動快照,scoll-snap,scroll-snap-type,scroll-snap-stop,scroll-snap-align,scroll-padding
   - - meta
     - name: og:title
       content: CSS scroll-snap

@@ -5,7 +5,7 @@ head:
       content: 許恩綸
   - - meta
     - name: keywords
-      content: CSS, 滾動時間軸, CSS縮寫, 視差效果
+      content: CSS, 滾動時間軸, animation-timeline, animation-timeline:scroll()
   - - meta
     - name: og:title
       content: CSS 滾動時間軸
