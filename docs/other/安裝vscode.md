@@ -57,6 +57,10 @@ uninstall 是解除安裝的意思
 選擇剛剛建好的資料夾
 按【選擇資料夾】
 
+## Auto Save
+在儲存時自動格式化文件
+到左下角的齒輪 -> 設定 -> 搜尋框打`auto save`
+![alt text](./assets/安裝vscode/image-4.png)
 
 ## 可以安裝的掛件
 
