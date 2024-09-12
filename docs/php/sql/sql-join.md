@@ -22,7 +22,7 @@ head:
 
 ## 關聯式 JOIN
 
-![alt text](./assets/sql-join/image.png)
+![alt text](../assets/sql-join/image.png)
 
 以下為SQL中Left Join與Inner Join的簡單說明。
 
@@ -72,15 +72,15 @@ head:
 有兩個資料表，一對多，users 和 user_quotas 的表
 
 **users 資料表**
-![alt text](./assets/sql-join/image-1.png)
+![alt text](../assets/sql-join/image-1.png)
 
 **user_quotas 資料表**
-![alt text](./assets/sql-join/image-2.png)
+![alt text](../assets/sql-join/image-2.png)
 
 ::: tip 練習題
 請列出每位使用者的總配額，並且按照總配額的大到小排序!
 
-<a href='./assets/sql-join/test.sql' download='test.sql'>下載`test.sql`檔</a>
+<a href='../assets/sql-join/test.sql' download='test.sql'>下載`test.sql`檔</a>
 :::
 ::: warning 要輸出的結果
 |id | account | total_value

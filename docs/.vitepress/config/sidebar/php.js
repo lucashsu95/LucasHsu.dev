@@ -3,8 +3,8 @@ export function sidebarPhp() {
         {
             text: "Xampp",
             items: [
-                { text: "xampp 起手式｜下載xampp", link: "php/xampp起手式", activeMatch: "php/xampp起手式" },
-                { text: "xampp mysql mysql開不起來", link: "php/xampp-mysql-err", activeMatch: "php/xampp-mysql-err" },
+                { text: "xampp 起手式｜下載xampp", link: "php/xampp/xampp起手式", activeMatch: "php/xampp/xampp起手式" },
+                { text: "xampp mysql mysql開不起來", link: "php/xampp/xampp-mysql-err", activeMatch: "php/xampp/xampp-mysql-err" },
             ],
         },
         {
@@ -17,7 +17,8 @@ export function sidebarPhp() {
         {
             text: "SQL",
             items: [
-                { text: "JOIN 關聯式", link: "php/sql-join", activeMatch: "php/sql-join" },
+                { text: "JOIN 關聯式", link: "php/sql/sql-join", activeMatch: "php/sql/sql-join" },
+                { text: "SQL CASE...WHEN...THEN", link: "php/sql/sql-case-when-then", activeMatch: "php/sql/sql-case-when-then" },
             ],
         },
     ];

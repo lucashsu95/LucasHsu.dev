@@ -26,7 +26,7 @@ head:
 
 再建立一個新的`data`資料夾，建立完後重啟一下xampp的mysql
 
-![1676084429.jpg](./assets/xampp-mysql-err/1676084429.jpg)
+![1676084429.jpg](../assets/xampp-mysql-err/1676084429.jpg)
 
 此時應該還是不能運行的
 
@@ -36,9 +36,9 @@ head:
 
 `mysql`,`performance_schema`,`phpmyadmin`,等資料夾到`data`
 
-![1676084583.jpg](./assets/xampp-mysql-err/1676084583.jpg)
+![1676084583.jpg](../assets/xampp-mysql-err/1676084583.jpg)
 
-![1676084727.jpg](./assets/xampp-mysql-err/1676084727.jpg)
+![1676084727.jpg](../assets/xampp-mysql-err/1676084727.jpg)
 
 接下來再重啟一下xampp的mysql,此時已經可以正常啟動了
 
@@ -53,4 +53,4 @@ head:
 
 再重啟xampp-mysql即可正常
 
-![1676085854.jpg](./assets/xampp-mysql-err/1676085854.jpg)
+![1676085854.jpg](../assets/xampp-mysql-err/1676085854.jpg)

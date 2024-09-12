@@ -23,7 +23,7 @@ head:
 
 沒有的話可以看這篇
 
-[**xampp 起手式｜下載xampp**](./xampp起手式)
+[**xampp 起手式｜下載xampp**](./xampp/xampp起手式)
 
 ## 新增資料夾
 

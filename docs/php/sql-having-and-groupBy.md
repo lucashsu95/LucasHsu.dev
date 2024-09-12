@@ -1,1 +1,0 @@
-# SQL HAVING and GROUP BY
