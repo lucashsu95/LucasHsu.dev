@@ -40,7 +40,10 @@ npx tailwindcss init -p
 ```js
 /** @type {import('tailwindcss').Config} */
 
-const content = ['./src/**/*.{vue,js,ts,jsx,tsx}']
+const content: [
+  "./index.html",
+  "./src/**/*.{js,jsx}",
+],
 const plugins = []
 const theme = { extend: {} }
 export { content, plugins, theme }
