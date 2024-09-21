@@ -1,47 +1,44 @@
-(() => {
-
+function lineBox() {
     const style = `
-#preview-image {
-    padding:0 20px;
-    position: fixed;
-    inset: 0;
-    display: none;
-    align-items: center;
-    justify-content: space-between;
-    z-index: 998;
-
-
-    & .bg {
-        position: absolute;
+    #preview-image {
+        padding:0 20px;
+        position: fixed;
         inset: 0;
-        background: #0009;
-    }
-
-    & img {
-        border-radius:5px;
-        max-width: 90%;
-        z-index: 998;
-        box-shadow:2px 3px 15px #888a;
-    }
-
-    & button {
-        z-index: 999;
-        width: 50px;
-        height: 50px;
-        background:#efefef;
-        border-radius: 50%;
-        border: 1px solid #ccc;
-        font-size:28px;
-        display: flex;
+        display: none;
         align-items: center;
-        justify-content: center;
-        & img{
-            width: 30px;
-            height: 30px;
+        justify-content: space-between;
+        z-index: 998;
+
+        & .bg {
+            position: absolute;
+            inset: 0;
+            background: #0009;
+        }
+
+        & img {
+            border-radius:5px;
+            max-width: 90%;
+            z-index: 998;
+        }
+
+        & button {
+            z-index: 999;
+            width: 50px;
+            height: 50px;
+            background:#efefef;
+            border-radius: 50%;
+            border: 1px solid #ccc;
+            font-size:28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            & img{
+                width: 30px;
+                height: 30px;
+            }
         }
     }
-}
-`
+    `
 
     const styleTag = document.createElement('style')
     styleTag.innerHTML = style
@@ -88,4 +85,11 @@
         currentImgIdx = currentImgIdx === len ? 0 : currentImgIdx + 1;
         currentImg.src = srcAry[currentImgIdx]
     })
+}
+
+(() => {
+    lineBox()
+    setInterval(() => {
+        lineBox()
+    }, 5000);
 })()
