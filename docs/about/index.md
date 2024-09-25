@@ -6,9 +6,9 @@ outline: "deep"
 
 目前就讀於國立台北商業大學資訊管理系
 
-興趣看看[Anime](https://www.youtube.com/watch?v=2QDwgqMKk5w)或聽聽[Music](https://www.youtube.com/watch?v=H88kps8X4Mk)(j-pop、k-pop、en、ch都聽)
+興趣看看[Anime](https://www.youtube.com/watch?v=2QDwgqMKk5w)或聽聽**Music**([J-pop](https://www.youtube.com/watch?v=H88kps8X4Mk)、[K-pop](https://www.youtube.com/watch?v=Km71Rr9K-Bw)、[E](https://www.youtube.com/watch?v=hBp4dgE7Bho)[N](https://www.youtube.com/watch?v=2ZBtPf7FOoM)、[中文](https://www.youtube.com/watch?v=sHD_z90ZKV0&pp=ygUP5ZGo5p2w5YCr56i76aaZ)都聽)
 
-專長是寫[程式](https://d1dwq032kyr03c.cloudfront.net/upload/images/20230308/2015530772u2KtINPD.png)和網頁吧...也只會這個了
+專長是寫[程式](https://d1dwq032kyr03c.cloudfront.net/upload/images/20230308/2015530772u2KtINPD.png)和**網頁**吧...也只會這個了
 
 這裡放了一些程式筆記和作品集，不定期更新。
 
