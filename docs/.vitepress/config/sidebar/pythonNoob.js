@@ -19,7 +19,7 @@ export function sidebarPythonNoob() {
     },
     {
       text: "TQC+ 程式語言Python",
-      collapsed: false,
+      collapsed: true,
       items: [
         {
           text: "第1類 基本程式設計",
@@ -69,7 +69,6 @@ export function sidebarPythonNoob() {
             { text: "310 迴圈公式計算", link: "/python/新手上路系列/tqc/tqc3/310" },
           ]
         },
-        // { text: "101 整數格式化輸出", link: "/python/新手上路系列/tqc/tqc1/101" },
       ]
     }
   ];
