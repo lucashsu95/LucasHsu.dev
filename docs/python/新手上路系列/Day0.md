@@ -60,7 +60,8 @@ print("Hello, world!")
 ```
 
 7. 然後按ctrl + `，可以叫出終端機
-8. 在終端機裡打
+8. 在終端機裡打cmd 按下Enter(切換成command 不要使用powershell)
+9. 在終端機裡打
 ```sh
 python a.py
 ```
