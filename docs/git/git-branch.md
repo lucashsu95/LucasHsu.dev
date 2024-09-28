@@ -10,3 +10,12 @@ git branch
 git branch -r // 查看遠端分支
 git branch -a // 查看所有分支
 ```
+
+
+## Merge & Rebase
+
+- [git rebase VS git merge？ 更優雅的 git 合併方式值得擁有](https://www.cnblogs.com/FraserYu/p/11192840.html)
+
+### 交互式Reabase
+
+<!-- TODO -->
