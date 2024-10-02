@@ -9,13 +9,13 @@ head:
       content: 許恩綸
   - - meta
     - name: keywords
-      content: Python, python, 新手上路, 變數, if...else,if else, input, print
+      content: python,新手上路,變數,if,if else,input,print
   - - meta
     - name: og:title
       content: Python新手上路 Day1 - 變數和條件判斷
   - - meta
     - name: og:description
-      content: 學習Python的變數、輸入輸出函數、條件判斷語句，以及f-string格式化
+      content: 變數、輸入輸出函數、條件判斷語句，以及f-string格式化
   - - meta
     - name: og:type
       content: article
@@ -382,4 +382,5 @@ print(f"我的名字是 {name}，今年 {age} 岁。")
 
 ## 牛刀小試
 
-[TQC+ 程式語言Python 第2類：選擇敘述](https://jbprogramnotes.com/2020/05/tqc-%e7%a8%8b%e5%bc%8f%e8%aa%9e%e8%a8%80python-%e7%ac%ac2%e9%a1%9e%ef%bc%9a%e9%81%b8%e6%93%87%e6%95%98%e8%bf%b0/)
+[TQC+ 程式語言Python 第1類：基本程式設計](./tqc/tqc1/101)
+[TQC+ 程式語言Python 第2類：選擇敘述](./tqc/tqc2/201)

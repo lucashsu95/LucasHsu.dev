@@ -19,7 +19,6 @@ export function sidebarPythonNoob() {
     },
     {
       text: "TQC+ 程式語言Python",
-      collapsed: true,
       items: [
         {
           text: "第1類 基本程式設計",
@@ -67,6 +66,38 @@ export function sidebarPythonNoob() {
             { text: "308 迴圈位數加總", link: "/python/新手上路系列/tqc/tqc3/308" },
             { text: "309 存款總額", link: "/python/新手上路系列/tqc/tqc3/309" },
             { text: "310 迴圈公式計算", link: "/python/新手上路系列/tqc/tqc3/310" },
+          ]
+        },
+        {
+          text: "第4類 迴圈敘述",
+          collapsed: true,
+          items: [
+            { text: '401 最小值', link: "/python/新手上路系列/tqc/tqc4/401" },
+            { text: "402 不定數迴圈-最小值", link: "/python/新手上路系列/tqc/tqc4/402" },
+            { text: "403 倍數總和計算", link: "/python/新手上路系列/tqc/tqc4/403" },
+            { text: "404 數字反轉判斷", link: "/python/新手上路系列/tqc/tqc4/404" },
+            { text: "405 不定數迴圈-分數等級", link: "/python/新手上路系列/tqc/tqc4/405" },
+            { text: "406 不定數迴圈-BMI計算", link: "/python/新手上路系列/tqc/tqc4/406" },
+            { text: "407 不定數迴圈-閏年判斷", link: "/python/新手上路系列/tqc/tqc4/407" },
+            { text: "408 奇偶數個數計算", link: "/python/新手上路系列/tqc/tqc4/408" },
+            { text: "409 得票數計算", link: "/python/新手上路系列/tqc/tqc4/409" },
+            { text: "410 繪製等腰三角形", link: "/python/新手上路系列/tqc/tqc4/410" },
+          ]
+        },
+        {
+          text: "第6類 迴圈敘述",
+          collapsed: true,
+          items: [
+            { text: '601 偶數索引值加總', link: "/python/新手上路系列/tqc/tqc6/601" },
+            { text: "602 撲克牌總和", link: "/python/新手上路系列/tqc/tqc6/602" },
+            { text: "603 數字排序", link: "/python/新手上路系列/tqc/tqc6/603" },
+            { text: "604 眾數", link: "/python/新手上路系列/tqc/tqc6/604" },
+            { text: "605 成績計算", link: "/python/新手上路系列/tqc/tqc6/605" },
+            { text: "606 二維串列行列數", link: "/python/新手上路系列/tqc/tqc6/606" },
+            { text: "607 成績計算", link: "/python/新手上路系列/tqc/tqc6/607" },
+            { text: "608 最大最小值索引", link: "/python/新手上路系列/tqc/tqc6/608" },
+            { text: "609 矩陣相加", link: "/python/新手上路系列/tqc/tqc6/609" },
+            { text: "610 平均溫度", link: "/python/新手上路系列/tqc/tqc6/610" },
           ]
         },
       ]

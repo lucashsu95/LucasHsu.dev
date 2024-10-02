@@ -281,6 +281,5 @@ print(output)
 ---
 
 ## 牛刀小試
-- [TQC+ 程式語言Python 第3類：迴圈敘述](https://jbprogramnotes.com/2020/05/tqc-%e7%a8%8b%e5%bc%8f%e8%aa%9e%e8%a8%80python-%e7%ac%ac3%e9%a1%9e%ef%bc%9a%e8%bf%b4%e5%9c%88%e6%95%98%e8%bf%b0/)
-
-- [TQC+ 程式語言Python 第4類：進階控制流程](https://jbprogramnotes.com/2020/05/tqc-%e7%a8%8b%e5%bc%8f%e8%aa%9e%e8%a8%80python-%e7%ac%ac4%e9%a1%9e%ef%bc%9a%e9%80%b2%e9%9a%8e%e6%8e%a7%e5%88%b6%e6%b5%81%e7%a8%8b/)
+- [TQC+ 程式語言Python 第3類：迴圈敘述](./tqc/tqc3/301)
+- [TQC+ 程式語言Python 第4類：進階控制流程](./tqc/tqc4/401)
