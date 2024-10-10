@@ -87,21 +87,3 @@ grid允許創建多行和多列的網格布局，以更精確地控制元素的�
     [flex小青蛙](https://flexboxfroggy.com/#zh-tw)
 2. ![](https://hackmd.io/_uploads/SJB6CLNCn.png)
     [grid花園](https://cssgridgarden.com/#zh-tw)
-    
-## 牛刀小試
-
-### flex
-
-用flex做做看吧
-
-![](https://hackmd.io/_uploads/Hk9zkPN03.png)
-
-
-### grid
-
-用grid做做看吧
-
-
-![](https://hackmd.io/_uploads/SJiD1D40h.png)
-
-![](https://hackmd.io/_uploads/Hke2JwVR3.png)
