@@ -6,7 +6,7 @@ head:
       content: 許恩綸
   - - meta
     - name: keywords
-      content: xampp, mysql, 新手上路, xampp mysql 打不開
+      content: xampp,mysql,xampp mysql 打不開
   - - meta
     - name: og:title
       content: xampp mysql 又壞掉

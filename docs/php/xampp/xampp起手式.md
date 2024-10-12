@@ -6,7 +6,7 @@ head:
       content: 許恩綸
   - - meta
     - name: keywords
-      content: xampp, mysql, phpmyadmin
+      content: xampp,xampp起手式,安裝xampp,xampp download
   - - meta
     - name: og:title
       content: xampp 起手式
