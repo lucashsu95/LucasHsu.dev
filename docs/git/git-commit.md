@@ -27,7 +27,7 @@ head:
 
 ## Add
 
-```bash
+```shell
 git add [file1] [file2] // 將變更的檔案增加到暫存區
 git add [dir] // 新增指定目錄到暫存區，包括子目錄
 git add . // 新增目前目錄下的所有檔案到暫存區
@@ -39,7 +39,7 @@ git commit 指令將暫存區內容新增至本機倉庫。
 
 提交暫存區到本地倉庫中
 
-```bash
+```shell
 git commit -m [message]
 ```
 
@@ -47,11 +47,11 @@ git commit -m [message]
 
 提交暫存區的指定文件到倉庫區：
 
-```bash
+```shell
 git commit [file1] [file2] ... -m [message]
 ```
 ### reset --hard
-```bash
+```shell
 git reset --hard HEAD~1 // 直接銷毀上1個commit
 git checkout HEAD~2 // 回溯到2個commit
 ```
@@ -60,13 +60,13 @@ git checkout HEAD~2 // 回溯到2個commit
 
 git push 命令用於從將本機的分支版本上傳到遠端並合併。 命令格式如下：
 
-```bash
+```shell
 git push <远程主机名> <本地分支名>:<远程分支名>
 ```
 
 如果本機分支名與遠端分支名相同，則可以省略冒號：
 
-```bash
+```shell
 git push <远程主机名> <本地分支名>
 ```
 
@@ -74,12 +74,22 @@ git push <远程主机名> <本地分支名>
 
 下列指令將本機的 master 分支推送到 origin 主機的 master 分支。
 
-```bash
+```shell
 git push origin master
 ```
 
-## 強制Push
+### 強制Push
 
-```bash
+```shell
 git push -f
 ```
+
+## 查看commit
+
+```shell
+git log // 查看
+git log --oneline // 簡化只會看到內容
+git log n -5 // 只看最近5個
+```
+
+可以按`q`退出
