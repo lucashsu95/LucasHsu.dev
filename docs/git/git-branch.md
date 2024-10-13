@@ -6,11 +6,34 @@
 ## 基本命令
 
 ```bash
-git branch
+git checkout feature // 切換分支
+git branch // 查看分支
 git branch -r // 查看遠端分支
 git branch -a // 查看所有分支
 ```
 
+## 新增/刪除分支
+```shell
+git branch <new-branch-name> // 新增
+git checkout -b <new-branch-name> // 新增，並且直接切過去
+git branch -d <branch_name> // 刪除
+git branch -D <branch_name> // 強制刪除
+```
+
+## 新增/刪除遠端分支
+```shell
+git push origin <branch-name> // 分支推送到遠端
+git push <remote> --delete <branch_name> // 刪除遠端
+git push <remote> :<branch_name> // 刪除遠端
+```
+
+## 設置上游追蹤
+
+如果你希望在未來能夠簡單地使用 git push 和 git pull，可以在首次推送時設置上游追蹤：
+
+```shell
+git push -u origin <branch-name>
+```
 
 ## Merge & Rebase
 
