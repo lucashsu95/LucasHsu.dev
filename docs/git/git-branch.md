@@ -23,8 +23,8 @@ git branch -D <branch_name> // 強制刪除
 ## 新增/刪除遠端分支
 ```shell
 git push origin <branch-name> // 分支推送到遠端
-git push <remote> --delete <branch_name> // 刪除遠端
-git push <remote> :<branch_name> // 刪除遠端
+git push origin --delete <branch_name> // 刪除遠端
+git push origin :<branch_name> // 刪除遠端
 ```
 
 ## 設置上游追蹤
