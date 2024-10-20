@@ -7,17 +7,13 @@ on:
       - main
 
 jobs:
-  build:
-      name: Build
-      runs-on: ubuntu-latest
-      steps:
-        - name: 拉取程式碼
-          uses: actions/checkout@v4
-          with: 
-            fetch-depth: 0
   deploy:
     runs-on: ubuntu-latest
     steps:
+      - name: 拉取程式碼
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v3
         with:
