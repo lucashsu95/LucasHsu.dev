@@ -19,8 +19,7 @@ head:
 ---
 
 # python-新手上路-Day6 ｜ List
-
-> 程式設計師的生物鐘只有兩個狀態：coding 和還沒寫完的 coding。
+> 程式設計師的生物鐘只有兩個狀態:coding 和還沒寫完的 coding。
 
 列表是 Python 中常用的資料結構，用於儲存一系列元素。它具有彈性，可以容納不同類型的元素，如數字、字串、物件等。
 
@@ -54,7 +53,7 @@ Python 提供了多種方法來操作列表。以下是一些常用的方法示�
 
 - ### append 新增
 
-  將新元素<span class='mm'>增加</span>到列表末尾。
+  將新元素<mark>增加</mark>到列表末尾。
 
   ```py
   my_list.append(新元素)
@@ -62,7 +61,7 @@ Python 提供了多種方法來操作列表。以下是一些常用的方法示�
 
 - ### remove 刪除
 
-  <span class='mm'>刪除</span>特定的元素。
+  <mark>刪除</mark>特定的元素。
 
   ```py
   my_list.remove(要刪除的元素)
@@ -70,7 +69,7 @@ Python 提供了多種方法來操作列表。以下是一些常用的方法示�
 
 - ### insert 插入
 
-  在指定位置<span class='mm'>插入</span>新元素。
+  在指定位置<mark>插入</mark>新元素。
 
   ```py
   my_list.insert(位置, 新元素)
@@ -87,7 +86,7 @@ Python 提供了多種方法來操作列表。以下是一些常用的方法示�
 
 - ### pop 移除
 
-  <span class='mm'>刪除</span>特定的<span class='mm'>位置</span>的元素，並回傳。
+  <mark>刪除</mark>特定的<mark>位置</mark>的元素，並回傳。
 
   ```py
   item = my_list.pop(位置) # 回傳被刪除的元素
@@ -120,7 +119,7 @@ Python 提供了多種方法來操作列表。以下是一些常用的方法示�
 還是看不懂，範例不就來了嗎
 
 - ### append 新增
-  將新元素<span class='mm'>增加</span>到列表末尾。
+  將新元素<mark>增加</mark>到列表末尾。
   ```py
   my_list = [1, 2, 3]
   my_list.append(4)
@@ -128,7 +127,7 @@ Python 提供了多種方法來操作列表。以下是一些常用的方法示�
   ```
 - ### remove 刪除
 
-  <span class='mm'>刪除</span>特定的元素。
+  <mark>刪除</mark>特定的元素。
 
   ```py
   my_list = [1, 2, 3, 4, 3]
@@ -138,7 +137,7 @@ Python 提供了多種方法來操作列表。以下是一些常用的方法示�
 
 - ### insert 插入
 
-  在指定位置<span class='mm'>插入</span>新元素。
+  在指定位置<mark>插入</mark>新元素。
 
   ```py
   my_list = [1, 2, 3]
@@ -158,7 +157,7 @@ Python 提供了多種方法來操作列表。以下是一些常用的方法示�
 
 - ### pop 移除
 
-  <span class='mm'>刪除</span>特定的<span class='mm'>位置</span>的元素，並回傳。
+  <mark>刪除</mark>特定的<mark>位置</mark>的元素，並回傳。
 
   ```py
   my_list = ['a', 'b', 'c', 'd', 'e']

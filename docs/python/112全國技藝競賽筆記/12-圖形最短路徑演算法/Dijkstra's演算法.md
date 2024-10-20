@@ -12,9 +12,9 @@ Dijkstra演算法是一種用於解決**最短路徑問題**的演算法。它�
 
 4. **最短路徑查詢**：你可以使用Dijkstra演算法來回答特定節點對之間的最短路徑查詢，例如找到兩個城市之間的最短路徑。
 
-5. **最小生成樹**：Dijkstra演算法的變體也可用於<span class='m'>構建最小生成樹</span>，這在最小生成樹問題中非常有用，也可以使用[併查集 Disjoint Set 與 Union Find](../08-樹Tree/最小成本生成樹.md)。
+5. **最小生成樹**：Dijkstra演算法的變體也可用於<mark>構建最小生成樹</mark>，這在最小生成樹問題中非常有用，也可以使用[併查集 Disjoint Set 與 Union Find](../08-樹Tree/最小成本生成樹.md)。
 
-需要注意的是，Dijkstra演算法<span class='m'>無法處理包含負權重</span>邊的圖，如果圖中存在負權重邊，則可能需要使用[貝爾曼-福德(Bellman–Ford)演算法](./Bellman–Ford演算法.md)。此外，對於<span class='m'>密集圖和大型圖，Dijkstra演算法的效能可能不佳</span>，而其他演算法如`A*搜索`等可能更為適用。
+需要注意的是，Dijkstra演算法<mark>無法處理包含負權重</mark>邊的圖，如果圖中存在負權重邊，則可能需要使用[貝爾曼-福德(Bellman–Ford)演算法](./Bellman–Ford演算法.md)。此外，對於<mark>密集圖和大型圖，Dijkstra演算法的效能可能不佳</mark>，而其他演算法如`A*搜索`等可能更為適用。
 
 
 ## 學習資源

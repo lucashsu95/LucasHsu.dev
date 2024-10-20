@@ -179,7 +179,7 @@ print(nv)
 那...<br>
 `'123'` 跟 `123` 是同一個型態嗎?<br>
 答案是不一樣!
-怎麼分辨? 有加<span class='m'>單引號</span>或<span class='m'>雙引號</span>的資料就是字串
+怎麼分辨? 有加<mark>單引號</mark>或<mark>雙引號</mark>的資料就是字串
 
 ### Bollean(布林值)
 
