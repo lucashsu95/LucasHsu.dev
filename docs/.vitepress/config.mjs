@@ -10,6 +10,10 @@ import {
   sidebarJavascript,
 } from "./config/sidebar";
 import { InlineLinkPreviewElementTransform } from "@nolebase/vitepress-plugin-inline-link-preview/markdown-it";
+import { 
+  GitChangelog, 
+  GitChangelogMarkdownSection, 
+} from '@nolebase/vitepress-plugin-git-changelog/vite'
 
 const env = loadEnv("", process.cwd());
 
@@ -34,6 +38,12 @@ export default defineConfig({
         "@nolebase/vitepress-plugin-inline-link-preview",
       ],
     },
+    plugins: [ 
+      GitChangelog({ 
+        repoURL: () => 'https://github.com/lucashsu95/LucasHsu.dev', 
+      }), 
+      GitChangelogMarkdownSection(), 
+    ],
   },
   base: "/LucasHsu.dev/",
   title: "LucasHsu.dev",

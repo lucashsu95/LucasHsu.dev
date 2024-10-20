@@ -40,6 +40,10 @@ import "@nolebase/vitepress-plugin-enhanced-readabilities/client/style.css";
 import { NolebaseInlineLinkPreviewPlugin } from "@nolebase/vitepress-plugin-inline-link-preview/client";
 import "@nolebase/vitepress-plugin-inline-link-preview/client/style.css";
 
+// vitepress-plugin-git-changelog
+import { NolebaseGitChangelogPlugin } from "@nolebase/vitepress-plugin-git-changelog/client";
+import "@nolebase/vitepress-plugin-git-changelog/client/style.css";
+
 function reloadBusuanzi() {
   const busuanziScriptId = "busuanzi-script";
 
@@ -77,8 +81,10 @@ export default {
     googleAnalytics({
       id: process.env.VITE_GOOGLE_ANALYTICS_ID,
     });
+    const { app } = ctx;
 
-    ctx.app.use(NolebaseInlineLinkPreviewPlugin);
+    app.use(NolebaseInlineLinkPreviewPlugin);
+    app.use(NolebaseGitChangelogPlugin,);
   },
   setup() {
     vitepressLifeProgress();
