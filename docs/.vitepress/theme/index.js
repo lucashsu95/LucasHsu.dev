@@ -43,6 +43,8 @@ import "@nolebase/vitepress-plugin-inline-link-preview/client/style.css";
 // vitepress-plugin-git-changelog
 import { NolebaseGitChangelogPlugin } from "@nolebase/vitepress-plugin-git-changelog/client";
 import "@nolebase/vitepress-plugin-git-changelog/client/style.css";
+import TocList from "./components/TocList.vue";
+import CarrySystem from "./components/CarrySystem.vue";
 
 function reloadBusuanzi() {
   const busuanziScriptId = "busuanzi-script";
@@ -84,7 +86,9 @@ export default {
     const { app } = ctx;
 
     app.use(NolebaseInlineLinkPreviewPlugin);
-    app.use(NolebaseGitChangelogPlugin,);
+    app.use(NolebaseGitChangelogPlugin);
+    app.component("TocList", TocList);
+    app.component('CarrySystem',CarrySystem);
   },
   setup() {
     vitepressLifeProgress();

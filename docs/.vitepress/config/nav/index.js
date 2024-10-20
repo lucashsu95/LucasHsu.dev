@@ -1,7 +1,8 @@
 export function nav() {
   return [
-    { text: "Home", link: "/" },
-    { text: "About me", link: "/about/" },
+    { text: "首頁", link: "/" },
+    { text: "關於我", link: "/about/" },
+    { text: "最近更新", link: "/toc" },
     {
       text: "Python",
       items: [
@@ -21,13 +22,18 @@ export function nav() {
     { text: "GIT", link: "/git/" },
     { text: "作品集", link: "/portfolio/" },
     {
-      text: "Other",
+      text: "其它",
       items: [
         { text: "安裝vscode", link: "/other/安裝vscode" },
-        { text: "設定 ESLint 和 Prettier", link: "/other/init-eslint-prettier" },
-        { text: "設定 jsconfig.json和vite.config.js", link: "/other/init-jsconfig-viteConfig" },
+        {
+          text: "設定 ESLint 和 Prettier",
+          link: "/other/init-eslint-prettier",
+        },
+        {
+          text: "設定 jsconfig.json和vite.config.js",
+          link: "/other/init-jsconfig-viteConfig",
+        },
       ],
-
     },
   ];
 }

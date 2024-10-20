@@ -1,9 +1,10 @@
 name: Deploy
 
-on:
-  push:
-    branches:
-      - main
+on: workflow_dispatch
+# on:
+#   push:
+#     branches:
+#       - main
 
 jobs:
   build:
@@ -23,9 +24,11 @@ jobs:
           node-version: 18
       - run: npm i pnpm -g
       - run: pnpm install
-
+      - run: pnpm generate-sidebar
+      
       - name: Create .env file
         run: echo "VITE_GOOGLE_ANALYTICS_ID=${{ secrets.VITE_GOOGLE_ANALYTICS_ID }}" > .env
+
       - name: Build
         run: pnpm build
 

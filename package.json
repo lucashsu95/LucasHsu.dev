@@ -14,7 +14,8 @@
   "scripts": {
     "dev": "vitepress dev docs",
     "build": "vitepress build docs",
-    "preview": "vitepress preview docs"
+    "preview": "vitepress preview docs",
+    "generate-sidebar": "node generateSidebar.js"
   },
   "dependencies": {
     "busuanzi.pure.js": "^1.0.3",

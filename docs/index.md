@@ -26,7 +26,7 @@ features:
     details: <img src="https://skillicons.dev/icons?perline=4&theme=light&i=vscode,phpstorm,ps,ai,figma,notion,git,docker" class="icon-img">
   - icon: ☕
     title: In Learing
-    details: <img src="https://skillicons.dev/icons?perline=4&theme=light&i=java,react,tailwind,spring" class="icon-img">
+    details: <img src="https://skillicons.dev/icons?perline=4&theme=light&i=react,tailwind" class="icon-img">
 
 
 head:
