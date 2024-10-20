@@ -1,3 +1,25 @@
+---
+outline: "deep"
+head:
+  - - meta
+    - name: author
+      content: 許恩綸
+  - - meta
+    - name: keywords
+      content: git,git branch,分支
+  - - meta
+    - name: og:title
+      content: git branch 分支
+  - - meta
+    - name: og:description
+      content: git branch教學和範例
+  - - meta
+    - name: og:type
+      content: article
+  - - meta
+    - name: og:image
+      content: https://lucashsu95.github.io/LucasHsu.dev/git/git-branch.html
+---
 # Git Branch 分支
 
 ## 介紹
