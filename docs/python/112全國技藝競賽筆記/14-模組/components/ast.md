@@ -1,16 +1,38 @@
+---
+head:
+  - - meta
+    - name: author
+      content: 許恩綸
+  - - meta
+    - name: keywords
+      content: ast,python,抽象語法樹
+  - - meta
+    - name: og:title
+      content: 抽象語法樹|python
+  - - meta
+    - name: og:description
+      content: 本章節介紹抽象語法樹，python程式碼提供範例。
+  - - meta
+    - name: og:type
+      content: article
+  - - meta
+    - name: og:image
+      content: https://lucashsu95.github.io/LucasHsu.dev/python/112全國技藝競賽筆記/14-模組/components/ast.html
+---
+
 # ast抽象語法樹
 
 ## 介紹
 
-当使用Python的`ast`模块时，你通常会分为两个主要步骤：解析源代码以构建AST，然后遍历AST节点以执行所需的操作。以下是一个简单的示例，演示如何使用`ast`模块来解析Python代码并遍历AST节点以查找函数定义。
+當使用Python的`ast`模組時，你通常會分為兩個主要步驟：解析原始程式碼以構建AST，然後遍歷AST節點以執行所需的操作。以下是一個簡單的示例，演示如何使用`ast`模組來解析Python代碼並遍歷AST節點以查找函式定義。
 
-首先，我们需要导入`ast`模块：
+首先，我們需要導入`ast`模組：
 
 ```python
 import ast
 ```
 
-然后，让我们看一个示例，假设我们有以下Python代码：
+然後，讓我們看一個示例，假設我們有以下Python代碼：
 
 ```python
 def add(a, b):
@@ -20,7 +42,7 @@ def subtract(a, b):
     return a - b
 ```
 
-我们可以使用`ast`模块来解析这段代码并查找其中的函数定义：
+我們可以使用`ast`模組來解析這段代碼並查找其中的函式定義：
 
 ```python
 source_code = """
@@ -31,36 +53,36 @@ def subtract(a, b):
     return a - b
 """
 
-# 解析源代码并构建AST
+# 解析原始程式碼並構建AST
 parsed_code = ast.parse(source_code)
 
-# 遍历AST以查找函数定义
+# 遍歷AST以查找函式定義
 for node in ast.walk(parsed_code):
     if isinstance(node, ast.FunctionDef):
         print(f"Found function: {node.name}")
 ```
 
-在这个示例中，我们首先使用`ast.parse()`函数将源代码解析为AST。然后，我们使用`ast.walk()`函数遍历AST中的所有节点，并检查是否某个节点是`ast.FunctionDef`类型的，如果是，则打印出函数的名称。这将输出：
+在這個示例中，我們首先使用`ast.parse()`函數將原始程式碼解析為AST。然後，我們使用`ast.walk()`函數遍歷AST中的所有節點，並檢查是否某個節點是`ast.FunctionDef`類型的，如果是，則列印出函數的名稱。這將輸出：
 
 ```
 Found function: add
 Found function: subtract
 ```
 
-这是一个简单示例，演示了如何使用`ast`模块解析Python代码并查找特定类型的节点。你可以根据需要执行更复杂的分析和操作。`ast`模块为更复杂的用例提供了丰富的功能，如修改AST以进行代码转换、查找特定模式的代码等。
+這是一個簡單示例，演示了如何使用`ast`模組解析Python代碼並查找特定類型的節點。你可以根據需要執行更複雜的分析和操作。`ast`模組為更複雜的用例提供了豐富的功能，如修改AST以進行代碼轉換、查找特定模式的代碼等。
 
 ## 進階
 
-除了函数定义外，`ast`模块还允许你分析Python代码中的其他类型的语句、表达式和结构。以下是一些常见的`ast`模块功能：
+除了函式定義外，`ast`模組還允許你分析Python代碼中的其他類型的語句、運算式和結構。以下是一些常見的`ast`模組功能：
 
-1. **Class Definition (类定义)**: 你可以使用`ast.ClassDef`节点来查找和分析类的定义，包括类名、类属性和方法。
+1. **Class Definition (類定義)**: 你可以使用`ast.ClassDef`節點來查找和分析類的定義，包括類名、類屬性和方法。
 
-2. **Control Flow Statements (控制流语句)**: 你可以分析`ast.If`, `ast.While`, `ast.For`, `ast.With`, `ast.Break`, `ast.Continue`, `ast.Return`等节点，以理解和修改条件语句、循环、异常处理等。
+2. **Control Flow Statements (控制流語句)**: 你可以分析`ast.If`, `ast.While`, `ast.For`, `ast.With`, `ast.Break`, `ast.Continue`, `ast.Return`等節點，以理解和修改條件陳述式、迴圈、異常處理等。
 
-3. **表达式 (Expressions)**: 你可以使用`ast.Expr`节点来查找和分析表达式，包括数学运算、函数调用、变量赋值等。
+3. **運算式 (Expressions)**: 你可以使用`ast.Expr`節點來查找和分析運算式，包括數學運算、函式呼叫、變數賦值等。
 
-4. **模块和导入 (Modules and Imports)**: 你可以使用`ast.Module`节点来表示整个模块，以及使用`ast.Import`和`ast.ImportFrom`节点来分析模块导入。
+4. **模組和導入 (Modules and Imports)**: 你可以使用`ast.Module`節點來表示整個模組，以及使用`ast.Import`和`ast.ImportFrom`節點來分析模組導入。
 
-`ast.parse()`函数用于将源代码解析为AST对象。这是第一步，它将源代码转换为AST树，使你能够访问和分析源代码的结构。你可以使用`ast.parse()`函数来创建AST对象，然后使用其他`ast`模块的功能来操作和分析AST。
+`ast.parse()`函數用於將原始程式碼解析為AST物件。這是第一步，它將原始程式碼轉換為AST樹，使你能夠訪問和分析原始程式碼的結構。你可以使用`ast.parse()`函數來創建AST物件，然後使用其他`ast`模組的功能來操作和分析AST。
 
-`ast.walk()`函数用于遍历AST树中的所有节点，允许你访问每个节点并进行操作。它是一个生成器，可用于深度优先遍历AST，以便查找和处理AST中的各种元素。你可以在遍历过程中检查节点的类型，然后执行相应的操作。这对于分析、转换和代码生成非常有用。
+`ast.walk()`函數用於遍歷AST樹中的所有節點，允許你訪問每個節點並進行操作。它是一個生成器，可用于深度優先遍歷AST，以便查找和處理AST中的各種元素。你可以在遍歷過程中檢查節點的類型，然後執行相應的操作。這對於分析、轉換和代碼生成非常有用。

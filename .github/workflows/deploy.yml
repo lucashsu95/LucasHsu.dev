@@ -16,6 +16,8 @@ jobs:
       - run: npm i pnpm -g
       - run: pnpm install
 
+      - name: Create .env file
+        run: echo "VITE_GOOGLE_ANALYTICS_ID=${{ secrets.VITE_GOOGLE_ANALYTICS_ID }}" > .env
       - name: Build
         run: pnpm build
 

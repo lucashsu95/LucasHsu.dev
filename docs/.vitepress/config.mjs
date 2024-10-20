@@ -1,4 +1,4 @@
-import { defineConfig } from "vitepress";
+import { defineConfig, loadEnv } from "vitepress";
 import { nav } from "./config/nav";
 import {
   sidebarGit,
@@ -9,11 +9,37 @@ import {
   sidebarCss,
   sidebarJavascript,
 } from "./config/sidebar";
+import { InlineLinkPreviewElementTransform } from "@nolebase/vitepress-plugin-inline-link-preview/markdown-it";
+
+const env = loadEnv("", process.cwd());
 
 export default defineConfig({
-  base: '/LucasHsu.dev/',
+  vite: {
+    define: {
+      "process.env": env,
+    },
+    optimizeDeps: {
+      exclude: [
+        "@nolebase/vitepress-plugin-enhanced-readabilities/client",
+        "vitepress",
+        "@nolebase/ui",
+        "@nolebase/vitepress-plugin-inline-link-preview/client",
+      ],
+    },
+    ssr: {
+      noExternal: [
+        "@nolebase/vitepress-plugin-highlight-targeted-heading",
+        "@nolebase/vitepress-plugin-enhanced-readabilities",
+        "@nolebase/ui",
+        "@nolebase/vitepress-plugin-inline-link-preview",
+      ],
+    },
+  },
+  base: "/LucasHsu.dev/",
   title: "LucasHsu.dev",
   description: "部落格&作品集&比賽事蹟&演算法筆記",
+  lang: "zh-TW",
+  cleanUrls: true,
   head: [
     [
       "link",
@@ -21,13 +47,6 @@ export default defineConfig({
         rel: "icon",
         href: "/LucasHsu.dev/logo/favicon.ico",
       },
-    ],
-    [
-      'script',
-      {
-        src: '/LucasHsu.dev/js/linebox.js',
-        defer: true, // 確保腳本在 DOM 加載後執行
-      }
     ],
   ],
   themeConfig: {
@@ -49,16 +68,21 @@ export default defineConfig({
     search: { provider: "local" },
     socialLinks: [{ icon: "github", link: "https://github.com/lucashsu95" }],
     footer: {
-      copyright: `Copyright © ${new Date().getFullYear()} Lucas Hsu`,
+      copyright: `Copyright © ${new Date().getFullYear()} ｜ Lucas Hsu`,
     },
     lastUpdated: true,
   },
   markdown: {
-    theme: { light: 'vitesse-light', dark: 'vitesse-dark' },
+    theme: { light: "vitesse-light", dark: "vitesse-dark" },
     image: {
-      lazyLoading: true
+      lazyLoading: true,
     },
-    // lineNumbers: true
-    math: true
+    math: true,
+    config: (md) => {
+      md.use(InlineLinkPreviewElementTransform);
+    },
+  },
+  sitemap: {
+    hostname: "https://lucashsu95.github.io/LucasHsu.dev",
   },
 });

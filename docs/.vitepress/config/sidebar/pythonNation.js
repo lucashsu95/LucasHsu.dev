@@ -108,7 +108,7 @@ export function sidebarPythonNation() {
           items: [
             {
               text: "深度和廣度優先搜索",
-              link: "/python/112全國技藝競賽筆記/03-搜尋法/DFS-and-BFS",
+              link: "/python/112全國技藝競賽筆記/08-樹Tree/DFS-and-BFS",
             },
             {
               text: "二元樹",
@@ -147,6 +147,10 @@ export function sidebarPythonNation() {
             {
               text: "位元運算子",
               link: "/python/112全國技藝競賽筆記/09-關於進位法/位元運算子",
+            },
+            {
+              text: "進位轉換器",
+              link: "/python/112全國技藝競賽筆記/09-關於進位法/進位轉換器",
             },
           ],
         },
@@ -279,10 +283,6 @@ export function sidebarPythonNation() {
           items: [
             {
               text: "一元二次方程式的根",
-              link: "/python/112全國技藝競賽筆記/15-其他/一元二次方程式的根",
-            },
-            {
-              text: "曼哈頓路徑",
               link: "/python/112全國技藝競賽筆記/15-其他/一元二次方程式的根",
             },
           ],

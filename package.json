@@ -1,11 +1,23 @@
 {
   "devDependencies": {
+    "@nolebase/vitepress-plugin-enhanced-mark": "^2.6.1",
+    "@nolebase/vitepress-plugin-enhanced-readabilities": "^2.6.1",
+    "@nolebase/vitepress-plugin-highlight-targeted-heading": "^2.6.1",
+    "@nolebase/vitepress-plugin-inline-link-preview": "^2.6.1",
     "markdown-it-mathjax3": "^4.3.2",
-    "vitepress": "1.0.0-rc.42"
+    "medium-zoom": "^1.1.0",
+    "vitepress": "1.0.0-rc.42",
+    "vitepress-plugin-google-analytics": "^1.0.2",
+    "vitepress-plugin-life-progress": "^0.0.3"
   },
   "scripts": {
     "dev": "vitepress dev docs",
     "build": "vitepress build docs",
     "preview": "vitepress preview docs"
+  },
+  "dependencies": {
+    "busuanzi.pure.js": "^1.0.3",
+    "viewerjs": "^1.11.6",
+    "vitepress-plugin-back-to-top": "^1.0.1"
   }
 }

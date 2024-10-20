@@ -1,6 +1,28 @@
+---
+outline: [2,3]
+head:
+  - - meta
+    - name: author
+      content: 許恩綸
+  - - meta
+    - name: keywords
+      content: collections,Counter,defaultdict,python
+  - - meta
+    - name: og:title
+      content: collections|python
+  - - meta
+    - name: og:description
+      content: 實作了專門的容器資料類型，為 Python 的通用內建容器dict、list、set和tuple提供了替代方案
+  - - meta
+    - name: og:type
+      content: article
+  - - meta
+    - name: og:image
+      content: https://lucashsu95.github.io/LucasHsu.dev/python/112全國技藝競賽筆記/14-模組/components/collections.html
+---
 # collections
 
-## collections.Counter
+## Counter
 計數神器
 
 ```python
@@ -22,10 +44,7 @@ print(cc[1])
 
 ---
 
-## collections.defaultdict
-英 -> 中
-default : 預設
-dict : 字典
+## defaultdict
 
 像是普通我們用`dict`做記算字串出現的時候會這樣做
 這是會輸入的資料
@@ -48,14 +67,13 @@ for i in inp:
     Ldict[i] = Ldict.get(i,0) + 1
 ```
 
-好,最後是我們的
+好,最後是我們的`defaultdict`
 ```python
 Ldict = defaultdict(int)
 for i in inp:
     Ldict[i] += 1
 ```
 這只是簡單的範例操作,做樹或圖的題目的時候會先把資料結構用好,會比較覺得好用,字數計算出現次數就直接用`Counter`就好了
-
 
 
 ## 操作

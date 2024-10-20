@@ -50,24 +50,43 @@ git commit -m [message]
 ```shell
 git commit [file1] [file2] ... -m [message]
 ```
-### reset --hard
+
+## Reset
 ```shell
+git reset --hard // 刪除回退點之前的所有訊息
 git reset --hard HEAD~1 // 直接銷毀上1個commit
 git checkout HEAD~2 // 回溯到2個commit
 ```
 
+::: info
+`--hard` 參數撤銷工作區中所有未提交的修改內容，將暫存區與工作區都回到上一次版本，並刪除先前的所有資訊提交
+:::
+
+### HEAD 說明
+
+- HEAD 表示目前版本
+- HEAD^ 上一个版本
+- HEAD^^ 上上一个版本
+- HEAD^^^ 上上上一个版本
+
+可以使用 ～數字表示
+
+- HEAD~0 表示目前版本
+- HEAD~1 上一个版本
+- HEAD^2 上上一个版本
+- HEAD^3 上上上一个版本
 ## Push
 
 git push 命令用於從將本機的分支版本上傳到遠端並合併。 命令格式如下：
 
 ```shell
-git push <远程主机名> <本地分支名>:<远程分支名>
+git push <遠端主機名稱> <本地分支名>:<遠端分支名>
 ```
 
 如果本機分支名與遠端分支名相同，則可以省略冒號：
 
 ```shell
-git push <远程主机名> <本地分支名>
+git push <遠端主機名稱> <本地分支名>
 ```
 
 **實例**
