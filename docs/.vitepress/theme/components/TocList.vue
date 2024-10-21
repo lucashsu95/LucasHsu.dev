@@ -1,4 +1,4 @@
-<!-- 目录 -->
+<!-- 目錄 -->
 <script setup>
 import { ref, computed, onMounted, onBeforeUnmount } from "vue";
 import sidebarData from "../sidebarData.json";
@@ -68,6 +68,6 @@ onBeforeUnmount(() => {
         </div>
       </div>
     </div>
-    <div id="load-more-trigger" style="height: 1px;"></div>
+    <div id="load-more-trigger" style="height: 1px"></div>
   </div>
 </template>

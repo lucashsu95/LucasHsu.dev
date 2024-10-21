@@ -1,22 +1,25 @@
 ---
-outline: deep
 head:
   - - meta
     - name: author
       content: 許恩綸
   - - meta
     - name: keywords
-      content: SQL, sql, sql join,sql 關聯
+      content: SQL, SQL JOIN, Inner Join, Left Join
   - - meta
     - name: og:title
-      content: SQL JOIN
+      content: SQL JOIN 教學
   - - meta
     - name: og:description
-      content: SQL JOIN
+      content: SQL JOIN 教學和範例，包括 Inner Join 和 Left Join 的使用方法
   - - meta
     - name: og:type
       content: article
+  - - meta
+    - name: og:image
+      content: https://lucashsu95.github.io/LucasHsu.dev/assets/sql-join/image.png
 ---
+
 
 # SQL JOIN
 
@@ -82,6 +85,8 @@ head:
 
 <a href='../assets/sql-join/test.sql' download='test.sql'>下載`test.sql`檔</a>
 :::
+
+
 ::: warning 要輸出的結果
 |id | account | total_value
 |---|---|---|
@@ -101,4 +106,4 @@ ORDER BY total_quota DESC;
 ```
 :::
 
-其它關建字：Right Join (右外連接)、Full Outer Join (全外連接)、Cross Join (交叉連接)、Natural Join (自然連接)、Natural Left Join (自然左外連接)、Natural Right Join (自然右外連接)、Natural Full Join (自然全外連接)、Natural Cross Join (自然交叉連接)、Subquery Join (子查詢連接)
+**其它關建字**：Right Join (右外連接)、Full Outer Join (全外連接)、Cross Join (交叉連接)、Natural Join (自然連接)、Natural Left Join (自然左外連接)、Natural Right Join (自然右外連接)、Natural Full Join (自然全外連接)、Natural Cross Join (自然交叉連接)、Subquery Join (子查詢連接)
