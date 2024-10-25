@@ -16,7 +16,7 @@ export function sidebarCss() {
       items: [
         { text: '關於 色碼 #hex rgba', link: '/css/色碼', activeMatch: '/css/色碼' },
         { text: '關於『&』｜Sass', link: '/css/關於『&』', activeMatch: '/css/關於『&』' },
-        { text: '介紹Clamp 一行寫好RWD?', link: '/css/clamp', activeMatch: '/css/clamp' },
+        { text: '關於 Clamp 一行寫好RWD?', link: '/css/clamp', activeMatch: '/css/clamp' },
         { text: 'CSS animation-timeline:scroll()', link: '/css/animation-timeline-scroll', activeMatch: '/css/animation-timeline-scroll' },
         { text: 'CSS scroll-snap', link: '/css/scroll-snap', activeMatch: '/css/scroll-snap' },
       ],

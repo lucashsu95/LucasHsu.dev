@@ -6,7 +6,7 @@ head:
       content: 許恩綸
   - - meta
     - name: keywords
-      content: oop,物件導向,javascript
+      content: oop,物件導向,javascript,封裝,繼承,抽象,多型
   - - meta
     - name: og:title
       content: 物件導向 OOP
