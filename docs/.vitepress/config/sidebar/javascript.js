@@ -7,6 +7,8 @@ export function sidebarJavascript() {
           { text: '關於 slice,split,splice', link: '/javascript/base/slice-split-splice', activeMatch: '/javascript/base/slice-split-splice' },
           { text: '關於 call,apply,bind', link: '/javascript/base/call-apply-bind', activeMatch: '/javascript/base/call-apply-bind' },
           { text: '關於 export和import', link: '/javascript/base/export-import', activeMatch: '/javascript/base/export-import' },
+          { text: '正規表達式 Regex', link: '/javascript/base/regex', activeMatch: '/javascript/base/regex' },
+          { text: 'Nodejs fs 基本操作', link: '/javascript/base/node-fs', activeMatch: '/javascript/base/node-fs' },
         ]
       },
       {

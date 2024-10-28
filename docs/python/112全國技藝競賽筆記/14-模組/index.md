@@ -47,7 +47,7 @@ print(a * b)
 做分數運算，這樣就不用考慮分母不一樣還要通分之類的。[官方文檔](https://docs.python.org/3/library/fractions.html)、[菜鳥教程](https://www.runoob.com/note/24857)
 
 ## re
-提供了正規表示式的功能，可以用來進行複雜的字串比對和處理。`re.find_all(pattern,st)`、`re.split(r'[,.:;]',st)`
+提供了正規表示式的功能，可以用來進行複雜的字串比對和處理。`re.findall(pattern,st)`、`re.split(r'[,.:;]',st)`、[懶人包](./components/regex)
 
 ## json
 輸入輸出json格式
