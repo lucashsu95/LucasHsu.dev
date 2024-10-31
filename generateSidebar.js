@@ -10,6 +10,19 @@ const outputFilePath = path.resolve(
   "sidebarData.json"
 );
 
+const { execSync } = require('child_process');
+
+function getGitLastModifiedTime(filePath) {
+    try {
+        const result = execSync(`git log -1 --format=%ct ${filePath}`).toString().trim();
+        const timestamp = parseInt(result, 10) * 1000; // Convert to milliseconds
+        return new Date(timestamp);
+    } catch (error) {
+        console.error(`Error getting last modified time for ${filePath}:`, error);
+        return null;
+    }
+}
+
 function getMarkdownFiles(dir, baseDir = "") {
   const files = fs.readdirSync(dir);
   let markdownFiles = [];
@@ -30,7 +43,7 @@ function getMarkdownFiles(dir, baseDir = "") {
       markdownFiles.push({
         text: file.replace(".md", ""),
         link: `${relativePath.replace(/\\/g, "/").replace(".md", "")}`,
-        lastUpdated: stat.mtimeMs,
+        lastUpdated: getGitLastModifiedTime(filePath),
       });
     }
   });
