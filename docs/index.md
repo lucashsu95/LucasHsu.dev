@@ -23,7 +23,7 @@ features:
     details:  <img src="https://skillicons.dev/icons?perline=4&theme=light&i=vue,pinia,bootstrap,laravel" class="icon-img">
   - icon: 🛠
     title: Skills & Tools
-    details: <img src="https://skillicons.dev/icons?perline=4&theme=light&i=vscode,phpstorm,ps,ai,figma,notion,git,docker" class="icon-img">
+    details: <img src="https://skillicons.dev/icons?perline=4&theme=light&i=vscode,phpstorm,ps,ai,pr,figma,notion,git,docker" class="icon-img">
   - icon: ☕
     title: In Learing
     details: <img src="https://skillicons.dev/icons?perline=4&theme=light&i=react,tailwind" class="icon-img">

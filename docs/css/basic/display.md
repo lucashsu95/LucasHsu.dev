@@ -15,6 +15,9 @@ head:
   - - meta
     - name: og:type
       content: article
+  - - meta
+    - name: og:image
+      content: https://lucashsu95.github.io/LucasHsu.dev/css/basic/grid
 ---
 
 # Css Display 顯示
