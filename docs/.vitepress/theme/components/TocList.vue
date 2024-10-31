@@ -10,7 +10,7 @@ const list = computed(() => {
 
 const sortedList = computed(() => {
   const ls = [...list.value];
-  return ls.sort((a, b) => (b.lastUpdated || 0) - (a.lastUpdated || 0));
+  return ls.sort((a, b) => new Date(b.lastUpdated).getTime() - new Date(a.lastUpdated).getTime() || 0);
 });
 
 const itemsToShow = ref(10);
