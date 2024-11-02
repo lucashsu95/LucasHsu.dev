@@ -43,7 +43,7 @@ npx tailwindcss init -p
 const content = [
   "./index.html",
   "./src/**/*.{js,jsx}",
-],
+]
 const plugins = []
 const theme = { extend: {} }
 export { content, plugins, theme }
