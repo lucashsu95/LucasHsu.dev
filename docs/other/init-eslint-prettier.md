@@ -46,10 +46,10 @@ pnpm add -D eslint prettier eslint-plugin-prettier eslint-config-prettier
 
 記得要先安裝
 ```bash
-npm i -D @prettier/plugin-tailwindcss
+npm i -D prettier-plugin-tailwindcss
 ```
 ```bash
-pnpm add -D prettier/plugin-tailwindcss
+pnpm add -D prettier-plugin-tailwindcss
 ```
 
 ## 3. 執行 ESLint 和 Prettier
