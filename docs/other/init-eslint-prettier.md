@@ -48,6 +48,9 @@ pnpm add -D eslint prettier eslint-plugin-prettier eslint-config-prettier
 ```bash
 npm i -D @prettier/plugin-tailwindcss
 ```
+```bash
+pnpm add -D prettier/plugin-tailwindcss
+```
 
 ## 3. 執行 ESLint 和 Prettier
 
