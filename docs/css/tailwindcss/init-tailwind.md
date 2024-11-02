@@ -40,7 +40,7 @@ npx tailwindcss init -p
 ```js
 /** @type {import('tailwindcss').Config} */
 
-const content: [
+const content = [
   "./index.html",
   "./src/**/*.{js,jsx}",
 ],
