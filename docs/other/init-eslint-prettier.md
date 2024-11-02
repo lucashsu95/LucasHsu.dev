@@ -1,4 +1,3 @@
-田
 # 使用 npm / pnpm 的專案中設定 ESLint 和 Prettier
 
 ## 1. 安裝 ESLint 和 Prettier
