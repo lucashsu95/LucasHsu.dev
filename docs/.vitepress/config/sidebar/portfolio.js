@@ -20,6 +20,7 @@ export function sidebarPortfolio() {
         { text: "二元樹結構產生器", link: "portfolio/網站Web/二元樹結構產生器", activeMatch: "portfolio/網站Web/二元樹結構產生器" },
         { text: "圈圈差差", link: "portfolio/網站Web/圈圈差差", activeMatch: "portfolio/網站Web/圈圈差差" },
         { text: "值日生自動排班系統", link: "portfolio/網站Web/值日生自動排班系統", activeMatch: "portfolio/網站Web/值日生自動排班系統" },
+        { text: "自定題目練習系統", link: "portfolio/網站Web/自定題目練習系統", activeMatch: "portfolio/網站Web/自定題目練習系統" },
       ],
     },
     {
@@ -33,7 +34,7 @@ export function sidebarPortfolio() {
     },
     {
       text: "Python 工具",
-      collapsed: true,
+      collapsed: false,
       items: [
         { text: "資料夾路徑README生成器", link: "portfolio/python小工具/資料夾路徑README生成器", activeMatch: "portfolio/python小工具/資料夾路徑README生成器" },
         { text: "檔案分類器", link: "portfolio/python小工具/檔案分類器", activeMatch: "portfolio/python小工具/檔案分類器" },
