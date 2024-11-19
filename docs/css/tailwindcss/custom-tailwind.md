@@ -77,3 +77,107 @@ const theme = {
 }
 export { content, plugins, theme }
 ```
+
+
+::: details 自定樣式
+
+
+### `index.css`
+```css
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  /* Components Start */
+
+  .navbar {
+    @apply fixed left-0 right-0 top-0 z-10 flex justify-center space-x-4 bg-white p-5 shadow-md shadow-gray-300;
+  }
+
+  .wraps {
+    @apply flex min-h-screen w-full items-center justify-center bg-slate-200;
+  }
+
+  .wrap {
+    @apply flex flex-col rounded-xl border-2 border-sky-100 bg-slate-100 px-12 py-20 shadow-[2px_2px_15px] shadow-gray-300;
+  }
+
+  /* Components End */
+
+  /* Tag Start */
+
+  .input {
+    @apply mb-1 w-full rounded-md border border-gray-200 bg-slate-200 p-2 shadow-md shadow-gray-300 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-sky-500 md:min-w-[300px] lg:w-80;
+  }
+
+  .btn {
+    @apply cursor-pointer rounded-md px-3 py-1.5 transition-transform duration-300 hover:brightness-90 active:scale-95;
+  }
+
+  .btn-primary {
+    @apply bg-primary btn text-white;
+  }
+
+  .btn-secondary {
+    @apply btn bg-slate-200;
+  }
+
+  .btn-success {
+    @apply bg-success btn;
+  }
+  .btn-danger {
+    @apply bg-danger btn;
+  }
+
+  .btn-warning {
+    @apply bg-warning btn;
+  }
+
+  .btn-info {
+    @apply bg-info btn;
+  }
+
+  .link {
+    @apply cursor-pointer text-sky-500;
+  }
+
+  /* Tag End */
+
+  /* Transform Start */
+
+  .underline-effect {
+    @apply relative pb-3 before:h-1 before:w-full before:content-[''];
+    @apply before:bg-primary before:absolute before:bottom-0 before:left-0;
+    @apply before:scale-x-0 before:transition-all before:duration-300 hover:before:scale-x-100;
+  }
+
+  .transform-300 {
+    @apply transform transition-transform duration-300;
+  }
+
+  /* Transform End */
+}
+```
+
+
+### `tailwindcss.config.js`
+```
+/** @type {import('tailwindcss').Config} */
+
+export const content = ['./src/**/*.{vue,js,ts,jsx,tsx}']
+export const plugins = []
+export const theme = {
+  extend: {
+    colors: {
+      primary: '#67c',
+      success: '#63e2b7',
+      warning: '#f2c97d',
+      danger: '#e88080',
+      info: '#70c0e8'
+    }
+  }
+}
+```
+
+:::
