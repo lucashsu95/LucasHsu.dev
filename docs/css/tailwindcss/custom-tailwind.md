@@ -116,7 +116,7 @@ export { content, plugins, theme }
   }
 
   .btn-primary {
-    @apply bg-primary btn text-white;
+    @apply btn bg-primary text-white;
   }
 
   .btn-secondary {
@@ -124,18 +124,18 @@ export { content, plugins, theme }
   }
 
   .btn-success {
-    @apply bg-success btn;
+    @apply btn bg-success;
   }
   .btn-danger {
-    @apply bg-danger btn;
+    @apply btn bg-danger;
   }
 
   .btn-warning {
-    @apply bg-warning btn;
+    @apply btn bg-warning;
   }
 
   .btn-info {
-    @apply bg-info btn;
+    @apply btn bg-info;
   }
 
   .link {
@@ -148,7 +148,7 @@ export { content, plugins, theme }
 
   .underline-effect {
     @apply relative pb-3 before:h-1 before:w-full before:content-[''];
-    @apply before:bg-primary before:absolute before:bottom-0 before:left-0;
+    @apply before:absolute before:bottom-0 before:left-0 before:bg-primary;
     @apply before:scale-x-0 before:transition-all before:duration-300 hover:before:scale-x-100;
   }
 
@@ -162,7 +162,8 @@ export { content, plugins, theme }
 
 
 ### `tailwindcss.config.js`
-```
+
+```javascript
 /** @type {import('tailwindcss').Config} */
 
 export const content = ['./src/**/*.{vue,js,ts,jsx,tsx}']
