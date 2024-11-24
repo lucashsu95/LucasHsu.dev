@@ -36,9 +36,7 @@ export function sidebarPortfolio() {
       text: "Python 工具",
       collapsed: false,
       items: [
-        { text: "資料夾路徑README生成器", link: "portfolio/python小工具/資料夾路徑README生成器", activeMatch: "portfolio/python小工具/資料夾路徑README生成器" },
-        { text: "檔案分類器", link: "portfolio/python小工具/檔案分類器", activeMatch: "portfolio/python小工具/檔案分類器" },
-        { text: "檔案重新命名器", link: "portfolio/python小工具/檔案重新命名器", activeMatch: "portfolio/python小工具/檔案重新命名器" },
+        { text: "hsutools cmd檔案操作工具", link: "portfolio/python小工具/hsutools", activeMatch: "portfolio/python小工具/hsutools" },
         { text: "大量調整影像大小器", link: "portfolio/python小工具/大量調整影像大小", activeMatch: "portfolio/python小工具/大量調整影像大小" },
       ],
     },
