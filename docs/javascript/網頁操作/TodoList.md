@@ -29,7 +29,10 @@ head:
 <video controls="controls" src="../assets/網頁操作/todolist/todolist-demo.mp4"></video>
 
 ::: details 看答案
-```html
+
+::: code-group
+
+```html [原生js寫法]
 <!DOCTYPE html>
 <html lang="zh-Hant">
   <head>
@@ -91,6 +94,102 @@ head:
   </body>
 </html>
 
+```
+
+```jsx [react 寫法]
+import { useState,useRef } from 'react'
+import PropTypes from 'prop-types'
+
+export default function TodoList() {
+  const [datas, setDatas] = useState([
+    {
+      id: 1,
+      content: 'text'
+    },
+    {
+      id: 2,
+      content: 'text2'
+    }
+  ])
+
+  const inp = useRef(null)
+
+  const handleAdd = () => {
+    const inpValue = inp.current.value
+    setDatas((prev) => {
+      return [
+        ...prev,
+        {
+          id: Date.now(),
+          content: inpValue
+        }
+      ]
+    })
+    inp.current.value = ''
+  }
+
+  return (
+    <section className="wrap">
+      <h2 className="text-xl font-bold">待辦事項</h2>
+
+      <section className="my-2 flex gap-2">
+        <input type="text" className="input flex-1" ref={inp} />
+        <button className="btn-primary" onClick={handleAdd}>
+          新增
+        </button>
+      </section>
+
+      <ul className="space-y-3 mt-3">
+        {datas.map((data) => (
+          <Todo key={data.id} data={data} setDatas={setDatas} />
+        ))}
+      </ul>
+    </section>
+  )
+}
+
+function Todo({ data, setDatas }) {
+  const { id, content } = data
+  const handleModify = () => {
+    const newContent = prompt('請輸入新的內容', content)
+    setDatas((prev) => {
+      return prev.map((item) => {
+        if (item.id === id) {
+          return {
+            ...item,
+            content: newContent
+          }
+        }
+        return item
+      })
+    })
+  }
+
+  const handleDelete = () => {
+    setDatas((prev) => {
+      return prev.filter((item) => item.id !== id)
+    })
+  }
+
+  return (
+    <li className="flex items-center justify-between space-x-3 rounded-lg border border-sky-500 p-3">
+      <span className="">{content}</span>
+      <div className="space-x-2">
+        <button className="btn-warning" onClick={handleModify}>
+          編輯
+        </button>
+        <button className="btn-danger" onClick={handleDelete}>
+          刪除
+        </button>
+      </div>
+    </li>
+  )
+}
+
+Todo.propTypes = {
+  data: PropTypes.object.isRequired,
+  setDatas: PropTypes.func.isRequired
+}
 ```
 [教學影片](https://www.youtube.com/watch?v=0CvVez4teYc&feature=youtu.be)
 :::
