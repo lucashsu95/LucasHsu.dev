@@ -35,7 +35,7 @@ head:
 
 在程式中，我們使用 `input` 函數來接收使用者的輸入
 
-```py
+```python
 n = input()
 nn = input('請輸入一些字')
 ```
@@ -44,7 +44,7 @@ nn = input('請輸入一些字')
 
 ::: code-group
 
-```py [第一種方法]
+```python [第一種方法]
 import sys
 # for line in sys.stdin.read().splitlines*():
 for line in sys.stdin:
@@ -52,7 +52,7 @@ for line in sys.stdin:
     print(line)
 ```
 
-```py [第二種方法]
+```python [第二種方法]
 while 1:
     try:
         n = input()
@@ -70,13 +70,13 @@ while 1:
 
 ::: code-group
 
-```py [a.py]
+```python [a.py]
 a = input()
 b = input()
 print(a,b)
 ```
 
-```py [in.txt]
+```python [in.txt]
 Everything will get better
 12345
 ```
@@ -107,7 +107,7 @@ python a.py < in.txt > out.txt
 讀進來的資料會是亂碼<br>
 加上`reconfigure(encoding="utf-8")`
 
-```py
+```python
 import sys
 
 a = sys.stdin.reconfigure(encoding="utf-8") # [!code focus]
@@ -123,7 +123,7 @@ for line in a:
 
 `print` 函數能夠將結果呈現在螢幕上
 
-```py
+```python
 print('hi')
 print('hi')
 # hi
@@ -138,7 +138,7 @@ python 的`print`會自動換行
 
 不要換行在後面加上`end=''`
 
-```py
+```python
 print('hi',end='')
 print('hi')
 # hihi
@@ -156,7 +156,7 @@ Python 中常見的型別有：`int` (整數)、`float` (浮點數)、`str` (字
 1. 我們可用`=`來給變數宣告初始值
 2. 我們可用`type()`這個函式來得知變數的型態
 
-```py
+```python
 int_val = 10
 float_val = 12.3
 str_val = 'hello python'
@@ -202,7 +202,7 @@ False (假)
 | x == y | X 是否等於 Y     |
 | x != y | X 是否不等於 Y   |
 
-```py
+```python
 10 <= 60 # 會變成 True
 123 == 123 # 會變成 True
 20 == 40 # 會變成 False
@@ -219,12 +219,12 @@ False (假)
 | a or b  | A 或 B 其中一個條件成立就回傳 True                            |
 | not A   | 如果 A 為 True，則回傳 False，反之則回傳 True(負負得正的感覺) |
 
-```py
+```python
 boolean = 12 + 4 > 80
 print(boolean) # 會輸出 False
 ```
 
-```py
+```python
 # 要是3和5的倍數
 number = int(input()) # 輸入一個數字
 print(number % 3 == 0 and number % 5 == 0)

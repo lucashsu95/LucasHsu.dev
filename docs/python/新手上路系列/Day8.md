@@ -24,12 +24,12 @@ head:
 
 `def`是 python 中的一個自訂函數，而自訂函數就是將自己所寫的程式碼定義成一個 function 的物件，而且可以在裡面任意的修改並且可以重複用，這樣如果遇到需要打到重複的程式碼的時候不用一直打只要執行這個函數即可
 
-```python=
+```python
 def 函數名稱(參數)：
     程式碼
 ```
 
-```python=
+```python
 def say():
     print("Hello")
     print("Hi")
@@ -40,7 +40,7 @@ say() # 在這裡呼叫
 
 在`def` 函式裡可以`回傳(return)` 東西
 
-```python=
+```python
 def parity(number):
     a = number * 2
     return a
@@ -51,7 +51,7 @@ print(parity(2)) # 這時候呼叫完，parity(2) 就會變成4 然後就print(4
 
 在函式中所定義的變數就是區域變數。只有在函式的範圍中都可以進行存取，而函式以外的其它地方，則無法進行存取
 
-```python=
+```python
 def calc_number():
     # 區域變數
     x = 20
@@ -66,7 +66,7 @@ print(x)
 
 可以使用`global`
 
-```python=
+```python
 # 全域變數
 x = 200
 
@@ -86,7 +86,7 @@ print(x)
 可以利用這個括號把變數或是值帶進去
 在帶入`function`的時候參數名稱可能會不一樣
 
-```python=
+```python
 def compute(a,b): #宣告函式且加入參數a,b
     return a+b  #回傳a+b
 
@@ -102,7 +102,7 @@ print(compute(num,num2))
 
 ### 範例 1
 
-```python=
+```python
 x = 200
 
 def calc_number():
@@ -122,7 +122,7 @@ print(x)
 
 ### 範例 2
 
-```python=
+```python
 x = 20
 
 def calc_number():
@@ -143,7 +143,7 @@ print(x)
 
 為了告訴 Python 我們要修改外部的 count 變數，我們使用 nonlocal 關鍵字，這樣 Python 就知道我們指的是外部的 count 變數，而不是創建一個新的局部變數。
 
-```python=
+```python
 def fs():
     count = 0
 

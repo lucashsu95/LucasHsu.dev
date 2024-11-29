@@ -39,7 +39,7 @@ key：value
 3. 字典是無序的，無法通過索引訪問元素，而是通過鍵（key）來訪問相應的值。
 以下是字典的一個簡單示例：
 
-```py
+```python
 student_scores = {
     "Alice": 85, # key : value
     "Bob": 70,
@@ -60,7 +60,7 @@ student_scores = {
 * 刪除鍵值對：使用 `del 字典名[鍵]` 來刪除指定的鍵值對。
 * 鍵是否存在：使用 `鍵 in 字典名` 來檢查指定的鍵是否存在於字典中。
 
-```py{1,5,9,13} [number]
+```python{1,5,9,13} [number]
 # 添加鍵值對：
 student_scores["Eve"] = 95
 # 現在字典變為 {"Alice": 85, "Bob": 70, "Charlie": 92, "David": 78, "Eve": 95}
@@ -84,7 +84,7 @@ is_bob_present = "Bob" in student_scores  # 結果為 False
 * `dict.values()`: 返回包含所有值的列表。
 * `dict.items()`: 返回包含所有鍵值對的列表，每個鍵值對都以元組形式（key, value）存在。
 
-```py {8,12,16,20}
+```python {8,12,16,20}
 student_scores = {
     "Alice": 85,
     "Bob": 70,
@@ -113,7 +113,7 @@ items_list = list(student_scores.items())
 
 #### 練習題目 1: 成績統計
 假設你有一個字典，其中存儲了一個班級的學生姓名和對應的數學成績。請完成以下任務：
-```py
+```python
 student_scores = {
     "Alice": 85,
     "Bob": 70,
@@ -129,7 +129,7 @@ student_scores = {
 
 #### 練習題目 2: 電子字典
 你想創建一個簡單的英文單詞電子字典，用於查詢單詞的定義。請完成以下任務：
-```py
+```python
 english_dictionary = {
     "apple": "a round fruit with red or green skin and firm white flesh",
     "banana": "a long curved fruit with a thick yellow skin",
@@ -153,7 +153,7 @@ english_dictionary = {
 
 ### 集合的操作範例
 
-```py {1,6,10}
+```python {1,6,10}
 # 新增
 # 使用花括號 {} 或者內建的 set() 函數來創建一個集合。
 my_set = {1, 2, 3, 4, 5}
@@ -173,7 +173,7 @@ my_set.discard(2)
 > 集合的交集就像是朋友的共同興趣，如果你們共同喜歡吃披薩，那就是你們的交集。
 
 你可以進行集合間的<mark>交集、聯集、差集</mark>等操作。
-```py
+```python
 set1 = {1, 2, 3, 4, 5}
 set2 = {4, 5, 6, 7, 8}
 
@@ -184,7 +184,7 @@ difference = {1, 2, 3}  # 差集
 
 迭代集合
 你可以使用迴圈來迭代集合中的元素。
-```py
+```python
 for item in my_set:
     print(item)
 ```

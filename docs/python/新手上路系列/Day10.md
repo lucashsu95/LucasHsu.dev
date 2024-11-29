@@ -24,7 +24,7 @@ head:
 
 ## IF
 
-```python=
+```python
 a = "🔥" if weight >= 60 else "😭"
 ```
 
@@ -32,14 +32,14 @@ a = "🔥" if weight >= 60 else "😭"
 
 ## FOR
 
-```python=
+```python
 squares = [x ** 2 for x in range(1, 6)]
 # 結果為 [1, 4, 9, 16, 25]
 ```
 
 ### 範例 1: 創建一個包含平方數的 List
 
-```python=
+```python
 even_numbers = [x for x in range(1, 11) if x % 2 == 0]
 ```
 
@@ -47,7 +47,7 @@ even_numbers = [x for x in range(1, 11) if x % 2 == 0]
 
 ### 範例 2: 將字串中的字母轉換成大寫
 
-```python=
+```python
 text = "hello world"
 uppercase_letters = [letter.upper() for letter in text if letter.isalpha()]
 # 結果為 ['H', 'E', 'L', 'L', 'O', 'W', 'O', 'R', 'L', 'D']
@@ -55,14 +55,14 @@ uppercase_letters = [letter.upper() for letter in text if letter.isalpha()]
 
 ### if 和 for 的結合
 
-```python=
+```python
 a = ["🔥" if weight >= 60 else "😭" for weight in [80, 70, 50, 40]]
 # a = ["🔥","🔥","😭","😭"]
 ```
 
 ### 範例 3: 使用嵌套一行寫法創建九九乘法表
 
-```python=
+```python
 [print(f'{i} * {j} = {i*j}', end='\n') if j == 9 else print(f'{i} * {j} = {i*j:<3d}', end=' ') for i in range(10) for j in range(10)]
 '''
 0 * 0 = 0   0 * 1 = 0   0 * 2 = 0   0 * 3 = 0   0 * 4 = 0   0 * 5 = 0   0 * 6 = 0   0 * 7 = 0   0 * 8 = 0   0 * 9 = 0
@@ -82,7 +82,7 @@ a = ["🔥" if weight >= 60 else "😭" for weight in [80, 70, 50, 40]]
 
 ### 使用一行寫法創建字典，將數字作為鍵，其平方作為值
 
-```python=
+```python
 square_dict = {x: x ** 2 for x in range(1, 6)}
 # 結果為 {1: 1, 2: 4, 3: 9, 4: 16, 5: 25}
 ```

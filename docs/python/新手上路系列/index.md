@@ -27,7 +27,7 @@ Wenyan:
 ```
 
 Equivalent JavaScript:
-```py
+```python
 n = 3
 for i in range(n):
     print('問天地好在。')

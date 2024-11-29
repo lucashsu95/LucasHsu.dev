@@ -1,7 +1,7 @@
 # 字串10題-答案
 
 ## 第1題
-```py
+```python
 import sys
 for line in sys.stdin.read().splitlines():
     if len(line) == 5 and line.isdigit():
@@ -11,7 +11,7 @@ for line in sys.stdin.read().splitlines():
 ```
 
 ## 第2題
-```py
+```python
 import sys
 for line in sys.stdin.read().splitlines():
     if len(line) >= 2 and line[0] == line[-1]:
@@ -21,7 +21,7 @@ for line in sys.stdin.read().splitlines():
 ```
 
 ## 第3題
-```py
+```python
 import sys
 for line in sys.stdin.read().splitlines():
     n = len(line)
@@ -32,7 +32,7 @@ for line in sys.stdin.read().splitlines():
 ```
 
 ## 第4題
-```py
+```python
 import sys
 for line in sys.stdin.read().splitlines():
     if len(line) >= 5 and line[-1] != '.' and line.count('.') <= 1 and line.replace('.','').isdigit():
@@ -42,7 +42,7 @@ for line in sys.stdin.read().splitlines():
 ```
 
 ## 第4題 V2
-```py
+```python
 import sys
 for line in sys.stdin.read().splitlines():
     Lresult = "F"
@@ -55,7 +55,7 @@ for line in sys.stdin.read().splitlines():
 ```
 
 ## 第5題
-```py
+```python
 import sys
 for line in sys.stdin.read().splitlines():
     if len(line) >= 5 and line[-1] != '.' and line.count('.') <= 1 and line.replace('.','').isdigit():
@@ -65,7 +65,7 @@ for line in sys.stdin.read().splitlines():
 ```
 
 ## 第5題 V2
-```py
+```python
 import sys
 
 for line in sys.stdin.read().splitlines():
@@ -84,7 +84,7 @@ for line in sys.stdin.read().splitlines():
 ```
 
 ## 第6題
-```py
+```python
 import sys
 for line in sys.stdin.read().splitlines():
     result = False
@@ -97,7 +97,7 @@ for line in sys.stdin.read().splitlines():
 ```
 
 ## 第7題
-```py
+```python
 import sys
 for line in sys.stdin.read().splitlines():
     result = False
@@ -108,7 +108,7 @@ for line in sys.stdin.read().splitlines():
 ```
 
 ## 第7題 V2
-```py
+```python
 import sys
 for line in sys.stdin.read().splitlines():
     Lresult = "F"
@@ -121,7 +121,7 @@ for line in sys.stdin.read().splitlines():
 ```
 
 ## 第8題
-```py
+```python
 import sys
 
 for line in sys.stdin.read().splitlines():
@@ -142,7 +142,7 @@ for line in sys.stdin.read().splitlines():
 ```
 
 ## 第8題 V2
-```py
+```python
 import sys
 for Lstr in sys.stdin.read().splitlines():
     Lresult = "F"
@@ -161,7 +161,7 @@ for Lstr in sys.stdin.read().splitlines():
 ```
 
 ## 第9題
-```py
+```python
 import sys
 for n in sys.stdin.read().splitlines():
     n = n.strip()
@@ -182,7 +182,7 @@ for n in sys.stdin.read().splitlines():
 ```
 
 ## 第10題
-```py
+```python
 import sys
 for n in sys.stdin.read().splitlines():
     result = False
@@ -201,7 +201,7 @@ for n in sys.stdin.read().splitlines():
 ```
 
 ## 第10題 V2
-```py
+```python
 import sys
 for n in sys.stdin.read().splitlines():
     result = False
