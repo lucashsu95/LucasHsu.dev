@@ -31,6 +31,7 @@ head:
 git add [file1] [file2] // 將變更的檔案增加到暫存區
 git add [dir] // 新增指定目錄到暫存區，包括子目錄
 git add . // 新增目前目錄下的所有檔案到暫存區
+git restore --staged src/pages/index.tsx // 從暫存區移除
 ```
 
 ## Commit
@@ -56,6 +57,7 @@ git commit [file1] [file2] ... -m [message]
 git reset --hard // 刪除回退點之前的所有訊息
 git reset --hard HEAD~1 // 直接銷毀上1個commit
 git checkout HEAD~2 // 回溯到2個commit
+git checkout -- src/pages/index.tsx // 取消index.tsx的變動
 ```
 
 ::: info
