@@ -18,9 +18,6 @@ head:
   - - meta
     - name: og:image
       content: https://lucashsu95.github.io/LucasHsu.dev/javascript/export-import.html
-  - - meta
-    - name: description
-      content: 了解如何在 JavaScript 中使用 export 和 import 來模塊化你的代碼，並通過簡單的範例展示如何在 HTML 中引入 JavaScript 模塊。
 ---
 
 # 關於 export 和 import

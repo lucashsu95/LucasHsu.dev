@@ -39,12 +39,16 @@
   border-radius: 50%;
 }
 
+.title-img {
+  box-shadow: none !important;
+}
+
 .icon-img {
   box-shadow: none !important;
 }
 
 .go-to-top {
-    background: #aaa !important;
+  background: #aaa !important;
 }
 
 /* Dark mode styles */
