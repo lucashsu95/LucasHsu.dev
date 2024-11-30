@@ -33,20 +33,20 @@ head:
 let a = 1
 let b = 2
 let c = a + b
-console.log(c)
+console.log(a,b,c)
 a += 1 // a = a + 1
-console.log(c)
+console.log(a,b,c)
 b = c
-console.log(c)
+console.log(a,b,c)
 ```
 
 :::details 看答案
-3
-3
-3
+1 2 3
+2 2 3
+2 3 3
 c這個變數沒有變過
-- a += 1是a + 1但不代表c會連結著a
-- b等於c 是b 的值被複寫不是c
+- `a += 1`是`a + 1`但不代表`c`會連結著`a`
+- `b`等於`c`是`b`的值被複寫不是`c`
 :::
 
 ## 使用內建函式
@@ -61,7 +61,6 @@ a.toString()
 parseInt('123') // 123
 Number('123') // 123
 ```
-
 
 ## 判斷式
 
