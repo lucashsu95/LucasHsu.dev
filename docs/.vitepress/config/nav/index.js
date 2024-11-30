@@ -19,11 +19,11 @@ export function nav() {
     { text: "PHP", link: "/php/" },
     { text: "JS", link: "/javascript/" },
     { text: "CSS", link: "/css/" },
-    { text: "GIT", link: "/git/" },
     { text: "作品集", link: "/portfolio/" },
     {
       text: "其它",
       items: [
+        { text: "GIT", link: "/git/" },
         { text: "安裝vscode", link: "/other/安裝vscode" },
         {
           text: "設定 ESLint 和 Prettier",

@@ -23,7 +23,7 @@ head:
 
 <img src="../assets/Days/javascript-title-img.png" alt="javascript-title-img" class="title-img" />
 
-# Day3 迴圈 For Loop & While Loop
+# Day3 迴圈 For & While
 
 ## For
 
@@ -73,12 +73,10 @@ for (let i = 1; i <= 5; i++) {
 
 ## 印出乘法表
 ```javascript:line-numbers
-for (let i = 1; i <= 5; i++) {
-    let row = '';
-    for (let j = 1; j <= i; j++) {
-        row += '*';
+for (let i = 1; i <= 9; i++) {
+    for (let j = 1; j <= 9; j++) {
+        console.log(`${i} x ${j} = ${i * j}`);
     }
-    console.log(row);
 }
 ```
 

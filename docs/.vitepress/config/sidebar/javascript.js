@@ -4,10 +4,9 @@ export function sidebarJavascript() {
       text: 'Days',
       collapsed: false,
       items: [
-        { text: 'Day1', link: '/javascript/Days/Day1', activeMatch: '/javascript/Days/Day1' },
-        { text: 'Day2', link: '/javascript/Days/Day2', activeMatch: '/javascript/Days/Day2' },
-        { text: 'Day3', link: '/javascript/Days/Day3', activeMatch: '/javascript/Days/Day3' },
-        // { text: 'Day4', link: '/javascript/basic/node-fs', activeMatch: '/javascript/basic/node-fs' },
+        { text: 'Day1 先講好規則', link: '/javascript/Days/Day1', activeMatch: '/javascript/Days/Day1' },
+        { text: 'Day2 判斷式 if...else', link: '/javascript/Days/Day2', activeMatch: '/javascript/Days/Day2' },
+        { text: 'Day3 迴圈 For & While', link: '/javascript/Days/Day3', activeMatch: '/javascript/Days/Day3' },
       ]
     },
     {
