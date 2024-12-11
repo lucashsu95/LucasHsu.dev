@@ -1,14 +1,45 @@
-# Axios
+---
+head:
+  - - meta
+    - name: author
+      content: 許恩綸
+  - - meta
+    - name: keywords
+      content: axios,javascript
+  - - meta
+    - name: og:title
+      content: javascript - axios
+  - - meta
+    - name: og:description
+      content: 使用axios實作
+  - - meta
+    - name: og:type
+      content: article
+  - - meta
+    - name: og:image
+      content: https://lucashsu95.github.io/LucasHsu.dev/javascript/export-import.html
+---
+
+# Axios - javascript
 
 ## 下載
 
-```bash
+::: code-group
+
+```bash [npm]
 npm i axios
+```
+```bash [pnpm]
 pnpm add axios
+```
+```bash [yarn]
 yarn add axios
 ```
+:::
 
 ## 初始化
+
+創建`src/lib/axios.ts`
 
 ```tsx
 import axios,{AxiosInstance} from "axios";
@@ -30,17 +61,17 @@ export default axiosInstance;
 
 ```jsx
 import { useEffect, useState } from "react";
-import axiosInstance from "../lib/axios";
+import axiosInstance from "@/lib/axios";
 
 interface ApiResponse {
-    success: boolean;
-    data: {
-      id: number;
-      name: string;
-      email: string;
-    }[];
-    message: string;
-  }
+  success: boolean;
+  data: {
+    id: number;
+    name: string;
+    email: string;
+  }[];
+  message: string;
+}
 
 export default function Home() {
   const [data, setData] = useState<ApiResponse | null>(null);
@@ -49,14 +80,14 @@ export default function Home() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axiosInstance.get("https://hp-api.onrender.com/api/spells");
-        setData(response.data);
-      } catch (err: unknown) {
-        if (err instanceof Error) {
-          setError(err.message);
-        } else {
-          setError("An unknown error occurred");
-        }
+        const { data } = await axiosInstance.get(
+          "https://hp-api.onrender.com/api/spells"
+        );
+        setData(data);
+      } catch (err) {
+        setError(
+          err instanceof Error ? err.message : "An unknown error occurred"
+        );
       }
     };
     fetchData();
