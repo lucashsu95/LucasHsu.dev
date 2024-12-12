@@ -57,34 +57,30 @@ export default axiosInstance;
 
 ## Get！發送請求
 
-使用api
+URL:`https://hp-api.onrender.com/api/spells`
 
-```jsx
+```tsx
+// /src/pages/spells.tsx
 import { useEffect, useState } from "react";
 import axiosInstance from "@/lib/axios";
 
 interface ApiResponse {
-  success: boolean;
-  data: {
-    id: number;
-    name: string;
-    email: string;
-  }[];
-  message: string;
+  id: number;
+  name: string;
+  description: string;
 }
 
-export default function Home() {
-  const [data, setData] = useState<ApiResponse | null>(null);
+export default function Sec1() {
+  const [data, setData] = useState<ApiResponse[] | null>(null);
   const [error, setError] = useState<string | null>(null);
-
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const { data } = await axiosInstance.get(
+        const response = await axiosInstance.get(
           "https://hp-api.onrender.com/api/spells"
         );
-        setData(data);
-      } catch (err) {
+        setData(response.data);
+      } catch (err: unknown) {
         setError(
           err instanceof Error ? err.message : "An unknown error occurred"
         );
@@ -95,14 +91,98 @@ export default function Home() {
 
   if (error) return <div>Error: {error}</div>;
   if (!data) return <div>Loading...</div>;
-
   return (
-    <div>
-      <h1>Data from API</h1> <pre>{JSON.stringify(data, null, 2)}</pre>{" "}
-    </div>
+    <>
+      <table className="border border-slate-600 m-5">
+        <tbody>
+          <tr>
+            <td className="border-[5px] p-[5px] ">ID</td>
+            <td className="border-[5px] p-[5px] ">name</td>
+            <td className="border-[5px] p-[5px] ">description</td>
+          </tr>
+          {data.map((d) => (
+            <tr key={d.id}>
+              <td className="border-[5px] p-[5px] ">{d.id}</td>
+              <td className="border-[5px] p-[5px] ">{d.name}</td>
+              <td className="border-[5px] p-[5px] ">{d.description}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </>
   );
 }
 ```
+
+依上面的方式
+
+換成打這支`https://datausa.io/api/data?drilldowns=Nation&measures=Population`來做做看
+::: details 看答案
+```tsx
+import axiosInstance from "@/lib/axios";
+import { useEffect, useState } from "react";
+
+interface ApiData {
+  ["ID Nation"]: string;
+  Nation: string;
+  ["ID Year"]: number;
+  Year: string;
+  Population: number;
+  ["Slug Nation"]: string;
+}
+
+export default function Sec2() {
+  const [data, setData] = useState<ApiData[] | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axiosInstance.get(
+          "https://datausa.io/api/data?drilldowns=Nation&measures=Population"
+        );
+        console.log(response.data);
+        setData(response.data.data);
+      } catch (err: unknown) {
+        setError(
+          err instanceof Error ? err.message : "An unknown error occurred"
+        );
+      }
+    };
+    fetchData();
+  }, []);
+
+  if (error) return <div>Error: {error}</div>;
+  if (!data) return <div>Loading...</div>;
+  return (
+    <>
+      <table className="border border-slate-600 m-5">
+        <tbody>
+          <tr>
+            <td className="border-[5px] p-[5px] ">ID Nation</td>
+            <td className="border-[5px] p-[5px] ">Nation</td>
+            <td className="border-[5px] p-[5px] ">ID Year</td>
+            <td className="border-[5px] p-[5px] ">Year</td>
+            <td className="border-[5px] p-[5px] ">Population</td>
+            <td className="border-[5px] p-[5px] ">Slug Nation</td>
+          </tr>
+          {data.map((v) => (
+            <tr key={v.Population}>
+              <td className="border-[5px] p-[5px] ">{v["ID Nation"]}</td>
+              <td className="border-[5px] p-[5px] ">{v.Nation}</td>
+              <td className="border-[5px] p-[5px] ">{v["ID Year"]}</td>
+              <td className="border-[5px] p-[5px] ">{v.Year}</td>
+              <td className="border-[5px] p-[5px] ">{v.Population}</td>
+              <td className="border-[5px] p-[5px] ">{v["Slug Nation"]}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </>
+  );
+}
+```
+:::
 
 ## 使用者 增修改查 User CURD
 
@@ -117,19 +197,20 @@ export default function Home() {
 `axios.ts`的`baseURL`改成[`http://127.0.0.1:5000/api/`](http://127.0.0.1:5000/api/)
 
 ```tsx
-// users/index.tsx
-import axiosInstance from "@/lib/axios";
+// users/index.import axiosInstance from "@/lib/axios";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import Button from "@/components/ui/button";
 
+interface User{
+  id: number;
+  name: string;
+  email: string;
+}
+
 interface ApiResponse {
   success: boolean;
-  data: {
-    id: number;
-    name: string;
-    email: string;
-  }[];
+  data: User[];
   message: string;
 }
 
@@ -151,7 +232,7 @@ export default function Home() {
       }
     };
     fetchData();
-  }, []);
+  }, [state]);
 
   const handleDelete = async (id: number) => {
     try {
@@ -172,45 +253,129 @@ export default function Home() {
 
   return (
     <div className="wraps flex-col">
-      <h1 className="text-xl font-bold mb-5">User List</h1>
-      <table className="min-w-full divide-y divide-gray-200">
-        <thead className="bg-gray-50">
-          <tr>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Name
-            </th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Email
-            </th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Action
-            </th>
-          </tr>
-        </thead>
-        <tbody className="bg-white divide-y divide-gray-200">
-          {state.data.map((user) => (
-            <tr key={user.id}>
-              <td className="px-6 py-4 whitespace-nowrap">{user.name}</td>
-              <td className="px-6 py-4 whitespace-nowrap">{user.email}</td>
-              <td>
-                <Button className="bg-amber-400">
-                  <Link href={`/users/${user.id}`}>編輯</Link>
-                </Button>
-                <Button
-                  className="bg-rose-400 sm:ms-1"
-                  onClick={() => handleDelete(user.id)}
-                >
-                  刪除
-                </Button>
-              </td>
+      <section className="wrap space-y-5">
+        <h1 className="text-2xl font-bold">User List</h1>
+
+        <Button className="bg-sky-500 w-max">
+          <Link href={"/users/create"}>新增使用者</Link>
+        </Button>
+
+        <table className="w-[800px] rounded-md overflow-hidden shadow divide-y divide-gray-200">
+          <thead className="bg-gray-50">
+            <tr>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Name
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Email
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Action
+              </th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody className="bg-white divide-y divide-gray-200">
+            {state.data.map((user) => (
+              <tr key={user.id}>
+                <td className="px-6 py-4 whitespace-nowrap">{user.name}</td>
+                <td className="px-6 py-4 whitespace-nowrap">{user.email}</td>
+                <td>
+                  <Button className="bg-amber-400">
+                    <Link href={`/users/${user.id}`}>編輯</Link>
+                  </Button>
+                  <Button
+                    className="bg-rose-400 sm:ms-1"
+                    onClick={() => handleDelete(user.id)}
+                  >
+                    刪除
+                  </Button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </section>
     </div>
   );
 }
+```
 
+```tsx
+// users/create.tsx
+import axiosInstance from "@/lib/axios";
+import Link from "next/link";
+import Button from "@/components/ui/button";
+import { FormEvent, useState } from "react";
+import { useRouter } from "next/router";
+
+interface UserForm {
+  name: string;
+  email: string;
+}
+
+const UserPage = () => {
+  const router = useRouter();
+
+  const [formData, setFormData] = useState<UserForm | null>({
+    name: "",
+    email: "",
+  });
+
+  if (!formData) return <div>Loading...</div>;
+
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    axiosInstance.post(`users`, formData);
+    router.push("/users");
+  };
+
+  return (
+    <div className="wraps">
+      <form
+        onSubmit={handleSubmit}
+        className="w-[400px] wrap mx-auto space-y-3 mt-5"
+      >
+        <Link href="/users" className="link">
+          Back to Users
+        </Link>
+        <h1 className="text-xl font-bold">新增使用者</h1>
+        <section className="space-y-5">
+          <p>
+            <label htmlFor="name">Name</label>
+            <input
+              type="text"
+              id="name"
+              className="input"
+              value={formData.name}
+              onChange={(e) =>
+                setFormData((prev) =>
+                  prev ? { ...prev, name: e.target.value } : prev
+                )
+              }
+            />
+          </p>
+          <p>
+            <label htmlFor="email">Email</label>
+            <input
+              type="text"
+              id="email"
+              className="input"
+              value={formData.email}
+              onChange={(e) =>
+                setFormData((prev) =>
+                  prev ? { ...prev, email: e.target.value } : prev
+                )
+              }
+            />
+          </p>
+        </section>
+        <Button className="mt-2">新增</Button>
+      </form>
+    </div>
+  );
+};
+
+export default UserPage;
 ```
 
 
