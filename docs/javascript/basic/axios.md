@@ -5,13 +5,13 @@ head:
       content: 許恩綸
   - - meta
     - name: keywords
-      content: axios,javascript
+      content: axios,javascript,next.js
   - - meta
     - name: og:title
-      content: javascript - axios
+      content: next.js - axios
   - - meta
     - name: og:description
-      content: 使用axios實作
+      content: 使用axios實作 by Next.js
   - - meta
     - name: og:type
       content: article
@@ -20,7 +20,7 @@ head:
       content: https://lucashsu95.github.io/LucasHsu.dev/javascript/export-import.html
 ---
 
-# Axios - javascript
+# Axios - next.js
 
 ## 下載
 
@@ -57,10 +57,71 @@ export default axiosInstance;
 
 ## Get！發送請求
 
-URL:`https://hp-api.onrender.com/api/spells`
+- api:`https://hp-api.onrender.com/api/spells`
+- file_path:`/src/pages/spells.tsx`
 
-```tsx
-// /src/pages/spells.tsx
+::: code-group
+
+```tsx [.then]import { useEffect, useState } from "react";
+import axiosInstance from "@/lib/axios";
+
+interface ApiResponse {
+  id: number;
+  name: string;
+  description: string;
+}
+
+export default function Sec1() {
+  const [data, setData] = useState<ApiResponse[] | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  useEffect(() => {
+    const fetchData = () => {
+      axiosInstance
+        .get("https://hp-api.onrender.com/api/spells")
+        .then((response) => {
+          setData(response.data);
+        })
+        .catch((err) => {
+          setError(
+            err instanceof Error ? err.message : "An unknown error occurred"
+          );
+        });
+    };
+    fetchData();
+  }, []);
+
+  if (error) return <div>Error: {error}</div>;
+  if (!data)
+    return (
+      <div className="h-screen w-screen z-50 bg-slate-200/75 flex justify-center items-center font-bold text-xl">
+        Loading...
+      </div>
+    );
+
+  return (
+    <>
+      <table className="border border-slate-600 m-5">
+        <tbody>
+          <tr>
+            <td className="border-[5px] p-[5px] ">ID</td>
+            <td className="border-[5px] p-[5px] ">name</td>
+            <td className="border-[5px] p-[5px] ">description</td>
+          </tr>
+          {data.map((d) => (
+            <tr key={d.id}>
+              <td className="border-[5px] p-[5px] ">{d.id}</td>
+              <td className="border-[5px] p-[5px] ">{d.name}</td>
+              <td className="border-[5px] p-[5px] ">{d.description}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </>
+  );
+}
+```
+
+```tsx [async await]
 import { useEffect, useState } from "react";
 import axiosInstance from "@/lib/axios";
 
@@ -90,7 +151,12 @@ export default function Sec1() {
   }, []);
 
   if (error) return <div>Error: {error}</div>;
-  if (!data) return <div>Loading...</div>;
+  if (!data)
+    return (
+      <div className="h-screen w-screen z-50 bg-slate-200/75 flex justify-center items-center font-bold text-xl">
+        Loading...
+      </div>
+    );
   return (
     <>
       <table className="border border-slate-600 m-5">
@@ -114,11 +180,88 @@ export default function Sec1() {
 }
 ```
 
+:::
+
 依上面的方式
 
 換成打這支`https://datausa.io/api/data?drilldowns=Nation&measures=Population`來做做看
 ::: details 看答案
-```tsx
+::: code-group
+
+```tsx [.then]
+import axiosInstance from "@/lib/axios";
+import { useEffect, useState } from "react";
+
+interface ApiData {
+  ["ID Nation"]: string;
+  Nation: string;
+  ["ID Year"]: number;
+  Year: string;
+  Population: number;
+  ["Slug Nation"]: string;
+}
+
+export default function Sec2() {
+  const [data, setData] = useState<ApiData[] | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchData = () => {
+      axiosInstance
+        .get(
+          "https://datausa.io/api/data?drilldowns=Nation&measures=Population"
+        )
+        .then((response) => {
+          console.log(response.data);
+          setData(response.data.data);
+        })
+        .catch((err) => {
+          setError(
+            err instanceof Error ? err.message : "An unknown error occurred"
+          );
+        });
+    };
+    fetchData();
+  }, []);
+
+  if (error) return <div>Error: {error}</div>;
+  if (!data)
+    return (
+      <div className="h-screen w-screen z-50 bg-slate-200/75 flex justify-center items-center font-bold text-xl">
+        Loading...
+      </div>
+    );
+
+  return (
+    <>
+      <table className="border border-slate-600 m-5">
+        <tbody>
+          <tr>
+            <td className="border-[5px] p-[5px] ">ID Nation</td>
+            <td className="border-[5px] p-[5px] ">Nation</td>
+            <td className="border-[5px] p-[5px] ">ID Year</td>
+            <td className="border-[5px] p-[5px] ">Year</td>
+            <td className="border-[5px] p-[5px] ">Population</td>
+            <td className="border-[5px] p-[5px] ">Slug Nation</td>
+          </tr>
+          {data.map((v) => (
+            <tr key={v.Population}>
+              <td className="border-[5px] p-[5px] ">{v["ID Nation"]}</td>
+              <td className="border-[5px] p-[5px] ">{v.Nation}</td>
+              <td className="border-[5px] p-[5px] ">{v["ID Year"]}</td>
+              <td className="border-[5px] p-[5px] ">{v.Year}</td>
+              <td className="border-[5px] p-[5px] ">{v.Population}</td>
+              <td className="border-[5px] p-[5px] ">{v["Slug Nation"]}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </>
+  );
+}
+```
+
+```tsx [async await]
 import axiosInstance from "@/lib/axios";
 import { useEffect, useState } from "react";
 
@@ -153,7 +296,12 @@ export default function Sec2() {
   }, []);
 
   if (error) return <div>Error: {error}</div>;
-  if (!data) return <div>Loading...</div>;
+  if (!data)
+    return (
+      <div className="h-screen w-screen z-50 bg-slate-200/75 flex justify-center items-center font-bold text-xl">
+        Loading...
+      </div>
+    );
   return (
     <>
       <table className="border border-slate-600 m-5">
@@ -190,19 +338,20 @@ export default function Sec2() {
 
 可以下載後端程式碼(python-Flask)
 
-[lucashsu95/user-mvc-with-flask](https://github.com/lucashsu95/user-mvc-with-flask?tab=readme-ov-file)
+[user-mvc-with-flask - Github](https://github.com/lucashsu95/user-mvc-with-flask?tab=readme-ov-file)
 
 ### 前端
 
-`axios.ts`的`baseURL`改成[`http://127.0.0.1:5000/api/`](http://127.0.0.1:5000/api/)
+`axios.ts`的`baseURL`改成`http://127.0.0.1:5000/api/`
 
+### `/src/pages/users/index.ts`
 ```tsx
-// users/index.import axiosInstance from "@/lib/axios";
+import axiosInstance from "@/lib/axios";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import Button from "@/components/ui/button";
 
-interface User{
+interface User {
   id: number;
   name: string;
   email: string;
@@ -220,16 +369,16 @@ export default function Home() {
 
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        const res = await axiosInstance.get<ApiResponse>("users");
-        setState(res.data);
-      } catch (err: unknown) {
-        if (err instanceof Error) {
-          setError(err.message);
-        } else {
-          setError("An unknown error occurred");
-        }
-      }
+      axiosInstance
+        .get<ApiResponse>("users")
+        .then((res) => {
+          setState(res.data);
+        })
+        .catch((err) => {
+          setError(
+            err instanceof Error ? err.message : "An unknown error occurred"
+          );
+        });
     };
     fetchData();
   }, [state]);
@@ -249,7 +398,12 @@ export default function Home() {
   };
 
   if (error) return <div>Error:{error}</div>;
-  if (!state) return <div>Loading...</div>;
+  if (!state)
+    return (
+      <div className="h-screen w-screen z-50 bg-slate-200/75 flex justify-center items-center font-bold text-xl">
+        Loading...
+      </div>
+    );
 
   return (
     <div className="wraps flex-col">
@@ -300,8 +454,8 @@ export default function Home() {
 }
 ```
 
+### `/src/pages/users/create.tsx`
 ```tsx
-// users/create.tsx
 import axiosInstance from "@/lib/axios";
 import Link from "next/link";
 import Button from "@/components/ui/button";
@@ -321,7 +475,12 @@ const UserPage = () => {
     email: "",
   });
 
-  if (!formData) return <div>Loading...</div>;
+  if (!formData)
+    return (
+      <div className="h-screen w-screen z-50 bg-slate-200/75 flex justify-center items-center font-bold text-xl">
+        Loading...
+      </div>
+    );
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -378,9 +537,10 @@ const UserPage = () => {
 export default UserPage;
 ```
 
+### `/src/pages/users/[id].tsx`
 
 ```tsx
-// users/[id].tsximport axiosInstance from "@/lib/axios";
+import axiosInstance from "@/lib/axios";
 import Link from "next/link";
 import Button from "@/components/ui/button";
 import { useEffect, useState } from "react";
@@ -420,7 +580,12 @@ const UserPage = () => {
     fetchData();
   }, [id]);
 
-  if (loading) return <div>Loading...</div>;
+  if (loading)
+    return (
+      <div className="h-screen w-screen z-50 bg-slate-200/75 flex justify-center items-center font-bold text-xl">
+        Loading...
+      </div>
+    );
 
   if (!formData) return <div>User not found</div>;
 

@@ -27,7 +27,7 @@ export function sidebarJavascript() {
         { text: 'OOP 物件導向', link: '/javascript/basic/OOP', activeMatch: '/javascript/basic/OOP' },
         { text: '正規表達式 Regex', link: '/javascript/basic/regex', activeMatch: '/javascript/basic/regex' },
         { text: 'Nodejs fs 基本操作', link: '/javascript/basic/node-fs', activeMatch: '/javascript/basic/node-fs' },
-        { text: 'axios', link: '/javascript/basic/axios', activeMatch: '/javascript/basic/axios' },
+        { text: 'Axios - next.js', link: '/javascript/basic/axios', activeMatch: '/javascript/basic/axios' },
       ]
     },
     {
