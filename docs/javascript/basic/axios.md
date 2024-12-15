@@ -5,13 +5,13 @@ head:
       content: 許恩綸
   - - meta
     - name: keywords
-      content: axios,javascript,next.js
+      content: axios,javascript,next.js,react
   - - meta
     - name: og:title
       content: next.js - axios
   - - meta
     - name: og:description
-      content: 使用axios實作 by Next.js
+      content: 使用axios實作 User CURD by Next.js - react
   - - meta
     - name: og:type
       content: article
@@ -42,14 +42,14 @@ yarn add axios
 創建`src/lib/axios.ts`
 
 ```tsx
-import axios,{AxiosInstance} from "axios";
+import axios, { AxiosInstance } from "axios";
 
-const axiosInstance:AxiosInstance = axios.create({
-    baseURL: "",
-    timeout: 5000,
-    headers: {
-        "Content-Type": "application/json",
-    }
+const axiosInstance: AxiosInstance = axios.create({
+  baseURL: "",
+  timeout: 5000,
+  headers: {
+    "Content-Type": "application/json",
+  },
 });
 
 export default axiosInstance;
@@ -62,7 +62,8 @@ export default axiosInstance;
 
 ::: code-group
 
-```tsx [.then]import { useEffect, useState } from "react";
+```tsx [.then]
+import { useEffect, useState } from "react";
 import axiosInstance from "@/lib/axios";
 
 interface ApiResponse {
@@ -342,14 +343,64 @@ export default function Sec2() {
 
 ### 前端
 
+
+### 初始設定
+
 `axios.ts`的`baseURL`改成`http://127.0.0.1:5000/api/`
 
-### `/src/pages/users/index.ts`
+#### /src/lib/axios.ts
+```ts
+import axios, { AxiosInstance } from "axios";
+
+const axiosInstance: AxiosInstance = axios.create({
+  baseURL: "http://127.0.0.1:5000/api/",
+  timeout: 5000,
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
+
+export default axiosInstance;
+```
+
+#### /src/lib/ApiResponse.ts
+```ts
+export const API_RESPONSE = {
+  MSG_EMAIL_EXISTS: "電子郵件已存在",
+  MSG_USER_NOT_EXISTS: "使用者不存在",
+  MSG_MISSING_FIELDS: "缺少欄位",
+} as const;
+
+type ApiResponseKey = keyof typeof API_RESPONSE;
+
+type ApiResponseError = {
+  response: {
+    data: {
+      message: string;
+    };
+  };
+};
+
+export function fail(error: ApiResponseError) {
+  const errorMessage = error.response.data.message;
+  return Object.keys(API_RESPONSE).includes(errorMessage as ApiResponseKey)
+    ? API_RESPONSE[errorMessage as ApiResponseKey]
+    : errorMessage;
+}
+```
+
+這邊都先用`.then()`寫法~~`async/await`寫法就當課後練習~~
+
+### 使用者列表 & 刪除使用者
+
+`/src/pages/users/index.ts`
+
 ```tsx
 import axiosInstance from "@/lib/axios";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import Button from "@/components/ui/button";
+import { fail } from "@/lib/ApiResponse";
 
 interface User {
   id: number;
@@ -368,33 +419,32 @@ export default function Home() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchData = async () => {
-      axiosInstance
-        .get<ApiResponse>("users")
-        .then((res) => {
-          setState(res.data);
-        })
-        .catch((err) => {
-          setError(
-            err instanceof Error ? err.message : "An unknown error occurred"
-          );
-        });
-    };
-    fetchData();
-  }, [state]);
+    axiosInstance
+      .get<ApiResponse>("users")
+      .then((res) => {
+        setState(res.data);
+      })
+      .catch((err) => {
+        setError(fail(err));
+      });
+  }, []);
 
-  const handleDelete = async (id: number) => {
-    try {
-      await axiosInstance.delete(`users/${id}`);
-      const res = await axiosInstance.get<ApiResponse>("users");
-      setState(res.data);
-    } catch (err: unknown) {
-      if (err instanceof Error) {
-        setError(err.message);
-      } else {
-        setError("An unknown error occurred");
-      }
-    }
+  const handleDelete = (id: number) => {
+    if (!confirm("確定要刪除嗎?")) return;
+
+    axiosInstance
+      .delete(`users/${id}`)
+      .then(() => {
+        alert("刪除成功");
+        setState((prev) =>
+          prev
+            ? { ...prev, data: prev.data.filter((user) => user.id !== id) }
+            : null
+        );
+      })
+      .catch((err) => {
+        setError(fail(err));
+      });
   };
 
   if (error) return <div>Error:{error}</div>;
@@ -454,13 +504,17 @@ export default function Home() {
 }
 ```
 
-### `/src/pages/users/create.tsx`
+### 新增使用者
+
+`/src/pages/users/create.tsx`
+
 ```tsx
 import axiosInstance from "@/lib/axios";
 import Link from "next/link";
 import Button from "@/components/ui/button";
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/router";
+import { fail } from "@/lib/ApiResponse";
 
 interface UserForm {
   name: string;
@@ -468,12 +522,24 @@ interface UserForm {
 }
 
 const UserPage = () => {
-  const router = useRouter();
-
   const [formData, setFormData] = useState<UserForm | null>({
     name: "",
     email: "",
   });
+  const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
+
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    axiosInstance
+      .post(`users`, formData)
+      .then(() => {
+        router.push("/users");
+      })
+      .catch((err) => {
+        setError(fail(err));
+      });
+  };
 
   if (!formData)
     return (
@@ -482,11 +548,7 @@ const UserPage = () => {
       </div>
     );
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    axiosInstance.post(`users`, formData);
-    router.push("/users");
-  };
+  if (error) return <div>Error: {error}</div>;
 
   return (
     <div className="wraps">
@@ -537,7 +599,9 @@ const UserPage = () => {
 export default UserPage;
 ```
 
-### `/src/pages/users/[id].tsx`
+### 編輯使用者
+
+`/src/pages/users/[id].tsx`
 
 ```tsx
 import axiosInstance from "@/lib/axios";
@@ -545,6 +609,7 @@ import Link from "next/link";
 import Button from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import { fail } from "@/lib/ApiResponse";
 
 interface FormData {
   id: number;
@@ -558,27 +623,39 @@ const UserPage = () => {
 
   const [formData, setFormData] = useState<FormData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!id) return;
 
-    const fetchData = async () => {
-      try {
-        const res = await axiosInstance.get(`users/${id}`);
-        setFormData({
-          id: res.data.id,
-          name: res.data.name,
-          email: res.data.email,
-        });
-      } catch (error) {
-        console.error("Failed to fetch user data:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+    axiosInstance
+      .get(`users/${id}`)
+      .then((res) => {
+        const { id, name, email } = res.data.data;
+        setFormData({ id, name, email });
+      })
+      .catch((err) => {
+        setError(fail(err));
+      });
 
-    fetchData();
+    setLoading(false);
   }, [id]);
+
+  if (!formData) return <div>User not found</div>;
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    axiosInstance
+      .put(`users/${formData.id}`, formData)
+      .then(() => {
+        alert("編輯成功");
+        router.push("/users");
+      })
+      .catch((err) => {
+        setError(fail(err));
+      });
+  };
 
   if (loading)
     return (
@@ -587,17 +664,7 @@ const UserPage = () => {
       </div>
     );
 
-  if (!formData) return <div>User not found</div>;
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    try {
-      await axiosInstance.put(`users/${formData.id}`, formData);
-      router.push("/users");
-    } catch (error) {
-      console.error("Failed to update user:", error);
-    }
-  };
+  if (error) return <div>Error: {error}</div>;
 
   return (
     <div className="wraps">
@@ -643,3 +710,5 @@ const UserPage = () => {
 
 export default UserPage;
 ```
+
+看完整程式碼Github
