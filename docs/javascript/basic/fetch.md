@@ -20,7 +20,11 @@ head:
       content: https://lucashsu95.github.io/LucasHsu.dev/javascript/basic/fetch
 ---
 
-# fetch()？
+# 使用 fetch() 進行非同步資料獲取的基礎教學
+
+可以用上一篇[異同步 - Asynchronous](./asynchronous)的概念繼續深入...
+
+## 什麼是fetch()
 
 想像你在一家餐廳點餐。當你告訴服務員你想要的食物時，你的請求就像是用 `fetch()` 向一個網路伺服器發送請求。`fetch()` 是一個 JavaScript 函數，它幫助我們從網路上獲取資料，就像你從餐廳獲得食物一樣。
 
