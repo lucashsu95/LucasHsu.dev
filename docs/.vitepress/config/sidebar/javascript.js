@@ -22,6 +22,7 @@ export function sidebarJavascript() {
     },
     {
       text: 'JavaScript 基礎',
+      collapsed: false,
       items: [
         { text: 'export 和 import', link: '/javascript/basic/export-import', activeMatch: '/javascript/basic/export-import' },
         { text: '物件導向程式設計 (OOP)', link: '/javascript/basic/OOP', activeMatch: '/javascript/basic/OOP' },
