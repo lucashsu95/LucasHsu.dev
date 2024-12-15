@@ -17,7 +17,7 @@ head:
       content: article
   - - meta
     - name: og:image
-      content: https://lucashsu95.github.io/LucasHsu.dev/javascript/export-import.html
+      content: https://lucashsu95.github.io/LucasHsu.dev/javascript/basic/axios
 ---
 
 # Axios - next.js
@@ -711,4 +711,4 @@ const UserPage = () => {
 export default UserPage;
 ```
 
-看完整程式碼Github
+看完整程式碼[Github](https://github.com/lucashsu95/axios-practise)
