@@ -31,7 +31,7 @@ export function sidebarJavascript() {
         { text: '異步處理 - Promise', link: '/javascript/basic/asynchronous', activeMatch: '/javascript/basic/asynchronous' },
         { text: 'fetch() 函數', link: '/javascript/basic/fetch', activeMatch: '/javascript/basic/fetch' },
         { text: 'HTTP 請求方法', link: '/javascript/basic/http-request', activeMatch: '/javascript/basic/http-request' },
-        { text: 'axios 使用', link: '/javascript/basic/axios', activeMatch: '/javascript/basic/axios' },
+        { text: 'axios 使用 - next.js', link: '/javascript/basic/axios', activeMatch: '/javascript/basic/axios' },
         { text: 'Node.js 文件系統 (fs) 基本操作', link: '/javascript/basic/node-fs', activeMatch: '/javascript/basic/node-fs' },
       ]
     },
