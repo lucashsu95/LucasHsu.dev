@@ -18,11 +18,12 @@ export function sidebarJavascript() {
         { text: '待辦事項清單 (TodoList)', link: '/javascript/網頁操作/TodoList', activeMatch: '/javascript/網頁操作/TodoList' },
         { text: '購物車範例', link: '/javascript/網頁操作/購物車', activeMatch: '/javascript/網頁操作/購物車' },
         { text: '聊天機器人', link: '/javascript/網頁操作/聯天機器人', activeMatch: '/javascript/網頁操作/聯天機器人' },
+        { text: '傳統時鐘製作指南', link: '/javascript/網頁操作/傳統時鐘製作指南', activeMatch: '/javascript/網頁操作/傳統時鐘製作指南' },
       ],
     },
     {
-      text: 'JavaScript 基礎',
-      collapsed: false,
+      text: 'JavaScript 進階(?)',
+      collapsed: true,
       items: [
         { text: 'export 和 import', link: '/javascript/basic/export-import', activeMatch: '/javascript/basic/export-import' },
         { text: '物件導向程式設計 (OOP)', link: '/javascript/basic/OOP', activeMatch: '/javascript/basic/OOP' },
