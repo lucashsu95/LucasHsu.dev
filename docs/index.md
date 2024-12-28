@@ -20,14 +20,13 @@ features:
     details: <img src="https://skillicons.dev/icons?perline=4&theme=light&i=python,html,css,js,php" class="icon-img">
   - icon: 🔥
     title: Framework & Library
-    details:  <img src="https://skillicons.dev/icons?perline=4&theme=light&i=vue,pinia,bootstrap,laravel" class="icon-img">
+    details:  <img src="https://skillicons.dev/icons?perline=4&theme=light&i=vue,pinia,bootstrap,laravel,react,tailwind" class="icon-img">
   - icon: 🛠
     title: Skills & Tools
-    details: <img src="https://skillicons.dev/icons?perline=4&theme=light&i=vscode,phpstorm,ps,ai,pr,figma,notion,git,docker" class="icon-img">
+    details: <img src="https://skillicons.dev/icons?perline=4&theme=light&i=vscode,phpstorm,ps,ai,pr,figma,notion,mysql,github,git,docker" class="icon-img">
   - icon: ☕
     title: In Learing
-    details: <img src="https://skillicons.dev/icons?perline=4&theme=light&i=react,tailwind" class="icon-img">
-
+    details: <img src="https://skillicons.dev/icons?perline=4&theme=light&i=linux,nextjs,java,spring" class="icon-img">
 
 head:
   - - meta
