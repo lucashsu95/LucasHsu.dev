@@ -62,6 +62,10 @@ print(list(permutations(a)))
 ## combinations
 `combinations` 函數用於生成給定序列的所有組合。組合是指在不考慮順序的情況下，從序列中選取元素的所有可能方式。
 
+:::info 小知識
+生成的組合中不允許有重複的元素。這意味著每個元素在組合中只能出現一次。
+:::
+
 ### 語法
 ```python
 itertools.combinations(iterable, r)
@@ -92,6 +96,14 @@ print(list(combinations(table,2)))
 ```
 [('肉', '菜'), ('肉', '蛋'), ('肉', '果'), ('菜', '蛋'), ('菜', '果'), ('蛋', '果')]
 ```
+
+### combinations_with_replacement 
+
+:::info 小知識
+生成的組合中允許有重複的元素。這表示同一個元素可以在組合中出現多次。
+:::
+
+例如，對於相同的集合 `['A', 'B', 'C']`，調用 `combinations_with_replacement('ABC', 2)` 會產生 `('A', 'A'), ('A', 'B'), ('A', 'C'), ('B', 'B'), ('B', 'C'), ('C', 'C')` 這樣的結果`23`。
 
 ## 總結
 - **`permutations`**：生成所有可能的排列，考慮順序。
