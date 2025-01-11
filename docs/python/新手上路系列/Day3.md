@@ -294,5 +294,6 @@ print(output)
 
 ## 牛刀小試
 
+- [迴圈10題](./loop-ten-question)
 - [TQC+ 程式語言 Python 第 3 類：迴圈敘述](./tqc/tqc3/301)
 - [TQC+ 程式語言 Python 第 4 類：進階控制流程](./tqc/tqc4/401)
