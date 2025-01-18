@@ -23,7 +23,7 @@ head:
 
 <img src="../assets/Days/javascript-title-img.png" alt="javascript-title-img" class="title-img" />
 
-# Day1 先講好規則
+# Javascript Day1 先講好規則
 
 ## 宣告變數
 

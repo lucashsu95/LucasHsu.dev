@@ -1,4 +1,6 @@
-# 字串10題-答案
+# String 10 question - answer
+
+字串10題答案
 
 ## 第1題
 ```python

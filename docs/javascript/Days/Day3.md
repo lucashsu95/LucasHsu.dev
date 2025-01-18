@@ -23,7 +23,7 @@ head:
 
 <img src="../assets/Days/javascript-title-img.png" alt="javascript-title-img" class="title-img" />
 
-# Day3 迴圈 For & While
+# Javascript Day3 迴圈 For & While
 
 ## For
 
