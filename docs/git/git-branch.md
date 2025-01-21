@@ -27,14 +27,14 @@ head:
 
 ## 基本命令
 
-```bash
+```shell
 git checkout feature // 切換分支
 git branch // 查看分支
 git branch -r // 查看遠端分支
 git branch -a // 查看所有分支
 ```
 
-## 新增/刪除分支
+## 新增/刪除**分支**
 ```shell
 git branch <new-branch-name> // 新增
 git checkout -b <new-branch-name> // 新增，並且直接切過去
@@ -42,11 +42,15 @@ git branch -d <branch_name> // 刪除
 git branch -D <branch_name> // 強制刪除
 ```
 
-## 新增/刪除遠端分支
+## 新增/刪除**遠端分支**
 ```shell
 git push origin <branch-name> // 分支推送到遠端
 git push origin --delete <branch_name> // 刪除遠端
 git push origin :<branch_name> // 刪除遠端
+git branch -d -r origin/<branchname> //刪除遠端分支，刪除后還需推送到服務器
+
+git remote add <name> <repositori_url> // 增加遠端分支
+git remote remove origin // 刪除全部遠端分支
 ```
 
 ## 設置上游追蹤
@@ -60,7 +64,3 @@ git push -u origin <branch-name>
 ## Merge & Rebase
 
 - [git rebase VS git merge？ 更優雅的 git 合併方式值得擁有](https://www.cnblogs.com/FraserYu/p/11192840.html)
-
-### 交互式Reabase
-
-<!-- TODO -->
