@@ -4,15 +4,17 @@
 
 首先，打開你的終端機，並導航到你的專案目錄。然後執行以下命令來安裝 ESLint 和 Prettier：
 
-### npm
-```bash
+::: code-group
+```bash [npm]
 npm install eslint prettier eslint-plugin-prettier eslint-config-prettier --save-dev
 ```
-或
-### pnpm
-```bash
+```bash [pnpm]
 pnpm add -D eslint prettier eslint-plugin-prettier eslint-config-prettier
 ```
+```bash [yarn]
+yarn add --dev eslint prettier eslint-plugin-prettier eslint-config-prettier
+```
+:::
 
 這些包的作用如下：
 
@@ -44,12 +46,18 @@ pnpm add -D eslint prettier eslint-plugin-prettier eslint-config-prettier
 ```
 
 記得要先安裝
-```bash
+
+::: code-group
+```bash [npm]
 npm i -D prettier-plugin-tailwindcss
 ```
-```bash
+```bash [pnpm]
 pnpm add -D prettier-plugin-tailwindcss
 ```
+```bash [yarn]
+yarn add --dev prettier-plugin-tailwindcss
+```
+:::
 
 ## 3. 執行 ESLint 和 Prettier
 

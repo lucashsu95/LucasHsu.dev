@@ -23,7 +23,7 @@ head:
 
 <img src="../assets/Days/javascript-title-img.png" alt="javascript-title-img" class="title-img" />
 
-# Day2 判斷式 IF...ELSE
+# Javascript Day2 判斷式 IF...ELSE
 
 ## 分別印出了多少?
 
