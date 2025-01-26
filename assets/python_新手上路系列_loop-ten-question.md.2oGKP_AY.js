@@ -1,4 +1,4 @@
-import{_ as e,c as l,J as s,V as i,E as a,o as t}from"./chunks/framework.RK-3fdBv.js";const k=JSON.parse('{"title":"迴圈10題","description":"","frontmatter":{},"headers":[],"relativePath":"python/新手上路系列/loop-ten-question.md","filePath":"python/新手上路系列/loop-ten-question.md","lastUpdated":1736596539000}'),c={name:"python/新手上路系列/loop-ten-question.md"},o=i(`<h1 id="迴圈10題" tabindex="-1">迴圈10題 <a class="header-anchor" href="#迴圈10題" aria-label="Permalink to &quot;迴圈10題&quot;">​</a></h1><p>請撰寫程式，輸出以下圖形。</p><h2 id="_1" tabindex="-1">(1) <a class="header-anchor" href="#_1" aria-label="Permalink to &quot;(1)&quot;">​</a></h2><div class="language- vp-adaptive-theme"><button title="Copy Code" class="copy"></button><span class="lang"></span><pre class="shiki shiki-themes vitesse-light vitesse-dark vp-code"><code><span class="line"><span>＊．．．．．．．．</span></span>
+import{_ as e,c as l,J as s,V as i,E as a,o as t}from"./chunks/framework.RK-3fdBv.js";const k=JSON.parse('{"title":"迴圈10題","description":"","frontmatter":{},"headers":[],"relativePath":"python/新手上路系列/loop-ten-question.md","filePath":"python/新手上路系列/loop-ten-question.md","lastUpdated":1737894989000}'),c={name:"python/新手上路系列/loop-ten-question.md"},o=i(`<h1 id="迴圈10題" tabindex="-1">迴圈10題 <a class="header-anchor" href="#迴圈10題" aria-label="Permalink to &quot;迴圈10題&quot;">​</a></h1><p>請撰寫程式，輸出以下圖形。</p><p>提示：圖形的邊當是<code>9 * 9</code></p><h2 id="_1" tabindex="-1">(1) <a class="header-anchor" href="#_1" aria-label="Permalink to &quot;(1)&quot;">​</a></h2><div class="language- vp-adaptive-theme"><button title="Copy Code" class="copy"></button><span class="lang"></span><pre class="shiki shiki-themes vitesse-light vitesse-dark vp-code"><code><span class="line"><span>＊．．．．．．．．</span></span>
 <span class="line"><span>．＊．．．．．．．</span></span>
 <span class="line"><span>．．＊．．．．．．</span></span>
 <span class="line"><span>．．．＊．．．．．</span></span>
@@ -62,15 +62,15 @@ import{_ as e,c as l,J as s,V as i,E as a,o as t}from"./chunks/framework.RK-3fdB
 <span class="line"><span>．．．＊．．．＊．</span></span>
 <span class="line"><span>．．＊．．．＊．．</span></span>
 <span class="line"><span>．＊．．．＊．．．</span></span>
-<span class="line"><span>＊．．．＊．．．＊</span></span></code></pre></div><h2 id="_9" tabindex="-1">(9) <a class="header-anchor" href="#_9" aria-label="Permalink to &quot;(9)&quot;">​</a></h2><div class="language- vp-adaptive-theme"><button title="Copy Code" class="copy"></button><span class="lang"></span><pre class="shiki shiki-themes vitesse-light vitesse-dark vp-code"><code><span class="line"><span>．＊＊＊．＊＊＊．</span></span>
-<span class="line"><span>＊＊＊．＊＊＊．＊</span></span>
-<span class="line"><span>＊＊．＊＊＊．＊＊</span></span>
-<span class="line"><span>＊．＊＊＊．＊＊＊</span></span>
-<span class="line"><span>．＊＊＊．＊＊＊．</span></span>
-<span class="line"><span>＊＊＊．＊＊＊．＊</span></span>
-<span class="line"><span>＊＊．＊＊＊．＊＊</span></span>
-<span class="line"><span>＊．＊＊＊．＊＊＊</span></span>
-<span class="line"><span>．＊＊＊．＊＊＊．</span></span></code></pre></div><h2 id="_10" tabindex="-1">(10) <a class="header-anchor" href="#_10" aria-label="Permalink to &quot;(10)&quot;">​</a></h2><div class="language- vp-adaptive-theme"><button title="Copy Code" class="copy"></button><span class="lang"></span><pre class="shiki shiki-themes vitesse-light vitesse-dark vp-code"><code><span class="line"><span>＊＊＊＊＊＊＊＊＊</span></span>
+<span class="line"><span>＊．．．＊．．．＊</span></span></code></pre></div><h2 id="_9" tabindex="-1">(9) <a class="header-anchor" href="#_9" aria-label="Permalink to &quot;(9)&quot;">​</a></h2><div class="language- vp-adaptive-theme"><button title="Copy Code" class="copy"></button><span class="lang"></span><pre class="shiki shiki-themes vitesse-light vitesse-dark vp-code"><code><span class="line"><span>＊．．．＊．．．＊</span></span>
+<span class="line"><span>．＊．．．＊．．．</span></span>
+<span class="line"><span>．．＊．．．＊．．</span></span>
+<span class="line"><span>．．．＊．．．＊．</span></span>
+<span class="line"><span>＊．．．＊．．．＊</span></span>
+<span class="line"><span>．＊．．．＊．．．</span></span>
+<span class="line"><span>．．＊．．．＊．．</span></span>
+<span class="line"><span>．．．＊．．．＊．</span></span>
+<span class="line"><span>＊．．．＊．．．＊</span></span></code></pre></div><h2 id="_10" tabindex="-1">(10) <a class="header-anchor" href="#_10" aria-label="Permalink to &quot;(10)&quot;">​</a></h2><div class="language- vp-adaptive-theme"><button title="Copy Code" class="copy"></button><span class="lang"></span><pre class="shiki shiki-themes vitesse-light vitesse-dark vp-code"><code><span class="line"><span>＊＊＊＊＊＊＊＊＊</span></span>
 <span class="line"><span>．＊＊＊＊＊＊＊＊</span></span>
 <span class="line"><span>．．＊＊＊＊＊＊＊</span></span>
 <span class="line"><span>．．．＊＊＊＊＊＊</span></span>
@@ -78,4 +78,4 @@ import{_ as e,c as l,J as s,V as i,E as a,o as t}from"./chunks/framework.RK-3fdB
 <span class="line"><span>．．．．．＊＊＊＊</span></span>
 <span class="line"><span>．．．．．．＊＊＊</span></span>
 <span class="line"><span>．．．．．．．＊＊</span></span>
-<span class="line"><span>．．．．．．．．＊</span></span></code></pre></div>`,22);function d(h,r,v,u,_,b){const n=a("NolebaseGitContributors"),p=a("NolebaseGitChangelog");return t(),l("div",null,[o,s(n),s(p)])}const m=e(c,[["render",d]]);export{k as __pageData,m as default};
+<span class="line"><span>．．．．．．．．＊</span></span></code></pre></div>`,23);function d(h,r,v,u,_,b){const n=a("NolebaseGitContributors"),p=a("NolebaseGitChangelog");return t(),l("div",null,[o,s(n),s(p)])}const m=e(c,[["render",d]]);export{k as __pageData,m as default};
