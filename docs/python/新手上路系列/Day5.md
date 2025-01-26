@@ -2,7 +2,7 @@
 outline: "deep"
 ---
 
-# python-新手上路-Day5 ｜ Test-2
+# python-新手上路-Day5
 
 ## 1. 請設計一個函式，接受兩個參數，並返回其乘積。
 
