@@ -1,6 +1,6 @@
 # String 10 question - answer
 
-字串10題答案
+<SecretPage password="loop10-lucasisgod" />
 
 ## 第1題
 ```python

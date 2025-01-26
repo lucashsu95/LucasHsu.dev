@@ -45,6 +45,7 @@ import { NolebaseGitChangelogPlugin } from "@nolebase/vitepress-plugin-git-chang
 import "@nolebase/vitepress-plugin-git-changelog/client/style.css";
 import TocList from "./components/TocList.vue";
 import CarrySystem from "./components/CarrySystem.vue";
+import SecretPage from "./components/SecretPage.vue";
 
 function reloadBusuanzi() {
   const busuanziScriptId = "busuanzi-script";
@@ -89,6 +90,7 @@ export default {
     app.use(NolebaseGitChangelogPlugin);
     app.component("TocList", TocList);
     app.component('CarrySystem',CarrySystem);
+    app.component('SecretPage',SecretPage);
   },
   setup() {
     vitepressLifeProgress();
