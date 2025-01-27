@@ -1,6 +1,6 @@
 # String 10 question - answer
 
-<SecretPage password="loop10-lucasisgod" />
+<SecretPage password="2024-3-9" />
 
 ## 第1題
 ```python
@@ -219,3 +219,4 @@ for n in sys.stdin.read().splitlines():
     print('正確' if result else '不正確')
 
 
+[看答案](./字串10題ans)

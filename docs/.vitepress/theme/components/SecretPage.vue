@@ -15,45 +15,49 @@ const keydownHandler = (e) => {
 };
 
 const contextmenuHandler = (e) => e.preventDefault();
-
 const copyHandler = (e) => e.preventDefault();
-
 const cutHandler = (e) => e.preventDefault();
-
 const wheelHandler = (e) => e.preventDefault();
+
+const removeEvent = () => {
+  window.removeEventListener("keydown", keydownHandler);
+  window.removeEventListener("contextmenu", contextmenuHandler);
+  window.removeEventListener("copy", copyHandler);
+  window.removeEventListener("cut", cutHandler);
+  window.removeEventListener("wheel", wheelHandler, { passive: false });
+  document.body.style.overflow = "auto";
+};
+
+const checkPass = () => {
+  if (pass.value === password) {
+    showModal.value = false;
+    removeEvent();
+  }
+};
+
+const backPage = () => {
+  removeEvent();
+  window.history.back();
+};
 
 onMounted(() => {
   if (password === "") {
     showModal.value = false;
   }
   window.addEventListener("keydown", keydownHandler);
-
   window.addEventListener("contextmenu", contextmenuHandler);
-
   window.addEventListener("copy", copyHandler);
-
   window.addEventListener("cut", cutHandler);
-
   window.addEventListener("wheel", wheelHandler, { passive: false });
-
   document.body.style.overflow = "hidden";
 });
 
-const checkPass = () => {
-  if (pass.value === password) {
-    showModal.value = false;
-    window.removeEventListener("keydown", keydownHandler);
-    window.removeEventListener("contextmenu", contextmenuHandler);
-    window.removeEventListener("copy", copyHandler);
-    window.removeEventListener("cut", cutHandler);
-    window.removeEventListener("wheel", wheelHandler, { passive: false });
-    document.body.style.overflow = "auto";
-  }
-};
-
-const backPage = () => {
-  window.history.back();
-};
+window.addEventListener("popstate", () => {
+  removeEvent();
+});
+// window.addEventListener("pushstate", () => {
+//   removeEvent();
+// });
 </script>
 
 <template>

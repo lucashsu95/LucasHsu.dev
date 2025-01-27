@@ -1,6 +1,6 @@
 # loop 10 question answer
 
-<SecretPage password="string-lucasisgod" />
+<SecretPage password="2025-1-11" />
 
 ## 第一題
 ```python
