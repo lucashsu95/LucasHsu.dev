@@ -71,3 +71,7 @@ uninstall 是解除安裝的意思
 - 做網頁就可以去找`live server`
 - `cdnjs`引入套件很好用
 - `Vitesse theme` 或是 `Owl` 的顏色好看(按`ctrl` + `shift` + `p` 然後打`Color Theme` 可以自己調顏色)
+
+## 快捷鍵
+
+- [[學習之路] VSCode 的技巧大補帖](https://summer10920.github.io/2020/10-23/article-vscode/)
