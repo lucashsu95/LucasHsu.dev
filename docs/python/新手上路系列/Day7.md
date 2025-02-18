@@ -174,15 +174,16 @@ my_set.discard(2)
 
 你可以進行集合間的<mark>交集、聯集、差集</mark>等操作。
 ```python
-set1 = {1, 2, 3, 4, 5}
-set2 = {4, 5, 6, 7, 8}
+a = {1,2,3,4}
+b = {2,3,5}
 
-intersection = {4, 5}  # 交集
-union = {1, 2, 3, 4, 5, 6, 7, 8}  # 聯集
-difference = {1, 2, 3}  # 差集
+intersection = a & b  # {2, 3} 交集
+union = a | b  # {1, 2, 3, 4, 5} 聯集
+difference = a - b  # {1, 2, 3} 差集
+symmetric_difference = a ^ b # {1, 4, 5}
 ```
 
-迭代集合
+**迭代集合**
 你可以使用迴圈來迭代集合中的元素。
 ```python
 for item in my_set:
