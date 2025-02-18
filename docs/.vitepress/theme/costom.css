@@ -51,6 +51,24 @@
   background: #aaa !important;
 }
 
+/* 整體滾動條樣式 */
+::-webkit-scrollbar {
+  width: 5px; /* 垂直滾動條寬度 */
+  height: 8px; /* 水平滾動條高度 */
+}
+
+/* 滾動條滑塊 */
+::-webkit-scrollbar-thumb {
+  background-color: rgba(150, 150, 150, 0.8); /* 軌道顏色 */
+  border-radius: 4px; /* 滑塊圓角 */
+}
+
+/* 滾動條軌道 */
+::-webkit-scrollbar-track {
+  background-color: rgba(0, 0, 0, 0.2); /* 滑塊顏色 */
+  border-radius: 4px; /* 軌道圓角 */
+}
+
 /* Dark mode styles */
 /* @media (prefers-color-scheme: dark) { */
 /* } */
