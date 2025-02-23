@@ -75,6 +75,10 @@ git cherry-pick <commit-id>
 
 ## Rebase -i
 
+::: danger 警告
+建議不要使用rebase修改遠端分支
+:::
+
 在 Git 中，`rebase` 是一個強大的工具，特別是在進行版本控制時。使用 `git rebase -i`（互動式重寫）可以讓您更靈活地管理提交歷史。以下是一些常用的指令及其功能介紹：
 
 ### 常用指令
@@ -120,18 +124,6 @@ git rebase -i <commit-id>
 ```
 
 這裡的 `<commit-id>` 是您想要開始重寫的基準提交。當編輯器打開後，您可以根據需要修改每一行的指令。
-
-**創一個新的分支出來**
-
-這裡的 `<branch-name>` 是您想要重寫的branch。
-
-```shell
-git checkout -b <branch-name>-rebase-new
-
-git checkout <branch-name>
-
-git merge <branch-name>-rebase-new
-```
 
 ### 最近的四個commit
 
