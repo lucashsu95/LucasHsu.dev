@@ -395,7 +395,9 @@ export function fail(error: ApiResponseError) {
 
 `/src/pages/users/index.ts`
 
-```tsx
+::: code-group
+
+```tsx [.then]
 import axiosInstance from "@/lib/axios";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -504,11 +506,117 @@ export default function Home() {
 }
 ```
 
+```tsx [async axios]
+import axiosInstance from "@/lib/axios";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import Button from "@/components/ui/button";
+import { fail } from "@/lib/ApiResponse";
+
+interface User {
+  id: number;
+  name: string;
+  email: string;
+}
+
+interface ApiResponse {
+  success: boolean;
+  data: User[];
+  message: string;
+}
+
+export default function Home() {
+  const [state, setState] = useState<ApiResponse | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(async () => {
+    try {
+      const res = await axiosInstance.get<ApiResponse>("users")
+      const data = setState(res.data)
+    } catch(err) {
+      setError(fail(err));
+    }
+  }, []);
+
+  const handleDelete = async (id: number) => {
+    if (!confirm("確定要刪除嗎?")) return;
+
+    const res = await axiosInstance.delete(`users/${id}`)
+    try {
+      alert("刪除成功");
+      setState((prev) =>
+        prev
+          ? { ...prev, data: prev.data.filter((user) => user.id !== id) }
+          : null
+    } catch (err){
+      setError(fail(err));
+    }
+  };
+
+  if (error) return <div>Error:{error}</div>;
+  if (!state)
+    return (
+      <div className="h-screen w-screen z-50 bg-slate-200/75 flex justify-center items-center font-bold text-xl">
+        Loading...
+      </div>
+    );
+
+  return (
+    <div className="wraps flex-col">
+      <section className="wrap space-y-5">
+        <h1 className="text-2xl font-bold">User List</h1>
+
+        <Button className="bg-sky-500 w-max">
+          <Link href={"/users/create"}>新增使用者</Link>
+        </Button>
+
+        <table className="w-[800px] rounded-md overflow-hidden shadow divide-y divide-gray-200">
+          <thead className="bg-gray-50">
+            <tr>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Name
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Email
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Action
+              </th>
+            </tr>
+          </thead>
+          <tbody className="bg-white divide-y divide-gray-200">
+            {state.data.map((user) => (
+              <tr key={user.id}>
+                <td className="px-6 py-4 whitespace-nowrap">{user.name}</td>
+                <td className="px-6 py-4 whitespace-nowrap">{user.email}</td>
+                <td>
+                  <Button className="bg-amber-400">
+                    <Link href={`/users/${user.id}`}>編輯</Link>
+                  </Button>
+                  <Button
+                    className="bg-rose-400 sm:ms-1"
+                    onClick={() => handleDelete(user.id)}
+                  >
+                    刪除
+                  </Button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </section>
+    </div>
+  );
+}
+```
+:::
+
 ### 新增使用者
 
 `/src/pages/users/create.tsx`
 
-```tsx
+::: code-group
+```tsx [.then]
 import axiosInstance from "@/lib/axios";
 import Link from "next/link";
 import Button from "@/components/ui/button";
@@ -599,11 +707,102 @@ const UserPage = () => {
 export default UserPage;
 ```
 
+```tsx [async await]
+import axiosInstance from "@/lib/axios";
+import Link from "next/link";
+import Button from "@/components/ui/button";
+import { FormEvent, useState } from "react";
+import { useRouter } from "next/router";
+import { fail } from "@/lib/ApiResponse";
+
+interface UserForm {
+  name: string;
+  email: string;
+}
+
+const UserPage = () => {
+  const [formData, setFormData] = useState<UserForm | null>({
+    name: "",
+    email: "",
+  });
+  const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try {
+      const res = await axiosInstance.post(`users`, formData)
+      router.push("/users");
+    } catch (err) {
+      setError(fail(err));
+    }
+  };
+
+  if (!formData)
+    return (
+      <div className="h-screen w-screen z-50 bg-slate-200/75 flex justify-center items-center font-bold text-xl">
+        Loading...
+      </div>
+    );
+
+  if (error) return <div>Error: {error}</div>;
+
+  return (
+    <div className="wraps">
+      <form
+        onSubmit={handleSubmit}
+        className="w-[400px] wrap mx-auto space-y-3 mt-5"
+      >
+        <Link href="/users" className="link">
+          Back to Users
+        </Link>
+        <h1 className="text-xl font-bold">新增使用者</h1>
+        <section className="space-y-5">
+          <p>
+            <label htmlFor="name">Name</label>
+            <input
+              type="text"
+              id="name"
+              className="input"
+              value={formData.name}
+              onChange={(e) =>
+                setFormData((prev) =>
+                  prev ? { ...prev, name: e.target.value } : prev
+                )
+              }
+            />
+          </p>
+          <p>
+            <label htmlFor="email">Email</label>
+            <input
+              type="text"
+              id="email"
+              className="input"
+              value={formData.email}
+              onChange={(e) =>
+                setFormData((prev) =>
+                  prev ? { ...prev, email: e.target.value } : prev
+                )
+              }
+            />
+          </p>
+        </section>
+        <Button className="mt-2">新增</Button>
+      </form>
+    </div>
+  );
+};
+
+export default UserPage;
+```
+:::
+
 ### 編輯使用者
 
 `/src/pages/users/[id].tsx`
+::: code-group
 
-```tsx
+```tsx [.then]
 import axiosInstance from "@/lib/axios";
 import Link from "next/link";
 import Button from "@/components/ui/button";
@@ -710,5 +909,111 @@ const UserPage = () => {
 
 export default UserPage;
 ```
+
+
+```tsx [async await]
+import axiosInstance from "@/lib/axios";
+import Link from "next/link";
+import Button from "@/components/ui/button";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import { fail } from "@/lib/ApiResponse";
+
+interface FormData {
+  id: number;
+  name: string;
+  email: string;
+}
+
+const UserPage = () => {
+  const router = useRouter();
+  const { id } = router.query;
+
+  const [formData, setFormData] = useState<FormData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(async () => {
+    if (!id) return;
+
+    try {
+      const res = await axiosInstance.get(`users/${id}`)
+      const { id, name, email } = res.data.data;
+      setFormData({ id, name, email });
+    } catch (err) {
+      setError(fail(err));
+    }
+    setLoading(false);
+  }, [id]);
+
+  if (!formData) return <div>User not found</div>;
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    try {
+      const res = await axiosInstance.put(`users/${formData.id}`, formData)
+      alert("編輯成功");
+      router.push("/users");
+    } catch (err) {
+      setError(fail(err));
+    }
+  };
+
+  if (loading)
+    return (
+      <div className="h-screen w-screen z-50 bg-slate-200/75 flex justify-center items-center font-bold text-xl">
+        Loading...
+      </div>
+    );
+
+  if (error) return <div>Error: {error}</div>;
+
+  return (
+    <div className="wraps">
+      <form
+        onSubmit={handleSubmit}
+        className="w-[400px] wrap mx-auto space-y-3 mt-5"
+      >
+        <Link href="/users" className="link">
+          Back to Users
+        </Link>
+        <h1 className="text-xl font-bold">修改使用者</h1>
+        <section className="space-y-5">
+          <p>
+            <label htmlFor="name">Name</label>
+            <input
+              type="text"
+              id="name"
+              className="input"
+              value={formData.name}
+              onChange={(e) =>
+                setFormData((prev) => ({ ...prev!, name: e.target.value }))
+              }
+            />
+          </p>
+          <p>
+            <label htmlFor="email">Email</label>
+            <input
+              type="text"
+              id="email"
+              className="input"
+              value={formData.email}
+              onChange={(e) =>
+                setFormData((prev) => ({ ...prev!, email: e.target.value }))
+              }
+            />
+          </p>
+        </section>
+        <Button className="mt-2">儲存</Button>
+      </form>
+    </div>
+  );
+};
+
+export default UserPage;
+```
+
+:::
 
 看完整程式碼[Github](https://github.com/lucashsu95/axios-practise)
