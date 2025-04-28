@@ -24,6 +24,10 @@ export function sidebarPythonNation() {
               text: "插補搜尋",
               link: "/python/112全國技藝競賽筆記/03-搜尋法/插補搜尋",
             },
+            {
+              text: "回溯搜尋",
+              link: "/python/112全國技藝競賽筆記/03-搜尋法/回溯搜尋",
+            },
           ],
         },
         {
