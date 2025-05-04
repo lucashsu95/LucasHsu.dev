@@ -54,11 +54,10 @@ a = sorted(ary,key=lambda x: (-x[1],x[0]))
 沒錯 `加個負號`就可以由大到小了(是不是超方便?)
 用括號括起來 會先判斷第一個在依序判斷 !
 
-想要練習可以在domjudge裡的
+想要練習可以在
 
-- 111_1130 的 `I`
-- TQC_111 的 `Q4`
-- UVA 的 `c012`
+- [Domjudge](https://zerojudge.ntub.tw/)裡的 111_1130 的 `I`
+- [UVA 的 `c012`](https://zerojudge.tw/ShowProblem?problemid=c012)
 
 ## 資料來源
 * [那些前端不用會，但是可以會的資料結構與演算法系列 第 17 篇](https://reurl.cc/GKy73d)
