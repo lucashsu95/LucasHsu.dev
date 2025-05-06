@@ -3,7 +3,7 @@
 ## 新增tag
 
 ```bash
-git tag <commit> # 新增本地tag
+git tag <tag-name> <commit> # 新增本地tag
 git push origin <tag-name> # 新增到遠端
 ```
 
