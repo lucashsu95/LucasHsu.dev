@@ -22,7 +22,7 @@
 [懶人包](./components/ast.md)
 
 ## ipaddress
-要算IP或是什麼遮罩什麼網段位子用這個就好啦!不需要在用什麼OR AND XOR 運算了!
+要算IP或是什麼遮罩什麼網段位子用這個就好啦!不需要在用什麼OR AND XOR 運算了! [懶人包](./components/ipaddress.md)
 
 ## decimal
 在python中浮點數相乘會有誤差<br>
