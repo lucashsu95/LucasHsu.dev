@@ -23,6 +23,7 @@ export function nav() {
     {
       text: "其它",
       items: [
+        { text: "JAVA", link: "/java/basic/Day01" },
         { text: "GIT", link: "/git/" },
         { text: "安裝vscode", link: "/other/安裝vscode" },
         {
