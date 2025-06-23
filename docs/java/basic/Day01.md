@@ -1,5 +1,5 @@
 ---
-output: "deep"
+outline: "deep"
 
 head:
   - - meta
@@ -17,6 +17,9 @@ head:
   - - meta
     - name: og:type
       content: article
+  - - meta
+    - name: og:image
+      content: ../assets/java-cover.png
 ---
 
 # Java 新手上路 Day1｜安裝教學｜型態
