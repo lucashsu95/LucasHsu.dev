@@ -18,7 +18,8 @@ head:
       content: article
   - - meta
     - name: og:image
-      content: https://lucashsu95.github.io/LucasHsu.dev/javascript/assets/Days/javascript-title-img.png
+      content: ../assets/Days/javascript-title-img.png
+      
 ---
 
 <img src="../assets/Days/javascript-title-img.png" alt="javascript-title-img" class="title-img" />
