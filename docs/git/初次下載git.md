@@ -34,11 +34,13 @@ head:
 
 找到 git 看是不是自己
 
-## 建立github Repo
+## 先建立github帳號
 
-- 去github.com官網創建新帳號(如果沒有的話)
+- 去[github.com](https://github.com/signup?ref_cta=Sign+up&ref_loc=header+logged+out&ref_page=%2F&source=header-home)官網創建新帳號(如果沒有的話)
 
 ## 新增USER 和EMAIL
+
+新增好github帳號之後回到桌面按`win + r`然後`cmd` → 下指令
 
 `<username>`、`<useremail>` 要改成自己github的喔
 ```bash
@@ -46,15 +48,31 @@ git config --global user.name <username>
 git config --global user.email <useremail>
 ```
 
-## NEW新增
+## 新增repo
 
-按綠色按鈕
+回到github 找到綠色按鈕，新增一個儲存庫(repo)
 
-## 取名字輸入檔名
+![new-green-btn-1](./imgs/new-green-btn-1.jpg)
+
+或是找到
+
+![new-green-btn-2](./imgs/new-green-btn-2.jpg)
+
+### 取名字輸入檔名
 
 ![](./imgs/1.png)
 
-## 複製(上傳)
+### 創件成功
+
+創件成功後會看到這個畫面
+
+可以撰擇 uploading an existing file 上傳現有的檔案
+
+也可以繼續往下做
+
+![create-repo-finish-view](./imgs/create-repo-finish-view.jpeg)
+
+## 上傳檔案/資料夾
 
 ### 在要上傳的資料夾上打cmd 進到終端
 
