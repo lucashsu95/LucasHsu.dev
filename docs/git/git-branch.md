@@ -18,8 +18,9 @@ head:
       content: article
   - - meta
     - name: og:image
-      content: https://lucashsu95.github.io/LucasHsu.dev/git/git-branch.html
+      content: ./imgs/git-cover.png
 ---
+
 # Git Branch 分支
 
 ## 介紹

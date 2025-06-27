@@ -15,6 +15,9 @@ head:
   - - meta
     - name: og:type
       content: article
+  - - meta
+    - name: og:image
+      content: ./imgs/git-cover.png
 ---
 
 # 電腦上移除git

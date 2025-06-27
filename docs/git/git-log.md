@@ -1,3 +1,27 @@
+---
+outline: "deep"
+
+head:
+  - - meta
+    - name: author
+      content: 許恩綸
+  - - meta
+    - name: keywords
+      content: git-log, git-log-檔案, git-檔案歷史, git-blame, git-show, git-follow, git-log-教學, git-查詢檔案, git-commit-歷史, git-檔案變更, git-追蹤檔案, git-指令
+  - - meta
+    - name: og:title
+      content: Git Log 查找特定檔案歷史紀錄教學｜5種方法完整指令範例
+  - - meta
+    - name: og:description
+      content: 如何用 git log 查找特定檔案的歷史紀錄？本篇教學包含 git log、git blame、git show 等5種查詢方法，附完整指令範例與使用時機，幫助你快速追蹤檔案變更歷史。
+  - - meta
+    - name: og:type
+      content: article
+  - - meta
+    - name: og:image
+      content: ./imgs/git-cover.png
+---
+
 # git log 查找特定檔案的歷史紀錄
 
 
@@ -90,12 +114,12 @@ git blame path/to/your/file.txt
 
 ## 🔚 小結
 
-| 目的                | 指令                                  |
-| ----------------- | ----------------------------------- |
-| 查找檔案所有歷史紀錄        | `git log -- path/to/file`           |
+| 目的                               | 指令                                |
+| ---------------------------------- | ----------------------------------- |
+| 查找檔案所有歷史紀錄               | `git log -- path/to/file`           |
 | 查找檔案歷史紀錄（含重命名或移動） | `git log --follow -- path/to/file`  |
-| 查看每個 commit 的具體變更 | `git log -p -- path/to/file`        |
-| 查看特定 commit 的檔案內容 | `git show <commit-id>:path/to/file` |
-| 查詢檔案每行的作者         | `git blame path/to/file`            |
+| 查看每個 commit 的具體變更         | `git log -p -- path/to/file`        |
+| 查看特定 commit 的檔案內容         | `git show <commit-id>:path/to/file` |
+| 查詢檔案每行的作者                 | `git blame path/to/file`            |
 
 ---

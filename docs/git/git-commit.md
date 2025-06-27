@@ -18,7 +18,7 @@ head:
       content: article
   - - meta
     - name: og:image
-      content: https://lucashsu95.github.io/LucasHsu.dev/git/git-commit.html
+      content: ./imgs/git-cover.png
 ---
 
 # git commit 提交

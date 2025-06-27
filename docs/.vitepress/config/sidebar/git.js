@@ -11,7 +11,7 @@ export function sidebarGit() {
         { text: 'git tag 標籤', link: '/git/git-tag', activeMatch: '/git/git-tag' },
         { text: 'git revert 分支', link: '/git/git-revert', activeMatch: '/git/git-revert' },
         { text: 'git clone 克隆', link: '/git/git-clone', activeMatch: '/git/git-clone' },
-        { text: 'git diff 克隆', link: '/git/git-clone', activeMatch: '/git/git-clone' },
+        { text: 'git diff 克隆', link: '/git/git-diff', activeMatch: '/git/git-diff' },
         { text: '電腦上移除git', link: '/git/電腦上移除git', activeMatch: '/git/電腦上移除git' },
       ],
     },
