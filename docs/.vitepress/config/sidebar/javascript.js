@@ -7,6 +7,7 @@ export function sidebarJavascript() {
         { text: 'Day 1: 先講好規則', link: '/javascript/Days/Day1', activeMatch: '/javascript/Days/Day1' },
         { text: 'Day 2: 判斷式 if...else', link: '/javascript/Days/Day2', activeMatch: '/javascript/Days/Day2' },
         { text: 'Day 3: 迴圈 For & While', link: '/javascript/Days/Day3', activeMatch: '/javascript/Days/Day3' },
+        { text: 'Day 4: 排序 Sort', link: '/javascript/Days/Day4', activeMatch: '/javascript/Days/Day4' },
       ]
     },
     {
