@@ -12,6 +12,7 @@ export function sidebarGit() {
         { text: 'git revert 分支', link: '/git/git-revert', activeMatch: '/git/git-revert' },
         { text: 'git clone 克隆', link: '/git/git-clone', activeMatch: '/git/git-clone' },
         { text: 'git diff 克隆', link: '/git/git-diff', activeMatch: '/git/git-diff' },
+        { text: 'github fork後同步遠端分支的方法', link: '/git/git-fork-after', activeMatch: '/git/git-fork-after' },
         { text: '電腦上移除git', link: '/git/電腦上移除git', activeMatch: '/git/電腦上移除git' },
       ],
     },
