@@ -89,7 +89,7 @@ Everything will get better
 python a.py < in.txt
 ```
 
-就會印出執行程式碼的結果`Everything will get better`
+就會印出執行程式碼的結果`Everything will get better 12345`
 
 ::: details 印在檔案裡、中文輸入
 
