@@ -9,6 +9,7 @@ import {
   sidebarCss,
   sidebarJavascript,
   sidebarJava,
+  sideBarDatabase,
 } from "./config/sidebar";
 import { InlineLinkPreviewElementTransform } from "@nolebase/vitepress-plugin-inline-link-preview/markdown-it";
 import { 
@@ -72,6 +73,7 @@ export default defineConfig({
       "/css/": sidebarCss(),
       "/git/": sidebarGit(),
       "/java/": sidebarJava(),
+      "/database/": sideBarDatabase(),
     },
     docFooter: {
       prev: "前一篇",

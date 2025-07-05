@@ -14,13 +14,6 @@ export function sidebarPhp() {
                 { text: "PHP 環境變數", link: "php/PHP環境變數", activeMatch: "php/PHP環境變數" },
                 { text: "Day1", link: "php/PHP-Day1", activeMatch: "php/PHP-Day1" },
             ],
-        },
-        {
-            text: "SQL",
-            items: [
-                { text: "JOIN 關聯式", link: "php/sql/sql-join", activeMatch: "php/sql/sql-join" },
-                { text: "SQL CASE...WHEN...THEN", link: "php/sql/sql-case-when-then", activeMatch: "php/sql/sql-case-when-then" },
-            ],
-        },
+        }
     ];
 }

@@ -4,34 +4,51 @@ export function nav() {
     { text: "關於我", link: "/about/" },
     { text: "最近更新", link: "/toc" },
     {
-      text: "Python",
+      text: "程式語言",
       items: [
         {
-          text: "新手上路系列",
-          link: "/python/新手上路系列/",
+          text: "Python",
+          items: [
+            {
+              text: "新手上路系列",
+              link: "/python/新手上路系列/",
+            },
+            {
+              text: "112全國技藝競賽筆記",
+              link: "/python/112全國技藝競賽筆記/",
+            },
+          ],
         },
-        {
-          text: "112全國技藝競賽筆記",
-          link: "/python/112全國技藝競賽筆記/",
-        },
+        { text: "JavaScript", link: "/javascript/" },
+        { text: "Java", link: "/java/basic/Day01" },
+        { text: "PHP", link: "/php/" },
       ],
     },
-    { text: "PHP", link: "/php/" },
-    { text: "JS", link: "/javascript/" },
-    { text: "CSS", link: "/css/" },
+    {
+      text: "前端技術",
+      items: [
+        { text: "CSS", link: "/css/" },
+      ],
+    },
+    {
+      text: "資料庫",
+      items: [
+        { text: "Database", link: "/database/database-index-basic" },
+        { text: "SQL", link: "/database/sql/sql-join" },
+      ],
+    },
     { text: "作品集", link: "/portfolio/" },
     {
-      text: "其它",
+      text: "開發工具",
       items: [
-        { text: "JAVA", link: "/java/basic/Day01" },
-        { text: "GIT", link: "/git/" },
-        { text: "安裝vscode", link: "/other/安裝vscode" },
+        { text: "Git", link: "/git/" },
+        { text: "VS Code 安裝", link: "/other/安裝vscode" },
         {
-          text: "設定 ESLint 和 Prettier",
+          text: "ESLint 和 Prettier 設定",
           link: "/other/init-eslint-prettier",
         },
         {
-          text: "設定 jsconfig.json和vite.config.js",
+          text: "jsconfig.json 和 vite.config.js 設定",
           link: "/other/init-jsconfig-viteConfig",
         },
       ],
