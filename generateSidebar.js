@@ -40,8 +40,25 @@ function getMarkdownFiles(dir, baseDir = "") {
       file.endsWith(".md") &&
       !["README.md", "index.md", "toc.md"].includes(file)
     ) {
+      // 讀取 Markdown 檔案的第一行 title
+      const content = fs.readFileSync(filePath, "utf-8");
+      // 先嘗試從 meta 標籤取得 og:title
+      let title;
+      const metaMatch = content.match(/-+\s*meta[\s\S]*?-+\s*/);
+      if (metaMatch) {
+        const ogTitleMatch = metaMatch[0].match(/name:\s*og:title[\s\S]*?content:\s*(.+)/);
+        if (ogTitleMatch) {
+          title = ogTitleMatch[1].replace(/["']/g, '').trim();
+        }
+      }
+      // 如果沒有 meta og:title，則用第一個 # 標題
+      if (!title) {
+        const titleMatch = content.match(/^#\s+(.*)/m);
+        title = titleMatch ? titleMatch[1].trim() : file.replace(".md", "");
+      }
+
       markdownFiles.push({
-        text: file.replace(".md", ""),
+        text: title,
         link: `${relativePath.replace(/\\/g, "/").replace(".md", "")}`,
         lastUpdated: getGitLastModifiedTime(filePath),
       });

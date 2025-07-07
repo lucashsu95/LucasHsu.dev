@@ -28,6 +28,7 @@ export function nav() {
       text: "前端技術",
       items: [
         { text: "CSS", link: "/css/" },
+        { text: "JavaScript", link: "/javascript/網頁操作/TodoList" },
       ],
     },
     {
