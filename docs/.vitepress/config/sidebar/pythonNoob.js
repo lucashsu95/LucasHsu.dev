@@ -71,7 +71,7 @@ export function sidebarPythonNoob() {
           ]
         },
         {
-          text: "第4類 迴圈敘述",
+          text: "第4類 進階控制流程",
           collapsed: true,
           items: [
             { text: '401 最小值', link: "/python/新手上路系列/tqc/tqc4/401" },
@@ -87,7 +87,7 @@ export function sidebarPythonNoob() {
           ]
         },
         {
-          text: "第6類 迴圈敘述",
+          text: "第6類 串列的運作",
           collapsed: true,
           items: [
             { text: '601 偶數索引值加總', link: "/python/新手上路系列/tqc/tqc6/601" },
