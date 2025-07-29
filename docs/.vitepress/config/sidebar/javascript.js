@@ -24,6 +24,9 @@ export function sidebarJavascript() {
         { text: '購物車範例', link: '/javascript/網頁操作/購物車', activeMatch: '/javascript/網頁操作/購物車' },
         { text: '聊天機器人', link: '/javascript/網頁操作/聯天機器人', activeMatch: '/javascript/網頁操作/聯天機器人' },
         { text: '傳統時鐘製作指南', link: '/javascript/網頁操作/傳統時鐘製作指南', activeMatch: '/javascript/網頁操作/傳統時鐘製作指南' },
+        { text: 'Service Worker', link: '/javascript/網頁操作/service-worker-basic', activeMatch: '/javascript/網頁操作/service-worker-basic' },
+        { text: 'Web Components - 基礎篇', link: '/javascript/網頁操作/web-components-1', activeMatch: '/javascript/網頁操作/web-components-1' },
+        { text: 'Web Components - 實戰篇', link: '/javascript/網頁操作/web-components-2', activeMatch: '/javascript/網頁操作/web-components-2' },
       ],
     },
     {
