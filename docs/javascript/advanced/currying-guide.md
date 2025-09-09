@@ -337,6 +337,86 @@ console.log(validEmail('test@test.com')); // { isValid: true, message: '驗證�
 console.log(minLengthPassword('123'));    // { isValid: false, message: '密碼 驗證失敗: minLength' }
 ```
 
+### 3. 待辦事項管理系統
+
+讓我們用 Currying 構建一個簡潔的待辦事項管理系統：
+
+```javascript
+// 基礎資料
+const todos = [
+  { id: 1, text: '學習 JavaScript', completed: false, priority: 'high', category: 'learning' },
+  { id: 2, text: '購買雜貨', completed: true, priority: 'medium', category: 'personal' },
+  { id: 3, text: '完成專案報告', completed: false, priority: 'high', category: 'work' },
+  { id: 4, text: '運動', completed: false, priority: 'low', category: 'health' }
+];
+
+// Curried 篩選函數
+const filterBy = property => value => todos => 
+  todos.filter(todo => todo[property] === value);
+
+// Curried 更新函數
+const updateTodo = property => value => id => todos =>
+  todos.map(todo => 
+    todo.id === id ? { ...todo, [property]: value } : todo
+  );
+
+// Curried 統計函數
+const countBy = property => todos =>
+  todos.reduce((stats, todo) => {
+    const key = todo[property];
+    stats[key] = (stats[key] || 0) + 1;
+    return stats;
+  }, {});
+
+// 創建專門的篩選器
+const filterCompleted = filterBy('completed');
+const filterPriority = filterBy('priority');
+const filterCategory = filterBy('category');
+
+// 創建專門的更新器
+const toggleComplete = updateTodo('completed');
+const changePriority = updateTodo('priority');
+
+// 創建專門的統計器
+const statsByPriority = countBy('priority');
+const statsByCategory = countBy('category');
+
+// 使用範例
+console.log('高優先級任務:', filterPriority('high')(todos));
+console.log('未完成任務:', filterCompleted(false)(todos));
+
+// 組合篩選器
+const getHighPriorityIncomplete = todos => 
+  filterCompleted(false)(filterPriority('high')(todos));
+
+console.log('高優先級未完成:', getHighPriorityIncomplete(todos));
+
+// 更新資料
+const toggleTodo1 = toggleComplete(true)(1);
+const updatedTodos = toggleTodo1(todos);
+console.log('更新後的待辦事項:', updatedTodos);
+
+// 統計資訊
+console.log('優先級統計:', statsByPriority(todos));
+console.log('分類統計:', statsByCategory(todos));
+
+// 創建管道函數進行複雜操作
+const pipe = (...fns) => initial => fns.reduce((acc, fn) => fn(acc), initial);
+
+const getWorkTasksHighPriority = pipe(
+  filterCategory('work'),
+  filterPriority('high'),
+  filterCompleted(false)
+);
+
+console.log('工作中的高優先級未完成任務:', getWorkTasksHighPriority(todos));
+```
+
+這個範例展示了 Currying 如何讓我們：
+- 創建可重用的篩選器和更新器
+- 組合簡單函數構建複雜功能
+- 通過部分應用創建專門化的工具函數
+
 ## Currying 的優點
 
 1. **函數重用性**：可以創建專門化的函數，減少重複程式碼

@@ -111,12 +111,12 @@ Maybe.of(10).flatMap(x => Maybe.of(x * 2))  // 結果：Maybe(20)
 不同場景下 Functor 和 Monad 的問題與解決方案：
 
 
-| 場景 | Functor 問題 | Monad 解決 |
-| :-- | :-- | :-- |
-| 安全除法 | `Maybe(Maybe(結果))` 嵌套 | `Maybe(結果)` 扁平化 |
-| 用戶資料處理 | `Maybe(Maybe(email))` 難以處理 | `Maybe(email)` 直接處理 |
-| API 請求鏈 | `Promise(Promise(data))` 嵌套 | `Promise(data)` 鏈式調用 |
-| 表單驗證 | `Validation(Validation(result))` 複雜 | `Validation(result)` 組合驗證 |
+| 場景         | Functor 問題                          | Monad 解決                    |
+| :----------- | :------------------------------------ | :---------------------------- |
+| 安全除法     | `Maybe(Maybe(結果))` 嵌套             | `Maybe(結果)` 扁平化          |
+| 用戶資料處理 | `Maybe(Maybe(email))` 難以處理        | `Maybe(email)` 直接處理       |
+| API 請求鏈   | `Promise(Promise(data))` 嵌套         | `Promise(data)` 鏈式調用      |
+| 表單驗證     | `Validation(Validation(result))` 複雜 | `Validation(result)` 組合驗證 |
 
 ### 使用法則總結
 
@@ -148,14 +148,14 @@ Maybe.of(16)
 
 ### 技術細節對比
 
-| 特性 | Functor | Monad |
-| :-- | :-- | :-- |
-| 核心方法 | `map` | `flatMap/chain/bind` |
-| 函數簽名 | `map(f: a → b) → F[b]` | `flatMap(f: a → M[b]) → M[b]` |
-| 處理函數類型 | 純函數 `(a → b)` | 返回 Monad 的函數 `(a → M[b])` |
-| 嵌套問題 | 會產生嵌套 `F[F[b]]` | 自動扁平化避免嵌套 |
-| 主要用途 | 值的轉換 | 計算的組合與控制流 |
-| 法則數量 | 2個法則 | 3個法則 |
+| 特性         | Functor                | Monad                          |
+| :----------- | :--------------------- | :----------------------------- |
+| 核心方法     | `map`                  | `flatMap/chain/bind`           |
+| 函數簽名     | `map(f: a → b) → F[b]` | `flatMap(f: a → M[b]) → M[b]`  |
+| 處理函數類型 | 純函數 `(a → b)`       | 返回 Monad 的函數 `(a → M[b])` |
+| 嵌套問題     | 會產生嵌套 `F[F[b]]`   | 自動扁平化避免嵌套             |
+| 主要用途     | 值的轉換               | 計算的組合與控制流             |
+| 法則數量     | 2個法則                | 3個法則                        |
 
 ### 關鍵洞察
 
@@ -342,7 +342,74 @@ console.log(result2.inspect());
 // Left(郵箱格式不正確)
 ```
 
-### 3. IO Monad - 管理副作用
+### 3. Result Monad - 簡化的錯誤處理
+
+Result Monad 是 Either Monad 的簡化版本，專門用於成功/失敗的二元狀態：
+
+```javascript
+class Result {
+  constructor(value, isSuccess = true) {
+    this.value = value;
+    this.isSuccess = isSuccess;
+  }
+  
+  static success(value) {
+    return new Result(value, true);
+  }
+  
+  static error(error) {
+    return new Result(error, false);
+  }
+  
+  static of(value) {
+    return Result.success(value);
+  }
+  
+  isError() {
+    return !this.isSuccess;
+  }
+  
+  map(fn) {
+    return this.isError() ? this : Result.success(fn(this.value));
+  }
+  
+  flatMap(fn) {
+    return this.isError() ? this : fn(this.value);
+  }
+  
+  getOrElse(defaultValue) {
+    return this.isSuccess ? this.value : defaultValue;
+  }
+  
+  inspect() {
+    return this.isSuccess ? `Success(${this.value})` : `Error(${this.value})`;
+  }
+}
+
+// 實際應用：安全計算鏈
+const safeParseInt = (str) => {
+  const num = parseInt(str, 10);
+  return isNaN(num) ? Result.error('無法解析為數字') : Result.success(num);
+};
+
+const safeDivide = (a, b) => {
+  return b === 0 ? Result.error('除數不能為零') : Result.success(a / b);
+};
+
+// 組合使用
+const calculate = (aStr, bStr) => 
+  safeParseInt(aStr)
+    .flatMap(a => 
+      safeParseInt(bStr)
+        .flatMap(b => safeDivide(a, b))
+    );
+
+console.log(calculate('10', '2').inspect());  // Success(5)
+console.log(calculate('10', '0').inspect());  // Error(除數不能為零)
+console.log(calculate('abc', '2').inspect()); // Error(無法解析為數字)
+```
+
+### 4. IO Monad - 管理副作用
 
 ```javascript
 class IO {
@@ -418,7 +485,7 @@ const program = interactiveGreeting();
 // program.run(); // 執行副作用
 ```
 
-### 4. List Monad - 非確定性計算
+### 5. List Monad - 非確定性計算
 
 ```javascript
 class List {
