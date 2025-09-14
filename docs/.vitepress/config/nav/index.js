@@ -20,7 +20,7 @@ export function nav() {
           ],
         },
         { text: "JavaScript", link: "/javascript/" },
-        { text: "Java", link: "/java/basic/Day01" },
+        { text: "Java", link: "/java/basic/install-java" },
         { text: "PHP", link: "/php/" },
       ],
     },

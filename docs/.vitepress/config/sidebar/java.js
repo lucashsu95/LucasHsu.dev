@@ -3,9 +3,14 @@ export function sidebarJava() {
         {
             text: "Basic Java",
             items: [
-                { text: "Day1 - 安裝｜變數", link: "java/basic/Day01", activeMatch: "java/basic/Day01" },
+                { text: "Day1 - 安裝｜變數", link: "java/basic/install-java", activeMatch: "java/basic/install-java" },
                 { text: "Day2 - 輸入Scanner", link: "java/basic/Scanner和String[]args", activeMatch: "java/basic/Scanner和String[]args" },
-                { text: "Day3 - JavaStream常見的操作", link: "java/basic/JavaStream常見的操作", activeMatch: "java/basic/JavaStream常見的操作" },
+                { text: "Day3 - 陣列與列表", link: "java/basic/Array與List深入比較", activeMatch: "java/basic/Array與List深入比較" },
+                { text: "Day4 - Java 世界的三大主角 上文", link: "java/basic/class-object-part-1", activeMatch: "java/basic/class-object-part-1" },
+                { text: "Day5 - Java 世界的三大主角 下文", link: "java/basic/class-object-part-2", activeMatch: "java/basic/class-object-part-2" },
+                { text: "Day6 - HashMap", link: "java/basic/HashMap", activeMatch: "java/basic/HashMap" },
+                { text: "Day7 - HashSet & TreeSet", link: "java/basic/HashSetTreeSet", activeMatch: "java/basic/HashSetTreeSet" },
+                { text: "Day8 - JavaStream常見的操作", link: "java/basic/JavaStream常見的操作", activeMatch: "java/basic/JavaStream常見的操作" },
                 { text: "什麼是固定簽名", link: "java/basic/什麼是固定簽名", activeMatch: "java/basic/什麼是固定簽名" },
                 { text: "是否相等", link: "java/basic/是否相等", activeMatch: "java/basic/是否相等" },
                 { text: "Integer和int的差別", link: "java/basic/Integer和int的差別", activeMatch: "java/basic/Integer和int的差別" },
