@@ -1,0 +1,728 @@
+---
+outline: "deep"
+
+head:
+  - - meta
+    - name: author
+      content: 許恩綸
+  - - meta
+    - name: keywords
+      content: java, OOP, 物件導向程式設計, interface, 多型, polymorphism, 智慧家電, 程式重構, java教學, 程式設計模式, 軟體架構
+  - - meta
+    - name: description
+      content: 透過智慧家電控制系統實戰，從混亂程式碼到優雅OOP設計的完整重構教學。深入學習Interface、多型、組合設計模式，適合Java程式設計初學者到進階開發者。
+  - - meta
+    - name: og:title
+      content: Java OOP物件導向完整教學 | 從混亂到秩序的程式碼重構實戰
+  - - meta
+    - name: og:description
+      content: 透過智慧家電控制系統實戰，從混亂程式碼到優雅OOP設計的完整重構教學。深入學習Interface、多型、組合設計模式。
+  - - meta
+    - name: og:type
+      content: article
+  - - meta
+    - name: og:image
+      content: ../assets/java-oop-cover.png
+  - - meta
+    - name: twitter:card
+      content: summary_large_image
+  - - meta
+    - name: twitter:title
+      content: Java OOP物件導向完整教學 | 從混亂到秩序的程式碼重構實戰
+  - - meta
+    - name: twitter:description
+      content: 透過智慧家電控制系統實戰，學習Interface、多型、組合設計模式，體驗從混亂程式碼到優雅OOP設計的重構過程。
+---
+
+# Java OOP 物件導向程式設計：從混亂到秩序的程式碼重構之旅
+
+
+## 🎯 開場情境設定 (15分鐘)
+
+### 情境背景
+你剛進入一家智慧家電新創公司「HomeTech」，第一天上班，主管就丟給你一個緊急任務：
+
+> **"客戶抱怨我們的設備控制App經常當機，而且每次新增品牌支援都要等2週開發時間。董事會下週要看demo，你能先做個最基礎的版本嗎？"**
+
+### 初始需求 (故意簡化)
+- 支援3個燈具品牌：Philips、小米、IKEA
+- 基本功能：開燈、關燈
+- **重要限制**：「先求有，再求好，時間很趕！」
+
+### 學生任務1：快速交付版本 (10分鐘)
+```java
+// 給學生的起始框架
+public class LightController {
+    // TODO: 實作controlLight方法
+    // 需求：根據brand參數控制不同品牌的燈
+    // brand可能的值："philips", "xiaomi", "ikea"
+    // action可能的值："on", "off"
+    
+    public void controlLight(String brand, String action) {
+        // 你的實作在這裡...
+        // 提示：最直接的方式就是if-else判斷
+    }
+
+    public void showAllLightStatus() {
+        // 提示：顯示所有燈具的狀態總覽
+    }
+}
+
+// 測試用的main方法
+public class TestApp {
+    public static void main(String[] args) {
+        LightController controller = new LightController();
+        
+        // 測試案例
+        controller.controlLight("philips", "on");
+        controller.controlLight("xiaomi", "off");
+        controller.controlLight("ikea", "on");
+        controller.controlLight("unknown", "on"); // 如果出現不支援品牌 要如何應變呢?
+        controller.showAllLightStatus();
+    }
+}
+```
+
+**學生思考引導問題：**
+1. 最快的實作方式是什麼？
+2. 你預期這個方法會長什麼樣子？
+
+---
+
+## 💥 需求地獄體驗 (25分鐘)
+
+### 第一波需求變更 (5分鐘後)
+> **主管：「剛接到客戶電話，他們的Philips燈泡開關有特殊動畫效果，小米的比較直接，IKEA的有漸變效果。麻煩調整一下輸出訊息。」**
+
+**學生任務2：修改輸出訊息**
+```java
+// 新的輸出需求：
+// 當Philips開燈輸出："✨ Philips智慧燈泡優雅點亮"
+// 當Philips關燈輸出："🌙 Philips智慧燈泡柔和熄滅"
+// 當小米開燈輸出："⚡ 小米燈泡瞬間點亮"
+// 當小米關燈輸出："💤 小米燈泡立即關閉"
+// 當IKEA開燈輸出："🏠 IKEA燈具溫馨啟動"
+// 當IKEA關燈輸出："🛌 IKEA燈具安靜關閉"
+```
+
+```java
+// 測試用的main方法
+// 第一波測試：基本開關功能
+System.out.println("📋 測試案例 1: 基本開關功能");
+controller.controlLight("philips", "on");
+controller.controlLight("xiaomi", "on");
+controller.controlLight("ikea", "on");
+controller.showAllLightStatus();
+
+// 第二波測試：關燈功能
+System.out.println("\n📋 測試案例 2: 關燈功能");
+controller.controlLight("xiaomi", "off");
+controller.showAllLightStatus();
+
+// 第二波測試：關燈功能
+System.out.println("\n📋 測試案例 3: 關燈功能");
+controller.controlLight("xiaomi", "off");
+controller.showAllLightStatus();
+
+// 第三波測試：關燈功能
+System.out.println("\n📋 測試案例 4: 關燈功能");
+controller.controlLight("xiaomi", "off");
+controller.showAllLightStatus();
+```
+
+### 第二波需求變更 (再5分鐘後)
+> **主管：「客戶又說要加亮度調節功能，還有色溫調整。另外，剛簽了兩個新品牌：Osram和Yeelight。」**
+
+**學生任務3：添加新功能和新品牌**
+```java
+// 新增功能需求：
+// setBrightness(brand, level) - level 1-100
+// setColorTemperature(brand, temp) - temp 2700-6500K
+
+// 新品牌輸出格式：
+// Osram: "💡 Osram專業燈具[動作]"
+// Yeelight: "🌈 Yeelight智慧燈[動作]"
+
+// 在LightController裡新增3種方法
+public void controlLight(String brand, String action) {
+    // 現在這個方法變得多複雜？
+}
+
+// 還要加這些方法...
+public void setBrightness(String brand, int level) {
+    // ??
+}
+
+public void setColorTemperature(String brand, int temp) {
+    // ??
+}
+```
+
+
+```java
+// 測試用的main方法
+// 測試所有新功能
+System.out.println("\n📋 測試案例 1: 基本開關功能");
+controller.controlLight("philips", "on");
+controller.controlLight("xiaomi", "on");
+controller.controlLight("ikea", "on");
+controller.controlLight("osram", "on");
+controller.controlLight("yeelight", "on");
+
+System.out.println("\n📋 測試案例 2: 亮度調節功能");
+controller.setBrightness("philips", 80);
+controller.setBrightness("xiaomi", 90);
+controller.setBrightness("osram", 75);
+controller.setBrightness("yeelight", 85);
+
+System.out.println("\n📋 測試案例 3: 色溫調節功能");
+controller.setColorTemperature("philips", 3000);
+controller.setColorTemperature("xiaomi", 4000);
+controller.setColorTemperature("ikea", 2700);
+controller.setColorTemperature("yeelight", 5000);
+
+System.out.println("\n📋 測試案例 4: 錯誤輸入測試");
+controller.setBrightness("philips", 150); // 超出範圍
+controller.setColorTemperature("xiaomi", 1000); // 超出範圍
+controller.controlLight("unknown", "on"); // 不支援品牌
+
+controller.showAllLightStatus(); // 要輸出status、brightness和colorTemp
+```
+
+### 第三波需求變更 (再5分鐘後)
+> **主管：「董事會說要demo智慧風扇和智慧音響的控制，用同一個App。風扇有轉速調節，音響有音量控制。」**
+
+**關鍵時刻**
+- 是否開始抱怨程式碼變得很亂？
+- 是否發現很多重複的邏輯？
+- 是否開始覺得難以維護？
+
+### 痛苦度量化體驗 (10分鐘)
+來實際計算：
+
+**程式碼複雜度分析表**
+| 項目 | 最初版本 | 當前版本 | 如果有10個品牌會變成 |
+|------|----------|----------|---------------------|
+| controlLight方法行數 | ? | ? | ? |
+| 需要維護的if-else分支 | ? | ? | ? |
+| 新增一個品牌要修改的地方 | ? | ? | ? |
+| 新增一個功能要修改的地方 | ? | ? | ? |
+
+**討論問題：**
+1. 如果bug出現在某個品牌的某個功能，要怎麼快速定位？
+2. 如果要修改所有品牌的開燈邏輯，需要改幾個地方？
+3. 新來的同事能快速理解這些程式碼嗎？
+
+---
+
+## 💡 啟發時刻：尋找模式 (15分鐘)
+
+### 發現問題根源
+**提問引導：**
+> "讓我們暫停寫程式碼，先思考一個問題：現實生活中，不同品牌的燈泡，在『功能』上有什麼共同點？"
+
+::: details 討論預期回答
+- 都可以開/關
+- 都可以調亮度
+- 都可以調色溫
+- 只是『實作方式』不同
+:::
+
+**關鍵問題：**
+> "程式碼能不能也用這種方式設計？先定義『統一的功能介面』，再讓每個品牌『各自實作』？"
+
+---
+
+## 🔧 解決方案探索：`Interface`登場 (30分鐘)
+
+### 第一步：定義統一介面 (10分鐘)
+
+**設計Interface：**
+```java
+// 學生協作完成這個Interface
+public interface SmartLight {
+    // TODO: 列出所有智慧燈泡應該有的功能
+    // 思考：什麼是『每個品牌都必須有』的功能？
+    
+    // 提示問題：
+    // 1. 基本開關功能？
+    // 2. 亮度調節功能？
+    // 3. 色溫調節功能？
+    // 4. 還有其他必備功能嗎？
+}
+```
+
+::: details 預期答案
+```java
+public interface SmartLight {
+    void turnOn();
+    void turnOff();
+    void setBrightness(int level);
+    void setColorTemperature(int temp);
+    String getBrand(); // 用於顯示品牌資訊
+}
+```
+:::
+
+### 第二步：品牌實作挑戰 (15分鐘)
+
+**學生實作任務：Philips品牌**
+```java
+public class PhilipsLight implements SmartLight {
+    // 實作提示：
+    // 1. 記住Philips的特色是「優雅」和「柔和」
+    // 2. 每個方法都要有品牌特色的輸出
+    // 3. 參考之前的輸出格式
+    
+    @Override
+    public void turnOn() {
+        // TODO: 實作Philips的開燈邏輯
+        // 輸出應該是："✨ Philips智慧燈泡優雅點亮"
+    }
+    
+    @Override
+    public void turnOff() {
+        // TODO: 實作Philips的關燈邏輯
+    }
+    
+    @Override
+    public void setBrightness(int level) {
+        // TODO: 實作Philips的亮度調節
+        // 輸出格式："✨ Philips燈泡亮度調節至 " + level + "%"
+    }
+    
+    @Override
+    public void setColorTemperature(int temp) {
+        // TODO: 實作Philips的色溫調節
+    }
+    
+    @Override
+    public String getBrand() {
+        // TODO: 回傳品牌名稱
+    }
+}
+```
+
+**分組任務：**
+- 第1組：完成PhilipsLight
+- 第2組：完成XiaomiLight 
+- 第3組：完成IkeaLight
+- 第4組：完成YeelightLight
+
+**驗證測試：**
+```java
+public class InterfaceTest {
+    public static void main(String[] args) {
+        // TODO: 創建不同品牌的燈泡物件
+        // TODO: 測試每個品牌的所有功能
+        // TODO: 觀察輸出是否符合各品牌特色
+        
+        SmartLight philips = new PhilipsLight();
+        SmartLight xiaomi = new XiaomiLight();
+        
+        // 測試相同介面，不同實作
+        testLight(philips);
+        testLight(xiaomi);
+    }
+    
+    public static void testLight(SmartLight light) {
+        System.out.println("測試品牌：" + light.getBrand());
+        light.turnOn();
+        light.setBrightness(80);
+        light.turnOff();
+        System.out.println("---");
+    }
+}
+```
+
+### 第三步：Controller重構體驗 (5分鐘)
+
+**重構前後對比展示：**
+```java
+// 重構前的惡夢程式碼 (讓學生回憶痛苦)
+public class OldLightController {
+    public void controlLight(String brand, String action) {
+        if (brand.equals("philips")) {
+            if (action.equals("on")) {
+                System.out.println("✨ Philips智慧燈泡優雅點亮");
+            } else if (action.equals("off")) {
+                System.out.println("🌙 Philips智慧燈泡柔和熄滅");
+            }
+        } else if (brand.equals("xiaomi")) {
+            // ... 又是重複邏輯
+        }
+        // 想像這裡有100行類似程式碼...
+    }
+}
+
+// 重構後的清爽程式碼
+public class NewLightController {
+    public void operateLight(SmartLight light, String action) {
+        switch (action.toLowerCase()) {
+            case "on":
+                light.turnOn();
+                break;
+            case "off":
+                light.turnOff();
+                break;
+            default:
+                System.out.println("不支援的操作：" + action);
+        }
+    }
+    
+    // 一行程式碼控制所有品牌！
+    public void turnOnAllLights(List<SmartLight> lights) {
+        lights.forEach(SmartLight::turnOn);
+    }
+    
+    public void setAllBrightness(List<SmartLight> lights, int level) {
+        lights.forEach(light -> light.setBrightness(level));
+    }
+}
+```
+
+---
+
+## 🚀 威力展示：多型的魔法 (20分鐘)
+
+### 魔法時刻：同一段程式碼，不同執行結果
+
+**學生體驗任務：**
+```java
+public class PolymorphismDemo {
+    public static void main(String[] args) {
+        // 創建不同品牌的燈泡陣列
+        List<SmartLight> lights = Arrays.asList(
+            new PhilipsLight(),
+            new XiaomiLight(),
+            new IkeaLight(),
+            new YeelightLight(),
+        );
+        
+        // 神奇的事情發生了：
+        // 同一行程式碼，卻產生5種不同的輸出！
+        System.out.println("=== 魔法演示：一行程式碼，多種執行結果 ===");
+        for (SmartLight light : lights) {
+            light.turnOn(); // 看看會發生什麼！
+        }
+        
+        System.out.println("\n=== 場景演示：回家模式 ===");
+        homeScenario(lights);
+        
+        System.out.println("\n=== 場景演示：睡眠模式 ===");
+        sleepScenario(lights);
+    }
+    
+    // 學生實作：回家模式場景
+    public static void homeScenario(List<SmartLight> lights) {
+        // TODO: 實作回家時的燈光場景
+        // 需求：所有燈開啟，亮度設為70%，色溫設為暖白光3000K
+    }
+    
+    // 學生實作：睡眠模式場景  
+    public static void sleepScenario(List<SmartLight> lights) {
+        // TODO: 實作睡眠時的燈光場景
+        // 需求：所有燈亮度調到10%，色溫調到2700K，然後關閉
+    }
+}
+```
+
+### 新品牌挑戰：零修改擴展
+
+**終極測試：**
+> "現在公司簽下了新品牌Tesla智慧燈泡，特色是『科技感』和『極簡』。挑戰：在不修改任何現有程式碼的情況下，讓系統支援Tesla燈泡。"
+
+**學生任務：**
+```java
+public class TeslaLight implements SmartLight {
+    // 學生獨立實作
+    // 特色：科技感的輸出訊息
+    // 例如："⚡ Tesla智慧燈具啟動中..." 
+    //      "🔋 Tesla燈具進入節能模式"
+}
+
+// 測試：將TeslaLight加入現有系統
+// 驗證：不用修改Controller和Demo程式碼
+```
+
+**成就感驗證：**
+- 所有原本的場景程式碼都能直接支援Tesla燈泡
+- Controller完全不需要修改
+- 新品牌自動擁有所有功能
+
+---
+
+## 🎯 進階挑戰：多重介面組合 (25分鐘)
+
+### 真實世界的複雜度
+
+**新情境設定：**
+> "公司擴展業務，不只做燈泡，還要做智慧風扇、智慧音響、智慧窗簾。每種設備有不同的能力組合。"
+
+### 能力導向設計思維
+
+**學生思考任務：**
+> "如果把設備的『能力』拆解開來，你會定義哪些基本能力？"
+
+**引導學生設計多個Interface：**
+```java
+// 基本控制能力
+public interface Controllable {
+    void powerOn();
+    void powerOff();
+    boolean isOn();
+}
+
+// 亮度調節能力
+public interface Dimmable {
+    void setBrightness(int level);
+    int getBrightness();
+}
+
+// 色溫調節能力  
+public interface ColorTemperatureAdjustable {
+    void setColorTemperature(int temp);
+    int getColorTemperature();
+}
+
+// 音量控制能力
+public interface VolumeControllable {
+    void setVolume(int level);
+    int getVolume();
+}
+
+// 轉速控制能力
+public interface SpeedControllable {
+    void setSpeed(int level);
+    int getSpeed();
+}
+```
+
+### 組合挑戰：實作智慧設備
+
+**學生分組實作任務：**
+
+**第1組：智慧音響**
+```java
+// 音響需要：基本控制 + 音量控制
+public class SmartSpeaker implements Controllable, VolumeControllable {
+    private boolean isOn = false;
+    private int volume = 50;
+    private String brand;
+    
+    // TODO: 實作所有interface方法
+    // 特色：音響相關的輸出訊息
+}
+```
+
+**第2組：智慧風扇**
+```java
+// 風扇需要：基本控制 + 轉速控制
+public class SmartFan implements Controllable, SpeedControllable {
+    // TODO: 實作wind-related的特色輸出
+}
+```
+
+**第3組：高階智慧燈泡**
+```java
+// 高階燈泡需要：基本控制 + 亮度調節 + 色溫調節
+public class AdvancedSmartLight implements Controllable, Dimmable, ColorTemperatureAdjustable {
+    // TODO: 整合所有燈泡功能
+}
+```
+
+**第4組：智慧窗簾**
+```java
+// 窗簾需要：基本控制 (開合)
+public class SmartCurtain implements Controllable {
+    // TODO: 實作窗簾特色功能
+    // powerOn = 開啟窗簾, powerOff = 關閉窗簾
+}
+```
+
+### 統一控制系統設計
+
+**終極挑戰：萬能控制器**
+```java
+public class UniversalController {
+    // 學生設計：能控制所有類型設備的方法
+    
+    public void powerOnAllDevices(List<Controllable> devices) {
+        // TODO: 一鍵開啟所有設備
+    }
+    
+    public void adjustAllDimmableDevices(List<Dimmable> devices, int level) {
+        // TODO: 調節所有可調光設備的亮度
+    }
+    
+    public void setVolumeForAllSpeakers(List<VolumeControllable> devices, int volume) {
+        // TODO: 調節所有音響設備的音量
+    }
+    
+    // 學生挑戰：場景模式實作
+    public void movieMode(List<Controllable> allDevices, 
+                         List<Dimmable> lights,
+                         List<VolumeControllable> speakers) {
+        // TODO: 實作看電影模式
+        // 需求：燈光調暗到30%，音響音量調到60%，窗簾關閉
+    }
+    
+    public void workMode(List<Controllable> allDevices,
+                        List<Dimmable> lights) {
+        // TODO: 實作工作模式  
+        // 需求：所有燈開到100%，風扇開到中速，音響關閉
+    }
+}
+```
+
+---
+
+## 🏆 綜合實戰：智慧家庭系統 (15分鐘)
+
+### 最終Boss戰：完整系統整合
+
+**學生團隊任務：**
+```java
+public class SmartHomeSystem {
+    private List<Controllable> allDevices = new ArrayList<>();
+    private List<Dimmable> dimmableDevices = new ArrayList<>();
+    private List<VolumeControllable> audioDevices = new ArrayList<>();
+    private List<SpeedControllable> speedDevices = new ArrayList<>();
+    
+    // TODO: 學生實作設備註冊方法
+    public void registerDevice(Object device) {
+        // 挑戰：自動判斷設備類型並加入對應清單
+        // 提示：使用instanceof檢查interface
+    }
+    
+    // TODO: 學生實作場景方法
+    public void executeHomeScene() {
+        // 回家場景：適合的燈光、音樂、通風
+    }
+    
+    public void executeSleepScene() {
+        // 睡眠場景：關閉不必要設備、調暗燈光
+    }
+    
+    public void executePartyScene() {
+        // 派對場景：明亮燈光、大聲音樂、強力通風
+    }
+    
+    // TODO: 學生實作設備管理方法
+    public void showAllDevicesStatus() {
+        // 顯示所有設備的當前狀態
+    }
+}
+```
+
+### 系統展示與測試
+```java
+public class SmartHomeDemo {
+    public static void main(String[] args) {
+        SmartHomeSystem home = new SmartHomeSystem();
+        
+        // 註冊各種設備
+        home.registerDevice(new PhilipsLight());
+        home.registerDevice(new SmartSpeaker("Sony"));
+        home.registerDevice(new SmartFan("Dyson"));
+        home.registerDevice(new SmartCurtain("IKEA"));
+        
+        // 場景演示
+        System.out.println("=== 智慧家庭系統演示 ===");
+        home.showAllDevicesStatus();
+        
+        System.out.println("\n執行回家場景...");
+        home.executeHomeScene();
+        
+        System.out.println("\n執行睡眠場景...");
+        home.executeSleepScene();
+        
+        home.showAllDevicesStatus();
+    }
+}
+```
+
+---
+
+## 📊 學習成果驗收 (10分鐘)
+
+### 程式碼品質對比分析
+
+| 評估項目 | 課程開始版本 | `Interface`重構版本 | 多介面組合版本 |
+|----------|-------------|------------------|---------------|
+| 主要方法行數 | ≈ 50+ 行 | ≈ 10 行 | ≈ 5 行 |
+| 新增品牌需修改的檔案數 | 1個大檔案 | 0個舊檔案 | 0個舊檔案 |
+| 程式碼重複程度 | 高(每品牌重複) | 低(共用邏輯) | 極低(能力複用) |
+| 新人理解難度 | 高(長方法) | 中(需理解介面) | 低(職責清晰) |
+| bug修復範圍 | 影響多品牌 | 只影響單一品牌 | 只影響單一能力 |
+
+### 設計思維轉變檢查
+
+**自我評估問題：**
+1. 現在看到需要判斷「類型」的`if-else`時，你第一個想到什麼解決方案？
+2. 如果要新增功能，你會先考慮什麼？
+3. 面對複雜系統時，你會如何拆解問題？
+
+### 下次遇到這些情況的行動計畫
+
+**學生制定OOP應用檢查清單：**
+- [ ] 一個方法超過20行且有多個`if-else`判斷類型
+- [ ] 發現自己在複製貼上相似邏輯
+- [ ] 新增一個類型需要修改多個地方
+- [ ] 一個類別負責太多不相關的事情
+- [ ] 需要支援多種「相似但不同」的物件
+
+**行動方案：**
+1. 先找出「共同行為」→ 設計Interface
+2. 將「特定實作」→ 分離到不同Class
+3. 用「多型」→ 統一處理邏輯
+4. 用「組合」→ 靈活定義能力
+
+---
+
+## 🎯 課程總結：OOP的本質 (5分鐘)
+
+### 核心洞察
+**OOP不是為了炫技，而是為了：**
+1. **管理複雜度** - 將大問題拆解成小問題
+2. **提高可維護性** - 修改影響範圍最小化  
+3. **增強可擴展性** - 新增功能不改舊程式碼
+4. **改善可理解性** - 每個類別職責單一明確
+
+### 設計原則記憶口訣
+- **Interface**: "定義能做什麼" (What)
+- **Class**: "定義怎麼做" (How)  
+- **Object**: "執行實際操作" (Do)
+- **多型**: "同樣呼叫，不同結果" (Magic)
+
+**設計模式：OOP的高級應用**
+- `Factory Pattern`：物件創建的藝術
+- `Observer Pattern`：事件驅動的設計
+- `Strategy Pattern`：演算法的彈性切換
+
+**回家作業：**
+設計一個「線上購物車系統」，支援不同類型商品（實體商品、數位商品、訂閱服務），每種商品有不同的計價方式和配送方式。用今天學到的OOP概念來設計。
+
+---
+
+## 💡 教學技巧補充
+
+### 關鍵教學時機把握
+1. **痛苦驅動時機**：當學生開始抱怨程式碼難寫時，正是引入解決方案的最佳時機
+2. **啊哈時刻**：當學生看到一行程式碼產生多種輸出時，要暫停讓他們充分體驗驚喜
+3. **成就感強化**：每當學生完成一個`Interface`實作，立即讓他們測試看到效果
+
+### 常見學生困惑與解答
+**Q: `Interface`跟`Class`有什麼不同？**
+A: `Interface`是「能力合約書」，`Class`是「具體執行者」。合約書定義「必須能做什麼」，執行者負責「具體怎麼做」。
+
+**Q: 為什麼不直接寫`Class`就好？**  
+A: 引導回想痛苦體驗：沒有統一規格時，`Controller`要怎麼統一處理不同品牌？
+
+**Q: 什麼時候該用多個`Interface`？**
+A: 當不同設備有不同「能力組合」時。音響不需要亮度調節，燈泡不需要音量控制。
+
+### 程式碼漸進展示技巧
+- 先讓學生寫出「壞」程式碼，體驗痛苦
+- 再展示「好」程式碼，對比效果強烈  
+- 最後讓學生自己重構，獲得成就感
