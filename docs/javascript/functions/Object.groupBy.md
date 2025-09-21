@@ -8,14 +8,17 @@ head:
     - name: keywords
       content: Object.groupBy,javascript,js,group,group by
   - - meta
-    - name: og:title
+    - property: og:title
       content: Object.groupBy() - javascript
   - - meta
-    - name: og:description
+    - property: og:description
       content: Object.groupBy() 是 JavaScript 中的一個新方法，用於根據回調函數返回的字符串值將可迭代對象的元素分組。這個方法的引入使得對數據進行分組變得更加簡單和直觀。
   - - meta
-    - name: og:type
+    - property: og:type
       content: article
+  - - meta
+    - property: og:image
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/javascript-cover.jpg
 ---
 
 # Object.groupBy()

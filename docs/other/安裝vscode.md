@@ -7,13 +7,13 @@ head:
     - name: keywords
       content: Python, python, 新手上路, 安裝VSCode, 開發環境設置
   - - meta
-    - name: og:title
+    - property: og:title
       content: Python新手上路 Day0 - 安裝VSCode
   - - meta
-    - name: og:descriptionN
+    - property: og:descriptionN
       content: 學習如何安裝VSCode
   - - meta
-    - name: og:type
+    - property: og:type
       content: article
 ---
 

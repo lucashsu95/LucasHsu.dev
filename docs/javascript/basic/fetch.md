@@ -7,17 +7,17 @@ head:
     - name: keywords
       content: fetch(),fetch,javascript
   - - meta
-    - name: og:title
+    - property: og:title
       content: 使用 fetch() 進行非同步資料獲取的基礎教學
   - - meta
-    - name: og:description
+    - property: og:description
       content: 利用非同步函式fetch()，獲取網路資料
   - - meta
-    - name: og:type
+    - property: og:type
       content: article
   - - meta
-    - name: og:image
-      content: https://lucashsu95.github.io/LucasHsu.dev/javascript/basic/fetch
+    - property: og:image
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/javascript-cover.jpg
 ---
 
 # 使用 fetch() 進行非同步資料獲取的基礎教學

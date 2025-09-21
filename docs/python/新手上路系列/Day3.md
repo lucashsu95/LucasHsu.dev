@@ -8,14 +8,17 @@ head:
     - name: keywords
       content: Python, python, 新手上路, 索引, for迴圈, while迴圈, 字串切片, range函數
   - - meta
-    - name: og:title
+    - property: og:title
       content: Python新手上路 Day3 - 迴圈和字串操作
   - - meta
-    - name: og:description
+    - property: og:description
       content: 學習Python的索引、for迴圈、while迴圈、字串切片和range函數
   - - meta
-    - name: og:type
+    - property: og:type
       content: article
+  - - meta
+    - property: og:image
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/python-cover.jpg
 ---
 
 # python-新手上路-Day3 ｜ for ｜ while ｜字串切片

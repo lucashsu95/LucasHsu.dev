@@ -8,17 +8,17 @@ head:
     - name: keywords
       content: JavaScript,slice,split,splice
   - - meta
-    - name: og:title
+    - property: og:title
       content: 搞懂slice,split,splice｜JavaScript
   - - meta
-    - name: og:description
+    - property: og:description
       content: slice()、splice()、split()在處理Array、String時會很常用到，本單元就會一一介紹如何使用
   - - meta
-    - name: og:type
+    - property: og:type
       content: article
   - - meta
-    - name: og:image
-      content: https://lucashsu95.github.io/LucasHsu.dev/javascript/base/slice-split-splice.html
+    - property: og:image
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/javascript-cover.jpg
 ---
 
 # slice,split,splice分不清

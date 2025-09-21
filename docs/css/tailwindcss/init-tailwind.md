@@ -7,13 +7,13 @@ head:
     - name: keywords
       content: CSS, Tailwind CSS, 初始化, 安裝, 配置
   - - meta
-    - name: og:title
+    - property: og:title
       content: Tailwind CSS 初始化設置指南
   - - meta
-    - name: og:description
+    - property: og:description
       content: 學習如何安裝、初始化和配置Tailwind CSS，包括創建配置文件和添加指令到CSS中
   - - meta
-    - name: og:type
+    - property: og:type
       content: article
 ---
 

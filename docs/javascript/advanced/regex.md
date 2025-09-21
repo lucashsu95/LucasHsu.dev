@@ -7,14 +7,17 @@ head:
     - name: keywords
       content: js,正規表達式,regex,match,抓取
   - - meta
-    - name: og:title
+    - property: og:title
       content: Regex 正規表達式 - javascript
   - - meta
-    - name: og:description
+    - property: og:description
       content: 正規表達式是被用來匹配字串中字元組合的模式。
   - - meta
-    - name: og:type
+    - property: og:type
       content: article
+  - - meta
+    - property: og:image
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/javascript-cover.png
 ---
 
 # Regex 正規表達式 JS為例

@@ -4,7 +4,7 @@ export function sidebarJava() {
             text: "Basic",
             items: [
                 { text: "安裝｜變數", link: "/java/basic/install-java", activeMatch: '/java/basic/install-java' },
-                { text: "輸入Scanner", link: "/java/basic/Scanner和String[]args" },
+                { text: "輸入Scanner", link: "/java/basic/Scanner" },
                 { text: "Array陣列與List列表", link: "/java/basic/Array與List深入比較" },
                 { text: "HashSet & TreeSet介紹與應用", link: "/java/basic/HashSetTreeSet" },
                 { text: "Java - Stream介紹與應用", link: "/java/basic/JavaStream常見的操作" },

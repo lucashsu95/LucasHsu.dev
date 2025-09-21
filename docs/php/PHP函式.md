@@ -8,13 +8,13 @@ head:
     - name: keywords
       content: PHP, php, 如何開始php
   - - meta
-    - name: og:title
+    - property: og:title
       content: PHP Function
   - - meta
-    - name: og:description
+    - property: og:description
       content: A Comprehensive Guide to Many Useful Functions
   - - meta
-    - name: og:type
+    - property: og:type
       content: article
 ---
 

@@ -6,20 +6,23 @@ head:
     - name: author
       content: 許恩綸
   - - meta
+    - itemprop: name
+      content: Java 新手上路 Day1 - 安裝教學｜基礎程式範例
+  - - meta
     - name: keywords
       content: java, 新手上路, 安裝教學, 變數
   - - meta
-    - name: og:title
+    - property: og:title
       content: Java 新手上路 Day1 - 安裝教學｜基礎程式範例
   - - meta
-    - name: og:description
+    - property: og:description
       content: 學習如何安裝Java、設置開發環境，還有基礎程式範例，輸入輸出函數
   - - meta
-    - name: og:type
+    - property: og:type
       content: article
   - - meta
-    - name: og:image
-      content: ../assets/java-cover.png
+    - property: og:image
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/java-cover.jpg
 ---
 
 # Java 新手上路 Day1｜安裝教學｜型態

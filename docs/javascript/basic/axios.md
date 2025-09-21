@@ -7,17 +7,17 @@ head:
     - name: keywords
       content: axios,javascript,next.js,react
   - - meta
-    - name: og:title
+    - property: og:title
       content: next.js - axios
   - - meta
-    - name: og:description
+    - property: og:description
       content: 使用axios實作 User CURD by Next.js - react
   - - meta
-    - name: og:type
+    - property: og:type
       content: article
   - - meta
-    - name: og:image
-      content: https://lucashsu95.github.io/LucasHsu.dev/javascript/basic/axios
+    - property: og:image
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/javascript-cover.jpg
 ---
 
 # Axios - next.js

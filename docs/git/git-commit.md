@@ -8,16 +8,16 @@ head:
     - name: keywords
       content: git,git commit,git reset
   - - meta
-    - name: og:title
+    - property: og:title
       content: git commit 提交
   - - meta
-    - name: og:description
+    - property: og:description
       content: git commit 提交,git commit -m、git push教學
   - - meta
-    - name: og:type
+    - property: og:type
       content: article
   - - meta
-    - name: og:image
+    - property: og:image
       content: ./imgs/git-cover.png
 ---
 

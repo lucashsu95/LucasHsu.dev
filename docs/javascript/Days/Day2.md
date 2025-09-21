@@ -8,17 +8,17 @@ head:
     - name: keywords
       content: javascript,if,else
   - - meta
-    - name: og:title
+    - property: og:title
       content: JavaScript 新手上路 Day2 - if else
   - - meta
-    - name: og:description
+    - property: og:description
       content: 了解如何在 JavaScript 中 寫判斷式(if...else)
   - - meta
-    - name: og:type
+    - property: og:type
       content: article
   - - meta
-    - name: og:image
-      content: ../assets/Days/javascript-title-img.png
+    - property: og:image
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/javascript-cover.jpg
       
 ---
 

@@ -8,16 +8,16 @@ head:
     - name: keywords
       content: collections,Counter,defaultdict,python
   - - meta
-    - name: og:title
+    - property: og:title
       content: collections|python
   - - meta
-    - name: og:description
+    - property: og:description
       content: 實作了專門的容器資料類型，為 Python 的通用內建容器dict、list、set和tuple提供了替代方案
   - - meta
-    - name: og:type
+    - property: og:type
       content: article
   - - meta
-    - name: og:image
+    - property: og:image
       content: https://lucashsu95.github.io/LucasHsu.dev/python/112全國技藝競賽筆記/14-模組/components/collections.html
 ---
 # collections

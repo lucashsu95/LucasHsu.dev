@@ -7,17 +7,17 @@ head:
     - name: keywords
       content: 非同步,異同步,promise,javascript,async,await
   - - meta
-    - name: og:title
+    - property: og:title
       content: 非同步是什麼?能吃嗎?
   - - meta
-    - name: og:description
+    - property: og:description
       content: 利用準備早餐的例子，快速了解異步（Asynchronous）與同步（Synchronous）的差別
   - - meta
-    - name: og:type
+    - property: og:type
       content: article
   - - meta
-    - name: og:image
-      content: https://lucashsu95.github.io/LucasHsu.dev/javascript/basic/asynchronous
+    - property: og:image
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/javascript-cover.jpg
 ---
 
 # 異同步 - Asynchronous

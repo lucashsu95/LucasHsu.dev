@@ -8,14 +8,17 @@ head:
     - name: keywords
       content: Object.call,Object.apply,Object.bind,javascript,js,傳this到函式
   - - meta
-    - name: og:title
+    - property: og:title
       content: Object.call(), Object.apply(), Object.bind() - javascript
   - - meta
-    - name: og:description
+    - property: og:description
       content: call(), apply() 和 bind() 是 JavaScript 中的三個方法，屬於 Function 原型，允許你以指定的 this 值調用一個函數，並將參數傳遞。這些方法特別適合在需要控制 this 值的情況下。
   - - meta
-    - name: og:type
+    - property: og:type
       content: article
+  - - meta
+    - property: og:image
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/javascript-cover.jpg
 ---
 
 # **Object.call()、Object.apply()、Object.bind()**

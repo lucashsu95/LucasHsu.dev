@@ -8,14 +8,17 @@ head:
     - name: keywords
       content: Object.hasOwn,javascript,js,has,key,includes,object,
   - - meta
-    - name: og:title
+    - property: og:title
       content: Object.hasOwn() - javascript
   - - meta
-    - name: og:description
+    - property: og:description
       content: Object.hasOwn() 是 JavaScript 中的一個靜態方法，用於檢查指定對象是否擁有某個屬性作為其自有屬性。這個方法的引入旨在取代 Object.prototype.hasOwnProperty() 方法，並提供更好的兼容性和使用便利性。
   - - meta
-    - name: og:type
+    - property: og:type
       content: article
+  - - meta
+    - property: og:image
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/javascript-cover.jpg
 ---
 
 # Object.hasOwn()

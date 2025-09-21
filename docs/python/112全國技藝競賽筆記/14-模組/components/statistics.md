@@ -8,13 +8,13 @@ head:
     - name: keywords
       content: statistics,python,平均值,中位數,分組中位數
   - - meta
-    - name: og:title
+    - property: og:title
       content: statistics|python
   - - meta
-    - name: og:description
+    - property: og:description
       content: 使用python模組計算平均值,中位數,分組中位數
   - - meta
-    - name: og:type
+    - property: og:type
       content: article
 ---
 

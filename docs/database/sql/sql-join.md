@@ -7,16 +7,16 @@ head:
     - name: keywords
       content: SQL, SQL JOIN, Inner Join, Left Join
   - - meta
-    - name: og:title
+    - property: og:title
       content: SQL JOIN 教學
   - - meta
-    - name: og:description
+    - property: og:description
       content: SQL JOIN 教學和範例，包括 Inner Join 和 Left Join 的使用方法
   - - meta
-    - name: og:type
+    - property: og:type
       content: article
   - - meta
-    - name: og:image
+    - property: og:image
       content: https://lucashsu95.github.io/LucasHsu.dev/assets/sql-join/image.png
 ---
 
@@ -88,12 +88,12 @@ head:
 
 
 ::: warning 要輸出的結果
-|id | account | total_value
-|---|---|---|
-|2|	user02|	9|
-|3|	user03|	8|
-|4|	user04|	8|
-|1|	user01|	7|
+| id  | account | total_value |
+| --- | ------- | ----------- |
+| 2   | user02  | 9           |
+| 3   | user03  | 8           |
+| 4   | user04  | 8           |
+| 1   | user01  | 7           |
 :::
 
 ::: details 看答案

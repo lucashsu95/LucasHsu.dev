@@ -7,17 +7,17 @@ head:
     - name: keywords
       content: HTTP請求方法,HTTP methods,GET,POST,PUT,DELETE,PATCH,JavaScript
   - - meta
-    - name: og:title
+    - property: og:title
       content: HTTP 請求方法介紹
   - - meta
-    - name: og:description
+    - property: og:description
       content: 了解各種 HTTP 請求方法及其用途，包括 GET、POST、PUT、DELETE 和 PATCH。
   - - meta
-    - name: og:type
+    - property: og:type
       content: article
   - - meta
-    - name: og:image
-      content: https://lucashsu95.github.io/LucasHsu.dev/javascript/basic/http-request
+    - property: og:image
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/javascript-cover.jpg
 ---
 
 # HTTP 請求方法

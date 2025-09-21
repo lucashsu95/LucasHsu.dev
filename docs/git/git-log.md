@@ -9,16 +9,16 @@ head:
     - name: keywords
       content: git-log, git-log-檔案, git-檔案歷史, git-blame, git-show, git-follow, git-log-教學, git-查詢檔案, git-commit-歷史, git-檔案變更, git-追蹤檔案, git-指令
   - - meta
-    - name: og:title
+    - property: og:title
       content: Git Log 查找特定檔案歷史紀錄教學｜5種方法完整指令範例
   - - meta
-    - name: og:description
+    - property: og:description
       content: 如何用 git log 查找特定檔案的歷史紀錄？本篇教學包含 git log、git blame、git show 等5種查詢方法，附完整指令範例與使用時機，幫助你快速追蹤檔案變更歷史。
   - - meta
-    - name: og:type
+    - property: og:type
       content: article
   - - meta
-    - name: og:image
+    - property: og:image
       content: ./imgs/git-cover.png
 ---
 

@@ -8,14 +8,17 @@ head:
     - name: keywords
       content: Python, python, 新手上路, 字典, 集合, set, dict
   - - meta
-    - name: og:title
+    - property: og:title
       content: Python新手上路 Day7 - 字典(dict)與集合(set)
   - - meta
-    - name: og:description
+    - property: og:description
       content: 學習Python中的字典和集合的基本概念和操作方法
   - - meta
-    - name: og:type
+    - property: og:type
       content: article
+  - - meta
+    - property: og:image
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/python-cover.jpg
 ---
 
 # python-新手上路-Day7｜dict｜set

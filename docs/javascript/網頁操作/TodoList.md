@@ -7,14 +7,17 @@ head:
     - name: keywords
       content: javascript,todolist
   - - meta
-    - name: og:title
+    - property: og:title
       content: 用Javascript做一個TodoList吧
   - - meta
-    - name: og:description
+    - property: og:description
       content: TodoList實作教學，以Javascript為例
   - - meta
-    - name: og:type
+    - property: og:type
       content: article
+  - - meta
+    - property: og:image
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/javascript-cover.jpg
 ---
 
 # TodoList 待辦事項清單

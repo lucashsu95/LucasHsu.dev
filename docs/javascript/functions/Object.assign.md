@@ -8,14 +8,17 @@ head:
     - name: keywords
       content: Object.assign,javascript,js,複製Object
   - - meta
-    - name: og:title
+    - property: og:title
       content: Object.assign() - javascript
   - - meta
-    - name: og:description
+    - property: og:description
       content: Object.assign() 是 JavaScript 中的一個靜態方法，用於將一個或多個源對象的可枚舉屬性複製到目標對象。這個方法返回修改後的目標對象。
   - - meta
-    - name: og:type
+    - property: og:type
       content: article
+  - - meta
+    - property: og:image
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/javascript-cover.jpg
 ---
 
 # Object.assign()

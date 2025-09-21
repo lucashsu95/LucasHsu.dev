@@ -7,14 +7,17 @@ head:
     - name: keywords
       content: node.js,fs,檔案,javascript,js
   - - meta
-    - name: og:title
+    - property: og:title
       content: Node.js fs 使用教學 | 檔案操作
   - - meta
-    - name: og:description
+    - property: og:description
       content: node.js fs 教學，對檔案的操作，讀取、寫入、更新、刪除檔案操作，還有程式碼範例。
   - - meta
-    - name: og:type
+    - property: og:type
       content: article
+  - - meta
+    - property: og:image
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/javascript-cover.png
 ---
 
 # Node.js fs

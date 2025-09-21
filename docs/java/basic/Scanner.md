@@ -9,17 +9,17 @@ head:
     - name: keywords
       content: java-scanner, java-string-args, java-輸入, java-命令列參數, java-動態輸入, java-main-參數, java-Scanner-教學, java-args-用法, java-新手教學, java-輸入差異
   - - meta
-    - name: og:title
+    - property: og:title
       content: Day02 - 命令列參數與動態輸入教學
   - - meta
-    - name: og:description
+    - property: og:description
       content: Java Scanner-和 String[] args-有什麼不同？本篇說明兩種輸入方式的用途、差異、範例與適用情境，幫助新手理解命令列參數與動態輸入的正確用法，避免常見混淆。
   - - meta
-    - name: og:type
+    - property: og:type
       content: article
   - - meta
-    - name: og:image
-      content: ../assets/java-cover.png
+    - property: og:image
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/java-cover.jpg
 ---
 
 # Scanner 和 String[] args

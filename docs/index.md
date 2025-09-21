@@ -36,10 +36,9 @@ head:
     - name: author
       content: 許恩綸
   - - meta
-    - name: og:title
+    - property: og:title
       content: LucasHsu.dev部落格&作品集&比賽事蹟&演算法
   - - meta
-    - name: og:description
       content: 這裡放了一些程式筆記和作品集，不定期更新
 ---
 <style>

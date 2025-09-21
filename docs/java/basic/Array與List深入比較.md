@@ -12,17 +12,17 @@ head:
     - name: description
       content: 深入比較Java Array與List的差異、使用時機與效能分析。完整教學包含基礎語法、實作範例和選擇指南，適合Java初學者到進階開發者。
   - - meta
-    - name: og:title
+    - property: og:title
       content: Java Array 與 List 完整比較教學 | 陣列 vs 列表深度解析
   - - meta
-    - name: og:description
+    - property: og:description
       content: 深入比較Java Array與List的差異、使用時機與效能分析。完整教學包含基礎語法、實作範例和選擇指南，適合Java初學者到進階開發者。
   - - meta
-    - name: og:type
+    - property: og:type
       content: article
   - - meta
-    - name: og:image
-      content: ../assets/java-cover.png
+    - property: og:image
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/java-cover.jpg
   - - meta
     - name: twitter:card
       content: summary_large_image

@@ -8,16 +8,16 @@ head:
     - name: keywords
       content: 資料庫索引,MySQL索引,PostgreSQL索引,資料庫優化,SQL效能,索引設計
   - - meta
-    - name: og:title
+    - property: og:title
       content: 資料庫索引基礎入門：從零開始理解索引原理
   - - meta
-    - name: og:description
+    - property: og:description
       content: 完整的資料庫索引入門教學，從基礎概念到實戰應用。學習MySQL、PostgreSQL索引建立、優化技巧，提升查詢效能從O(n)到O(log n)
   - - meta
-    - name: og:type
+    - property: og:type
       content: article
   - - meta
-    - name: og:image
+    - property: og:image
       content: ./database-index-basic-cover.png
 ---
 
@@ -334,12 +334,12 @@ EXPLAIN ANALYZE SELECT * FROM table_name WHERE column = 'value';
 
 ## 效能基準測試結果
 
-| 資料量 | 無索引查詢時間 | 有索引查詢時間 | 效能提升 |
-|--------|---------------|---------------|----------|
-| 1,000 筆 | 2ms | 1ms | 2x |
-| 10,000 筆 | 25ms | 1ms | 25x |
-| 100,000 筆 | 300ms | 1ms | 300x |
-| 1,000,000 筆 | 3,000ms | 2ms | 1,500x |
+| 資料量       | 無索引查詢時間 | 有索引查詢時間 | 效能提升 |
+| ------------ | -------------- | -------------- | -------- |
+| 1,000 筆     | 2ms            | 1ms            | 2x       |
+| 10,000 筆    | 25ms           | 1ms            | 25x      |
+| 100,000 筆   | 300ms          | 1ms            | 300x     |
+| 1,000,000 筆 | 3,000ms        | 2ms            | 1,500x   |
 
 *測試環境：MySQL 8.0，Intel i7 CPU，16GB RAM，SSD 硬碟*
 

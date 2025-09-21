@@ -12,17 +12,17 @@ head:
     - name: description
       content: Java物件導向程式設計基礎教學：深入學習Class類別、Object物件、Interface介面的概念與應用。透過生活化比喻理解OOP核心原理，適合Java初學者建立扎實基礎。
   - - meta
-    - name: og:title
+    - property: og:title
       content: Java Class、Object、Interface 完整入門教學 | 物件導向程式設計基礎
   - - meta
-    - name: og:description
+    - property: og:description
       content: Java物件導向程式設計基礎教學：深入學習Class類別、Object物件、Interface介面的概念與應用。透過生活化比喻理解OOP核心原理，適合Java初學者建立扎實基礎。
   - - meta
-    - name: og:type
+    - property: og:type
       content: article
   - - meta
-    - name: og:image
-      content: ../assets/java-cover.png
+    - property: og:image
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/java-cover.jpg
   - - meta
     - name: twitter:card
       content: summary_large_image

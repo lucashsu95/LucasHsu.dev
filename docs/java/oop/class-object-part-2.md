@@ -12,17 +12,17 @@ head:
     - name: description
       content: Java物件導向進階應用：深入學習多型、介面實作與智慧家庭控制器實戰案例。透過完整程式範例掌握Class、Object、Interface的協作關係與實際應用。
   - - meta
-    - name: og:title
+    - property: og:title
       content: Java OOP 進階實作教學 | 多型與介面應用完整指南
   - - meta
-    - name: og:description
+    - property: og:description
       content: Java物件導向進階應用：深入學習多型、介面實作與智慧家庭控制器實戰案例。透過完整程式範例掌握Class、Object、Interface的協作關係與實際應用。
   - - meta
-    - name: og:type
+    - property: og:type
       content: article
   - - meta
-    - name: og:image
-      content: ../assets/java-cover.png
+    - property: og:image
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/java-cover.jpg
   - - meta
     - name: twitter:card
       content: summary_large_image

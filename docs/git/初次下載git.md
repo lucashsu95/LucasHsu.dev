@@ -8,16 +8,16 @@ head:
     - name: keywords
       content: git,git init,git開始,git安裝
   - - meta
-    - name: og:title
+    - property: og:title
       content: git init 初始化｜建立github Repo
   - - meta
-    - name: og:description
+    - property: og:description
       content: git init 初始化｜建立github Repo,電腦第一次裝git要做的事,檢查電腦有無GIT,新增USER 和EMAIL
   - - meta
-    - name: og:type
+    - property: og:type
       content: article
   - - meta
-    - name: og:image
+    - property: og:image
       content: ./imgs/git-cover.png
 ---
 

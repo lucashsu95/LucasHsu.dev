@@ -7,16 +7,16 @@ head:
     - name: author
       content: 許恩綸
   - - meta
-    - name: og:title
+    - property: og:title
       content: CSS 響應式網頁設計(RWD)
   - - meta
-    - name: og:description
+    - property: og:description
       content: 媒體查詢是一種CSS技術，允許開發者根據設備的特徵（如螢幕寬度、高度、解析度等）來應用不同的樣式。這使得網站能夠在各種設備上提供良好的使用者體驗，無論是桌面電腦、平板還是手機。
   - - meta
-    - name: og:type
+    - property: og:type
       content: article
   - - meta
-    - name: og:image
+    - property: og:image
       content: https://lucashsu95.github.io/LucasHsu.dev/css/basic/grid
 ---
 

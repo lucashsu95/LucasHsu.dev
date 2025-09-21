@@ -7,16 +7,16 @@ head:
     - name: keywords
       content: git,git clone,clone
   - - meta
-    - name: og:title
+    - property: og:title
       content: git clone 克隆
   - - meta
-    - name: og:description
+    - property: og:description
       content: git clone 克隆,到電腦上克隆雲端上github的repo,只下載最近三次commit教學
   - - meta
-    - name: og:type
+    - property: og:type
       content: article
   - - meta
-    - name: og:image
+    - property: og:image
       content: ./imgs/git-cover.png
 ---
 

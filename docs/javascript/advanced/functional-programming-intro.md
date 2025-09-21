@@ -8,17 +8,17 @@ head:
     - name: keywords
       content: 函數式程式設計,functional programming,純函數,不可變性,高階函數,map,filter,reduce,javascript,js,fp
   - - meta
-    - name: og:title
+    - property: og:title
       content: 函數式程式設計入門指南 | Pure Functions、Immutability、Higher-Order Functions
   - - meta
-    - name: og:description
+    - property: og:description
       content: 完整的函數式程式設計入門教學，包含純函數、不可變性、高階函數等核心概念，以及JavaScript中map、filter、reduce的實戰應用。
   - - meta
-    - name: og:type
+    - property: og:type
       content: article
   - - meta
-    - name: og:image
-      content: https://lucashsu.dev/javascript/advanced/functional-programming-intro
+    - property: og:image
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/javascript-cover.png
   - - meta
     - name: description
       content: 學習函數式程式設計的核心概念：純函數、不可變性、高階函數。掌握JavaScript中map、filter、reduce方法的實際應用，適合初學者入門。

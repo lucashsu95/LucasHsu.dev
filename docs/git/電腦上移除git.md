@@ -7,16 +7,16 @@ head:
     - name: keywords
       content: git,移除git,刪除git
   - - meta
-    - name: og:title
+    - property: og:title
       content: 電腦上移除git
   - - meta
-    - name: og:description
+    - property: og:description
       content: 電腦上移除git
   - - meta
-    - name: og:type
+    - property: og:type
       content: article
   - - meta
-    - name: og:image
+    - property: og:image
       content: ./imgs/git-cover.png
 ---
 

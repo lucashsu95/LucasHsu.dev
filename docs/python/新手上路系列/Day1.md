@@ -9,14 +9,17 @@ head:
     - name: keywords
       content: python,新手上路,變數,input,print
   - - meta
-    - name: og:title
+    - property: og:title
       content: Python新手上路 Day1 - 變數｜型態
   - - meta
-    - name: og:description
+    - property: og:description
       content: 變數、輸入輸出函數
   - - meta
-    - name: og:type
+    - property: og:type
       content: article
+  - - meta
+    - property: og:image
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/python-cover.jpg
 ---
 
 # python-新手上路-Day1 ｜變數｜ 型態

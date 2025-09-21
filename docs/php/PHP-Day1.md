@@ -7,13 +7,13 @@ head:
     - name: keywords
       content: PHP, php, 如何開始php
   - - meta
-    - name: og:title
+    - property: og:title
       content: PHP-Day1
   - - meta
-    - name: og:description
+    - property: og:description
       content: 學習如何寫php
   - - meta
-    - name: og:type
+    - property: og:type
       content: article
 ---
 

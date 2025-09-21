@@ -9,17 +9,17 @@ head:
     - name: keywords
       content: Java int 和 Integer 差別, Java 基本型別, Java 包裝類別, Java autoboxing, Java unboxing, int null, Integer null, Java 集合, Java 型別選擇, Java 新手教學
   - - meta
-    - name: og:title
+    - property: og:title
       content: Java int 與 Integer 差異全解析｜基本型別與包裝類別比較、使用時機
   - - meta
-    - name: og:description
+    - property: og:description
       content: Java int 和 Integer 有什麼不同？本篇說明 int 與 Integer 的記憶體、null、方法、效能差異，介紹自動裝箱/拆箱，並給出實用範例與選用建議，幫助新手正確選擇型別。
   - - meta
-    - name: og:type
+    - property: og:type
       content: article
   - - meta
-    - name: og:image
-      content: ../assets/java-cover.png
+    - property: og:image
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/java-cover.jpg
 ---
 
 # Integer 和 int 的差別

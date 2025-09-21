@@ -9,14 +9,17 @@ head:
     - name: keywords
       content: Python, python, 新手上路, 環境設置, print函數
   - - meta
-    - name: og:title
+    - property: og:title
       content: Python新手上路 Day0 - 建置環境
   - - meta
-    - name: og:description
+    - property: og:description
       content: 學習如何安裝Python、設置開發環境，以及使用基本的print()函數
   - - meta
-    - name: og:type
+    - property: og:type
       content: article
+  - - meta
+    - property: og:image
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/python-cover.jpg
 ---
 
 # python-新手上路-Day0｜建置環境

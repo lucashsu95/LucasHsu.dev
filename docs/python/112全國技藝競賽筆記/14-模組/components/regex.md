@@ -7,13 +7,13 @@ head:
     - name: keywords
       content: python,正規表達式,regex,match,抓取
   - - meta
-    - name: og:title
+    - property: og:title
       content: Regex 正規表達式 - python
   - - meta
-    - name: og:description
+    - property: og:description
       content: 正規表達式是被用來匹配字串中字元組合的模式。
   - - meta
-    - name: og:type
+    - property: og:type
       content: article
 ---
 

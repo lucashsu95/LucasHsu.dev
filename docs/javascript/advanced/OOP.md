@@ -8,17 +8,17 @@ head:
     - name: keywords
       content: oop,物件導向,javascript,封裝,繼承,抽象,多型
   - - meta
-    - name: og:title
+    - property: og:title
       content: 物件導向 OOP
   - - meta
-    - name: og:description
+    - property: og:description
       content: 物件導向 OOP 以 JavaScript為例
   - - meta
-    - name: og:type
+    - property: og:type
       content: article
   - - meta
-    - name: og:image
-      content: https://lucashsu95.github.io/LucasHsu.dev/javascript/OOP.html
+    - property: og:image
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/javascript-cover.png
 ---
 
 # 物件導向 OOP 以 JavaScript 為例

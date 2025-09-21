@@ -7,16 +7,16 @@ head:
     - name: keywords
       content: git-fork, git-upstream, git-同步, git-merge, git-fetch, git-fork-同步, github-fork, git-遠端分支
   - - meta
-    - name: og:title
+    - property: og:title
       content: Git Fork 專案後同步遠端分支教學｜完整步驟與指令範例
   - - meta
-    - name: og:description
+    - property: og:description
       content: Git fork 專案後如何同步原作者的更新？本篇教學詳細說明設定 upstream、fetch、merge 的完整流程，並提供實用指令範例，讓你輕鬆保持 fork 專案與原專案同步。
   - - meta
-    - name: og:type
+    - property: og:type
       content: article
   - - meta
-    - name: og:image
+    - property: og:image
       content: ./imgs/git-cover.png
 ---
 

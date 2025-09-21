@@ -7,13 +7,13 @@ head:
     - name: keywords
       content: jsconfig.json,jsconfig,vite.config.js
   - - meta
-    - name: og:title
+    - property: og:title
       content: 設定 jsconfig.json和vite.config.js
   - - meta
-    - name: og:description
+    - property: og:description
       content: 初始化 jsconfig.json和vite.config.js
   - - meta
-    - name: og:type
+    - property: og:type
       content: article
 ---
 

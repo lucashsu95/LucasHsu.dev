@@ -8,14 +8,17 @@ head:
     - name: keywords
       content: Python, python, 新手上路, 串列(List), 列表操作, 列表方法
   - - meta
-    - name: og:title
+    - property: og:title
       content: Python新手上路 Day6 - 串列(List)與基本操作
   - - meta
-    - name: og:description
+    - property: og:description
       content: 學習Python中的串列(List)概念、創建方法、訪問元素以及常用的列表操作方法
   - - meta
-    - name: og:type
+    - property: og:type
       content: article
+  - - meta
+    - property: og:image
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/python-cover.jpg
 ---
 
 # python-新手上路-Day6 ｜ List

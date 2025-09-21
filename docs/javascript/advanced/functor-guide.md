@@ -8,17 +8,17 @@ head:
     - name: keywords
       content: functor,函子,函數式程式設計,functional programming,map方法,maybe functor,container,映射,範疇論,javascript,js
   - - meta
-    - name: og:title
+    - property: og:title
       content: Functor 函子完整指南 | 容器與映射的藝術
   - - meta
-    - name: og:description
+    - property: og:description
       content: 深入學習 Functor 函子概念，包含 Maybe、Box、Task Functor 的實現與應用，掌握函數式程式設計的核心抽象。
   - - meta
-    - name: og:type
+    - property: og:type
       content: article
   - - meta
-    - name: og:image
-      content: https://lucashsu.dev/javascript/advanced/functor-guide
+    - property: og:image
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/javascript-cover.png
   - - meta
     - name: description
       content: 完整的 Functor 函子教學指南，學習容器與映射的藝術，包含實用的 Maybe、Box、Task Functor 實現和應用範例。

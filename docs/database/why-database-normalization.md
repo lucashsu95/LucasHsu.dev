@@ -8,16 +8,16 @@ head:
     - name: keywords
       content: 資料庫正規化,database normalization,第一正規化,第二正規化,第三正規化,1NF,2NF,3NF,資料庫設計,資料冗餘,資料異常,OLTP,OLAP
   - - meta
-    - name: og:title
+    - property: og:title
       content: 為什麼要資料庫正規化？完整指南與實務應用
   - - meta
-    - name: og:description
+    - property: og:description
       content: 深入解析資料庫正規化的核心概念，包含第一、二、三正規化的詳細說明，以及何時使用反正規化的實務建議。
   - - meta
-    - name: og:type
+    - property: og:type
       content: article
   - - meta
-    - name: og:image
+    - property: og:image
       content: https://lucashsu.dev/database/why-database-normalization
   - - meta
     - name: description

@@ -7,14 +7,17 @@ head:
     - name: keywords
       content: js,javascript,四捨五入,round,toFixed
   - - meta
-    - name: og:title
+    - property: og:title
       content: 在javascript中使用四捨五入
   - - meta
-    - name: og:description
+    - property: og:description
       content: 使用 Math.round 和 toFixed 四捨五入
   - - meta
-    - name: og:type
+    - property: og:type
       content: article
+  - - meta
+    - property: og:image
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/javascript-cover.jpg
 ---
 
 

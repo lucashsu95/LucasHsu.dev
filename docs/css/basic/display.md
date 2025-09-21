@@ -7,16 +7,16 @@ head:
     - name: author
       content: 許恩綸
   - - meta
-    - name: og:title
+    - property: og:title
       content: Css Display 顯示
   - - meta
-    - name: og:description
+    - property: og:description
       content: display屬性用於控制HTML元素在網頁上的顯示方式。這個屬性有多個不同的值，每個值都決定了元素的顯示方式。以下是display屬性的一些常見值
   - - meta
-    - name: og:type
+    - property: og:type
       content: article
   - - meta
-    - name: og:image
+    - property: og:image
       content: https://lucashsu95.github.io/LucasHsu.dev/css/basic/grid
 ---
 

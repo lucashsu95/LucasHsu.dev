@@ -8,16 +8,16 @@ head:
     - name: keywords
       content: ASCII,標點符號,python
   - - meta
-    - name: og:title
+    - property: og:title
       content: 生成所有標點符號、ASCII|python|string模組
   - - meta
-    - name: og:description
+    - property: og:description
       content: 展示了如何使用Python的string模組中的常量和函式，以便在處理字符串時提高效率與簡潔性
   - - meta
-    - name: og:type
+    - property: og:type
       content: article
   - - meta
-    - name: og:image
+    - property: og:image
       content: https://lucashsu95.github.io/LucasHsu.dev/python/112全國技藝競賽筆記/14-模組/components/string.html
 ---
 

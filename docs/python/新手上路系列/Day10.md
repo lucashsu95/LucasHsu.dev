@@ -8,14 +8,17 @@ head:
     - name: keywords
       content: Python, python, 新手上路, List Comprehension, 列表生成式, python一行寫法
   - - meta
-    - name: og:title
+    - property: og:title
       content: Python新手上路 Day10 - List Comprehension
   - - meta
-    - name: og:description
+    - property: og:description
       content: 學習如何使用Python中的List Comprehension來創建和操作列表
   - - meta
-    - name: og:type
+    - property: og:type
       content: article
+  - - meta
+    - property: og:image
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/python-cover.jpg
 ---
 
 # python-新手上路-Day10 ｜ List Comprehension

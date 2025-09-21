@@ -12,17 +12,17 @@ head:
     - name: description
       content: 深入比較Java HashSet與TreeSet的特性差異、效能表現和使用場景。完整教學包含程式範例、時間複雜度分析，幫助你選擇最適合的Set集合實作。
   - - meta
-    - name: og:title
+    - property: og:title
       content: Java HashSet vs TreeSet 完整比較教學 | Set集合選擇指南
   - - meta
-    - name: og:description
+    - property: og:description
       content: 深入比較Java HashSet與TreeSet的特性差異、效能表現和使用場景。完整教學包含程式範例、時間複雜度分析，幫助你選擇最適合的Set集合實作。
   - - meta
-    - name: og:type
+    - property: og:type
       content: article
   - - meta
-    - name: og:image
-      content: ../assets/java-cover.png
+    - property: og:image
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/java-cover.jpg
   - - meta
     - name: twitter:card
       content: summary_large_image

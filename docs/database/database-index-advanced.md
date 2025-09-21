@@ -8,16 +8,16 @@ head:
     - name: keywords
       content: 進階索引,B-Tree,複合索引,Hash索引,資料庫優化,MySQL索引,PostgreSQL索引,索引設計,SQL效能
   - - meta
-    - name: og:title
+    - property: og:title
       content: 進階索引實戰：B-Tree、複合索引與 Hash Map 全解析
   - - meta
-    - name: og:description
+    - property: og:description
       content: 深入解析B-Tree、Hash索引與複合索引原理，學習進階索引設計技巧，從3秒查詢優化到50毫秒的實戰案例
   - - meta
-    - name: og:type
+    - property: og:type
       content: article
   - - meta
-    - name: og:image
+    - property: og:image
       content: ./database-index-advanced-cover.png
 ---
 
@@ -38,12 +38,12 @@ head:
 
 ## 0. 索引 ≈ PWA 快取：觀念對照圖
 
-| Web PWA | Database | 共通核心 |
-|---------|----------|---------|
-| Service Worker Cache API | B-Tree / Hash Index | 以空間換時間，加速存取 |
-| Cache Key | 索引 Key | 唯一定位資料位置 |
-| Cache First / Network First | Index Lookup / Table Scan | 先查快取 (索引)，再回源 (資料表) |
-| 緩存更新 (Revalidate) | 索引維護 (UPDATE / REBUILD) | 保持資料與索引一致 |
+| Web PWA                     | Database                    | 共通核心                         |
+| --------------------------- | --------------------------- | -------------------------------- |
+| Service Worker Cache API    | B-Tree / Hash Index         | 以空間換時間，加速存取           |
+| Cache Key                   | 索引 Key                    | 唯一定位資料位置                 |
+| Cache First / Network First | Index Lookup / Table Scan   | 先查快取 (索引)，再回源 (資料表) |
+| 緩存更新 (Revalidate)       | 索引維護 (UPDATE / REBUILD) | 保持資料與索引一致               |
 
 **結論**：快取如何讓 PWA 離線秒開，索引就如何讓資料庫查詢「不掃全表」。
 
@@ -153,11 +153,11 @@ WHERE  country='TW' AND status='paid'; -- 直接返回索引頁
 
 ## 4. 快取策略 vs. 索引策略：最佳化思路對照
 
-| PWA 策略 | 資料庫對應 | 適用場景 |
-|-----------|------------|----------|
-| Cache First | 覆蓋索引 (只走索引頁) | 熱門讀多寫少清單 |
-| Network First | 非覆蓋索引 + 回表 | 資料即時性高，需要最新 row |
-| Stale-While-Revalidate | 舊索引保留 + 背景 REBUILD | 夜間批次重建大索引 |
+| PWA 策略               | 資料庫對應                | 適用場景                   |
+| ---------------------- | ------------------------- | -------------------------- |
+| Cache First            | 覆蓋索引 (只走索引頁)     | 熱門讀多寫少清單           |
+| Network First          | 非覆蓋索引 + 回表         | 資料即時性高，需要最新 row |
+| Stale-While-Revalidate | 舊索引保留 + 背景 REBUILD | 夜間批次重建大索引         |
 
 > TIP：夜深人靜做 `OPTIMIZE TABLE` = 背景 Revalidate Cache。
 
@@ -205,12 +205,12 @@ EXPLAIN SELECT ... ;
 
 ## 7. 常見地雷與排雷技巧
 
-| 地雷 | 解法 |
-|-------|------|
+| 地雷                                  | 解法                                                |
+| ------------------------------------- | --------------------------------------------------- |
 | 在索引欄位使用函數 `YEAR(created_at)` | 建立 **函數索引 (Expression Index)** 或改寫範圍查詢 |
-| LIKE '%keyword%' 前置百分比 | 使用全文索引 (FULLTEXT, GIN) |
-| 多欄都建單欄索引 → 過度索引 | 合併為複合索引，或只保留高選擇性 |
-| 低選擇度欄位建索引 (gender) | 搭配高選擇度欄或省略索引 |
+| LIKE '%keyword%' 前置百分比           | 使用全文索引 (FULLTEXT, GIN)                        |
+| 多欄都建單欄索引 → 過度索引           | 合併為複合索引，或只保留高選擇性                    |
+| 低選擇度欄位建索引 (gender)           | 搭配高選擇度欄或省略索引                            |
 
 ---
 
@@ -277,13 +277,13 @@ OPTIMIZE TABLE table_name;
 
 ## 進階索引效能測試
 
-| 索引類型 | 查詢類型 | 100萬筆數據耗時 | 適用場景 |
-|---------|----------|----------------|----------|
-| B-Tree | 等值查詢 | 2-5ms | 通用查詢 |
-| B-Tree | 範圍查詢 | 10-50ms | 日期、數值範圍 |
-| Hash | 等值查詢 | 1-2ms | 熱點數據查詢 |
-| 複合索引 | 多條件查詢 | 1-3ms | 複雜業務查詢 |
-| 覆蓋索引 | 特定欄位查詢 | 0.5-1ms | 報表、統計查詢 |
+| 索引類型 | 查詢類型     | 100萬筆數據耗時 | 適用場景       |
+| -------- | ------------ | --------------- | -------------- |
+| B-Tree   | 等值查詢     | 2-5ms           | 通用查詢       |
+| B-Tree   | 範圍查詢     | 10-50ms         | 日期、數值範圍 |
+| Hash     | 等值查詢     | 1-2ms           | 熱點數據查詢   |
+| 複合索引 | 多條件查詢   | 1-3ms           | 複雜業務查詢   |
+| 覆蓋索引 | 特定欄位查詢 | 0.5-1ms         | 報表、統計查詢 |
 
 *測試環境：MySQL 8.0，SSD硬碟，16GB記憶體*
 

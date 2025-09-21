@@ -7,13 +7,13 @@ head:
     - name: keywords
       content: css,滾動時間軸,滾動快照,scoll-snap,scroll-snap-type,scroll-snap-stop,scroll-snap-align,scroll-padding
   - - meta
-    - name: og:title
+    - property: og:title
       content: CSS scroll-snap
   - - meta
-    - name: og:description
+    - property: og:description
       content: 介紹scroll-snap-type、scroll-snap-stop、scroll-snap-align、scroll-padding
   - - meta
-    - name: og:type
+    - property: og:type
       content: article
 ---
 

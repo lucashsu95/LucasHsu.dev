@@ -7,13 +7,13 @@ head:
     - name: keywords
       content: CSS, 背景圖片, background屬性, CSS縮寫, 視差效果
   - - meta
-    - name: og:title
+    - property: og:title
       content: CSS背景圖片設置 - 縮寫屬性詳解
   - - meta
-    - name: og:description
+    - property: og:description
       content: 學習使用一行CSS縮寫屬性設置背景圖片，包括置中、不重複、等比例放大及固定位置等效果
   - - meta
-    - name: og:type
+    - property: og:type
       content: article
 ---
 

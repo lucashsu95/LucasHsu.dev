@@ -7,17 +7,17 @@ head:
     - name: keywords
       content: export, import, JavaScript, 模塊, ES6 模塊, JS 模塊, 模塊化
   - - meta
-    - name: og:title
+    - property: og:title
       content: JavaScript 中的 export 和 import
   - - meta
-    - name: og:description
+    - property: og:description
       content: 了解如何在 JavaScript 中使用 export 和 import 來模塊化你的代碼，並通過簡單的範例展示如何在 HTML 中引入 JavaScript 模塊。
   - - meta
-    - name: og:type
+    - property: og:type
       content: article
   - - meta
-    - name: og:image
-      content: https://lucashsu95.github.io/LucasHsu.dev/javascript/export-import.html
+    - property: og:image
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/javascript-cover.jpg
 ---
 
 # 關於 export 和 import

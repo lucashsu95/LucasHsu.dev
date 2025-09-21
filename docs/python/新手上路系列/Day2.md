@@ -9,14 +9,17 @@ head:
     - name: keywords
       content: python,新手上路,if,if else,格式化,f-string
   - - meta
-    - name: og:title
+    - property: og:title
       content: Python新手上路 Day2 - 條件判斷和f-string
   - - meta
-    - name: og:description
+    - property: og:description
       content: 條件判斷語句，以及f-string格式化
   - - meta
-    - name: og:type
+    - property: og:type
       content: article
+  - - meta
+    - property: og:image
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/python-cover.jpg
 ---
 
 # python-新手上路-Day2 ｜流程控制 if...else ｜格式化 f-string

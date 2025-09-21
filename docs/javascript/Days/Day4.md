@@ -9,17 +9,17 @@ head:
     - name: keywords
       content: javascript-sort, javascript-排序, javascript-array-sort, js-sort-方法, javascript-升序, javascript-降序, javascript-自訂排序, javascript-比較函數
   - - meta
-    - name: og:title
+    - property: og:title
       content: JavaScript sort() 排序方法完整教學｜升序降序與自訂排序範例
   - - meta
-    - name: og:description
+    - property: og:description
       content: JavaScript sort() 怎麼用？本篇詳細說明 sort() 方法的工作原理、返回值意義、升序降序排序，並提供數字、字串、物件排序的實用範例，幫你掌握 JavaScript 陣列排序技巧。
   - - meta
-    - name: og:type
+    - property: og:type
       content: article
   - - meta
-    - name: og:image
-      content: ../assets/Days/javascript-title-img.png
+    - property: og:image
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/javascript-cover.jpg
 ---
 
 # JavaScript sort() 排序方法完整教學

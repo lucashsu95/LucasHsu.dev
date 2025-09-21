@@ -8,13 +8,13 @@ head:
     - name: keywords
       content: php,環境變數
   - - meta
-    - name: og:title
+    - property: og:title
       content: 設定php環境變數
   - - meta
-    - name: og:description
+    - property: og:description
       content: 在windows中設定php環境變數
   - - meta
-    - name: og:type
+    - property: og:type
       content: article
 ---
 

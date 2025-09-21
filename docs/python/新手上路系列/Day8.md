@@ -8,14 +8,17 @@ head:
     - name: keywords
       content: Python, python, 新手上路, 函式, def
   - - meta
-    - name: og:title
+    - property: og:title
       content: Python新手上路 Day8 - 函式與def
   - - meta
-    - name: og:description
+    - property: og:description
       content: 學習如何使用Python中的函式與def關鍵字來定義和呼叫函式
   - - meta
-    - name: og:type
+    - property: og:type
       content: article
+  - - meta
+    - property: og:image
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/python-cover.jpg
 ---
 
 # python-新手上路-Day8 ｜函式｜ def

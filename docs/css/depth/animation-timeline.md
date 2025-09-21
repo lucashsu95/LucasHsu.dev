@@ -7,13 +7,13 @@ head:
     - name: keywords
       content: CSS, animation-timeline, scroll(), view()
   - - meta
-    - name: og:title
+    - property: og:title
       content: CSS 滾動時間軸
   - - meta
-    - name: og:description
+    - property: og:description
       content: CSS 滾動時間軸
   - - meta
-    - name: og:type
+    - property: og:type
       content: article
 ---
 

@@ -7,13 +7,13 @@ head:
     - name: keywords
       content: CSS, css, clamp函數, 響應式設計, 流動排版
   - - meta
-    - name: og:title
+    - property: og:title
       content: CSS技巧 - 使用clamp()函數進行響應式設計
   - - meta
-    - name: og:description
+    - property: og:description
       content: 學習如何使用CSS的clamp()函數來實現響應式設計，並在不同視口寬度下自動調整元素大小
   - - meta
-    - name: og:type
+    - property: og:type
       content: article
 ---
 
@@ -56,7 +56,7 @@ font-size: clamp(32px, 4vw, 48px);
 使用`clamp()`可以簡化流動排版的實現，避免使用繁瑣的媒體查詢。這對於創建響應式設計非常有用，特別是在字體大小和元素尺寸需要隨著屏幕大小變化時。例如：
 
 | 視口寬度 (px) | 首選值 (px) | 實際值 (px) |
-|---------------|-------------|-------------|
+| ------------- | ----------- | ----------- |
 | 500           | 20          | 32          |
 | 900           | 36          | 36          |
 | 1400          | 56          | 48          |

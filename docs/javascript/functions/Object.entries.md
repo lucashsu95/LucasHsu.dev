@@ -8,14 +8,17 @@ head:
     - name: keywords
       content: Object.entries,javascript,js,Object轉陣列,Object轉Array
   - - meta
-    - name: og:title
+    - property: og:title
       content: Object.entries() - javascript
   - - meta
-    - name: og:description
+    - property: og:description
       content: Object.entries() 是 JavaScript 中的一個靜態方法，用於返回一個給定對象的可枚舉屬性鍵值對的數組。這個方法的主要功能是將對象的屬性轉換為一個由鍵值對組成的數組，每個鍵值對也是一個數組，第一個元素是屬性鍵，第二個元素是對應的屬性值。
   - - meta
-    - name: og:type
+    - property: og:type
       content: article
+  - - meta
+    - property: og:image
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/javascript-cover.jpg
 ---
 
 # Object.entries()

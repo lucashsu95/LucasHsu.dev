@@ -7,13 +7,13 @@ head:
     - name: keywords
       content: CSS, 網格,gird,Grid
   - - meta
-    - name: og:title
+    - property: og:title
       content: CSS - Grid 教學
   - - meta
-    - name: og:description
+    - property: og:description
       content: 學習CSS - Grid使用方法，有範例和教學影片
   - - meta
-    - name: og:type
+    - property: og:type
       content: article
 ---
 

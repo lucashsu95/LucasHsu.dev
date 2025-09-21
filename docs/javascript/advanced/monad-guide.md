@@ -8,17 +8,17 @@ head:
     - name: keywords
       content: monad,單子,函數式程式設計,functional programming,flatMap,maybe monad,either monad,io monad,promise,javascript,js
   - - meta
-    - name: og:title
+    - property: og:title
       content: Monad 單子完整指南 | 函數式程式設計的終極抽象
   - - meta
-    - name: og:description
+    - property: og:description
       content: 深入學習 Monad 單子概念，包含 Maybe、Either、IO、List Monad 的實現與應用，掌握函數式程式設計的核心抽象模式。
   - - meta
-    - name: og:type
+    - property: og:type
       content: article
   - - meta
-    - name: og:image
-      content: https://lucashsu.dev/javascript/advanced/monad-guide
+    - property: og:image
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/javascript-cover.png
   - - meta
     - name: description
       content: 完整的 Monad 單子教學指南，學習函數式程式設計的終極抽象，包含錯誤處理、副作用管理和計算組合的實用範例。

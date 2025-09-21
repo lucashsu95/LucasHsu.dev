@@ -8,17 +8,17 @@ head:
     - name: keywords
       content: javascript,for,loop,while
   - - meta
-    - name: og:title
+    - property: og:title
       content: JavaScript 新手上路 Day3 for while loop
   - - meta
-    - name: og:description
+    - property: og:description
       content: 了解如何在 JavaScript 中 使用for迴圈和while迴圈和雙層迴圈
   - - meta
-    - name: og:type
+    - property: og:type
       content: article
   - - meta
-    - name: og:image
-      content: ../assets/Days/javascript-title-img.png
+    - property: og:image
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/javascript-cover.jpg
 ---
 
 <img src="../assets/Days/javascript-title-img.png" alt="javascript-title-img" class="title-img" />

@@ -8,13 +8,13 @@ head:
     - name: keywords
       content: xampp,mysql,xampp mysql 打不開
   - - meta
-    - name: og:title
+    - property: og:title
       content: xampp mysql 又壞掉
   - - meta
-    - name: og:description
+    - property: og:description
       content: xampp mysql 又壞掉
   - - meta
-    - name: og:type
+    - property: og:type
       content: article
 ---
 

@@ -7,13 +7,13 @@ head:
     - name: keywords
       content: CSS, Tailwind CSS, 客製化, 配置, @layer, 擴展
   - - meta
-    - name: og:title
+    - property: og:title
       content: Tailwind CSS 客製化指南
   - - meta
-    - name: og:description
+    - property: og:description
       content: 學習如何使用@layer語法和tailwind.config.js文件來客製化Tailwind CSS，包括擴展基礎樣式、組件和工具類
   - - meta
-    - name: og:type
+    - property: og:type
       content: article
 ---
 

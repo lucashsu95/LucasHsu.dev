@@ -8,16 +8,16 @@ head:
     - name: keywords
       content: git,git branch,分支
   - - meta
-    - name: og:title
+    - property: og:title
       content: git branch 分支
   - - meta
-    - name: og:description
+    - property: og:description
       content: git branch教學和範例
   - - meta
-    - name: og:type
+    - property: og:type
       content: article
   - - meta
-    - name: og:image
+    - property: og:image
       content: ./imgs/git-cover.png
 ---
 

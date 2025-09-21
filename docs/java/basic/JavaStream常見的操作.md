@@ -9,17 +9,17 @@ head:
     - name: keywords
       content: java-stream, java-stream-教學, java-stream-範例, java-stream-操作, java-stream-用法, java-list-stream, java-集合操作, java-8-stream, java-stream-filter, java-stream-map, java-stream-collect, java-stream-常見錯誤
   - - meta
-    - name: og:title
+    - property: og:title
       content: Day02 - Java Stream-常見操作與用法總整理
   - - meta
-    - name: og:description
+    - property: og:description
       content: Java Stream-怎麼用？本篇整理 Java Stream-最常見的操作與範例，包含 filter、map、collect、reduce、distinct、sorted 等方法，並說明 Stream-特性與常見注意事項，幫助你快速上手 Java 8-函數式寫法。
   - - meta
-    - name: og:type
+    - property: og:type
       content: article
   - - meta
-    - name: og:image
-      content: ../assets/java-cover.png
+    - property: og:image
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/java-cover.jpg
 ---
 
 # Java Steam
@@ -80,11 +80,11 @@ list.stream().forEach(System.out::println);
 `collect()` 是 終端操作，用於把 `Stream` 的元素彙整成集合、字串或其他結果。它搭配 `Collectors` 工具類使用，能做各種聚合。以下整理常見且實用的模式。
 
 **基礎收集**
-| 用法                             | 說明             | 範例                                                                |
-| ------------------------------ | -------------- | ----------------------------------------------------------------- |
-| `Collectors.toList()`          | 收集到 `List`     | `list.stream().collect(Collectors.toList())`                      |
+| 用法                           | 說明                | 範例                                                              |
+| ------------------------------ | ------------------- | ----------------------------------------------------------------- |
+| `Collectors.toList()`          | 收集到 `List`       | `list.stream().collect(Collectors.toList())`                      |
 | `Collectors.toSet()`           | 收集到 `Set` (去重) | `list.stream().collect(Collectors.toSet())`                       |
-| `Collectors.toCollection(...)` | 自訂集合型別         | `list.stream().collect(Collectors.toCollection(LinkedList::new))` |
+| `Collectors.toCollection(...)` | 自訂集合型別        | `list.stream().collect(Collectors.toCollection(LinkedList::new))` |
 
 
 ::: details 更多計巧
@@ -142,11 +142,11 @@ System.out.println(stats.getMax());     // 7
 
 **分組**
 
-| 用法                                                        | 說明                      |
-| --------------------------------------------------------- | ----------------------- |
+| 用法                                                      | 說明                         |
+| --------------------------------------------------------- | ---------------------------- |
 | `Collectors.groupingBy(keyFn)`                            | 依 key 分組，value 是 `List` |
 | `Collectors.groupingBy(keyFn, counting())`                | 分組後計數                   |
-| `Collectors.groupingBy(keyFn, mapping(valueFn, toSet()))` | 分組後轉換並收集                |
+| `Collectors.groupingBy(keyFn, mapping(valueFn, toSet()))` | 分組後轉換並收集             |
 
 ```java
 Map<Integer, List<String>> byLength =
@@ -172,11 +172,11 @@ false -> [奇數...]
 ```
 
 **轉換成 Map**
-| 用法                                            | 說明            |
-| --------------------------------------------- | ------------- |
-| `toMap(keyFn, valueFn)`                       | 轉成 Map        |
+| 用法                                          | 說明                   |
+| --------------------------------------------- | ---------------------- |
+| `toMap(keyFn, valueFn)`                       | 轉成 Map               |
 | `toMap(keyFn, valueFn, mergeFn)`              | key 重複時自訂合併規則 |
-| `toMap(keyFn, valueFn, mergeFn, mapSupplier)` | 指定 Map 類型     |
+| `toMap(keyFn, valueFn, mergeFn, mapSupplier)` | 指定 Map 類型          |
 ```java
 Map<String, Integer> map =
     list.stream().collect(Collectors.toMap(Object::toString, x -> x));
