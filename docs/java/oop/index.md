@@ -52,7 +52,7 @@ head:
 ### 學生任務1：快速交付版本 (10分鐘)
 ```java
 // 給學生的起始框架
-public class LightController {
+class LightController {
     // TODO: 實作controlLight方法
     // 需求：根據brand參數控制不同品牌的燈
     // brand可能的值："philips", "xiaomi", "ikea"
@@ -69,7 +69,7 @@ public class LightController {
 }
 
 // 測試用的main方法
-public class TestApp {
+public class Main {
     public static void main(String[] args) {
         LightController controller = new LightController();
         
@@ -83,11 +83,18 @@ public class TestApp {
 }
 ```
 
-**學生思考引導問題：**
-1. 最快的實作方式是什麼？
-2. 你預期這個方法會長什麼樣子？
+**預期輸出**
+```
+philips開燈
+xiaomi關燈
+ikea開燈
+找不到品牌
 
----
+=== 所有燈具狀態 ===
+philips: 開啟
+xiaomi: 關閉
+ikea: 開啟
+```
 
 ## 💥 需求地獄體驗 (25分鐘)
 
@@ -213,8 +220,6 @@ controller.showAllLightStatus(); // 要輸出status、brightness和colorTemp
 2. 如果要修改所有品牌的開燈邏輯，需要改幾個地方？
 3. 新來的同事能快速理解這些程式碼嗎？
 
----
-
 ## 💡 啟發時刻：尋找模式 (15分鐘)
 
 ### 發現問題根源
@@ -230,8 +235,6 @@ controller.showAllLightStatus(); // 要輸出status、brightness和colorTemp
 
 **關鍵問題：**
 > "程式碼能不能也用這種方式設計？先定義『統一的功能介面』，再讓每個品牌『各自實作』？"
-
----
 
 ## 🔧 解決方案探索：`Interface`登場 (30分鐘)
 
