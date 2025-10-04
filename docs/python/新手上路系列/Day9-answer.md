@@ -92,7 +92,7 @@ print(" ".join(map(str, nums)))
 
 ### 第 8 題：是否為單調陣列（不含重複值）
 
-```pythonw
+```python
     nums = list(map(int, line.split(',')))
     if len(nums) != len(set(nums)):
         print("false")

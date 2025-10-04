@@ -39,6 +39,7 @@ head:
     - property: og:title
       content: LucasHsu.dev部落格&作品集&比賽事蹟&演算法
   - - meta
+    - property: og:description
       content: 這裡放了一些程式筆記和作品集，不定期更新
 ---
 <style>
