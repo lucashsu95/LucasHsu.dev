@@ -17,9 +17,10 @@ export function sidebarJava() {
         {
             text: "OOP",
             items: [
-                { text: "從混亂到秩序的程式碼重構之旅", link: "/java/oop/index" },
-                { text: "Java 的三大主角 上文", link: "/java/oop/class-object-part-1" },
-                { text: "Java 的三大主角 下文", link: "/java/oop/class-object-part-2" },
+                { text: "混亂到秩序的重構之旅 混亂體驗", link: "/java/oop/oop-1" },
+                { text: "混亂到秩序的重構之旅 概念學習", link: "/java/oop/class-object-interface" },
+                // { text: "混亂到秩序的重構之旅 抽象理解", link: "/java/oop/polymorphism-abstract" },
+                // { text: "混亂到秩序的重構之旅 實戰應用", link: "/java/oop/oop-2" },
             ],
         },
     ];
