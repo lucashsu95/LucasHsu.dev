@@ -206,6 +206,7 @@ public class App {
         controller.controlLight("philips", "on");
         controller.controlLight("xiaomi", "on");
         controller.controlLight("ikea", "on");
+        controller.controlLight("unknown", "on");
         controller.showAllLightStatus();
 
         controller.controlLight("xiaomi", "off");
@@ -369,4 +370,5 @@ public class DeviceController {
 2. 如果要修改所有品牌的開燈邏輯，需要改幾個地方？
 3. 新來的同事能快速理解這些程式碼嗎？
 4. 這樣的程式碼還能撐多久？
+
 
