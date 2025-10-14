@@ -531,7 +531,6 @@ public class App {
         controller.setBrightness("ikea", 75);
         controller.setBrightness("osram", 85);
         controller.setBrightness("yeelight", 70);
-        controller.setBrightness("yeelight", 70);
         
         System.out.println("\n測試案例 3: 色溫調節功能");
         controller.setColorTemperature("philips", 2700);

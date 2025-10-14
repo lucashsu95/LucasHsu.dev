@@ -254,8 +254,12 @@ public void setBrightness(String brand, int level) {
 
 **新品牌輸出格式：**
 ```java
-// Osram: "Osram專業燈具[動作]"
-// Yeelight: "Yeelight智慧燈[動作]"
+// Osram:
+//     "osram 專業燈具點亮"
+//     "osram 智慧燈泡關閉"
+// Yeelight:
+//     "yeelight 智慧燈啟動"
+//     "yeelight 智慧燈熄滅"
 
 ```
 
@@ -308,11 +312,11 @@ yeelight 燈泡亮度調節至 85%
 不支援的品牌: unknown
 
 === 所有燈具狀態總覽 ===
-xiaomi: ON | 亮度: 90%
-osram: ON | 亮度: 75%
-philips: ON | 亮度: 80%
-yeelight: ON | 亮度: 85%
-ikea: ON | 亮度: 50%
+xiaomi: ON | 亮度: 90% | 色溫: 5000K
+osram: ON | 亮度: 85% | 色溫: 4000K
+philips: ON | 亮度: 80% | 色溫: 2700K
+yeelight: ON | 亮度: 70% | 色溫: 3500K
+ikea: ON | 亮度: 75% | 色溫: 3000K
 ```
 
 
