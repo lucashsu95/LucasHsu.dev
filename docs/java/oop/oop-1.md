@@ -326,7 +326,7 @@ ikea: ON | 亮度: 75% | 色溫: 3000K
 
 **新增功能需求(色溫調整功能)：**
 ```java
-// setColorTemperature(brand, temp) - temp 2700-6500K
+// setColorTemperature(brand, temp) - temp 2700-6500K 預設 3000K
 
 // LightController裡再新增1種方法
 public void setColorTemperature(String brand, int temp) {

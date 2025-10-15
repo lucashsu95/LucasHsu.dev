@@ -509,7 +509,7 @@ xiaomi: ON | 亮度: 90% | 色溫: 5000K
 osram: ON | 亮度: 85% | 色溫: 4000K
 philips: ON | 亮度: 80% | 色溫: 2700K
 yeelight: ON | 亮度: 70% | 色溫: 3500K
-ikea: ON | 亮度: 75% | 色溫: 2700K
+ikea: ON | 亮度: 75% | 色溫: 3000K
 ```
 
 
