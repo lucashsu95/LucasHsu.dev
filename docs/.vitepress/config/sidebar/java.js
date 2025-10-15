@@ -19,8 +19,8 @@ export function sidebarJava() {
             items: [
                 { text: "混亂到秩序的重構之旅 混亂體驗", link: "/java/oop/oop-1" },
                 { text: "混亂到秩序的重構之旅 概念學習", link: "/java/oop/class-object-interface" },
-                // { text: "混亂到秩序的重構之旅 抽象理解", link: "/java/oop/polymorphism-abstract" },
-                // { text: "混亂到秩序的重構之旅 實戰應用", link: "/java/oop/oop-2" },
+                { text: "混亂到秩序的重構之旅 抽象理解", link: "/java/oop/polymorphism-abstract" },
+                { text: "混亂到秩序的重構之旅 實戰應用", link: "/java/oop/oop-2" },
             ],
         },
     ];
