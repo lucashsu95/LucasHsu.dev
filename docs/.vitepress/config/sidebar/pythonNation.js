@@ -290,6 +290,10 @@ export function sidebarPythonNation() {
               link: "/python/112全國技藝競賽筆記/15-其他/primeTable",
             },
             {
+              text: "最小素因子表（SPF）",
+              link: "/python/112全國技藝競賽筆記/15-其他/spf",
+            },
+            {
               text: "布林代數",
               link: "/python/112全國技藝競賽筆記/15-其他/布林代數",
             },
