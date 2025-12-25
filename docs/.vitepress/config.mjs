@@ -12,10 +12,11 @@ import {
   sideBarDatabase,
 } from "./config/sidebar";
 import { InlineLinkPreviewElementTransform } from "@nolebase/vitepress-plugin-inline-link-preview/markdown-it";
-import { 
-  GitChangelog, 
-  GitChangelogMarkdownSection, 
+import {
+  GitChangelog,
+  GitChangelogMarkdownSection,
 } from '@nolebase/vitepress-plugin-git-changelog/vite'
+import { MermaidMarkdown, MermaidPlugin } from "vitepress-plugin-mermaid";
 
 const env = loadEnv("", process.cwd());
 
@@ -25,6 +26,7 @@ export default defineConfig({
       "process.env": env,
     },
     optimizeDeps: {
+      include: ["mermaid"],
       exclude: [
         "@nolebase/vitepress-plugin-enhanced-readabilities/client",
         "vitepress",
@@ -38,13 +40,15 @@ export default defineConfig({
         "@nolebase/vitepress-plugin-enhanced-readabilities",
         "@nolebase/ui",
         "@nolebase/vitepress-plugin-inline-link-preview",
-      ],
+        "mermaid",
+      ]
     },
-    plugins: [ 
-      GitChangelog({ 
-        repoURL: () => 'https://github.com/lucashsu95/LucasHsu.dev', 
-      }), 
-      GitChangelogMarkdownSection(), 
+    plugins: [
+      GitChangelog({
+        repoURL: () => 'https://github.com/lucashsu95/LucasHsu.dev',
+      }),
+      GitChangelogMarkdownSection(),
+      MermaidPlugin()
     ],
   },
   base: "/LucasHsu.dev/",
@@ -94,6 +98,7 @@ export default defineConfig({
     math: true,
     config: (md) => {
       md.use(InlineLinkPreviewElementTransform);
+      md.use(MermaidMarkdown);
     },
   },
   sitemap: {

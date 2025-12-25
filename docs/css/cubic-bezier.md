@@ -1,77 +1,168 @@
-# **CSS中的`cubic-bezier`函數**
+﻿# CSS 中的 cubic-bezier
 
-`cubic-bezier`是CSS中用於定義動畫速度曲線的函數，主要用於`transition`和`animation`屬性中。它通過貝茲曲線來控制動畫的速度變化，使動畫效果更加自然和靈活。
+>  TL;DR：`cubic-bezier(x1, y1, x2, y2)` 讓你自訂動畫速度曲線；`x1`、`x2` 必須介於 0~1，`y` 可超出 0~1 以產生彈跳/超衝效果。善用工具（cubic-bezier.com）先視覺化，再複製參數。
 
----
+## 前置知識
+- 已會 `transition`、`animation` 的基本用法
+- 知道常見曲線：`ease`、`ease-in`、`ease-out`、`ease-in-out`
 
-## **語法**
+## 為什麼用 cubic-bezier？
+- 客製化速度感：比內建 `ease` 更細緻，讓動畫更貼近產品個性。
+- 彈跳/超衝效果：`y` 超出 0~1 可做 overshoot/bounce。
+- 一致性：同一套曲線可在不同元件重用，維持品牌感。
+
+:::tip 工具建議
+先用 https://cubic-bezier.com 視覺化拖點，再複製數值到程式碼。
+:::
+
+
+## 語法與參數
 ```css
 cubic-bezier(x1, y1, x2, y2)
 ```
-- **x1, y1, x2, y2**：定義貝茲曲線的兩個控制點，範圍為0到1之間。`x1`和`x2`必須在0到1之間，而`y1`和`y2`可以超出此範圍，以實現特殊效果。
+- `x1`, `x2`：0~1（時間軸），超出會使曲線無效。
+- `y1`, `y2`：可超出 0~1，決定速度快慢與超衝程度。
 
----
+常見預設值對照：
+- ease: cubic-bezier(0.25, 0.1, 0.25, 1)
+- ease-in: cubic-bezier(0.42, 0, 1, 1)
+- ease-out: cubic-bezier(0, 0, 0.58, 1)
+- ease-in-out: cubic-bezier(0.42, 0, 0.58, 1)
 
-## **使用場景**
-1. **自定義動畫速度**：取代預設的`ease`、`ease-in`等，實現獨特的動畫效果。
-2. **彈跳效果**：通過設置`y`值超出範圍，創造類似彈跳的效果。
-3. **平滑過渡**：在元素狀態變化時（如滑鼠懸停），提供更流暢的過渡效果。
+## 使用情境
+1) 自訂品牌感：按鈕 hover、卡片浮起。
+2) 彈跳/超衝：`y` > 1 或 < 0。
+3) 漸進顯示：列表逐項淡入、位移。
+4) 對齊實體動作：模擬重力、慣性。
 
----
+## 範例
 
-## **範例**
-
-### 範例1：基本使用
+### 範例 1：基本過渡（溫和加速再減速）
 ```css
-div {
-    width: 100px;
-    height: 100px;
-    background: red;
-    transition: width 2s cubic-bezier(0.1, 0.7, 1.0, 0.1);
+.card {
+  width: 120px;
+  height: 120px;
+  background: #ff6b6b;
+  transition: transform 400ms cubic-bezier(0.33, 0.02, 0.11, 0.99);
 }
 
-div:hover {
-    width: 300px;
+.card:hover {
+  transform: translateY(-12px) scale(1.03);
 }
 ```
-此範例中，當滑鼠懸停時，`div`的寬度會從100px平滑過渡到300px，並以自定義的貝茲曲線速度變化。
+說明：前段加速，尾端收斂，適合微互動。
 
----
-
-### 範例2：彈跳效果
+### 範例 2：彈跳效果（y 超出 1）
 ```css
-span {
-    transition: transform 0.3s cubic-bezier(0.3, 0.8, 0.3, 2.3);
+.chip {
+  display: inline-block;
+  padding: 10px 14px;
+  background: #1c7ed6;
+  color: #fff;
+  border-radius: 999px;
+  transition: transform 320ms cubic-bezier(0.26, 1.42, 0.42, 1.01);
 }
 
-span:hover {
-    transform: translateY(-50px);
+.chip:hover {
+  transform: translateY(-8px);
 }
 ```
-此範例中，`span`元素在滑鼠懸停時會向上移動，並帶有彈跳效果。
+說明：`y1` 大於 1 產生超衝，再回落，帶彈性。
 
----
-
-### 範例3：與`@keyframes`結合
+### 範例 3：搭配 keyframes（平滑滑動，帶超衝）
 ```css
 @keyframes slide {
-    from {
-        transform: translateX(0);
-    }
-    to {
-        transform: translateX(100px);
-    }
+  from { transform: translateX(0); }
+  to { transform: translateX(140px); }
 }
 
 .box {
-    animation: slide 2s infinite cubic-bezier(.89,-0.93,.2,1.58);
+  width: 80px;
+  height: 80px;
+  background: #12b886;
+  animation: slide 1.4s cubic-bezier(0.89, -0.93, 0.2, 1.58) infinite alternate;
 }
 ```
-此範例中，`.box`元素會以自定義的貝茲曲線速度進行滑動動畫。
+說明：`y2` < 0 先向反方向拉，再往正向超衝。
 
----
+##  注意事項
+1) `x1`、`x2` 必須在 0~1，否則曲線無效。
+2) `y` 可超出 0~1，但請測試避免過度閃爍或視覺突兀。
+3) 移動距離大時，應拉長動畫時間避免突兀。
+4) 多段互動請共用同一套曲線，保持一致感。
 
-## **注意事項**
-1. **參數範圍**：`x1`和`x2`必須在0到1之間，否則曲線無效。
-2. **瀏覽器支持**：所有現代瀏覽器均支持`cubic-bezier`，但建議測試以確保兼容性。
-3. **工具輔助**：可以使用在線工具（如cubic-bezier.com）來可視化並生成所需的貝茲曲線參數。
+##  實戰練習
+
+### 練習 1（簡單）
+將一個按鈕 hover 時微浮起並放大，使用自訂 cubic-bezier 取代 `ease`，並描述體感差異。
+
+:::details 參考答案
+```css
+.btn {
+  transition: transform 260ms cubic-bezier(0.25, 0.9, 0.35, 1);
+}
+
+.btn:hover {
+  transform: translateY(-6px) scale(1.02);
+}
+```
+差異：前段加速，尾段收斂，比內建 ease 更俐落且不突兀。
+:::
+
+### 練習 2（簡單）
+設計一個「卡片翻轉」的入場效果，需使用 `cubic-bezier` 並確保收尾不抖動。
+
+:::details 參考答案
+```css
+.card {
+  transform: rotateY(-90deg);
+  transform-origin: left;
+  animation: flipIn 480ms cubic-bezier(0.18, 0.65, 0.24, 0.99) forwards;
+}
+
+@keyframes flipIn {
+  to { transform: rotateY(0deg); }
+}
+```
+收尾使用接近 1 的 y2，避免最後抖動。
+:::
+
+### 練習 3（中等）
+為列表項目做「階梯式淡入+位移」動畫：
+1. 單個項目使用自訂 cubic-bezier。
+2. 使用 `animation-delay` 讓多個項目依序出現。
+3. 確保延遲與曲線搭配不突兀。
+
+:::details 參考答案與思路
+```css
+.item {
+  opacity: 0;
+  transform: translateY(16px);
+  animation: fadeUp 360ms cubic-bezier(0.23, 0.92, 0.35, 1) forwards;
+}
+
+.item:nth-child(1) { animation-delay: 0ms; }
+.item:nth-child(2) { animation-delay: 90ms; }
+.item:nth-child(3) { animation-delay: 180ms; }
+
+@keyframes fadeUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+```
+思路：曲線尾端收斂，延遲間隔 < 總時長，讓階梯感連續。
+:::
+
+##  延伸閱讀
+- MDN: https://developer.mozilla.org/docs/Web/CSS/easing-function
+- 視覺化工具：https://cubic-bezier.com
+- 動畫實戰參考：`animation-timeline`、`starting-style` 相關章節（本站）
+
+##  總結
+1. `cubic-bezier` 讓動畫速度可客製，`x` 在 0~1，`y` 可超出。
+2. 先用工具視覺化，再落地到程式碼。
+3. 彈跳/超衝效果靠 `y` 超出 0~1，但需測試避免突兀。
+4. 多段互動共用曲線可提升一致性。
+5. 每個動畫搭配適當時長與延遲，避免視覺疲勞。
