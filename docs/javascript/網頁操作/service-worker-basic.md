@@ -1,5 +1,15 @@
 # Service Worker 入門指南：從零開始掌握 Web 背景服務
 
+## TL;DR
+- Service Worker = 背景腳本，可攔截請求、快取、離線、推播；需 HTTPS 或 localhost。
+- PWA 安裝三件套：`manifest.json`、`sw.js`、有效 HTTPS；再通過 Lighthouse PWA 項目。
+- 最小步驟：1) 建立 manifest + icons；2) 在頁面註冊 SW；3) SW 安裝時快取核心資產與離線頁；4) 挑選快取策略 (Cache First / Network First / Stale-While-Revalidate)。
+
+## 前置知識
+- 同源/路徑範圍：SW 只能控制與自身 scope 相同的路徑。
+- 非同步 API：`Promise`、`fetch`、`caches` 基礎。
+- HTTPS 限制：本地開發用 localhost，正式站需 HTTPS。
+
 Service Worker 是現代 Web 開發的核心技術之一，它讓網頁能夠擁有類似原生 APP 的功能，包括離線瀏覽、背景運作和推播通知。本文將帶您從基礎開始，透過實際範例快速上手 Service Worker 開發。
 
 ## 什麼是 Service Worker？
@@ -26,6 +36,87 @@ self.addEventListener('fetch', event => {
 });
 ```
 
+## PWA 安裝條件與 manifest 範例
+
+1. 必須透過 HTTPS 提供
+2. 註冊有效的 Service Worker
+3. 提供 `manifest.json` (含名稱、icons、start_url、display)
+
+```json
+{
+    "name": "My Awesome App",
+    "short_name": "Awesome",
+    "start_url": "/index.html",
+    "scope": "/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#0f172a",
+    "icons": [
+        { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+        { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png" }
+    ]
+}
+```
+
+HTML 記得掛上 manifest：
+
+```html
+<link rel="manifest" href="/manifest.json" />
+<meta name="theme-color" content="#0f172a" />
+```
+
+## 安裝與測試清單
+- DevTools → Application → Manifest：確保 icon、start_url 正常。
+- DevTools → Application → Service Workers：勾選 *Update on reload*，確認 scope 範圍。
+- Lighthouse 跑 PWA 檢查：至少通過「可安裝」「離線可用」。
+- 關閉網路再訪問：驗證離線頁或快取回應是否生效。
+
+## 實戰練習
+
+### 練習 1：補上 manifest（簡單）⭐
+> 為你的專案新增 manifest，包含名稱、兩個尺寸的 icon、start_url，並在 HTML 掛載。
+
+:::details 💡 參考答案
+```html
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#0f172a" />
+```
+:::
+
+### 練習 2：離線頁（簡單）⭐
+> 在 SW 安裝階段快取 `/offline.html`，並在抓不到網路時回傳它。
+
+:::details 💡 參考答案
+```javascript
+const OFFLINE_PAGE = '/offline.html'
+// install -> cache offline
+// fetch nav -> return offline when network/cache miss
+```
+:::
+
+### 練習 3：策略選擇（中等）⭐⭐
+> 請為「API」與「靜態資源」分別選擇合適策略並實作。
+
+:::details 💡 參考答案與提示
+- 靜態：Cache First；API：Network First 或 Stale-While-Revalidate。
+```javascript
+if (isAsset) return cacheFirst(event.request)
+if (isApi) return networkFirst(event.request)
+```
+:::
+
+## 延伸閱讀
+- MDN: [Service Worker API](https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API)
+- Google Web Dev: [Workbox](https://developer.chrome.com/docs/workbox/) - 用套件快速寫策略
+- Web App Manifest 規範：欄位解釋與支援度
+
+## FAQ
+- Q: 為什麼 SW 沒有接管？
+    - A: 檢查路徑 scope；確保在 HTTPS/localhost；瀏覽器需 reload 才會讓新 SW 控制現有頁面。
+- Q: 更新 SW 後，舊檔還在被使用？
+    - A: 啟用 `skipWaiting()` + `clients.claim()`，但記得評估是否會中斷使用者；常見做法是提示「有新版本可用」。
+- Q: 離線測試時仍出現 404？
+    - A: 確認 `fetch` 事件有處理 `mode === 'navigate'`，並在安裝時就快取 offline 頁面。
 ## Service Worker 生命週期
 
 理解生命週期是掌握 Service Worker 的關鍵。完整的生命週期包括：

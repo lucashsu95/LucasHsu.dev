@@ -7,6 +7,9 @@ head:
     - name: author
       content: 許恩綸
   - - meta
+    - name: description
+      content: display 屬性總覽：block/inline/inline-block/none/flex/grid 差異、實例對照、練習題與 FAQ。
+  - - meta
     - property: og:title
       content: Css Display 顯示
   - - meta
@@ -23,6 +26,18 @@ head:
 # Css Display 顯示
 
 display屬性用於控制HTML元素在網頁上的顯示方式。這個屬性有多個不同的值，每個值都決定了元素的顯示方式。以下是display屬性的一些常見值：
+
+## TL;DR
+
+- `block` 佔滿一行；`inline` 不換行且無法設定寬高；`inline-block` 可並排又能設寬高。
+- `flex` 擅長一維（橫/縱）排列；`grid` 擅長二維（列+欄）版面。
+- `none` 隱藏且不占空間；需顯示/隱藏可考慮 `visibility` 或 `opacity` 差異。
+
+## 前置知識
+
+- 盒模型（margin/padding/border）對佔位的影響。
+- 基礎排版：行內元素、區塊元素的預設行為。
+- Flexbox / Grid 的核心概念與支援度。
 
 ## block
 
@@ -108,9 +123,96 @@ flex使元素成為一個靈活的容器，其子元素將按照一定的比例�
 ```
 這個範例創建一個網格容器，其中有3列且列之間有10像素的間距
 
+## Flex vs Grid 快速對照
+
+| 場景       | Flex                            | Grid                          |
+| ---------- | ------------------------------- | ----------------------------- |
+| 一維排列   | ✅ 最適（水平或垂直）            | 可用但非專長                  |
+| 二維佈局   | 需巢狀、多容器                  | ✅ 單容器即可控列與欄          |
+| 等比例撐開 | `flex: 1`                       | `1fr` 更直覺                  |
+| 控制間距   | `gap`（現代瀏覽器支援）         | `gap`（原生支援）             |
+| 置中       | `align-items`/`justify-content` | `place-items`/`place-content` |
+
+選擇策略：
+- 列表、導覽列、按鈕群 → Flex。
+- 卡片瀑布流、儀表板、表格式版面 → Grid。
+
+## 選擇決策圖
+
+```mermaid
+flowchart TD
+  A[要排版的維度?] -->|一維| B[Flex]
+  A -->|二維| C[Grid]
+  B --> D{需要等分?}
+  D -->|是| E[flex:1]
+  D -->|否| F[調整 margin/gap]
+  C --> G[使用 grid-template-columns/rows]
+```
+
 ## 小遊戲
 
 1. ![](https://hackmd.io/_uploads/Sy-11PNRn.png)
     [flex小青蛙](https://flexboxfroggy.com/#zh-tw)
 2. ![](https://hackmd.io/_uploads/SJB6CLNCn.png)
     [grid花園](https://cssgridgarden.com/#zh-tw)
+
+## 實戰練習
+
+### 練習 1：inline-block 排列（簡單）⭐
+> 將三個 `.tag` 水平排列並保留可設定寬高。
+
+:::details 💡 參考答案
+```css
+.tag { display: inline-block; padding: 4px 8px; }
+```
+:::
+
+### 練習 2：Flex 置中（簡單）⭐
+> 讓 `.hero` 裡的文字水平垂直置中。
+
+:::details 💡 參考答案
+```css
+.hero {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+```
+:::
+
+### 練習 3：Grid 卡片（中等）⭐⭐
+> 三欄卡片在寬度 < 768px 變兩欄，< 480px 變單欄。
+
+:::details 💡 參考答案與提示
+**提示：** `grid-template-columns` 搭配媒體查詢。
+
+**參考答案：**
+```css
+.cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+@media (max-width: 768px) {
+  .cards { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 480px) {
+  .cards { grid-template-columns: 1fr; }
+}
+```
+:::
+
+## 延伸閱讀
+
+- [MDN: display](https://developer.mozilla.org/en-US/docs/Web/CSS/display)
+- [Flexbox Froggy](https://flexboxfroggy.com/#zh-tw)
+- [Grid Garden](https://cssgridgarden.com/#zh-tw)
+
+## FAQ
+
+- 為什麼 `inline-block` 之間有空白？
+  - HTML 換行會產生字元空白，可移除空白或使用 `font-size:0` 技巧。
+- Flex 與 Grid 何時混用？
+  - 外層用 Grid 做大版面，內層用 Flex 排列項目是常見組合。
+- `display: none` 與 `visibility: hidden` 差異？
+  - `none` 不佔空間、無法互動；`visibility: hidden` 佔位但不可見。

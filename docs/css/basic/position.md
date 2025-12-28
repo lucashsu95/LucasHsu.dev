@@ -19,6 +19,23 @@ head:
 
 # Css Position 定位
 
+## TL;DR
+- `static`：預設，不可移動。
+- `relative`：保留原位，視覺位移。
+- `absolute`：脫離文流，相對最近定位祖先。
+- `fixed`：相對視窗固定。
+- `sticky`：滾到臨界點後改為固定。
+
+## 視覺化：何時用哪種定位
+```mermaid
+flowchart TD
+  A[需要跟文流互動?] -->|是| B[relative / sticky]
+  A -->|否| C[absolute / fixed]
+  B --> D[滾動到閾值固定? -> sticky]
+  C --> E[釘在視窗 -> fixed]
+  C --> F[釘在容器 -> absolute]
+```
+
 position屬性用於控制HTML元素在網頁上的位置和布局方式。這個屬性有幾個不同的值，每個值都控制元素的定位方式。以下是position的主要值：
 
 ## static
@@ -86,4 +103,60 @@ sticky屬性是一種混合定位，當元素在可見區域內時，它的行�
 試著使用position把下圖做出來吧!
 
 ![](https://hackmd.io/_uploads/HJ_P2I4A3.png)
+
+## 實戰練習
+
+### 練習 1：Badge 角落標籤（簡單）⭐
+> 在卡片右上角放一個絕對定位 badge。
+
+:::details 💡 參考答案
+```css
+.card { position: relative; }
+.badge {
+  position: absolute;
+  top: 8px; right: 8px;
+  background: #e11; color: #fff;
+  padding: 4px 8px; border-radius: 12px;
+}
+```
+:::
+
+### 練習 2：Sticky 導航（簡單）⭐
+> 建立頂部黏性導覽列，滾動時吸附頂部。
+
+:::details 💡 參考答案
+```css
+.nav {
+  position: sticky;
+  top: 0;
+  background: #fff;
+  z-index: 10;
+}
+```
+:::
+
+### 練習 3：兩欄重疊卡片（中等）⭐⭐
+> 左欄文字，右側浮出小卡片，卡片需相對左欄容器定位。
+
+:::details 💡 參考答案與提示
+```css
+.wrap { position: relative; }
+.floating {
+  position: absolute;
+  top: 20px;
+  right: -40px;
+  width: 180px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.15);
+}
+```
+**提示**：父層設 `position: relative;` 以建立定位參考。
+:::
+
+## FAQ
+- Q: 絕對定位找不到參考點？
+  - A: 檢查父層是否有 `position: relative/absolute/fixed/sticky`，沒有就會以 viewport 為準。
+- Q: sticky 失效？
+  - A: 父層 overflow 設定會影響；需要有滾動空間，並設 `top`。
+- Q: fixed 元素被覆蓋？
+  - A: 調整 `z-index` 並確保 position 已設定。
 

@@ -1,5 +1,15 @@
 # Web Components 基礎篇：從零開始掌握原生元件開發
 
+## TL;DR
+- 由 Custom Elements + Shadow DOM + Templates/Slots 組成，瀏覽器原生支援。
+- 元件名稱必須有連字符，Shadow DOM 提供樣式隔離，事件仍可冒泡。
+- 適合封裝跨框架 UI，並可與框架共存（自定義元素就是一個 DOM 節點）。
+
+## 前置知識
+- ES6 class、繼承 `HTMLElement`
+- DOM API：`attachShadow`、`querySelector`
+- 基本 HTML/ARIA，可幫元件加上 `role`、`tabindex`
+
 ## 1. 什麼是 Web Components？
 
 Web Components 是 W3C 制定的瀏覽器原生元件模型，核心目標為「封裝、重用、框架無關」。它讓開發者能夠創建可重複使用的自定義 HTML 元素，具有以下優勢：
@@ -261,3 +271,73 @@ Web Components 提供了一種原生的方式來創建可重複使用的 UI 元�
 - 漸進增強的傳統網站功能
 
 在下一篇實戰篇中，我們將探討如何在真實專案中應用 Web Components，包括與現有框架的整合、SEO 優化和性能調優等高級主題。
+
+## 實戰練習
+
+### 練習 1：最小元件（簡單）⭐
+> 建立一個 `<hello-tag>`，渲染「Hello」並在連接時印出 console 訊息。
+
+:::details 💡 參考答案
+```javascript
+class HelloTag extends HTMLElement {
+  connectedCallback() {
+    this.textContent = 'Hello'
+    console.log('connected')
+  }
+}
+customElements.define('hello-tag', HelloTag)
+```
+:::
+
+### 練習 2：屬性監聽（簡單）⭐
+> 製作 `<badge-count>`，有 `count` 屬性且會自動重新渲染。
+
+:::details 💡 參考答案
+```javascript
+class BadgeCount extends HTMLElement {
+  static get observedAttributes() { return ['count'] }
+  connectedCallback() { this.render() }
+  attributeChangedCallback() { this.render() }
+  render() { this.textContent = this.getAttribute('count') || 0 }
+}
+customElements.define('badge-count', BadgeCount)
+```
+:::
+
+### 練習 3：Slots 與樣式隔離（中等）⭐⭐
+> 建立 `<card-box>`，使用 Shadow DOM，提供 `title` 插槽與主要內容插槽。
+
+:::details 💡 參考答案與提示
+```javascript
+class CardBox extends HTMLElement {
+  constructor() {
+    super()
+    const shadow = this.attachShadow({ mode: 'open' })
+    shadow.innerHTML = `
+      <style>
+        .card { border: 1px solid #ddd; padding: 16px; border-radius: 8px; }
+        h3 { margin: 0 0 8px 0; }
+      </style>
+      <article class="card">
+        <h3><slot name="title">預設標題</slot></h3>
+        <slot></slot>
+      </article>
+    `
+  }
+}
+customElements.define('card-box', CardBox)
+```
+:::
+
+## 延伸閱讀
+- MDN: Custom Elements / Shadow DOM / HTML Templates
+- Web.dev: Web Components 基礎指南
+- Lit 官方文件：若想要語法糖與更佳 DX
+
+## FAQ
+- Q: 為什麼自定義元素名稱要有連字符？
+  - A: 避免與原生元素衝突，規範要求必須包含 `-`。
+- Q: Shadow DOM 會影響 SEO 嗎？
+  - A: 影子樹內的內容搜尋引擎可見度有限，SEO 內容建議放 Light DOM（可在實戰篇用混合策略）。
+- Q: 如何在框架中使用？
+  - A: 當作一般 DOM 元素引用即可；React 需確保屬性用小寫，事件用 `addEventListener`。

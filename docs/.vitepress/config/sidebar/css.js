@@ -9,7 +9,6 @@ export function sidebarCss() {
         { text: 'Position 定位', link: '/css/basic/position', activeMatch: '/css/basic/position' },
         { text: 'Background 背景', link: '/css/basic/background', activeMatch: '/css/basic/background' },
         { text: '選擇器', link: '/css/basic/選擇器', activeMatch: '/css/basic/選擇器' },
-        { text: '選擇器2', link: '/css/選擇器2', activeMatch: '/css/選擇器2' },
         { text: 'RWD響應式', link: '/css/basic/rwd', activeMatch: '/css/basic/rwd' },
       ],
     },

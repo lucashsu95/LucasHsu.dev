@@ -19,6 +19,20 @@ head:
 
 # Grid 使用教學
 
+## TL;DR
+- 宣告容器：`display: grid` + `grid-template-columns/rows` 或 `grid-auto-flow`。
+- 快速排版：`grid-template-areas` 命名區塊，或用 `grid-column` / `grid-row` 指定跨度。
+- 間距：`gap` 一次設定 row/column 間距。
+
+## 速查表
+| 想做什麼 | 屬性                    | 範例                          |
+| -------- | ----------------------- | ----------------------------- |
+| 定寬列   | `grid-template-columns` | `200px 1fr 1fr`               |
+| 均分列   | `grid-template-columns` | `repeat(3, 1fr)`              |
+| 命名區塊 | `grid-template-areas`   | `'header header' 'side main'` |
+| 跨列     | `grid-column`           | `1 / 3` (跨 2 欄)             |
+| 跨行     | `grid-row`              | `2 / 4` (跨 2 行)             |
+
 ::: tip 題目
 試著用`grid`製作下方的表格
 :::
@@ -118,4 +132,64 @@ head:
     grid-column: 1 / 4; /* 從第1列跨到第4列 */
     grid-row: 7 / 9; /* 從第7行跨到第9行 */
 }
+
+## 實戰練習
+
+### 練習 1：三欄等高卡片（簡單）⭐
+> 建立 3 欄卡片，欄寬平均，行距 16px。
+
+:::details 💡 參考答案
+```css
+.cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+```
+:::
+
+### 練習 2：header / main / side / footer 版型（簡單）⭐
+> 用 `grid-template-areas` 完成上方題目圖片版型。
+
+:::details 💡 參考答案
+```css
+.layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: auto 1fr auto;
+    grid-template-areas:
+        "A3 cat cat"
+        "B1 cat cat"
+        "B1 cat cat"
+        "E123 E123 E123"
+        "E123 E123 E123"
+        "B2 C1 C2"
+        "D1 D2 D3"
+        "F1 ZZ ZZ";
+    gap: 10px;
+}
+```
+:::
+
+### 練習 3：自適應卡片（中等）⭐⭐
+> 用 `grid-template-columns: repeat(auto-fit, minmax(200px, 1fr))` 做響應式卡片牆。
+
+:::details 💡 參考答案與提示
+```css
+.gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+}
+```
+**提示**：`auto-fit` 會自動填滿可用空間，minmax 控制最小寬度。
+:::
+
+## FAQ
+- Q: 要讓項目置中？
+    - A: 容器用 `place-items: center;`，單一項目用 `place-self: center;`。
+- Q: 舊版瀏覽器不支援 Grid？
+    - A: 可用 `@supports (display: grid)` 切換，或 fallback 至 flex。
+- Q: gap 支援哪裡？
+    - A: Grid/Flex 都支援現代瀏覽器，IE 不支援。
 ```

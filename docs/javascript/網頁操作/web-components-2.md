@@ -1,5 +1,12 @@
 # Web Components 實戰篇：企業級應用與最佳實踐
 
+## TL;DR
+- 延續基礎篇：已理解 Custom Elements/Shadow DOM/Slots 後，開始談架構、封裝、發佈與測試。
+- 關鍵：抽出 BaseElement、標準化 API（屬性/事件/slots/CSS vars）、監控性能、加上 CI 測試。
+- 與框架共存：自定義元素就是 DOM，React/Vue/Angular 都能直接使用；確保屬性用小寫並使用事件橋接。
+
+> 尚未讀基礎？先回到 [基礎篇](./web-components-1) 了解基本 API 再繼續。
+
 ## 1. 實戰專案：構建元件庫
 
 在這個實戰篇中，我們將構建一個完整的元件庫，並探討在真實專案中的應用場景。
@@ -668,6 +675,66 @@ class DocumentationGenerator {
 
 ## 8. 總結
 
+## 實戰練習
+
+### 練習 1：事件介面統一（簡單）⭐
+> 為你的元件庫訂一個事件命名規範，並在 `BaseElement.emit` 加上前綴，例如 `wc:`，避免事件衝突。
+
+:::details 💡 參考答案
+```javascript
+emit(eventName, detail = {}) {
+  this.dispatchEvent(new CustomEvent(`wc:${eventName}`, { bubbles: true, detail }))
+}
+```
+:::
+
+### 練習 2：CSS 變數主題化（簡單）⭐
+> 替現有元件增加 CSS 變數（如 `--wc-primary`），讓使用者可自訂主題。
+
+:::details 💡 參考答案
+```css
+:host {
+  --wc-primary: #0f172a;
+}
+button { background: var(--wc-primary); }
+```
+:::
+
+### 練習 3：跨框架整合（中等）⭐⭐
+> 在 React 中包裝你的 Web Component，確保屬性與事件能正常對應。
+
+:::details 💡 參考答案與提示
+```jsx
+function ModalWrapper({ open, onClose, children }) {
+  const ref = useRef(null)
+  useEffect(() => {
+    const handler = (e) => onClose?.(e.detail)
+    ref.current?.addEventListener('wc:close', handler)
+    return () => ref.current?.removeEventListener('wc:close', handler)
+  }, [onClose])
+  useEffect(() => {
+    if (ref.current) {
+      open ? ref.current.setAttribute('open', '') : ref.current.removeAttribute('open')
+    }
+  }, [open])
+  return <modal-dialog ref={ref}>{children}</modal-dialog>
+}
+```
+:::
+
+## 延伸閱讀
+- Open UI 社群：Web Components 模式討論
+- Web.dev: Enterprise Web Components 指南
+- Shoelace / FAST / Lion: 參考成熟元件庫的 API 設計與測試流程
+
+## FAQ
+- Q: React/Vue 傳事件時收不到？
+  - A: 自定義事件不是合成事件，需用 `addEventListener` 監聽；屬性請使用小寫、避免駝峰。
+- Q: Shadow DOM 讓樣式不好客製？
+  - A: 暴露 CSS Variables/parts，並在文件列出可覆寫點。
+- Q: 如何測試？
+  - A: 單元測試用 Jest + @webcomponents/webcomponentsjs；互動/視覺用 Playwright 或 Storybook。
+
 Web Components 在企業級應用中具有巨大潛力：
 
 ### 8.1 適用場景
@@ -681,8 +748,3 @@ Web Components 在企業級應用中具有巨大潛力：
 2. **性能優化**：延遲載入、記憶體管理
 3. **測試覆蓋**：單元測試、視覺測試、E2E 測試
 4. **文檔完善**：API 文檔、使用範例、最佳實踐
-
-### 8.3 未來展望
-隨著瀏覽器支援度提升和生態系統成熟，Web Components 將成為前端開發的重要選擇，特別是在需要跨框架相容性和長期維護的企業環境中。
-
-開始嘗試將你的下一個專案組件重構為 Web Components，體驗「一次編寫，處處運行」的開發效率！

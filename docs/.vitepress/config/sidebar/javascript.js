@@ -20,6 +20,7 @@ export function sidebarJavascript() {
       items: [
         { text: '簡易計數器', link: '/javascript/網頁操作/簡易計數器', activeMatch: '/javascript/網頁操作/簡易計數器' },
         { text: '終極密碼遊戲', link: '/javascript/網頁操作/終極密碼', activeMatch: '/javascript/網頁操作/終極密碼' },
+        { text: '彈跳視窗', link: '/javascript/網頁操作/彈跳視窗', activeMatch: '/javascript/網頁操作/彈跳視窗' },
         { text: '待辦事項清單 (TodoList)', link: '/javascript/網頁操作/TodoList', activeMatch: '/javascript/網頁操作/TodoList' },
         { text: '購物車範例', link: '/javascript/網頁操作/購物車', activeMatch: '/javascript/網頁操作/購物車' },
         { text: '聊天機器人', link: '/javascript/網頁操作/聯天機器人', activeMatch: '/javascript/網頁操作/聯天機器人' },
