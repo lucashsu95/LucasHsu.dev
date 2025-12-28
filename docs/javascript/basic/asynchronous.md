@@ -18,9 +18,24 @@ head:
   - - meta
     - property: og:image
       content: https://lucashsu95.github.io/LucasHsu.dev/images/javascript-cover.jpg
+  - - meta
+    - name: description
+      content: 用早餐流程解釋同步與異步、Promise、async/await，含錯誤處理、事件迴圈與練習題。
 ---
 
 # 異同步 - Asynchronous
+
+## TL;DR
+
+- 同步會阻塞主執行緒；異步把耗時工作交給背景，主流程繼續跑。
+- Promise 是「未來值」的容器，`then/catch` 或 `async/await` 都在等它 resolve/reject。
+- 實務要處理：錯誤傳遞、執行順序（串行/並行）、取消與逾時（例如 `AbortController`）。
+
+## 前置知識
+
+- JavaScript 單執行緒、事件迴圈、工作佇列（task queue、microtask queue）。
+- ES6 模組與 `import` 基本用法。
+- HTTP 會花時間且可能失敗：請求逾時、連線中斷。
 
 ## 什麼是異步編程？
 
@@ -64,6 +79,17 @@ head:
 
 **Promise** 是一種用於處理異步操作的物件，它代表了一個尚未完成但預計會在將來完成的操作。Promise 有三種狀態：待定（pending）、已解決（fulfilled）、已拒絕（rejected）。
 
+### 什麼時候用 Promise？
+
+- 需要等待的任務：打 API、讀檔案、計時器。
+- 想避免巢狀回呼，讓成功與失敗集中處理。
+
+### 常見錯誤處理手法
+
+- `then().catch()`：簡單串接即可。
+- `async/await` + `try/catch`：直覺，適合長流程。
+- 逾時保護：`Promise.race([work, timeoutPromise])`。
+
 ### 範例
 
 ```javascript
@@ -88,6 +114,28 @@ myPromise.then(result => {
 
 在這個範例中，我們創建了一個 Promise，模擬了一個耗時兩秒的操作。當操作成功時，會調用 `resolve`，並在 `.then()` 中處理結果；如果失敗，則調用 `reject`，並在 `.catch()` 中處理錯誤。
 
+### 錯誤包裝與逾時保護
+
+```javascript
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+const fetchWithTimeout = (url, { timeout = 3000 } = {}) => {
+    const controller = new AbortController();
+    const timer = delay(timeout).then(() => controller.abort());
+
+    const request = fetch(url, { signal: controller.signal });
+
+    return Promise.race([request, timer]).catch((error) => {
+        if (error.name === "AbortError") return Promise.reject("請求逾時");
+        return Promise.reject(error.message || "未知錯誤");
+    });
+};
+```
+
+這段示範了：
+- 用 `Promise.race` 做逾時保護；
+- 透過 `AbortController` 取消請求，避免資源浪費。
+
 ## async/await
 
 **async/await** 是基於 Promise 的語法糖，使得異步代碼看起來更像同步代碼。使用 `async` 關鍵字定義一個函數為異步函數，而 `await` 用來暫停函數的執行直到 Promise 被解決。
@@ -108,6 +156,27 @@ fetchData(); // 調用異步函數
 ```
 
 在這個範例中，我們定義了一個 `fetchData` 的異步函數。在這裡，我們使用 `await` 來等待 `myPromise` 的結果。如果 Promise 被解決，就會輸出成功的訊息；如果被拒絕，就會捕獲錯誤並輸出。
+
+### 串行 vs 並行
+
+```javascript
+// 串行：依序等待，總時間 ≈ 所有任務時間總和
+async function serial() {
+    const coffee = await makeCoffee();
+    const toast = await makeToast();
+    return [coffee, toast];
+}
+
+// 並行：同時開工，總時間 ≈ 最慢任務
+async function parallel() {
+    const [coffee, toast] = await Promise.all([makeCoffee(), makeToast()]);
+    return [coffee, toast];
+}
+```
+
+選擇原則：
+- 有相依性就串行（例如先拿 token 再打 API）。
+- 沒相依性就並行（例如多支列表 API）。
 
 
 ## 實作 - 準備早餐
@@ -249,4 +318,125 @@ prepareBreakfastAsync();
 透過以上兩個範例，我們可以清楚地看到異步編程的優勢。<br>
 在同步方式中，每個任務必須等前一個完成後才能開始，導致整體過程變慢。<br>
 而在異步方式中，所有任務可以同時進行，提高了效率，使得整體流程更加流暢。
+
+## 事件迴圈視覺化
+
+```mermaid
+sequenceDiagram
+    participant Main as JS 主線程
+    participant WA as Web APIs
+    participant MT as Microtask Queue (VIP通道)
+    participant TQ as Task Queue (普通通道)
+
+    Note over Main: 1. 程式開始
+
+    Main->>WA: 呼叫 setTimeout(cb, 0)
+    Note right of Main: 這是宏任務來源
+    WA->>WA: 計時器倒數結束
+    WA->>TQ: 將 callback 放入 Task Queue
+
+    Main->>WA: 呼叫 await fetch()
+    Note right of Main: 這是微任務來源
+    Main->>Main: 繼續執行同步代碼...
+    Main-->>Main: Call Stack 清空
+
+    WA->>WA: 網路請求完成
+    WA->>MT: 將 await 後續放入 Microtask Queue
+
+    Note over Main, TQ: --- Event Loop 階段 ---
+    
+    rect rgb(240, 248, 255)
+        Note over Main, MT: 優先檢查微任務
+        MT-->>Main: 執行 fetch 的後續 (then/await)
+        MT-->>MT: 確保微任務佇列全空
+    end
+
+    rect rgb(255, 245, 238)
+        Note over Main, TQ: 微任務全空後，才輪到宏任務
+        TQ-->>Main: 執行 setTimeout 的 callback
+    end
+```
+
+## 實戰練習
+
+### 練習 1：錯誤處理（簡單）⭐
+> 使用 `fetch("https://hp-api.onrender.com/api/spells")`，加上 3 秒逾時機制與錯誤提示。
+
+:::details 💡 參考答案
+```javascript
+const withTimeout = (promise, ms = 3000) =>
+    Promise.race([
+        promise,
+        new Promise((_, reject) =>
+            setTimeout(() => reject(new Error("請求逾時")), ms)
+        ),
+    ]);
+
+withTimeout(fetch("https://hp-api.onrender.com/api/spells"))
+    .then((res) => res.json())
+    .then((data) => console.log("spells", data.length))
+    .catch((err) => console.error(err.message));
+```
+:::
+
+### 練習 2：並行請求（簡單）⭐
+> 同時請求兩個公開 API，合併後印出各自的資料筆數。
+
+:::details 💡 參考答案
+```javascript
+const spellPromise = fetch("https://hp-api.onrender.com/api/spells").then((r) =>
+    r.json()
+);
+const nationPromise = fetch(
+    "https://datausa.io/api/data?drilldowns=Nation&measures=Population"
+).then((r) => r.json());
+
+Promise.all([spellPromise, nationPromise])
+    .then(([spells, nations]) => {
+        console.log("spells:", spells.length);
+        console.log("nations:", nations.data.length);
+    })
+    .catch((err) => console.error(err));
+```
+:::
+
+### 練習 3：取消請求（中等）⭐⭐
+> 使用 `AbortController` 在 1 秒內取消 fetch，並在 UI 顯示「已取消」。
+
+:::details 💡 參考答案與提示
+**提示：**
+1. 建立 `const controller = new AbortController()`。
+2. 將 `signal` 傳給 `fetch`。
+3. 用 `setTimeout(() => controller.abort(), 1000)` 取消。
+
+**參考答案：**
+```javascript
+const controller = new AbortController();
+const timer = setTimeout(() => controller.abort(), 1000);
+
+fetch("https://hp-api.onrender.com/api/spells", { signal: controller.signal })
+    .then((res) => res.json())
+    .then((data) => console.log("success", data.length))
+    .catch((err) => {
+        if (err.name === "AbortError") console.log("已取消");
+        else console.error(err.message);
+    })
+    .finally(() => clearTimeout(timer));
+```
+:::
+
+## 延伸閱讀
+
+- [使用 fetch() 進行非同步資料獲取的基礎教學](./fetch)
+- [Axios - next.js](./axios)
+- [MDN: Event loop](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Event_loop)
+
+## FAQ
+
+- `then/catch` 與 `async/await` 差在哪？
+    - 兩者等價；`async/await` 讀起來像同步，適合長流程；`then` 適合簡單鏈結或動態處理。
+- `Promise.all` 和 `Promise.allSettled` 差異？
+    - `all` 遇到一個 reject 就中斷；`allSettled` 會等待所有完成並回報狀態，適合「盡量收集結果」。
+- 什麼時候需要取消請求？
+    - 使用者切頁、輸入框快速輸入導致舊請求過時，或行動裝置節省流量時，可用 `AbortController` 取消。
 

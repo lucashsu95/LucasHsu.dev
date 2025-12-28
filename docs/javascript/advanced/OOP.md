@@ -23,6 +23,16 @@ head:
 
 # 物件導向 OOP 以 JavaScript 為例
 
+## TL;DR
+- OOP 四大支柱：封裝（隱藏實作）、繼承（extends）、多型（同名方法不同行為）、抽象（模板類別）。
+- JavaScript 實作：class + constructor + private fields (#) + super() + extends。
+- 實務：Animal 抽象類 → Dog/Cat 繼承 → makeSound() 多型 → #weight 封裝。
+
+## 前置知識
+- class 語法與 constructor
+- this 關鍵字綁定
+- 繼承與原型鏈基礎
+
 ## 創建 Class
 
 ```js:line-numbers
@@ -220,3 +230,143 @@ const myDog = new Dog("Buddy", 2, "Golden Retriever");
 const myCat = new Cat("Fluffy", 3, "5kg");
 // console.log(myCat.makeSound()); // Error: 必須實作 makeSound 方法 // [!code error]
 ```
+
+## 類別圖
+
+```mermaid
+classDiagram
+    class Animal {
+        <<abstract>>
+        -String name
+        -Number age
+        +constructor(name, age)
+        +getInfo() String
+        +makeSound() String*
+    }
+    
+    class Dog {
+        -String breed
+        +constructor(name, age, breed)
+        +makeSound() String
+    }
+    
+    class Cat {
+        -String #weight
+        +constructor(name, age, weight)
+        +getWeight() String
+        +setWeight(weight) void
+        +makeSound() String
+    }
+    
+    Animal <|-- Dog : extends
+    Animal <|-- Cat : extends
+```
+
+## 實戰練習
+
+### 練習 1：創建 Vehicle 類別（簡單）⭐
+> 建立 Vehicle 類別（brand, model）與 getDetails() 方法，再建立 Car 子類別（doors）。
+
+:::details 💡 參考答案
+```javascript
+class Vehicle {
+  constructor(brand, model) {
+    this.brand = brand
+    this.model = model
+  }
+  getDetails() {
+    return `${this.brand} ${this.model}`
+  }
+}
+
+class Car extends Vehicle {
+  constructor(brand, model, doors) {
+    super(brand, model)
+    this.doors = doors
+  }
+}
+
+const myCar = new Car('Toyota', 'Corolla', 4)
+console.log(myCar.getDetails()) // Toyota Corolla
+```
+:::
+
+### 練習 2：Private field 封裝（簡單）⭐
+> 為 BankAccount 類別建立私有的 #balance，用 deposit() 和 getBalance() 操作。
+
+:::details 💡 參考答案
+```javascript
+class BankAccount {
+  #balance = 0
+  
+  deposit(amount) {
+    this.#balance += amount
+  }
+  
+  getBalance() {
+    return this.#balance
+  }
+}
+
+const account = new BankAccount()
+account.deposit(1000)
+console.log(account.getBalance()) // 1000
+```
+:::
+
+### 練習 3：多型與抽象（中等）⭐⭐
+> 建立 Shape 抽象類別（calculateArea），再實作 Circle 與 Rectangle 子類別。
+
+:::details 💡 參考答案與提示
+```javascript
+class Shape {
+  constructor() {
+    if (this.constructor === Shape) {
+      throw new Error('無法實例化抽象類別')
+    }
+  }
+  calculateArea() {
+    throw new Error('必須實作 calculateArea')
+  }
+}
+
+class Circle extends Shape {
+  constructor(radius) {
+    super()
+    this.radius = radius
+  }
+  calculateArea() {
+    return Math.PI * this.radius ** 2
+  }
+}
+
+class Rectangle extends Shape {
+  constructor(width, height) {
+    super()
+    this.width = width
+    this.height = height
+  }
+  calculateArea() {
+    return this.width * this.height
+  }
+}
+
+const circle = new Circle(5)
+const rect = new Rectangle(4, 6)
+console.log(circle.calculateArea())  // 78.54
+console.log(rect.calculateArea())    // 24
+```
+:::
+
+## 延伸閱讀
+- [MDN: Classes](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes)
+- [JavaScript.info: Class patterns](https://javascript.info/class-patterns)
+- [SOLID principles in JavaScript](https://blog.bitsrc.io/solid-principles-in-javascript-276c72421805)
+
+## FAQ
+- Q: private field (#) 與 closure 差在哪？
+  - A: # 是語言級別的私有，closure 是作用域封閉；# 可在類別方法間共享，closure 不行。
+- Q: 為何要抽象類別？
+  - A: 強制子類別實作特定方法，確保介面一致性；避免實例化模板類別。
+- Q: 多型的實際用途？
+  - A: 統一介面、不同實作；如 Array/NodeList 都有 forEach，但內部行為不同。

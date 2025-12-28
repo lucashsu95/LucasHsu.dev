@@ -18,6 +18,9 @@ head:
   - - meta
     - property: og:image
       content: https://lucashsu95.github.io/LucasHsu.dev/images/javascript-cover.jpg
+  - - meta
+    - name: description
+      content: HTTP 方法與狀態碼概覽，搭配 fetch GET/POST 範例、流程圖、練習題與常見 FAQ。
 ---
 
 # HTTP 請求方法
@@ -25,6 +28,18 @@ head:
 在[什麼是fetch()](./fetch)的文章中學到了怎麼打api，在`fetch()`預設是使用GET方法
 
 除了 `GET` 方法，HTTP 還有其他多種請求方法，每種方法都有其特定的用途和行為。以下是一些常見的 HTTP 請求方法：
+
+## TL;DR
+
+- GET 讀取、POST 新增、PUT 取代、PATCH 局部更新、DELETE 刪除。
+- 安全性：GET/HEAD/OPTIONS/TRACE 為 safe；幂等性：GET/PUT/DELETE/HEAD/OPTIONS/TRACE 為 idempotent。
+- 實務搭配：加上錯誤處理、逾時與 JSON 解析，必要時設定標頭與 body。
+
+## 前置知識
+
+- HTTP 請求組成：方法、URL、標頭、主體。
+- 狀態碼分段：1xx/2xx/3xx/4xx/5xx。
+- 基礎 JavaScript fetch/async-await。
 
 ### 1. POST
 - **用途**：用於向伺服器提交數據，通常用於創建新的資源。
@@ -61,6 +76,18 @@ head:
 這些方法讓客戶端能夠以標準化和可預測的方式對 API 的資源執行 CRUD 操作（創建、讀取、更新和刪除）。每種方法都有其適合使用的場景，開發者可以根據需求選擇合適的方法來進行 HTTP 請求。
 
 要開始使用 `fetch()` 方法，你需要了解如何發送 HTTP 請求，並且可以使用不同的請求方法來獲取或傳送資料。以下是如何使用 `fetch()` 的基本介紹，以及兩個範例，展示如何使用 `GET` 和 `POST` 方法。
+
+## 方法與特性速查
+
+| 方法    | 用途                   | 安全 | 幂等 |
+| ------- | ---------------------- | ---- | ---- |
+| GET     | 讀取                   | 是   | 是   |
+| POST    | 新增                   | 否   | 否   |
+| PUT     | 取代                   | 否   | 是   |
+| PATCH   | 局部更新               | 否   | 否   |
+| DELETE  | 刪除                   | 否   | 是   |
+| HEAD    | 取得標頭               | 是   | 是   |
+| OPTIONS | 詢問支援方法/CORS 預檢 | 是   | 是   |
 
 
 ### HTTP 狀態碼
@@ -130,14 +157,17 @@ fetch(url, options)
 
     <script>
         fetch("https://hp-api.onrender.com/api/spells") // 發送 GET 請求
-            .then((response) => response.json()) // 將回應轉換為 JSON 格式
+            .then((response) => {
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                return response.json();
+            })
             .then((data) => {
                 data.forEach((spell) => {
-                    let table = document.querySelector("table");
-                    let row = table.insertRow();
-                    let cell1 = row.insertCell(0);
-                    let cell2 = row.insertCell(1);
-                    let cell3 = row.insertCell(2);
+                    const table = document.querySelector("table");
+                    const row = table.insertRow();
+                    const cell1 = row.insertCell(0);
+                    const cell2 = row.insertCell(1);
+                    const cell3 = row.insertCell(2);
                     cell1.innerHTML = spell.id; // 填入 ID
                     cell2.innerHTML = spell.name; // 填入名稱
                     cell3.innerHTML = spell.description; // 填入描述
@@ -177,18 +207,85 @@ fetch(url, options)
             },
             body: JSON.stringify(data) // 將資料轉換為 JSON 字串
         })
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error('網路錯誤');
-            }
-            return response.json(); // 將回應轉換為 JSON 格式
-        })
-        .then((result) => console.log('成功:', result)) // 成功處理回應
-        .catch((error) => console.error('發生錯誤:', error)); // 錯誤處理
+                .then((response) => {
+                        if (!response.ok) {
+                                throw new Error(`HTTP ${response.status}`);
+                        }
+                        return response.json(); // 將回應轉換為 JSON 格式
+                })
+                .then((result) => console.log('成功:', result)) // 成功處理回應
+                .catch((error) => console.error('發生錯誤:', error)); // 錯誤處理
     </script>
 </body>
 </html>
 ```
+
+## 請求流程圖
+
+```mermaid
+sequenceDiagram
+        participant Client
+        participant Server
+        Client->>Server: 發送 HTTP 方法 + URL + headers + body
+        Server-->>Client: 狀態碼 + headers + body
+        Client-->>Client: 檢查狀態碼、解析 JSON、錯誤處理
+```
+
+## 實戰練習
+
+### 練習 1：GET 與狀態檢查（簡單）⭐
+> 使用 fetch 對 spells API，非 2xx 時顯示錯誤訊息。
+
+:::details 💡 參考答案
+```javascript
+fetch("https://hp-api.onrender.com/api/spells")
+    .then((r) => {
+        if (!r.ok) throw new Error(`HTTP ${r.status}`);
+        return r.json();
+    })
+    .then((data) => console.log(data.length))
+    .catch((err) => console.error(err.message));
+```
+:::
+
+### 練習 2：POST JSON（簡單）⭐
+> 對 jsonplaceholder posts 建立一筆資料，印出回傳 id。
+
+:::details 💡 參考答案
+```javascript
+fetch("https://jsonplaceholder.typicode.com/posts", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ title: "demo", body: "hello", userId: 1 }),
+})
+    .then((r) => r.json())
+    .then((data) => console.log(data.id));
+```
+:::
+
+### 練習 3：方法選擇題（中等）⭐⭐
+> 下列情境用哪個方法？(1) 部分更新使用者暱稱 (2) 刪除單一貼文 (3) 取得列表。
+
+:::details 💡 參考答案
+1. PATCH
+2. DELETE
+3. GET
+:::
+
+## 延伸閱讀
+
+- [使用 fetch() 進行非同步資料獲取的基礎教學](./fetch)
+- [Axios - next.js](./axios)
+- [MDN: HTTP methods](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods)
+
+## FAQ
+
+- POST 與 PUT 差異？
+    - POST 常用於新增；PUT 用於整體取代，且幂等。
+- PATCH 什麼時候用？
+    - 只改部分欄位時，避免整筆覆蓋。
+- 為何要檢查 `response.ok`？
+    - fetch 對 4xx/5xx 不會自動 throw，需要手動檢查。
 
 ### 總結
 

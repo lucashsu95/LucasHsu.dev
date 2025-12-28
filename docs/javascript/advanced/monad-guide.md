@@ -44,6 +44,16 @@ head:
 
 # Monad：函數式程式設計的終極抽象
 
+## TL;DR
+- Monad = 有 flatMap 的 Functor；解決「回傳容器的函數」嵌套問題。
+- 實務：Maybe (空值)、Either (錯誤處理)、IO (副作用)、Promise (非同步)。
+- flatMap = 應用函數 + 攤平；可連接可能失敗/非同步/有副作用的操作。
+
+## 前置知識
+- Functor 概念與 map 方法
+- Promise 的 then / catch / chaining
+- 錯誤處理模式 (try/catch vs Either)
+
 ## 什麼是 Monad？
 
 Monad（單子）是函數式程式設計中最重要也是最神秘的概念之一。如果說 Functor 是「可以映射的容器」，那麼 **Monad 就是「可以扁平化映射的容器」**。
@@ -673,3 +683,96 @@ Monad 是函數式程式設計的精髓，它提供了一種統一的方式來�
 - **Promise** 讓異步編程變得簡單
 
 理解 Monad 需要時間和實踐，但一旦掌握，它會讓您的程式碼變得更加健壯、可維護和優雅。記住：Monad 不是為了炫技，而是為了解決實際的編程問題。
+## 實際應用場景
+
+### 1. API 請求鍵（Either + Promise）
+```javascript
+const fetchUser = (id) => 
+  fetch(`/api/users/${id}`)
+    .then(res => res.ok ? Either.right(res) : Either.left('請求失敗'))
+    .then(either => either.map(r => r.json()))
+
+fetchUser(1)
+  .then(either => either.fold(
+    err => console.error(err),
+    user => console.log(user)
+  ))
+```
+
+### 2. 表單驗證管線（Either chaining）
+```javascript
+const validateForm = (data) =>
+  Either.right(data)
+    .flatMap(validateEmail)
+    .flatMap(validateAge)
+    .flatMap(validatePassword)
+
+validateForm({ email: 'test@mail.com', age: 25, password: 'secret' })
+  .fold(
+    errors => showErrors(errors),
+    validData => submitForm(validData)
+  )
+```
+
+### 3. 安全鍵操作（Maybe chaining）
+```javascript
+const getUserCity = (userId) =>
+  Maybe.of(users[userId])
+    .flatMap(user => Maybe.of(user.address))
+    .flatMap(addr => Maybe.of(addr.city))
+    .getOrElse('Unknown')
+```
+
+## 實戰練習
+
+### 練習 1：Maybe 鍵處理（簡單）⭐
+> 使用 Maybe.flatMap 安全存取 user.profile.address.city。
+
+:::details 💡 參考答案
+```javascript
+const city = Maybe.of(user)
+  .flatMap(u => Maybe.of(u.profile))
+  .flatMap(p => Maybe.of(p.address))
+  .flatMap(a => Maybe.of(a.city))
+  .getOrElse('Unknown')
+```
+:::
+
+### 練習 2：Either 錯誤處理（簡單）⭐
+> 寫出 safeDivide 和 safeSquareRoot，組合鍵計算「16 / 4 的平方根」。
+
+:::details 💡 參考答案
+```javascript
+const safeDivide = (a, b) => b === 0 ? Either.left('除以零') : Either.right(a / b)
+const safeSquareRoot = (n) => n < 0 ? Either.left('負數無平方根') : Either.right(Math.sqrt(n))
+
+const result = safeDivide(16, 4)
+  .flatMap(safeSquareRoot)
+  .getOrElse(0) // 2
+```
+:::
+
+### 練習 3：Promise Monad（中等）⭐⭐
+> 實現Promise鍵的 API 請求：fetchUser → fetchOrders → 計算總額。
+
+:::details 💡 參考答案與提示
+```javascript
+fetchUser(id)
+  .then(user => fetchOrders(user.id))
+  .then(orders => orders.reduce((sum, o) => sum + o.amount, 0))
+  .catch(err => console.error(err))
+```
+:::
+
+## 延伸閱讀
+- [You Could Have Invented Monads](http://blog.sigfpe.com/2006/08/you-could-have-invented-monads-and.html)
+- folktale / fp-ts：Monad 實作庫
+- [Monad laws in JavaScript](https://curiosity-driven.org/monads-in-javascript)
+
+## FAQ
+- Q: Promise 真的是 Monad 嗎？
+  - A: 是，`then` = flatMap；但不完全符合法則（如 auto-unwrap）。
+- Q: Either 與 try/catch 差在哪？
+  - A: Either 是純函數、可組合、離散錯誤與成功；try/catch 有副作用、難組合。
+- Q: 一定要用 Monad 嗎？
+  - A: 不一定；但在錯誤處理、非同步、空值場景中很有用。

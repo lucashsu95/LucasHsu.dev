@@ -44,6 +44,16 @@ head:
 
 # Functor：容器與映射的藝術
 
+## TL;DR
+- Functor = 可 map 的容器；保持結構，只變散內容。
+- 需滿足同態法則 (`map(x=>x)=functor`) 和組合法則 (`map(f).map(g)=map(x=>g(f(x)))`) 。
+- 實務：Maybe (null 安全)、Box (組合轉換)、Task (非同步)；JS 陣列就是 Functor。
+
+## 前置知識
+- 高階函數：接收/回傳函數
+- 鍵鎖調用 (method chaining)
+- 純函數概念與不可變更新
+
 ## 什麼是 Functor？
 
 Functor（函子）是函數式程式設計中的一個核心概念，它來自於範疇論（Category Theory）。簡單來說，**Functor 是一個可以被映射（map）的容器**。
@@ -465,3 +475,71 @@ Functor 是函數式程式設計中的一個強大抽象，它讓我們能夠以
 - 保持代碼的純函數特性
 
 雖然 Functor 的概念來自於數學，但在實際編程中，它提供了非常實用的解決方案。掌握 Functor 的使用，將讓您的 JavaScript 代碼更加健壯和優雅。
+## Functor 法則
+
+```mermaid
+graph LR
+  A[Functor法則] --> B[同態法則]
+  A --> C[組合法則]
+  B --> D[functor.map（x=>x） = functor]
+  C --> E[map（f）.map（g） = map（x=>g（f（x）））]
+```
+
+## 實戰練習
+
+### 練習 1：Maybe 安全存取（簡單）⭐
+> 使用 Maybe 從 user.profile.email 取值，無效時回傳 'no-email'。
+
+:::details 💡 參考答案
+```javascript
+const user = { profile: { email: 'test@example.com' } }
+const email = Maybe.of(user.profile)
+  .map(p => p.email)
+  .getOrElse('no-email')
+```
+:::
+
+### 練習 2：Box 鎖鏈轉換（簡單）⭐
+> 使用 Box 將字串轉大寫、分割、取長度。
+
+:::details 💡 參考答案
+```javascript
+Box.of('hello world')
+  .map(s => s.toUpperCase())
+  .map(s => s.split(' '))
+  .map(arr => arr.length)
+  .fold(x => x) // 2
+```
+:::
+
+### 練習 3：自建 Functor（中等）⭐⭐
+> 建立 Result functor，有 Success/Failure 兩種狀態，並實作 map。
+
+:::details 💡 參考答案與提示
+```javascript
+class Result {
+  constructor(isSuccess, value) {
+    this.isSuccess = isSuccess
+    this.value = value
+  }
+  static success(v) { return new Result(true, v) }
+  static failure(v) { return new Result(false, v) }
+  map(fn) {
+    return this.isSuccess ? Result.success(fn(this.value)) : this
+  }
+}
+```
+:::
+
+## 延伸閱讀
+- [Fantasyland Spec](https://github.com/fantasyland/fantasy-land#functor) - JS functor 規範
+- folktale / sanctuary / ramda-fantasy：Functor 實作庫
+- [Category Theory for Programmers](https://bartoszmilewski.com/2014/10/28/category-theory-for-programmers-the-preface/)
+
+## FAQ
+- Q: Array 和 Maybe 都是 Functor，有什麼差別？
+  - A: 都有 map，但語意不同：Array 處理多值，Maybe 處理無值情況。
+- Q: 為何需要法則？
+  - A: 確保行為一致、可組合、可預測；法則是 Functor 的本質。
+- Q: map 和 flatMap 差在哪？
+  - A: map 是 Functor，flatMap 是 Monad；後者有扔平功能（解決嵌套）。
