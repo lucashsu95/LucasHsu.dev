@@ -52,6 +52,10 @@ export function nav() {
           text: "jsconfig.json 和 vite.config.js 設定",
           link: "/other/init-jsconfig-viteConfig",
         },
+        {
+          text: "在 Windows 安裝 WSL",
+          link: "/other/install-wsl",
+        },
       ],
     },
   ];

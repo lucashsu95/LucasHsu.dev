@@ -11,8 +11,8 @@ export function sideBarDatabase() {
     {
       text: "SQL",
       items: [
-        { text: "JOIN 關聯式", link: "database/sql/sql-join", activeMatch: "database/sql/sql-join" },
-        { text: "SQL CASE...WHEN...THEN", link: "database/sql/sql-case-when-then", activeMatch: "database/sql/sql-case-when-then" },
+        { text: "JOIN 關聯式", link: "/database/sql/sql-join", activeMatch: "/database/sql/sql-join" },
+        { text: "SQL CASE...WHEN...THEN", link: "/database/sql/sql-case-when-then", activeMatch: "/database/sql/sql-case-when-then" },
       ],
     },
   ];
