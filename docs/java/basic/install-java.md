@@ -1,22 +1,16 @@
 ---
-outline: "deep"
-
+title: Java 安裝與環境設定完整指南 | LucasHsu.dev
+description: 從零開始安裝 JDK、設定環境變數到執行第一個程式，Windows/Mac/Linux 完整教學，含常見問題排解。
 head:
   - - meta
-    - name: author
-      content: 許恩綸
-  - - meta
-    - itemprop: name
-      content: Java 新手上路 Day1 - 安裝教學｜基礎程式範例
-  - - meta
     - name: keywords
-      content: java, 新手上路, 安裝教學, 變數
+      content: Java 安裝, JDK 下載, Java 環境變數, JAVA_HOME, javac, HelloWorld, Java 新手教學, Chocolatey 安裝 Java
   - - meta
     - property: og:title
-      content: Java 新手上路 Day1 - 安裝教學｜基礎程式範例
+      content: Java 安裝與環境設定完整指南 | LucasHsu.dev
   - - meta
     - property: og:description
-      content: 學習如何安裝Java、設置開發環境，還有基礎程式範例，輸入輸出函數
+      content: 從零開始安裝 JDK、設定環境變數到執行第一個程式，Windows/Mac/Linux 完整教學，含常見問題排解。
   - - meta
     - property: og:type
       content: article
@@ -25,177 +19,198 @@ head:
       content: https://lucashsu95.github.io/LucasHsu.dev/images/java-cover.jpg
 ---
 
-# Java 新手上路 Day1｜安裝教學｜型態
+# Java 安裝與環境設定完整指南
 
-「安裝 Java 開發環境」與「基礎程式範例」。內容以 Windows 系統為主，Mac/Linux 安裝方式類似，但設定步驟略有不同。
+> 📝 TL;DR 下載 JDK、設定 JAVA_HOME、驗證 `java -version` 與 `javac -version`、編譯執行 HelloWorld.java。Windows 可用 Chocolatey 快速安裝，Mac 用 Homebrew。
 
-## 安裝教學
+## 前置知識
 
-### **1. 什麼是 JDK 和 JRE？**
+- 了解命令列（cmd / PowerShell / Terminal）基本操作
+- 知道如何設定系統環境變數（或願意跟著步驟學習）
 
-- **JRE（Java Runtime Environment）**：執行 Java 程式所需的環境，一般使用者安裝即可。
-- **JDK（Java Development Kit）**：開發 Java 程式所需的工具包，包含編譯器（javac）、執行器（java）等。開發者必須安裝 JDK。
+## 什麼是 JDK 和 JRE？
 
----
+- **JRE（Java Runtime Environment）**：只能執行 Java 程式，一般使用者安裝即可。
+- **JDK（Java Development Kit）**：開發者工具包，包含編譯器（`javac`）、除錯工具、JRE 等，開發必裝。
 
-### **2. 下載與安裝 JDK**
+:::warning 重點
+要寫 Java 程式必須安裝 JDK，只裝 JRE 無法編譯。
+:::
 
-1. **前往 Oracle 官方網站下載 JDK**
-   - 進入 Oracle Java 下載頁面，選擇適合你作業系統的 JDK（如 Windows x64 Installer）。
-   - 推薦選擇長期支援版本（LTS）：JDK 8、JDK 11、JDK 17。
+## 安裝 JDK（Windows）
 
-2. **執行安裝程式**
-   - 下載後，雙擊安裝檔（如 `jdk-17.0.x_windows-x64_bin.exe`）。
-   - 依照指示點選「下一步」，建議使用預設安裝路徑（如 `C:\Program Files\Java\jdk-17.0.x`）。
+### 方法 1：手動下載安裝
 
-也可以使用[chocolatey](https://chocolatey.org/install)
-```bash
-choco install openjdk11 -y
+1. 前往 [Oracle JDK 下載頁](https://www.oracle.com/java/technologies/downloads/) 或 [Adoptium（OpenJDK）](https://adoptium.net/)
+2. 選擇適合你的版本（推薦 LTS：JDK 11、17、21）
+3. 執行安裝檔，建議用預設路徑如 `C:\Program Files\Java\jdk-17`
+
+### 方法 2：用 Chocolatey 快速安裝
+
+```powershell
+choco install openjdk17 -y
 ```
 
----
+此方式會自動設定環境變數，適合熟悉命令列的使用者。
 
-### **3. 設定環境變數**
+### 方法 3：Mac/Linux 安裝
 
-1. **設定 JAVA_HOME**
-   - 按 `Win + R`，輸入 `sysdm.cpl`，開啟「系統內容」視窗。
-   - 點選「進階」→「環境變數」。
-   - 在「系統變數」區，點「新增」，輸入：
-     - 變數名稱：`JAVA_HOME`
-     - 變數值：JDK安裝路徑，如 `C:\Program Files\Java\jdk-17.0.x`。
+**Mac（Homebrew）**：
+```bash
+brew install openjdk@17
+```
 
-2. **編輯 Path 變數**
-   - 在「系統變數」找到 `Path`，點「編輯」。
-   - 新增 `%JAVA_HOME%\bin` 到 Path 變數中。
+**Linux（Ubuntu/Debian）**：
+```bash
+sudo apt update
+sudo apt install openjdk-17-jdk -y
+```
 
-### **4. 測試安裝是否成功**
+## 設定環境變數（Windows 手動安裝適用）
 
-1. **開啟命令提示字元**
-   - 按 `Win + R`，輸入 `cmd`，按 Enter。
-2. **輸入指令測試**
-   - 輸入 `java -version`，顯示 Java 版本代表 JRE 安裝成功。
-   - 輸入 `javac -version`，顯示編譯器版本代表 JDK 安裝成功。
+1. 按 `Win + R` → 輸入 `sysdm.cpl` → 進階 → 環境變數
+2. 新增系統變數 `JAVA_HOME`，值為 JDK 路徑（例如 `C:\Program Files\Java\jdk-17`）
+3. 編輯 `Path` 變數，新增 `%JAVA_HOME%\bin`
+4. 確認後重啟命令提示字元
 
----
+```mermaid
+flowchart TD
+    A[開啟環境變數設定] --> B[新增 JAVA_HOME]
+    B --> C[編輯 Path 加入 %JAVA_HOME%\bin]
+    C --> D[確認並重啟終端機]
+    D --> E[驗證安裝]
+```
 
-### 開始寫你的第一個 Java 程式
+## 驗證安裝
 
-1. **建立檔案**
-   - 用記事本或 VS Code 等編輯器，建立 `HelloWorld.java` 檔案。
-   - 輸入以下內容：
-     ```java
-     public class HelloWorld {
-         public static void main(String[] args) {
-             System.out.println("Hello, Java!");
-         }
-     }
-     ```
-2. **編譯與執行**
-   - 在命令提示字元，切換到檔案所在目錄。
-   - 輸入 `javac HelloWorld.java` 編譯。
-   - 輸入 `java HelloWorld` 執行，看到輸出 `Hello, Java!` 即成功。
+```powershell
+java -version
+javac -version
+```
 
-- **安裝 JDK**：下載、執行安裝程式、設定環境變數。
-- **測試安裝**：輸入 `java -version` 和 `javac -version` 確認。
-- **開始寫程式**：編輯、編譯、執行你的第一個 Java 程式。
+若顯示版本號表示成功。若提示找不到指令，檢查環境變數設定。
+
+## 第一個 Java 程式：HelloWorld
+
+1. 新增 `HelloWorld.java`：
+
+```java
+public class HelloWorld {
+    public static void main(String[] args) {
+        System.out.println("Hello, Java!");
+    }
+}
+```
+
+2. 編譯與執行：
+
+```bash
+javac HelloWorld.java  # 編譯產生 HelloWorld.class
+java HelloWorld        # 執行（不需加 .class）
+```
 
 ## 基礎程式範例
-### **1. 輸入與輸出**
 
-**輸入 (Input)**
-Java 需要透過 `Scanner` 來取得使用者輸入：
+### 輸出
+
+```java
+System.out.println("Hello, World!");
+System.out.print("不換行");
+```
+
+### 輸入
+
+需要 `Scanner` 類別：
 
 ```java
 import java.util.Scanner;
 
-public class Main {
+public class InputExample {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        System.out.print("請輸入一些字: ");
-        String input = scanner.nextLine(); // 取得一行輸入
-        System.out.println("你輸入的是: " + input);
+        System.out.print("請輸入你的名字: ");
+        String name = scanner.nextLine();
+        System.out.println("你好, " + name);
+        scanner.close();
     }
 }
 ```
-- `scanner.nextLine()`：取得一行輸入。
-- `scanner.next()`：取得一個字串（遇到空白會停止）。
-- `scanner.nextInt()`、`scanner.nextDouble()`：取得整數或浮點數。
 
-**輸出 (Output)**
-Java 使用 `System.out.println()` 來輸出內容：
+## 實戰練習
 
+### 練習 1：驗證安裝（簡單）
+
+執行 `java -version` 和 `javac -version`，截圖兩者輸出結果。
+
+:::details 答案
+確認兩者都顯示版本號且無錯誤訊息即可。
+:::
+
+### 練習 2：執行 HelloWorld（簡單）
+
+建立並執行 `HelloWorld.java`，輸出「Hello, Java!」。
+
+:::details 答案
 ```java
-System.out.println("Hello, World!");
-System.out.print("不換行"); // 不換行
-System.out.println("換行");
+public class HelloWorld {
+    public static void main(String[] args) {
+        System.out.println("Hello, Java!");
+    }
+}
 ```
 
----
-
-### **2. 變數與型態**
-
-Java 是強型別語言，宣告變數時必須指定型態：
-
-```java
-int intVal = 10;
-double doubleVal = 12.3;
-String strVal = "Hello Java";
-boolean booleanVal = true;
-char charVal = 'A';
+編譯與執行步驟：
+```bash
+javac HelloWorld.java
+java HelloWorld
 ```
-- `int`：整數
-- `double`：浮點數
-- `String`：字串（注意：Java 字串是不可變的）
-- `boolean`：布林值（true/false）
-- `char`：字元
+:::
 
-**型態檢查**
-Java 沒有像 Python 的 `type()`，但可以用 `instanceof` 檢查物件型態：
+### 練習 3：輸入與計算（中等）
 
+撰寫程式讀取使用者輸入的兩個整數，輸出它們的和。
+
+:::details 參考答案
 ```java
-System.out.println(strVal instanceof String); // true
+import java.util.Scanner;
+
+public class AddNumbers {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("輸入第一個數字: ");
+        int a = sc.nextInt();
+        System.out.print("輸入第二個數字: ");
+        int b = sc.nextInt();
+        System.out.println("總和: " + (a + b));
+        sc.close();
+    }
+}
 ```
-（對於基本型態，無法直接檢查，但變數型態是固定的）
+:::
 
----
+## FAQ
 
-### **3. 數學運算子**
+**Q: JAVA_HOME 與 Path 有什麼差別？**  
+A: `JAVA_HOME` 指向 JDK 根目錄，供其他工具查找；`Path` 中的 `%JAVA_HOME%\bin` 讓系統找到 `java` 和 `javac` 指令。
 
-Java 支援多種數學運算：
+**Q: 為什麼執行 HelloWorld 不用加 .class？**  
+A: `java` 命令執行的是類別名稱，而非檔案名稱。編譯器已產生 `HelloWorld.class`，JVM 會自動找到。
 
-| 運算子 | 說明         |
-|--------|------------|
-| +      | 加法        |
-| -      | 減法        |
-| *      | 乘法        |
-| /      | 除法        |
-| %      | 取餘數      |
-| ++     | 遞增        |
-| --     | 遞減        |
+**Q: Chocolatey 與手動安裝有何差異？**  
+A: Chocolatey 會自動處理環境變數，適合熟悉命令列者；手動安裝需自行設定但更直觀。
 
-```java
-int a = 10, b = 3;
-System.out.println(a + b); // 13
-System.out.println(a - b); // 7
-System.out.println(a * b); // 30
-System.out.println(a / b); // 3（整數除法）
-System.out.println(a % b); // 1
-```
+## 延伸閱讀
 
----
+- [什麼是固定簽名](./什麼是固定簽名) - 理解 main 方法格式
+- [Java 基本型別與變數](./Integer和int的差別) - 深入型別系統
 
-### **4. 比較運算子**
+## 總結
 
-Java 比較運算子與 Python 類似：
+1. 安裝 JDK 後務必設定 `JAVA_HOME` 與 `Path`
+2. 用 `javac` 編譯 `.java`，用 `java` 執行類別
+3. HelloWorld 是驗證環境的最佳方式
+4. Windows 可用 Chocolatey、Mac 用 Homebrew 簡化安裝
 
-| 運算子 | 說明           |
-|--------|--------------|
-| <      | 大於          |
-| >=     | 大於等於       |
-| ==     | 等於          |
-| !=     | 不等於        |
-
-```java
-System.out.println(10 `、`>=`、`==`、`!=`)
-- **邏輯運算**：`&&`、`||`、`!`
-```
+:::tip 下一步
+環境設定完成後，建議學習 [Java 介面](./java-interface) 與 [Stream 操作](./JavaStream常見的操作)。
+:::

@@ -19,7 +19,7 @@ head:
 
 # Css Position 定位
 
-## TL;DR
+> 📝 TL;DR
 - `static`：預設，不可移動。
 - `relative`：保留原位，視覺位移。
 - `absolute`：脫離文流，相對最近定位祖先。

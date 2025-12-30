@@ -19,7 +19,7 @@ head:
 
 # Grid 使用教學
 
-## TL;DR
+> 📝 TL;DR
 - 宣告容器：`display: grid` + `grid-template-columns/rows` 或 `grid-auto-flow`。
 - 快速排版：`grid-template-areas` 命名區塊，或用 `grid-column` / `grid-row` 指定跨度。
 - 間距：`gap` 一次設定 row/column 間距。

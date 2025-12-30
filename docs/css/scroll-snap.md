@@ -21,7 +21,7 @@ head:
 
 CSS Scroll Snap 是一組用於定義滾動位置快照點的 CSS 屬性,可以提供更好的滾動體驗。
 
-## TL;DR
+> 📝 TL;DR
 - 用在水平/垂直滑動相簿、輪播、逐章閱讀，讓滾動自然「卡」在對齊點。
 - 容器: `scroll-snap-type` + (可選) `scroll-padding`，子項: `scroll-snap-align`，避免滑過: `scroll-snap-stop: always`。
 - 多用 `proximity` 讓體驗不生硬，`mandatory` 適合精準翻頁。

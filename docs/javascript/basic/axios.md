@@ -25,7 +25,7 @@ head:
 
 # Axios - next.js
 
-## TL;DR
+> 📝 TL;DR
 
 - Axios 是基於 Promise 的 HTTP 客戶端，支援攔截器、預設值、取消請求與自動 JSON 轉換。
 - 建議建立共用實例：設定 `baseURL`、`timeout`、標頭與錯誤攔截器。

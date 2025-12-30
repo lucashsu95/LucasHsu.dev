@@ -25,7 +25,7 @@ head:
 
 # 異同步 - Asynchronous
 
-## TL;DR
+> 📝 TL;DR
 
 - 同步會阻塞主執行緒；異步把耗時工作交給背景，主流程繼續跑。
 - Promise 是「未來值」的容器，`then/catch` 或 `async/await` 都在等它 resolve/reject。

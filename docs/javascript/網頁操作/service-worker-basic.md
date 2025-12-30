@@ -1,6 +1,6 @@
 # Service Worker 入門指南：從零開始掌握 Web 背景服務
 
-## TL;DR
+> 📝 TL;DR
 - Service Worker = 背景腳本，可攔截請求、快取、離線、推播；需 HTTPS 或 localhost。
 - PWA 安裝三件套：`manifest.json`、`sw.js`、有效 HTTPS；再通過 Lighthouse PWA 項目。
 - 最小步驟：1) 建立 manifest + icons；2) 在頁面註冊 SW；3) SW 安裝時快取核心資產與離線頁；4) 挑選快取策略 (Cache First / Network First / Stale-While-Revalidate)。

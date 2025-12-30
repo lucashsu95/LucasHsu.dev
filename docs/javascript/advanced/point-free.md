@@ -41,7 +41,7 @@ head:
 
 # 函數組合、Point-Free 與管線化（Pipe/Compose）
 
-## TL;DR
+> 📝 TL;DR
 - `compose` 自右向左、`pipe` 自左向右，本質都是把小函數串成「資料處理工廠」。
 - Point-Free 聚焦意圖、減少暫存變數，但過度會難除錯；加 `tap/log` 與好的命名降低風險。
 - 實務上可結合 Ramda 自動柯里化、RxJS/TaskEither 處理 async 與錯誤，資料大時用 lazy/transducer 減少重複迭代。

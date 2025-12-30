@@ -1,40 +1,37 @@
 ---
-outline: "deep"
-
+title: Java HashSet vs TreeSet 完整比較教學 | LucasHsu.dev  
+description: 深入比較Java HashSet與TreeSet的特性差異、效能表現和使用場景，附程式範例、時間複雜度分析與練習題。
 head:
-  - - meta
-    - name: author
-      content: 許恩綸
   - - meta
     - name: keywords
       content: java, hashset, treeset, set, 集合, 資料結構, 哈希表, 紅黑樹, java教學, 程式設計, 效能比較, 排序
-  - - meta
-    - name: description
-      content: 深入比較Java HashSet與TreeSet的特性差異、效能表現和使用場景。完整教學包含程式範例、時間複雜度分析，幫助你選擇最適合的Set集合實作。
   - - meta
     - property: og:title
       content: Java HashSet vs TreeSet 完整比較教學 | Set集合選擇指南
   - - meta
     - property: og:description
-      content: 深入比較Java HashSet與TreeSet的特性差異、效能表現和使用場景。完整教學包含程式範例、時間複雜度分析，幫助你選擇最適合的Set集合實作。
+      content: 深入比較Java HashSet與TreeSet的特性差異、效能表現和使用場景，附程式範例、時間複雜度分析與練習題。
   - - meta
     - property: og:type
       content: article
   - - meta
     - property: og:image
       content: https://lucashsu95.github.io/LucasHsu.dev/images/java-cover.jpg
-  - - meta
-    - name: twitter:card
-      content: summary_large_image
-  - - meta
-    - name: twitter:title
-      content: Java HashSet vs TreeSet 完整比較教學 | Set集合選擇指南
-  - - meta
-    - name: twitter:description
-      content: 深入比較Java HashSet與TreeSet的特性差異、效能表現和使用場景。完整教學包含程式範例、時間複雜度分析。
 ---
 
-# Java HashSet vs TreeSet 比較指南
+# Java HashSet vs TreeSet 完整比較教學
+
+> 📝 TL;DR HashSet 無序快速（O(1)）、TreeSet 有序稍慢（O(log n)）；前者適合去重查找，後者適合需排序與範圍查詢的場景。
+
+## 前置知識
+
+- 了解 Java 集合框架基本概念
+- 熟悉時間複雜度（O(1)、O(log n)、O(n)）
+- 知道何謂雜湊（Hash）與樹狀結構
+
+:::tip 新手友善
+不熟集合？先想「不重複的資料袋」，HashSet 像亂序快速存取，TreeSet 像自動排序書架。
+:::
 
 ## 什麼是 Java Set？
 
@@ -188,12 +185,89 @@ Set 集合的共同特性是元素不重複，但 HashSet 和 TreeSet 對「重�
 - 不關心資料順序，只希望快速存取 → **HashSet**
 - 需要自動排序集合，即使犧牲效能 → **TreeSet**
 
+## 實戰練習
+
+### 練習 1：基礎使用（簡單）
+
+建立 `HashSet<Integer>` 加入 `{5, 2, 8, 2, 5}`，輸出結果並說明為何是 3 個元素。
+
+:::details 答案
+```java
+Set<Integer> set = new HashSet<>();
+set.add(5);
+set.add(2);
+set.add(8);
+set.add(2); // 重複，不會加入
+set.add(5); // 重複，不會加入
+System.out.println(set); // 可能輸出 [8, 2, 5]（無序）
+```
+
+因為 Set 自動去重，所以只保留 3 個唯一值。
+:::
+
+### 練習 2：選擇合適的 Set（簡單）
+
+何時用 HashSet？何時用 TreeSet？列舉至少兩個適用場景。
+
+:::details 答案
+**HashSet**：去重、檢查是否存在、不在意順序的統計（如使用者 ID 集合）。  
+**TreeSet**：排行榜、範圍查詢（如 80-100 分學生）、需按順序迭代的資料。
+:::
+
+### 練習 3：自訂排序（中等）
+
+用 TreeSet 儲存 `Person` 物件，依年齡排序。若年齡相同則依姓名排序。
+
+:::details 💡 參考答案
+```java
+class Person {
+    String name;
+    int age;
+    Person(String n, int a) { name = n; age = a; }
+}
+
+Set<Person> people = new TreeSet<>(
+    Comparator.comparingInt((Person p) -> p.age)
+              .thenComparing(p -> p.name)
+);
+people.add(new Person("Alice", 30));
+people.add(new Person("Bob", 25));
+people.add(new Person("Charlie", 30));
+
+people.forEach(p -> System.out.println(p.name + ", " + p.age));
+// 輸出: Bob, 25 / Alice, 30 / Charlie, 30
+```
+:::
+
+## FAQ
+
+**Q: HashSet 可以存 null 嗎？**  
+A: 可以存一個 null。TreeSet 不允許 null（會拋出 `NullPointerException`）。
+
+**Q: 如何判斷元素重複？**  
+A: HashSet 用 `hashCode()` 與 `equals()`；TreeSet 用 `compareTo()` 或 `Comparator`。
+
+**Q: TreeSet 能做範圍查詢嗎？**  
+A: 可以，用 `subSet()`、`headSet()`、`tailSet()` 等方法。
+
+## 視覺化比較
+
+```mermaid
+graph LR
+    A[需要排序?] -->|是| B[TreeSet<br/>O(log n)]
+    A -->|否| C[只要去重?]
+    C -->|是| D[HashSet<br/>O(1)]
+    C -->|否| E[考慮LinkedHashSet<br/>O(1)且保插入順序]
+```
+
+## 延伸閱讀
+
+- [Array與List深入比較](./Array與List深入比較) - 理解陣列與列表差異
+- [Java interface](./java-interface) - 了解 Set 介面設計
+
 ## 總結
 
-HashSet 和 TreeSet 都遵循 Set 集合的「不儲存重複元素」核心原則，但實現方式大不相同：
-
-- **HashSet**：追求極致速度的「無序」魔法箱
-- **TreeSet**：能自動分類排序的「有序」圖書館書架  
-- **LinkedHashSet**：結合 HashSet 速度和插入順序維護的折中方案
-
-程式設計沒有萬能工具，只有最適合當下情境的選擇。根據對這兩者特性的理解，在面對去重或組織資料問題時，就能做出明智的決策。
+1. HashSet：無序、O(1)、適合快速去重與查找
+2. TreeSet：有序、O(log n)、適合排序與範圍查詢
+3. 選擇依據：效能優先用 HashSet，需排序用 TreeSet
+4. 自訂物件需實作 `Comparable` 或提供 `Comparator`

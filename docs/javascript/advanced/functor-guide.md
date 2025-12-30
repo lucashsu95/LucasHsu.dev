@@ -44,7 +44,7 @@ head:
 
 # Functor：容器與映射的藝術
 
-## TL;DR
+> 📝 TL;DR
 - Functor = 可 map 的容器；保持結構，只變散內容。
 - 需滿足同態法則 (`map(x=>x)=functor`) 和組合法則 (`map(f).map(g)=map(x=>g(f(x)))`) 。
 - 實務：Maybe (null 安全)、Box (組合轉換)、Task (非同步)；JS 陣列就是 Functor。

@@ -23,7 +23,7 @@ head:
 
 # 物件導向 OOP 以 JavaScript 為例
 
-## TL;DR
+> 📝 TL;DR
 - OOP 四大支柱：封裝（隱藏實作）、繼承（extends）、多型（同名方法不同行為）、抽象（模板類別）。
 - JavaScript 實作：class + constructor + private fields (#) + super() + extends。
 - 實務：Animal 抽象類 → Dog/Cat 繼承 → makeSound() 多型 → #weight 封裝。

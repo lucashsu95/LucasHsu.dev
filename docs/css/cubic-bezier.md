@@ -1,6 +1,6 @@
 ﻿# CSS 中的 cubic-bezier
 
->  TL;DR：`cubic-bezier(x1, y1, x2, y2)` 讓你自訂動畫速度曲線；`x1`、`x2` 必須介於 0~1，`y` 可超出 0~1 以產生彈跳/超衝效果。善用工具（cubic-bezier.com）先視覺化，再複製參數。
+> 📝 TL;DR：`cubic-bezier(x1, y1, x2, y2)` 讓你自訂動畫速度曲線；`x1`、`x2` 必須介於 0~1，`y` 可超出 0~1 以產生彈跳/超衝效果。善用工具（cubic-bezier.com）先視覺化，再複製參數。
 
 ## 前置知識
 - 已會 `transition`、`animation` 的基本用法

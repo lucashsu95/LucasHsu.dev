@@ -32,7 +32,7 @@ head:
 
 一個簡單的範例，記得在 HTML 檔裡引入 JS 檔的時候加上 `type="module"`。
 
-## TL;DR
+> 📝 TL;DR
 
 - ES modules 透過 `export` 暴露、`import` 引入；瀏覽器需 `type="module"`。
 - 命名匯出可匯出多個值；預設匯出每檔僅一個，用 `export default`。

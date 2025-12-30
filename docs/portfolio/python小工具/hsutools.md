@@ -4,9 +4,10 @@
 
 ## How to Start ?
 
-1. 下載後用**以系統管理員身份執行**`setup.exe`檔
-2. 就可以把資料夾刪除了
-3. 到需要使用的地方下指令(ex:hsu filem,hsu rename,hsu cpath,hsu cpath --path `<path-name>`)
+```shell
+pip install hsutools
+hsu --help
+```
 
 ## Introduce
 
@@ -59,19 +60,3 @@
 3. 在「取代後的文字」欄位輸入欲取代後的文字。
 4. 若需一併取代資料夾名稱，勾選「連同資料夾名稱一起取代」選項。
 5. 點擊「執行」按鈕開始取代。
-
-## Build
-
-```shell
-.venv\Scripts\activate
-pip install -r requirements.txt
-```
-
-```shell
-python src/build.py
-```
-
-儲存到`requirements.txt`
-```shell
-pip freeze > requirements.txt
-```

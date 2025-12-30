@@ -25,7 +25,7 @@ head:
 
 # CSS 響應式網頁設計(RWD)
 
-## TL;DR
+> 📝 TL;DR
 
 - RWD 透過媒體查詢在不同螢幕寬度套用不同樣式。
 - 常見策略：桌機優先（desktop-first）或手機優先（mobile-first）；推薦 mobile-first 搭配 `min-width` 斷點。

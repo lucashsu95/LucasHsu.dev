@@ -1,32 +1,45 @@
 ---
-outline: "deep"
-
 head:
   - - meta
-    - name: author
-      content: 許恩綸
-  - - meta
     - name: keywords
-      content: java-stream, java-stream-教學, java-stream-範例, java-stream-操作, java-stream-用法, java-list-stream, java-集合操作, java-8-stream, java-stream-filter, java-stream-map, java-stream-collect, java-stream-常見錯誤
+      content: java stream, stream api, filter, map, collect, reduce, java 8, 函數式程式設計, lambda, 集合操作
   - - meta
     - property: og:title
-      content: Day02 - Java Stream-常見操作與用法總整理
+      content: Java Stream 常見操作完整指南 | LucasHsu.dev
   - - meta
     - property: og:description
-      content: Java Stream-怎麼用？本篇整理 Java Stream-最常見的操作與範例，包含 filter、map、collect、reduce、distinct、sorted 等方法，並說明 Stream-特性與常見注意事項，幫助你快速上手 Java 8-函數式寫法。
+      content: 完整解析 Java Stream API filter、map、collect、reduce、sorted 等操作,附流程圖、練習題與常見陷阱。
   - - meta
     - property: og:type
       content: article
   - - meta
     - property: og:image
       content: https://lucashsu95.github.io/LucasHsu.dev/images/java-cover.jpg
+  - - meta
+    - property: title
+      content: Java Stream 常見操作完整指南 | LucasHsu.dev
+  - - meta
+    - property: description
+      content: 完整解析 Java Stream API - filter、map、collect、reduce、sorted 等操作,附流程圖、練習題與常見陷阱。
 ---
 
-# Java Steam
+# Java Stream 常見操作完整指南
 
-Java 的 `Stream` 是 Java 8 引入的一個強大工具，可以讓你更簡潔地操作集合資料（像 `List`, `Set` 等），類似 Python 的串列推導式或函數式操作。
+> 📝 TL;DR Stream 讓集合操作像水管串接: `list.stream().filter().map().collect()`。注意 Stream 只能用一次,終端操作後即失效。
 
-以下是 Java Stream 最常見的操作整理（附範例）：
+## 前置知識
+
+- 熟悉 Java 集合(List、Set、Map)
+- 了解 Lambda 表達式基本語法(`x -> x * 2`)
+- 知道何謂函數式程式設計
+
+:::tip 新手友善
+不熟 Lambda?先想成「匿名函式」,`x -> x * 2` 等同定義一個「輸入 x,回傳 x*2」的函式。
+:::
+
+## 什麼是 Stream?
+
+Stream 是 Java 8 引入的強大工具,讓集合操作更簡潔,類似 Python 的列表推導式。
 
 ## 🔹 基本結構
 
@@ -325,3 +338,98 @@ long count = list.stream().filter(x -> x % 2 == 0).count();
 
 * Stream 只能使用一次（終端操作後就不能再用）
 * Stream 不會改變原本的集合（除非你手動處理）
+
+## Stream 操作流程圖
+
+```mermaid
+flowchart LR
+    A[原始集合] --> B[stream]
+    B --> C[中間操作<br/>filter/map/sorted]
+    C --> D{終端操作<br/>collect/forEach}
+    D --> E[結果]
+    
+    style C fill:#e1f5ff
+    style D fill:#ffe1e1
+```
+
+## 實戰練習
+
+### 練習 1: 過濾與收集(簡單)⭐
+
+從 `[1,2,3,4,5]` 中篩選偶數並轉成 List。
+
+:::details 💡 參考答案
+```java
+List<Integer> list = Arrays.asList(1, 2, 3, 4, 5);
+List<Integer> evens = list.stream()
+    .filter(x -> x % 2 == 0)
+    .collect(Collectors.toList());
+// 結果: [2, 4]
+```
+:::
+
+### 練習 2: 轉換與統計(簡單)⭐
+
+將 `["apple","banana","cherry"]` 轉成長度列表,計算總和。
+
+:::details 💡 參考答案
+```java
+List<String> words = Arrays.asList("apple", "banana", "cherry");
+int totalLength = words.stream()
+    .mapToInt(String::length)
+    .sum();
+// 結果: 17 (5+6+6)
+```
+:::
+
+### 練習 3: 分組與計數(中等)⭐⭐
+
+有一個學生成績列表,依成績分組並計算各組人數:
+
+```java
+class Student {
+    String name;
+    int score;
+}
+List<Student> students = Arrays.asList(
+    new Student("Alice", 85),
+    new Student("Bob", 72),
+    new Student("Carol", 95)
+);
+```
+
+要求: 90分以上為 A,70-89為 B,70以下為 C。
+
+:::details 💡 參考答案
+```java
+Map<String, Long> gradeCount = students.stream()
+    .collect(Collectors.groupingBy(
+        s -> s.score >= 90 ? "A" : s.score >= 70 ? "B" : "C",
+        Collectors.counting()
+    ));
+// 結果: {A=1, B=2}
+```
+:::
+
+## FAQ
+
+**Q: Stream 和 for 迴圈哪個快?**  
+A: 小數據集差異不大,大數據可用 `parallelStream()` 平行化加速。但可讀性 Stream 更佳。
+
+**Q: 為什麼 Stream 只能用一次?**  
+A: 設計理念是「消耗性管道」,終端操作後資源釋放。需多次操作請重新建立 stream。
+
+**Q: collect() 一定要用嗎?**  
+A: 終端操作有多種:`collect`(收集)、`forEach`(遍歷)、`reduce`(歸納)等,依需求選擇。
+
+## 延伸閱讀
+
+- [Optional 使用指南](#) - 處理 findFirst/findAny 回傳值
+- [平行流性能優化](#) - parallelStream 實戰技巧
+
+## 總結
+
+1. Stream 採用流水線模式:建立→中間操作→終端操作
+2. 常用操作:filter(過濾)、map(轉換)、collect(收集)
+3. 終端操作後 Stream 失效,需重新建立
+4. 善用方法參考(如 `String::length`)提升可讀性

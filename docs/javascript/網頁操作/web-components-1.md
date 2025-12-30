@@ -1,6 +1,6 @@
 # Web Components 基礎篇：從零開始掌握原生元件開發
 
-## TL;DR
+> 📝 TL;DR
 - 由 Custom Elements + Shadow DOM + Templates/Slots 組成，瀏覽器原生支援。
 - 元件名稱必須有連字符，Shadow DOM 提供樣式隔離，事件仍可冒泡。
 - 適合封裝跨框架 UI，並可與框架共存（自定義元素就是一個 DOM 節點）。

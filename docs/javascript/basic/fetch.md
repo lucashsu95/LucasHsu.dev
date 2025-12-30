@@ -27,7 +27,7 @@ head:
 
 可以用上一篇[異同步 - Asynchronous](./asynchronous)的概念繼續深入...
 
-## TL;DR
+> 📝 TL;DR
 
 - `fetch(url, options)` 回傳 Promise，預設方法為 GET。
 - 常見步驟：送出請求 → `response.ok` 檢查 → 轉格式 (`json()`/`text()`) → 處理錯誤。

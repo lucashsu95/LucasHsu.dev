@@ -22,7 +22,7 @@ head:
 
 # TodoList 待辦事項清單
 
-## TL;DR
+> 📝 TL;DR
 - 先做 MVP：新增/更新/刪除 + 內存狀態；再加完成狀態、篩選、永續化。
 - React/Vue：使用單一 state 作為真相來源；新增/編輯/刪除都要不可變更新。
 - 原生 JS：事件委派 + LocalStorage；避免空白與重複項。

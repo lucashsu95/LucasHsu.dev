@@ -44,7 +44,7 @@ head:
 
 # Monad：函數式程式設計的終極抽象
 
-## TL;DR
+> 📝 TL;DR
 - Monad = 有 flatMap 的 Functor；解決「回傳容器的函數」嵌套問題。
 - 實務：Maybe (空值)、Either (錯誤處理)、IO (副作用)、Promise (非同步)。
 - flatMap = 應用函數 + 攤平；可連接可能失敗/非同步/有副作用的操作。

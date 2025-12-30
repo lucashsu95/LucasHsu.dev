@@ -1,6 +1,6 @@
 # @property
 
-## TL;DR
+> 📝 TL;DR
 - 定義 CSS 變數型別/初始值/繼承性，讓自訂屬性可動畫。
 - 關鍵欄位：`syntax`、`inherits`、`initial-value`。
 - 常見用途：可動畫色彩/長度/角度、自訂旋轉/漸層停駐點。

@@ -25,7 +25,7 @@ head:
 
 > 本文將「索引」觀念與前端離線快取 (Service Worker / PWA) 類比，幫助剛接觸後端資料庫的新手也能快速理解「**為何加索引像是替資料上快取**」。全篇以 MySQL 為例，但概念同樣適用於 PostgreSQL、SQL Server 等主流 RDBMS。
 
-## 📋 文章目錄
+## 文章目錄
 
 1. [索引 ≈ PWA 快取：觀念對照圖](#索引--pwa-快取觀念對照圖)
 2. [B-Tree／B+Tree：關聯式資料庫的預設索引](#b-treeb+tree關聯式資料庫的預設索引)
@@ -298,11 +298,3 @@ OPTIMIZE TABLE table_name;
 - [MySQL InnoDB B+Tree 深度解析](https://dev.mysql.com/doc/refman/8.0/en/innodb-index-types.html)
 - [PostgreSQL 索引類型完整指南](https://www.postgresql.org/docs/current/indexes-types.html)
 - [High Performance MySQL 第三版](https://www.oreilly.com/library/view/high-performance-mysql/9781449332471/)
-
----
-
-**📝 作者資訊：** 本文由許恩綸撰寫，專注於資料庫效能優化與後端架構設計。
-
-**🔄 最後更新：** 2025年7月5日
-
-**⚡ 效能提升：** 透過本文技巧，可將查詢效能提升 **60-1500倍**！

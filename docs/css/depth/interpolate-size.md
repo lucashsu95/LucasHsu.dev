@@ -1,6 +1,6 @@
 # interpolate-size
 
-## TL;DR
+> 📝 TL;DR
 - 讓 `height/width` 在 `auto` 與固定值間可過渡：`interpolate-size: allow-keywords;`
 - 放在 `:root` 或容器上啟用；仍屬實驗性。
 - 常見場景：手風琴展開/收合、懸浮卡片高度切換。

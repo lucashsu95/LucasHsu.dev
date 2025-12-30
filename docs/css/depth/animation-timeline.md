@@ -19,7 +19,7 @@ head:
 
 # animation-timeline
 
-## TL;DR
+> 📝 TL;DR
 - `animation-timeline` 用來換掉預設時間軸，最常見：`scroll()`、`view()`。
 - `scroll()`：動畫進度跟滾動同步，做滾動觸發漸變/位移。
 - `view()`：依元素進出視口程度推進動畫，常用於進場效果。

@@ -29,7 +29,7 @@ head:
 
 除了 `GET` 方法，HTTP 還有其他多種請求方法，每種方法都有其特定的用途和行為。以下是一些常見的 HTTP 請求方法：
 
-## TL;DR
+> 📝 TL;DR
 
 - GET 讀取、POST 新增、PUT 取代、PATCH 局部更新、DELETE 刪除。
 - 安全性：GET/HEAD/OPTIONS/TRACE 為 safe；幂等性：GET/PUT/DELETE/HEAD/OPTIONS/TRACE 為 idempotent。

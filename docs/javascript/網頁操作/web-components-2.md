@@ -1,6 +1,6 @@
 # Web Components 實戰篇：企業級應用與最佳實踐
 
-## TL;DR
+> 📝 TL;DR
 - 延續基礎篇：已理解 Custom Elements/Shadow DOM/Slots 後，開始談架構、封裝、發佈與測試。
 - 關鍵：抽出 BaseElement、標準化 API（屬性/事件/slots/CSS vars）、監控性能、加上 CI 測試。
 - 與框架共存：自定義元素就是 DOM，React/Vue/Angular 都能直接使用；確保屬性用小寫並使用事件橋接。

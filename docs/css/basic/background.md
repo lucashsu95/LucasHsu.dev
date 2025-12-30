@@ -19,7 +19,7 @@ head:
 
 # 背景圖片
 
-## TL;DR
+> 📝 TL;DR
 - 一行縮寫：`background: url(img) no-repeat center/cover fixed;`。
 - 常見順序：色 > 圖 > repeat > position / size > attachment。
 - 視差感：`background-attachment: fixed;`；滿版：`background-size: cover;`。

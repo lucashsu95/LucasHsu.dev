@@ -22,7 +22,7 @@ head:
 
 # Node.js fs
 
-## TL;DR
+> 📝 TL;DR
 - `fs.readFile()`: 讀取檔案內容。
 - `fs.writeFile()`: 建立/覆寫檔案。
 - `fs.appendFile()`: 追加內容到檔案末尾。
