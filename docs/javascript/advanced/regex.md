@@ -15,6 +15,9 @@ head:
   - - meta
     - property: og:type
       content: article
+  - - meta
+    - property: og:image
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/javascript-cover.jpg
 ---
 
 # JavaScript 正規表達式（Regex）

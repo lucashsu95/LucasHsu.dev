@@ -15,11 +15,14 @@ head:
   - - meta
     - property: og:type
       content: article
+  - - meta
+    - property: og:image
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/git-cover.jpg
 ---
 
 # Git Tag 
 
->  **TL;DR**：Git 標籤（Tag）就像「遊戲存檔點」或「里程碑」，用來標記重要版本（如 v1.0.0）。兩種類型：輕量標籤（lightweight）只是便利貼、附註標籤（annotated）是正式紀念碑（含作者/日期/訊息）。建議發布版本用附註標籤（`git tag -a v1.0.0 -m "message"`）。標籤需單獨推送（`git push origin <tag-name>`），不會跟著 commit 自動上傳！
+> 📝 TL;DR：Git 標籤（Tag）就像「遊戲存檔點」或「里程碑」，用來標記重要版本（如 v1.0.0）。兩種類型：輕量標籤（lightweight）只是便利貼、附註標籤（annotated）是正式紀念碑（含作者/日期/訊息）。建議發布版本用附註標籤（`git tag -a v1.0.0 -m "message"`）。標籤需單獨推送（`git push origin <tag-name>`），不會跟著 commit 自動上傳！
 
 ##  前置知識
 - 了解 Git commit 與分支

@@ -18,12 +18,12 @@ head:
       content: article
   - - meta
     - property: og:image
-      content: ./imgs/git-cover.png
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/git-cover.jpg
 ---
 
 # git commit 提交與最佳實踐
 
->  TL;DR：`git commit` 就像把你的程式碼打包成快照存進 Git 的「時光寶盒」。記得先 `git status` 檢查、`git add` 選檔、再 `commit` 留言。切記：`--hard` 這個核彈按鈕不要亂按！要反悔時，先找溫柔的 `revert`，真的沒辦法再考慮狠心的 `reset`。
+>  📝 TL;DR：`git commit` 就像把你的程式碼打包成快照存進 Git 的「時光寶盒」。記得先 `git status` 檢查、`git add` 選檔、再 `commit` 留言。切記：`--hard` 這個核彈按鈕不要亂按！要反悔時，先找溫柔的 `revert`，真的沒辦法再考慮狠心的 `reset`。
 
 ##  前置知識
 - 知道 Git 的三個家：工作區（你的檔案夾）、暫存區（候車室）、本地倉庫（永久倉庫）
@@ -108,11 +108,11 @@ git reset --hard HEAD~1
 
 ### 決策表（選錯會被隊友打）
 
-| 情境 | 推薦指令 | 原因 |
-|------|-----------|------|
-| 回退已推送的錯誤 | `git revert` | 保留歷史，大家都能看到你修正了啥  |
-| 清除本地尚未推送的提交 | `git reset --hard` | 重寫歷史，反正還沒人知道  |
-| 只想取消某個檔案的變更 | `git restore <file>` | 不動提交歷史，只改檔案 |
+| 情境                   | 推薦指令             | 原因                             |
+| ---------------------- | -------------------- | -------------------------------- |
+| 回退已推送的錯誤       | `git revert`         | 保留歷史，大家都能看到你修正了啥 |
+| 清除本地尚未推送的提交 | `git reset --hard`   | 重寫歷史，反正還沒人知道         |
+| 只想取消某個檔案的變更 | `git restore <file>` | 不動提交歷史，只改檔案           |
 
 ### 記住：
 - **Revert** = 「抱歉我錯了，我用新的 commit 來修正」（光明正大）

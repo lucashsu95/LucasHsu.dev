@@ -15,11 +15,14 @@ head:
   - - meta
     - property: og:type
       content: article
+  - - meta
+    - property: og:image
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/git-cover.jpg
 ---
 
 # Git 暫存區
 
->  **TL;DR**：Git 有三個區域：工作目錄（你改檔案的地方）、暫存區（準備上台表演的後台）、儲存庫（正式演出的舞台）。`git add` 把演員送到後台、`git restore --staged` 叫演員回休息室、`git stash` 是「先把道具藏起來」的緊急按鈕。理解暫存區 = 掌握 Git 的靈魂！
+>  📝 TL;DR：Git 有三個區域：工作目錄（你改檔案的地方）、暫存區（準備上台表演的後台）、儲存庫（正式演出的舞台）。`git add` 把演員送到後台、`git restore --staged` 叫演員回休息室、`git stash` 是「先把道具藏起來」的緊急按鈕。理解暫存區 = 掌握 Git 的靈魂！
 
 ##  前置知識
 - 已安裝 Git 並初始化儲存庫（`git init`）
@@ -40,12 +43,12 @@ flowchart LR
 
 ### 區域說明
 
-| 區域 | 英文名稱 | 狀態 | 指令 |
-|------|---------|------|------|
-| **工作目錄** | Working Directory | 修改檔案的地方 | 編輯器操作 |
-| **暫存區** | Staging Area / Index | 準備提交的檔案 | `git add` |
-| **儲存庫** | Repository | 已提交的歷史記錄 | `git commit` |
-| **暫存堆疊** | Stash | 臨時儲存的變更 | `git stash` |
+| 區域         | 英文名稱             | 狀態             | 指令         |
+| ------------ | -------------------- | ---------------- | ------------ |
+| **工作目錄** | Working Directory    | 修改檔案的地方   | 編輯器操作   |
+| **暫存區**   | Staging Area / Index | 準備提交的檔案   | `git add`    |
+| **儲存庫**   | Repository           | 已提交的歷史記錄 | `git commit` |
+| **暫存堆疊** | Stash                | 臨時儲存的變更   | `git stash`  |
 
  **生活化比喻**：
 - **工作目錄** = 排練室（你在這裡練習、修改）

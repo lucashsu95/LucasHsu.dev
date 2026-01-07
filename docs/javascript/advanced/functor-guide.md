@@ -18,7 +18,7 @@ head:
       content: article
   - - meta
     - property: og:image
-      content: https://lucashsu95.github.io/LucasHsu.dev/images/javascript-cover.png
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/javascript-cover.jpg
   - - meta
     - name: description
       content: 完整的 Functor 函子教學指南，學習容器與映射的藝術，包含實用的 Maybe、Box、Task Functor 實現和應用範例。

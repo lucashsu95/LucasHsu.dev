@@ -1,3 +1,10 @@
+---
+head:
+  - - meta
+    - property: og:image
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/sql-cover.jpg
+---
+
 # SQL CASE...WHEN...THEN
 
 CASE...WHEN...THEN 是 SQL 中的條件表達式,用於根據特定條件返回不同的結果。這裡是一個基本的語法結構和簡單的使用示例:

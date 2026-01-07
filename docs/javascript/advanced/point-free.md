@@ -18,7 +18,7 @@ head:
       content: article
   - - meta
     - property: og:image
-      content: https://lucashsu95.github.io/LucasHsu.dev/images/javascript-cover.png
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/javascript-cover.jpg
   - - meta
     - property: og:url
       content: https://lucashsu.dev/javascript/advanced/functional-composition

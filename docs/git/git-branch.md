@@ -18,12 +18,12 @@ head:
       content: article
   - - meta
     - property: og:image
-      content: ./imgs/git-cover.png
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/git-cover.jpg
 ---
 
 # Git Branch 分支管理 
 
->  TL;DR：分支就像平行宇宙，讓多人可以各自開發不同功能不打架！基本套路：`git branch <name>` 創造分支  `git checkout <name>` 穿越過去  開發完成後 `merge` 或 `rebase` 合體回主線。遠端分支用 `git push origin <branch>` 發射出去 
+>  📝 TL;DR：分支就像平行宇宙，讓多人可以各自開發不同功能不打架！基本套路：`git branch <name>` 創造分支  `git checkout <name>` 穿越過去  開發完成後 `merge` 或 `rebase` 合體回主線。遠端分支用 `git push origin <branch>` 發射出去 
 
 ##  前置知識
 - 了解 Git 基本操作：add、commit、log

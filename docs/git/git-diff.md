@@ -15,11 +15,14 @@ head:
   - - meta
     - property: og:type
       content: article
+  - - meta
+    - property: og:image
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/git-cover.jpg
 ---
 
 # Git Diff
 
->  **TL;DR**：`git diff` 是「程式碼找碴遊戲」的神器！無參數看「工作目錄 vs 暫存區」、`--staged` 看「暫存區 vs 最後存檔」、`commit1 commit2` 比較「兩個時空的差異」。可以指定檔案（`-- path/to/file`）、用 `--word-diff` 顯示「哪個字被偷改」。紅色 `-` 是刪除、綠色 `+` 是新增，就像偵探辦案一樣精彩！
+>  📝 TL;DR：`git diff` 是「程式碼找碴遊戲」的神器！無參數看「工作目錄 vs 暫存區」、`--staged` 看「暫存區 vs 最後存檔」、`commit1 commit2` 比較「兩個時空的差異」。可以指定檔案（`-- path/to/file`）、用 `--word-diff` 顯示「哪個字被偷改」。紅色 `-` 是刪除、綠色 `+` 是新增，就像偵探辦案一樣精彩！
 
 ##  前置知識
 - 了解 Git 三大區域（工作目錄、暫存區、儲存庫）
@@ -38,13 +41,13 @@ graph TB
 
 ### 比較類型速查表
 
-| 指令 | 比較對象 | 說明 |
-|------|---------|------|
-| `git diff` | 工作目錄 vs 暫存區 | 查看**未暫存**的變更 |
-| `git diff --staged` | 暫存區 vs HEAD | 查看**即將提交**的變更 |
-| `git diff HEAD` | 工作目錄 vs HEAD | 查看**所有未提交**的變更 |
-| `git diff commit1 commit2` | 兩個 commits | 比較歷史版本 |
-| `git diff branch1 branch2` | 兩個分支 | 比較分支差異 |
+| 指令                       | 比較對象           | 說明                     |
+| -------------------------- | ------------------ | ------------------------ |
+| `git diff`                 | 工作目錄 vs 暫存區 | 查看**未暫存**的變更     |
+| `git diff --staged`        | 暫存區 vs HEAD     | 查看**即將提交**的變更   |
+| `git diff HEAD`            | 工作目錄 vs HEAD   | 查看**所有未提交**的變更 |
+| `git diff commit1 commit2` | 兩個 commits       | 比較歷史版本             |
+| `git diff branch1 branch2` | 兩個分支           | 比較分支差異             |
 
  **生活化比喻**：
 - `git diff` = 「草稿 vs 即將交出去的作業」（還沒放進書包的改動）

@@ -15,11 +15,14 @@ head:
   - - meta
     - property: og:type
       content: article
+  - - meta
+    - property: og:image
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/git-cover.jpg
 ---
 
 # 移除 Git 認證教學 
 
->  **TL;DR**：Windows 會在認證管理員偷偷儲存 GitHub 帳號密碼（就像瀏覽器記住密碼一樣）。切換帳號或遇到權限問題時，需要手動「清除記憶」。路徑：控制台  使用者帳戶  認證管理員  Windows 認證  移除 `git:https://github.com`。就像「登出帳號」一樣簡單，但很多人不知道在哪裡登出！
+>  📝 TL;DR：Windows 會在認證管理員偷偷儲存 GitHub 帳號密碼（就像瀏覽器記住密碼一樣）。切換帳號或遇到權限問題時，需要手動「清除記憶」。路徑：控制台  使用者帳戶  認證管理員  Windows 認證  移除 `git:https://github.com`。就像「登出帳號」一樣簡單，但很多人不知道在哪裡登出！
 
 ##  前置知識
 - 知道如何開啟 Windows 控制台

@@ -16,11 +16,14 @@ head:
   - - meta
     - property: og:type
       content: article
+  - - meta
+    - property: og:image
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/git-cover.jpg
 ---
 
 # Git Log
 
->  **TL;DR**：`git log` 是「時光相簿」，紀錄所有 commit 歷史（或說是犯罪紀錄？）。常用選項：`--oneline`（一行簡潔版）、`--graph`（畫出家譜圖）、`--follow`（追蹤改名檔案）。查看特定檔案用 `git log -- <file>`、查看「誰寫的這行爛 code」用 `git blame`、查看「某次 commit 改了什麼」用 `git show`。考古必備神器！
+>  📝 TL;DR：`git log` 是「時光相簿」，紀錄所有 commit 歷史（或說是犯罪紀錄？）。常用選項：`--oneline`（一行簡潔版）、`--graph`（畫出家譜圖）、`--follow`（追蹤改名檔案）。查看特定檔案用 `git log -- <file>`、查看「誰寫的這行爛 code」用 `git blame`、查看「某次 commit 改了什麼」用 `git show`。考古必備神器！
 
 ##  前置知識
 - 了解 Git commit 概念
@@ -496,7 +499,7 @@ cat > "$output_file" << EOF
 ## Commits
 
 | Date | Author | Message |
-|------|--------|---------|
+| ---- | ------ | ------- |
 EOF
 
 git log --pretty=format:"| %ad | %an | %s |" --date=short --since="last monday" >> "$output_file"

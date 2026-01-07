@@ -18,12 +18,12 @@ head:
       content: article
   - - meta
     - property: og:image
-      content: ./imgs/git-cover.png
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/git-cover.jpg
 ---
 
 # Git Push 與 Fetch
 
->  TL;DR：`git fetch` 像是去郵局領包裹但不拆封（下載遠端更新但不合併）；`git push` 是把你的作品寄出去（上傳本地提交到遠端）。首次推送用 `-u` 建立追蹤，之後直接 `push` 就行。Push 失敗通常是遠端有新提交，先 `pull` 再推。強制推送 `-f` 會覆蓋遠端，慎用！
+>  📝 TL;DR：`git fetch` 像是去郵局領包裹但不拆封（下載遠端更新但不合併）；`git push` 是把你的作品寄出去（上傳本地提交到遠端）。首次推送用 `-u` 建立追蹤，之後直接 `push` 就行。Push 失敗通常是遠端有新提交，先 `pull` 再推。強制推送 `-f` 會覆蓋遠端，慎用！
 
 ##  前置知識
 - 了解本地與遠端倉庫的差異
@@ -182,10 +182,10 @@ git push --force-with-lease origin main
 
 ##  Fetch vs Pull 的差異
 
-| 指令 | 動作 | 安全性 | 適用情境 |
-|------|------|--------|----------|
-| `git fetch` | 只下載 | 高（安全第一） | 先看看遠端有什麼更新 |
-| `git pull` | 下載+合併 | 中（一次到位） | 確定要立刻合併遠端更新 |
+| 指令        | 動作      | 安全性         | 適用情境               |
+| ----------- | --------- | -------------- | ---------------------- |
+| `git fetch` | 只下載    | 高（安全第一） | 先看看遠端有什麼更新   |
+| `git pull`  | 下載+合併 | 中（一次到位） | 確定要立刻合併遠端更新 |
 
 `git pull` 等同於（組合技）：
 ```shell

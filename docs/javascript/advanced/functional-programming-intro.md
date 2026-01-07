@@ -18,7 +18,7 @@ head:
       content: article
   - - meta
     - property: og:image
-      content: https://lucashsu95.github.io/LucasHsu.dev/images/javascript-cover.png
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/javascript-cover.jpg
   - - meta
     - name: description
       content: 學習函數式程式設計的核心概念：純函數、不可變性、高階函數。掌握JavaScript中map、filter、reduce方法的實際應用，適合初學者入門。

@@ -1,3 +1,10 @@
+---
+head:
+  - - meta
+    - property: og:image
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/javascript-cover.jpg
+---
+
 # 簡易計數器
 
 <SecretPage password="簡易計數器-ans" />

@@ -18,7 +18,7 @@ head:
       content: article
   - - meta
     - property: og:image
-      content: https://lucashsu95.github.io/LucasHsu.dev/images/javascript-cover.png
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/javascript-cover.jpg
   - - meta
     - name: description
       content: 完整的 Currying 柯里化教學指南，學習將多參數函數轉換為單參數函數鏈的技術，提升程式碼重用性和靈活性。

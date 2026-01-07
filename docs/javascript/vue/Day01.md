@@ -1,3 +1,10 @@
+---
+head:
+  - - meta
+    - property: og:image
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/javascript-cover.jpg
+---
+
 # Vue 新手上路 Day01
 
 先準備好html，vue是一個漸進式框架，可以直接使用cdn來做學習，不用一開始就接觸一大包

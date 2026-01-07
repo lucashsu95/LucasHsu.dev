@@ -15,11 +15,14 @@ head:
   - - meta
     - property: og:type
       content: article
+  - - meta
+    - property: og:image
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/git-cover.jpg
 ---
 
 # Git Fork
 
->  **TL;DR**：Fork 就像「開分店」或「創建平行世界」，把別人的專案複製一份到你的 GitHub。流程：Fork  Clone  設定 upstream  開發  同步上游  Push  Pull Request。關鍵咒語：`git remote add upstream <原作者 URL>` + `git fetch upstream` + `git merge upstream/main`。記住：Origin 是你的分店、Upstream 是總公司！
+>  📝 TL;DR：Fork 就像「開分店」或「創建平行世界」，把別人的專案複製一份到你的 GitHub。流程：Fork  Clone  設定 upstream  開發  同步上游  Push  Pull Request。關鍵咒語：`git remote add upstream <原作者 URL>` + `git fetch upstream` + `git merge upstream/main`。記住：Origin 是你的分店、Upstream 是總公司！
 
 ##  前置知識
 - 了解 Git 基本指令（clone、push、pull）

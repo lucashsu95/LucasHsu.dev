@@ -1,3 +1,10 @@
+---
+head:
+  - - meta
+    - property: og:image
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/javascript-cover.jpg
+---
+
 # 終極密碼 答案
 
 <SecretPage password="終極密碼-ans" />

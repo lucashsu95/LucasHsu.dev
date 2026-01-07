@@ -18,7 +18,7 @@ head:
       content: article
   - - meta
     - property: og:image
-      content: https://lucashsu95.github.io/LucasHsu.dev/images/javascript-cover.png
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/javascript-cover.jpg
   - - meta
     - name: description
       content: 完整的 Monad 單子教學指南，學習函數式程式設計的終極抽象，包含錯誤處理、副作用管理和計算組合的實用範例。

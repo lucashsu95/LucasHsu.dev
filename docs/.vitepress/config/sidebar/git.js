@@ -14,9 +14,24 @@ export function sidebarGit() {
           activeMatch: "/git/git-staging",
         },
         {
-          text: "git commit 提交與最佳實踐",
+          text: "Git commit 提交與最佳實踐",
           link: "/git/git-commit",
           activeMatch: "/git/git-commit",
+        },
+        {
+          text: "Git Log",
+          link: "/git/git-log",
+          activeMatch: "/git/git-log",
+        },
+        {
+          text: "Git Show",
+          link: "/git/git-show",
+          activeMatch: "/git/git-show",
+        },
+        {
+          text: "Git Diff",
+          link: "/git/git-diff",
+          activeMatch: "/git/git-diff",
         },
         {
           text: "Git Push 與 Fetch",
@@ -42,11 +57,6 @@ export function sidebarGit() {
           text: "Git Clone",
           link: "/git/git-clone",
           activeMatch: "/git/git-clone",
-        },
-        {
-          text: "Git Diff",
-          link: "/git/git-diff",
-          activeMatch: "/git/git-diff",
         },
         {
           text: "Git Fork",

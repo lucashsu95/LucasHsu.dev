@@ -16,11 +16,14 @@ head:
   - - meta
     - property: og:type
       content: article
+  - - meta
+    - property: og:image
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/git-cover.jpg
 ---
 
 # Git 安裝與初始設定
 
->  **TL;DR**：安裝 Git  設定使用者（`git config --global user.name/email`） 產生 SSH 金鑰（`ssh-keygen`） 加到 GitHub  測試連線（`ssh -T git@github.com`）。Windows 使用者要注意：先檢查認證管理員、移除舊帳號，避免「登入到別人的 GitHub」的尷尬情況！就像遊戲「新手入門教學」，完成這關才能開始冒險！
+>  📝 TL;DR：安裝 Git  設定使用者（`git config --global user.name/email`） 產生 SSH 金鑰（`ssh-keygen`） 加到 GitHub  測試連線（`ssh -T git@github.com`）。Windows 使用者要注意：先檢查認證管理員、移除舊帳號，避免「登入到別人的 GitHub」的尷尬情況！就像遊戲「新手入門教學」，完成這關才能開始冒險！
 
 ##  前置知識
 - 知道如何開啟終端機/命令提示字元

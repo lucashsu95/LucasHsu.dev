@@ -1,3 +1,10 @@
+---
+head:
+  - - meta
+    - property: og:image
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/javascript-cover.jpg
+---
+
 # Service Worker 入門指南：從零開始掌握 Web 背景服務
 
 > 📝 TL;DR

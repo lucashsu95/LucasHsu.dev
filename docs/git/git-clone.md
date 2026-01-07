@@ -15,11 +15,14 @@ head:
   - - meta
     - property: og:type
       content: article
+  - - meta
+    - property: og:image
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/git-cover.jpg
 ---
 
 # Git Clone
 
->  **TL;DR**：`git clone` 就像用魔法複製別人的專案到你的電腦！HTTPS 簡單但要輸密碼（就像每次進門都要敲門），SSH 設定一次就永久免密碼（像有鑰匙直接開門）。`--depth` 可以只下載「最近幾次存檔」，超適合「我只想看最新版不想考古」的人！
+>  📝 TL;DR：`git clone` 就像用魔法複製別人的專案到你的電腦！HTTPS 簡單但要輸密碼（就像每次進門都要敲門），SSH 設定一次就永久免密碼（像有鑰匙直接開門）。`--depth` 可以只下載「最近幾次存檔」，超適合「我只想看最新版不想考古」的人！
 
 ##  前置知識
 - 已安裝 Git（[安裝教學](./初次下載git.md)）
@@ -40,12 +43,12 @@ sequenceDiagram
 
 **Clone vs Download ZIP 差異：**
 
-| 比較項目 | git clone | Download ZIP |
-|---------|-----------|--------------|
-| Git 歷史 |  包含完整 commit 歷史 |  只有當前檔案 |
-| .git 資料夾 |  有 |  無 |
-| 可推送變更 |  可 git push |  無法推送 |
-| 大小 | 較大（含歷史） | 較小（僅檔案） |
+| 比較項目    | git clone            | Download ZIP   |
+| ----------- | -------------------- | -------------- |
+| Git 歷史    | 包含完整 commit 歷史 | 只有當前檔案   |
+| .git 資料夾 | 有                   | 無             |
+| 可推送變更  | 可 git push          | 無法推送       |
+| 大小        | 較大（含歷史）       | 較小（僅檔案） |
 
  **小技巧**：如果你只是想「看看程式碼長怎樣」，下載 ZIP 就夠了。但如果要「參與開發、推送變更」，一定要用 `git clone`！
 
