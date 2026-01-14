@@ -24,6 +24,53 @@ head:
 
 >  📝 TL;DR：`git diff` 是「程式碼找碴遊戲」的神器！無參數看「工作目錄 vs 暫存區」、`--staged` 看「暫存區 vs 最後存檔」、`commit1 commit2` 比較「兩個時空的差異」。可以指定檔案（`-- path/to/file`）、用 `--word-diff` 顯示「哪個字被偷改」。紅色 `-` 是刪除、綠色 `+` 是新增，就像偵探辦案一樣精彩！
 
+## 開場情境：部署前的驚魂記
+
+**情境：** 週五下午 5:50，你準備部署到正式環境。突然收到主管訊息：「等等！先確認你這次改了什麼，別像上次一樣把測試用的 `console.log` 也推上去。」
+
+你心想：「我改了十幾個檔案，哪記得每個改了什麼...」
+
+**這時 `git diff` 就是你的救命符！**
+
+```bash
+# 1. 先看看「還沒加入暫存區」的改動（可能有忘記的測試程式碼）
+git diff
+```
+
+**輸出：**
+```diff
+diff --git a/src/utils.js b/src/utils.js
++   console.log('DEBUG: total =', total);  // ← 糟糕！忘記刪除
+```
+
+```bash
+# 2. 刪除測試用程式碼後，暫存所有檔案
+git add .
+
+# 3. 最後檢查「即將提交」的內容（最重要的一步！）
+git diff --staged
+```
+
+**輸出：**
+```diff
+diff --git a/src/api/payment.js b/src/api/payment.js
+-  const API_KEY = 'test_1234567890';
++  const API_KEY = process.env.PAYMENT_API_KEY;  // ✓ 正確使用環境變數
+```
+
+**💾 確認無誤後才提交：**
+```bash
+git commit -m "feat: 整合金流系統"
+```
+
+**🎯 這個情境展示了：**
+1. `git diff`（無參數）= 找出「忘記處理的改動」
+2. `git diff --staged` = 「最後檢查即將提交的內容」（避免災難）
+
+💡 **養成習慣：每次 commit 前一定先 `git diff --staged`，就像「送出作業前再檢查一遍」！**
+
+---
+
 ##  前置知識
 - 了解 Git 三大區域（工作目錄、暫存區、儲存庫）
 - 知道基本 Git 指令（add、commit）
@@ -261,6 +308,8 @@ git diff -U0
 
 ### 情境 1：提交前檢查
 
+**情境：** 你剛完成一個功能，修改了 5 個檔案，但記不清每個檔案改了什麼。
+
 ```bash
 # 1. 修改檔案後查看差異
 git diff
@@ -305,6 +354,146 @@ git diff --name-status main feature
 # 只看 src/ 資料夾的差異
 git diff main feature -- src/
 ```
+
+---
+
+### 情境 4：Code Review 前的自我檢查（超實用！）
+
+**情境：** 你要發 Pull Request 前，想先自己 review 一遍，確保：
+- 沒有多餘的空行
+- 沒有 debug 用的 `console.log`
+- 程式碼符合規範
+
+```bash
+# 1. 比較你的分支與 main 的差異
+git diff main...HEAD
+
+# 2. 只看檔案清單（快速掃描）
+git diff --name-status main...HEAD
+
+# 3. 檢查是否有敏感資訊
+git diff main...HEAD | grep -i -E '(password|secret|api_key|token)'
+
+# 4. 檢查是否有 console.log
+git diff main...HEAD | grep 'console\.log'
+```
+
+💡 **三個點 `...` 的意義：** `main...HEAD` 表示「HEAD 相對於『與 main 的共同祖先』的差異」，也就是「你在這個分支上做的所有改動」。
+
+---
+
+### 情境 5：衝突解決時比較版本
+
+**情境：** Merge 時遇到衝突，你想看「我的版本」和「別人的版本」分別是什麼。
+
+```bash
+# 假設正在解決 src/config.js 的衝突
+
+# 查看「我的版本」（當前分支）
+git show :2:src/config.js
+
+# 查看「別人的版本」（要合併進來的分支）
+git show :3:src/config.js
+
+# 比較兩個版本
+git diff :2:src/config.js :3:src/config.js
+```
+
+**衝突標記解釋：**
+```javascript
+<<<<<<< HEAD (我的版本)
+const API_URL = 'https://api-dev.example.com';
+=======
+const API_URL = 'https://api-staging.example.com';
+>>>>>>> feature-branch (別人的版本)
+```
+
+---
+
+### 情境 6：檢查「是否只改了空白或格式」
+
+**情境：** 你用 Prettier 格式化了程式碼，想確認「是否有實際的邏輯變更」。
+
+```bash
+# 忽略所有空白差異
+git diff -w
+
+# 如果輸出是空的，代表「只改了格式，沒改邏輯」
+```
+
+**實戰範例：**
+```bash
+# 格式化前後比較
+git diff HEAD  # 顯示一大堆縮排變更
+
+git diff -w HEAD  # 顯示空白 → 只是格式化，沒有邏輯變更
+```
+
+💡 **使用時機：** 當你執行 `npm run format` 後，用這招確認「Prettier 有沒有改壞邏輯」。
+
+---
+
+### 情境 7：追蹤「誰改了這個設定檔」
+
+**情境：** `package.json` 突然多了一個奇怪的套件，你想知道是哪個 commit 加的。
+
+```bash
+# 1. 查看 package.json 的歷史
+git log --oneline -- package.json
+
+# 2. 逐一比較每個 commit
+git diff abc123 def456 -- package.json
+
+# 3. 搜尋特定套件
+git log -p -- package.json | grep -A 5 -B 5 "weird-package"
+```
+
+---
+
+### 情境 8：製作「變更說明文件」
+
+**情境：** 你要寫「本次更新說明」，需要列出所有變更的檔案和簡要說明。
+
+```bash
+# 產生變更清單
+git diff --name-status main...HEAD > changes.txt
+
+# 產生詳細變更（包含行數統計）
+git diff --stat main...HEAD > changes_detail.txt
+
+# 只看新增的檔案
+git diff --name-status --diff-filter=A main...HEAD
+
+# 只看刪除的檔案
+git diff --name-status --diff-filter=D main...HEAD
+```
+
+**產生 Markdown 格式：**
+```bash
+#!/bin/bash
+
+echo "# 本次更新內容" > CHANGELOG.md
+echo "" >> CHANGELOG.md
+echo "## 變更檔案" >> CHANGELOG.md
+echo "" >> CHANGELOG.md
+
+git diff --name-status main...HEAD | while read status file; do
+  case $status in
+    A) echo "- ✨ 新增：$file" >> CHANGELOG.md ;;
+    M) echo "- 📝 修改：$file" >> CHANGELOG.md ;;
+    D) echo "- 🗑️ 刪除：$file" >> CHANGELOG.md ;;
+  esac
+done
+
+echo "" >> CHANGELOG.md
+echo "## 詳細統計" >> CHANGELOG.md
+echo "" >> CHANGELOG.md
+echo '```' >> CHANGELOG.md
+git diff --stat main...HEAD >> CHANGELOG.md
+echo '```' >> CHANGELOG.md
+```
+
+---
 
 ##  實戰練習
 
@@ -370,24 +559,24 @@ git diff --name-status HEAD~1 HEAD
 :::
 
 ### 練習 3（中等）
-寫一個 Shell 腳本，自動化「顯示所有未暫存變更  詢問是否查看詳細差異  選擇性暫存檔案」流程。
+寫一個 Shell 腳本，自動化「顯示所有未暫存變更 → 詢問是否查看詳細差異 → 選擇性暫存檔案」流程。
 
 :::details 參考答案與思路
 
 ```bash
 #!/bin/bash
 
-echo " 檢查未暫存的變更..."
+echo "🔍 檢查未暫存的變更..."
 
 # 取得所有修改的檔案
 modified_files=$(git diff --name-only)
 
 if [[ -z $modified_files ]]; then
-    echo " 無未暫存的變更"
+    echo "✅ 無未暫存的變更"
     exit 0
 fi
 
-echo " 以下檔案已修改："
+echo "📝 以下檔案已修改："
 echo "$modified_files" | nl  # 加上行號
 
 echo ""
@@ -405,23 +594,23 @@ if [[ $show_diff == "y" ]]; then
         case $answer in
             y)
                 git add "$file"
-                echo " 已暫存：$file"
+                echo "✅ 已暫存：$file"
                 ;;
             q)
-                echo " 結束操作"
+                echo "👋 結束操作"
                 exit 0
                 ;;
             *)
-                echo " 跳過：$file"
+                echo "⏭️ 跳過：$file"
                 ;;
         esac
     done <<< "$modified_files"
     
     echo ""
-    echo " 暫存區狀態："
+    echo "📊 暫存區狀態："
     git status --short
 else
-    echo " 已取消操作"
+    echo "❌ 已取消操作"
 fi
 ```
 
@@ -438,19 +627,280 @@ fi
 # 在腳本開頭定義顏色
 GREEN='\033[0;32m'
 RED='\033[0;31m'
+YELLOW='\033[0;33m'
 NC='\033[0m'  # No Color
 
-echo -e "${GREEN} 已暫存${NC}"
-echo -e "${RED} 跳過${NC}"
+echo -e "${GREEN}✅ 已暫存${NC}"
+echo -e "${RED}❌ 跳過${NC}"
+echo -e "${YELLOW}⚠️ 警告${NC}"
+```
+
+**更進階：加入智慧型檢查**
+```bash
+# 檢查是否有敏感資訊
+check_sensitive() {
+    local file=$1
+    if git diff -- "$file" | grep -i -E '(password|secret|api_key|token)'; then
+        echo -e "${RED}⚠️ 警告：發現可能的敏感資訊！${NC}"
+        read -p "確定要暫存嗎？(y/n): " confirm
+        if [[ $confirm != "y" ]]; then
+            return 1
+        fi
+    fi
+    return 0
+}
+
+# 使用：
+if check_sensitive "$file"; then
+    git add "$file"
+fi
 ```
 :::
 
-##  FAQ
+---
+
+### 練習 4（進階）：製作「差異分析報告」
+
+寫一個腳本，分析兩個分支的差異，產生包含以下資訊的報告：
+- 新增/修改/刪除的檔案數量
+- 程式碼行數變化
+- 是否有修改到關鍵檔案（config、package.json 等）
+- 是否有新增依賴套件
+
+:::details 參考答案與思路
+
+```bash
+#!/bin/bash
+
+# 使用方式：./analyze_diff.sh main feature-branch
+
+BASE_BRANCH=${1:-main}
+COMPARE_BRANCH=${2:-HEAD}
+
+echo "# 差異分析報告"
+echo "> 比較：$BASE_BRANCH...$COMPARE_BRANCH"
+echo "> 產生時間：$(date '+%Y-%m-%d %H:%M:%S')"
+echo ""
+
+# 1. 檔案變更統計
+echo "## 📊 檔案變更統計"
+echo ""
+
+added=$(git diff --name-status $BASE_BRANCH...$COMPARE_BRANCH | grep '^A' | wc -l)
+modified=$(git diff --name-status $BASE_BRANCH...$COMPARE_BRANCH | grep '^M' | wc -l)
+deleted=$(git diff --name-status $BASE_BRANCH...$COMPARE_BRANCH | grep '^D' | wc -l)
+
+echo "- ✨ 新增：$added 個檔案"
+echo "- 📝 修改：$modified 個檔案"
+echo "- 🗑️ 刪除：$deleted 個檔案"
+echo "- 📈 總計：$((added + modified + deleted)) 個檔案"
+echo ""
+
+# 2. 程式碼行數統計
+echo "## 📈 程式碼行數統計"
+echo ""
+echo '```'
+git diff --shortstat $BASE_BRANCH...$COMPARE_BRANCH
+echo '```'
+echo ""
+
+# 3. 關鍵檔案檢查
+echo "## ⚠️ 關鍵檔案變更"
+echo ""
+
+critical_files=(
+    "package.json"
+    "package-lock.json"
+    "pnpm-lock.yaml"
+    ".env"
+    ".env.example"
+    "docker-compose.yml"
+    "Dockerfile"
+    "tsconfig.json"
+    "vite.config.js"
+    ".gitignore"
+)
+
+has_critical=false
+for file in "${critical_files[@]}"; do
+    if git diff --name-only $BASE_BRANCH...$COMPARE_BRANCH | grep -q "^$file$"; then
+        echo "- ⚠️ $file"
+        has_critical=true
+    fi
+done
+
+if ! $has_critical; then
+    echo "- ✅ 無關鍵檔案變更"
+fi
+echo ""
+
+# 4. 依賴套件變更
+if git diff --name-only $BASE_BRANCH...$COMPARE_BRANCH | grep -q "package.json"; then
+    echo "## 📦 依賴套件變更"
+    echo ""
+    
+    echo "### 新增的套件"
+    echo '```'
+    git diff $BASE_BRANCH...$COMPARE_BRANCH -- package.json | grep '^+' | grep -v '+++' | grep '"'
+    echo '```'
+    echo ""
+    
+    echo "### 刪除的套件"
+    echo '```'
+    git diff $BASE_BRANCH...$COMPARE_BRANCH -- package.json | grep '^-' | grep -v '---' | grep '"'
+    echo '```'
+    echo ""
+fi
+
+# 5. 變更的檔案清單
+echo "## 📋 變更檔案清單"
+echo ""
+
+echo "### 新增的檔案"
+echo '```'
+git diff --name-status $BASE_BRANCH...$COMPARE_BRANCH | grep '^A' | cut -f2
+echo '```'
+echo ""
+
+echo "### 修改的檔案"
+echo '```'
+git diff --name-status $BASE_BRANCH...$COMPARE_BRANCH | grep '^M' | cut -f2
+echo '```'
+echo ""
+
+echo "### 刪除的檔案"
+echo '```'
+git diff --name-status $BASE_BRANCH...$COMPARE_BRANCH | grep '^D' | cut -f2
+echo '```'
+echo ""
+
+# 6. 風險評估
+echo "## 🎯 風險評估"
+echo ""
+
+risk_level="低"
+risk_reasons=()
+
+# 檢查是否有大量變更
+total_changes=$((added + modified + deleted))
+if [ $total_changes -gt 50 ]; then
+    risk_level="高"
+    risk_reasons+=("- 變更檔案數量過多（$total_changes 個）")
+fi
+
+# 檢查是否修改關鍵檔案
+if $has_critical; then
+    risk_level="中"
+    risk_reasons+=("- 修改了關鍵設定檔")
+fi
+
+# 檢查行數變更
+lines_changed=$(git diff --shortstat $BASE_BRANCH...$COMPARE_BRANCH | grep -oE '[0-9]+ insertion' | grep -oE '[0-9]+')
+if [ ! -z "$lines_changed" ] && [ $lines_changed -gt 500 ]; then
+    risk_level="高"
+    risk_reasons+=("- 程式碼變更行數過多（$lines_changed 行）")
+fi
+
+echo "**風險等級：** $risk_level"
+echo ""
+
+if [ ${#risk_reasons[@]} -gt 0 ]; then
+    echo "**原因：**"
+    printf '%s\n' "${risk_reasons[@]}"
+else
+    echo "✅ 無明顯風險"
+fi
+
+echo ""
+echo "---"
+echo ""
+echo "**建議：**"
+if [ "$risk_level" == "高" ]; then
+    echo "- 🔴 建議進行詳細的 Code Review"
+    echo "- 🧪 確保有完整的測試覆蓋"
+    echo "- 📝 考慮分拆成多個較小的 PR"
+elif [ "$risk_level" == "中" ]; then
+    echo "- 🟡 需要仔細檢查關鍵檔案的變更"
+    echo "- ✅ 確認測試通過後再合併"
+else
+    echo "- 🟢 可以正常進行 Code Review"
+fi
+```
+
+**思路：**
+1. 使用 `git diff --name-status` 統計檔案變更
+2. 使用 `git diff --shortstat` 取得行數統計
+3. 檢查關鍵檔案清單
+4. 分析 package.json 的差異（套件變更）
+5. 根據變更規模評估風險等級
+6. 產生 Markdown 格式報告
+
+**使用範例：**
+```bash
+# 比較 main 和 feature 分支
+./analyze_diff.sh main feature-branch > diff_report.md
+
+# 比較 main 和當前分支
+./analyze_diff.sh main
+
+# 查看報告
+cat diff_report.md
+```
+
+**輸出範例：**
+```markdown
+# 差異分析報告
+> 比較：main...feature-branch
+> 產生時間：2026-01-07 10:30:00
+
+## 📊 檔案變更統計
+
+- ✨ 新增：5 個檔案
+- 📝 修改：12 個檔案
+- 🗑️ 刪除：2 個檔案
+- 📈 總計：19 個檔案
+
+## ⚠️ 關鍵檔案變更
+
+- ⚠️ package.json
+- ⚠️ .env.example
+
+## 🎯 風險評估
+
+**風險等級：** 中
+
+**原因：**
+- 修改了關鍵設定檔
+
+**建議：**
+- 🟡 需要仔細檢查關鍵檔案的變更
+- ✅ 確認測試通過後再合併
+```
+
+:::
+
+---
+
+## FAQ
 
 ### Q: `git diff` 無輸出代表什麼？
 兩種可能：
 1. **工作目錄乾淨**：無任何修改
 2. **所有修改已暫存**：用 `git diff --staged` 查看
+
+**驗證方法：**
+```bash
+# 檢查狀態
+git status
+
+# 如果顯示 "nothing to commit, working tree clean"
+# → 真的沒有任何修改
+
+# 如果顯示 "Changes to be committed:"
+# → 有暫存的檔案，用 git diff --staged 查看
+```
+
+---
 
 ### Q: 如何忽略空白差異？
 ```bash
@@ -463,6 +913,145 @@ git diff --ignore-space-at-eol
 # 忽略空白行變更
 git diff --ignore-blank-lines
 ```
+
+ **使用時機**：當你只改了縮排或格式化程式碼時，這招可以過濾掉「無意義的差異」！
+
+**實戰範例：**
+```bash
+# 情境：執行 Prettier 後想確認邏輯是否改變
+git diff  # 顯示一堆縮排變更，看不出重點
+
+git diff -w  # 只顯示邏輯變更，清爽多了！
+```
+
+---
+
+### Q: 如何將 diff 輸出存成檔案？
+```bash
+# 存成 patch 檔
+git diff > changes.patch
+
+# 稍後套用 patch
+git apply changes.patch
+
+# 或使用 git format-patch（更完整）
+git format-patch HEAD~1  # 產生最近一個 commit 的 patch
+```
+
+**實戰情境：**
+```bash
+# 在無法直接 push 的環境（如斷網、沒權限）
+# 可以把變更打包成 patch 檔，透過其他方式傳送
+
+# 1. 產生 patch
+git diff > my_changes.patch
+
+# 2. 傳給同事
+
+# 3. 同事套用 patch
+git apply my_changes.patch
+```
+
+---
+
+### Q: 如何在 VS Code 中查看 Git Diff？
+1. 點擊左側的**原始檔控制**圖示
+2. 點擊檔案名稱右側的**開啟變更**圖示
+3. 或使用指令：`code --diff file1 file2`
+
+**快捷鍵：**
+- `Ctrl+Shift+G`：開啟原始檔控制面板
+- 點擊檔案：自動顯示 diff
+
+**進階技巧：**
+```bash
+# 在終端機用 VS Code 開啟 diff
+git difftool --tool=code --no-prompt
+```
+
+---
+
+### Q: 如何比較「兩個月前」和「現在」的差異？
+
+```bash
+# 方法一：使用時間範圍
+git diff "@{2 months ago}" HEAD
+
+# 方法二：找到兩個月前的 commit hash
+git log --since="2 months ago" --reverse --oneline | head -1
+# 假設得到 abc123
+
+git diff abc123 HEAD
+
+# 方法三：只看統計資訊
+git diff --stat "@{2 months ago}" HEAD
+```
+
+**實戰情境：**
+```bash
+# 產生「兩個月來的變更報告」
+git diff --stat "@{2 months ago}" HEAD > changes_2months.txt
+
+# 或用腳本產生 Markdown
+echo "# 兩個月變更報告" > report.md
+git diff --stat "@{2 months ago}" HEAD >> report.md
+```
+
+---
+
+### Q: `git diff` 顯示的內容太長，如何只看重點？
+
+```bash
+# 方法一：只看統計資訊
+git diff --stat
+
+# 方法二：只看檔案名稱
+git diff --name-only
+
+# 方法三：只看特定檔案類型
+git diff -- '*.js' '*.vue'
+
+# 方法四：排除特定資料夾
+git diff -- . ':(exclude)node_modules/*'
+
+# 方法五：使用分頁器
+git diff | less
+```
+
+**進階：自訂 Git 設定**
+```bash
+# 設定預設分頁器
+git config --global core.pager 'less -R'
+
+# 設定 diff 工具為 VS Code
+git config --global diff.tool vscode
+git config --global difftool.vscode.cmd 'code --wait --diff $LOCAL $REMOTE'
+```
+
+---
+
+### Q: 如何在 diff 中搜尋特定關鍵字？
+
+```bash
+# 方法一：用 grep 過濾
+git diff | grep -A 5 -B 5 "function login"
+
+# 方法二：只顯示包含關鍵字的檔案
+git diff --name-only | xargs grep "TODO"
+
+# 方法三：在 diff 輸出中搜尋
+git diff | grep -E '\+.*console\.log'  # 找出新增的 console.log
+```
+
+**實戰範例：**
+```bash
+# 檢查是否不小心加入了 debug 程式碼
+git diff --staged | grep -E '\+.*(console\.|debugger|TODO|FIXME)'
+
+# 如果有輸出，代表暫存區有 debug 程式碼，記得移除！
+```
+
+---
 
  **使用時機**：當你只改了縮排或格式化程式碼時，這招可以過濾掉「無意義的差異」！
 
