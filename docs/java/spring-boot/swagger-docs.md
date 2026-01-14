@@ -16,13 +16,12 @@ head:
       content: article
   - - meta
     - property: og:image
-      content: https://lucashsu95.github.io/LucasHsu.dev/images/java-cover.jpg
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/springboot-cover.jpg
 ---
 
 # Swagger 教學：在 Spring Boot 打造可閱讀 API 文件
 
-> 📝 **TL;DR**  
-> springdoc-openapi 讓 Spring Boot 自動產生 OpenAPI 文件並提供 Swagger UI；設定 `springdoc.swagger-ui.path` 後即可於 `/api` 查看文件，搭配 DTO 驗證、`@Operation`/`@Tag` 註解與環境切換，可快速交付乾淨的 API 說明。
+> 📝 TL;DR springdoc-openapi 讓 Spring Boot 自動產生 OpenAPI 文件並提供 Swagger UI；設定 `springdoc.swagger-ui.path` 後即可於 `/api` 查看文件，搭配 DTO 驗證、`@Operation`/`@Tag` 註解與環境切換，可快速交付乾淨的 API 說明。
 
 ## 前置知識
 
