@@ -23,6 +23,16 @@ head:
 
 # Object.groupBy()
 
+> 📝 TL;DR
+- ES2024 新方法，一行搞定陣列分組；取代手寫 `reduce` + 物件累積。
+- 回傳 `null` 原型物件，避免原型鏈干擾，適合資料科學/電商場景。
+- 回呼函數返回分組鍵（string/symbol），相同鍵的元素聚成一個陣列。
+
+## 前置知識
+- 陣列遍歷與 `reduce` 概念
+- 物件鍵值操作
+- 可選：`Object.create(null)` 與原型
+
 `Object.groupBy()` 是 JavaScript 中的一個新方法，用於根據回調函數返回的字符串值將可迭代對象的元素分組。這個方法的引入使得對數據進行分組變得更加簡單和直觀。
 
 ## 語法
@@ -110,3 +120,109 @@ console.log(peopleByAge);
 4. **性能**: 對於小到中型數據集，`Object.groupBy()` 提供了一個高效的解決方案，簡化了分組的代碼。
 
 `Object.groupBy()` 是一個強大的工具，能夠簡化數據分組的過程，提升代碼的可讀性和可維護性。
+
+## 實際應用場景
+
+### 1. 電商訂單分組
+```javascript
+const orders = [
+  { id: 1, status: 'pending', amount: 100 },
+  { id: 2, status: 'shipped', amount: 200 },
+  { id: 3, status: 'pending', amount: 150 },
+  { id: 4, status: 'delivered', amount: 300 }
+]
+
+const ordersByStatus = Object.groupBy(orders, order => order.status)
+// { pending: [{id:1,...}, {id:3,...}], shipped: [...], delivered: [...] }
+```
+
+### 2. 使用者等級分類
+```javascript
+const users = [
+  { name: 'Alice', score: 85 },
+  { name: 'Bob', score: 92 },
+  { name: 'Charlie', score: 78 }
+]
+
+const usersByGrade = Object.groupBy(users, user => {
+  if (user.score >= 90) return 'A'
+  if (user.score >= 80) return 'B'
+  return 'C'
+})
+// { A: [{name:'Bob',...}], B: [{name:'Alice'}], C: [{name:'Charlie'}] }
+```
+
+### 3. 日期資料聚合
+```javascript
+const logs = [
+  { event: 'login', date: '2025-01-01' },
+  { event: 'logout', date: '2025-01-01' },
+  { event: 'login', date: '2025-01-02' }
+]
+
+const logsByDate = Object.groupBy(logs, log => log.date)
+// { '2025-01-01': [...2 logs], '2025-01-02': [...1 log] }
+```
+
+## 實戰練習
+
+### 練習 1：商品分類（簡單）⭐
+> 將商品陣列按照類別 `category` 分組。
+
+:::details 💡 參考答案
+```javascript
+const products = [
+  { name: 'Laptop', category: 'electronics' },
+  { name: 'Shirt', category: 'clothing' },
+  { name: 'Phone', category: 'electronics' }
+]
+
+const grouped = Object.groupBy(products, p => p.category)
+// { electronics: [...], clothing: [...] }
+```
+:::
+
+### 練習 2：成績及格分組（簡單）⭐
+> 將學生按成績是否及格（≥60）分成 pass/fail 兩組。
+
+:::details 💡 參考答案
+```javascript
+const students = [
+  { name: 'Amy', score: 75 },
+  { name: 'Ben', score: 55 },
+  { name: 'Cathy', score: 90 }
+]
+
+const result = Object.groupBy(students, s => s.score >= 60 ? 'pass' : 'fail')
+```
+:::
+
+### 練習 3：多條件分組（中等）⭐⭐
+> 將訂單按「地區 + 狀態」組合鍵分組，例如 `北部-pending`。
+
+:::details 💡 參考答案與提示
+**提示：** 組合多個欄位成一個字串作為鍵。
+```javascript
+const orders = [
+  { region: '北部', status: 'pending', id: 1 },
+  { region: '南部', status: 'shipped', id: 2 },
+  { region: '北部', status: 'pending', id: 3 }
+]
+
+const grouped = Object.groupBy(orders, o => `${o.region}-${o.status}`)
+// { '北部-pending': [...], '南部-shipped': [...] }
+```
+:::
+
+## 延伸閱讀
+- MDN: [Object.groupBy()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/groupBy)
+- TC39 Proposal: Array Grouping
+- Lodash `_.groupBy` 對比與遷移指南
+
+## FAQ
+- Q: 和 `reduce` 手動分組有什麼差別？
+  - A: `Object.groupBy` 更簡潔，且回傳 null 原型物件避免原型鏈干擾；手寫 `reduce` 較靈活但冗長。
+- Q: 可以傳入 Map 嗎？
+  - A: 可以，但要用 `Map.groupBy()` (ES2024 同步新增)。
+- Q: 回傳物件的鍵順序？
+  - A: 按首次出現的鍵順序，符合插入順序（insertion order）。

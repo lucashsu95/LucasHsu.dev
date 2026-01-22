@@ -116,8 +116,6 @@ console.log(user1.getFullName.call(user2));
 // "Mary Chen"
 ```
 
----
-
 ##  apply() - 立即執行 + 陣列傳參
 
 ### 基本用法
@@ -409,8 +407,6 @@ const curriedMultiply = curry(obj.multiply, obj);
 curriedMultiply(2)(3)(4); // "Calculator: 24"
 ```
 :::
-
----
 
 ##  FAQ
 
