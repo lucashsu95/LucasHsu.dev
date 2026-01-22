@@ -240,8 +240,6 @@ git push origin main
 - 統一的提交訊息更清楚（一目了然）
 :::
 
----
-
 ##  FAQ
 
 ### Q: 誤用 reset --hard 刪除了改動，能救回嗎？

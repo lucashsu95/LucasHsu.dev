@@ -332,8 +332,6 @@ Optional<Integer> any = list.stream().findAny();
 long count = list.stream().filter(x -> x % 2 == 0).count();
 ```
 
----
-
 ## 📌 小提醒
 
 * Stream 只能使用一次（終端操作後就不能再用）

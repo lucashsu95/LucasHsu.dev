@@ -1016,8 +1016,6 @@ public class ExtensionDemo {
 2. 考慮 `Attackable`、`Defendable`、`Healable` 等能力
 3. 思考如何處理等級提升、技能學習
 
----
-
 ## 從混亂到秩序的旅程
 
 我們經歷了：

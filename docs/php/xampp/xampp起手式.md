@@ -67,8 +67,6 @@ head:
 
 ![DM_20231017170412_006.png](../assets/xampp起手式/DM_20231017170412_006.png)
 
----
-
 ## 更改Apache
 
 到這裡點擊`Apache`的`Config`在點擊第五個`phpMyAdmin`

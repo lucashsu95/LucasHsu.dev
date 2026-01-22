@@ -149,8 +149,6 @@ git log --oneline --graph --all
 
  **比喻**：就像「家譜圖」，可以看出誰是主線、誰是分支、哪裡合併了！
 
----
-
 ##  限制輸出範圍
 
 ### 1. 顯示最近 N 筆
@@ -216,8 +214,6 @@ git log --grep="fix\|feat"
 # 多個關鍵字（AND）
 git log --grep="fix" --grep="login" --all-match
 ```
-
----
 
 ##  查詢特定檔案歷史
 
@@ -287,8 +283,6 @@ Date:   Tue Dec 25 14:30:00 2023
 # 顯示單字差異（適合文件）
 git log -p --word-diff -- README.md
 ```
-
----
 
 ##  進階功能
 
@@ -388,8 +382,6 @@ git log --shortstat
 # 每個作者的 commit 數量
 git shortlog -sn
 ```
-
----
 
 ##  實用指令組合
 
@@ -649,8 +641,6 @@ git bisect good HEAD~50
 # 6. 結束
 git bisect reset
 ```
-
----
 
 ##  實戰練習
 
@@ -1027,8 +1017,6 @@ echo "✅ 圖表已產生：commits_trend.png"
 
 :::
 
----
-
 ##  FAQ
 
 ### Q: `git log` 輸出太多怎麼辦？
@@ -1085,15 +1073,11 @@ git log -S"function calculateTotal()" --source --all
 git log -G"function.*calculate.*" --source --all
 ```
 
----
-
 ##  延伸閱讀
 - [Git Commit](./git-commit.md) - 提交變更指南
 - [Git Diff](./git-diff.md) - 比較變更差異
 - [Pro Git: 檢視提交的歷史記錄](https://git-scm.com/book/zh-tw/v2/Git-基礎-檢視提交的歷史記錄)
 - [Git Pretty Formats](https://git-scm.com/docs/pretty-formats)
-
----
 
 ##  總結
 1. `git log` 顯示 commit 歷史，`--oneline` 最常用（簡潔清爽）。

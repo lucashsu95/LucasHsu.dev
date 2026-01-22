@@ -32,8 +32,6 @@ head:
 - **Maven 或 Gradle 依賴管理** - 會加入 `springdoc-openapi-starter-webmvc-ui`
 - **Bean 驗證註解** - 如 `@NotBlank`, `@Positive` 讓文件顯示欄位限制
 
----
-
 ## 什麼是 Swagger/OpenAPI？
 
 ### 為什麼需要學習它？
@@ -52,8 +50,6 @@ head:
 :::warning ⚠️ 注意
 Swagger 只應在內網、測試或受保護的環境開啟；正式環境記得關閉或加上驗證。
 :::
-
----
 
 ## 💻 基本設定
 
@@ -77,8 +73,6 @@ springdoc:
 
 - 啟動 Spring Boot，瀏覽 `/api` 即可看到 Swagger UI。
 - 原始 OpenAPI JSON 在 `/v3/api-docs`，可供前端或 Gateway 匯入。
-
----
 
 ## 實際範例
 
@@ -169,8 +163,6 @@ public class OpenApiConfig {
 - `info` 提供標題、版本、描述與聯絡資訊。
 - `components` 定義 JWT 安全方案；若前端在 UI 上勾選 Authorize，會自動帶入 Header。
 
----
-
 ## 視覺化說明
 
 ### 文件產生流程
@@ -199,8 +191,6 @@ sequenceDiagram
 :::tip 視覺化工具
 想快速驗證圖表語法，可用 Mermaid Live Editor 或 VS Code Mermaid 外掛預覽。
 :::
-
----
 
 ## 實戰練習
 
@@ -278,8 +268,6 @@ springdoc:
 ```
 :::
 
----
-
 ## 常見問題 FAQ
 
 ### Q1: Swagger UI 404？
@@ -297,8 +285,6 @@ springdoc:
 ### Q5: 如何支援多語系文件？
 **A:** 以多份 `group-configs` 搭配不同描述，或在 CI 產生多份 spec 檔交給前端切換；springdoc 本身不處理 UI i18n，需要自訂 Swagger UI。
 
----
-
 ## 最佳實踐
 
 ### ✅ 推薦做法
@@ -313,8 +299,6 @@ springdoc:
 1. **開放 Swagger 於公網** - 可能洩露內部端點；務必關閉或加權限。
 2. **忽略 DTO 驗證** - 文件缺欄位限制，前後端易出現格式錯誤。
 3. **缺乏版本資訊** - 忘記更新 `info.version`，難以追蹤 API 變動。
-
----
 
 ## 延伸閱讀
 
@@ -336,8 +320,6 @@ springdoc:
 - 若需要自動產生 TypeScript 型別，可研究 swagger-codegen 或 openapi-generator。
 - 想把文件部署到 API Gateway，可將 `/v3/api-docs` 匯入並啟用 Mock/驗證。
 - 需要 GraphQL 文件化？探索 GraphQL Playground 或 Voyager。
-
----
 
 ## 總結
 

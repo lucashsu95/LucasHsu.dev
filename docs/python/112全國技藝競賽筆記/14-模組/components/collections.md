@@ -42,8 +42,6 @@ cc = c.most_common(2)
 print(cc[1])
 ```
 
----
-
 ## defaultdict
 
 像是普通我們用`dict`做記算字串出現的時候會這樣做
