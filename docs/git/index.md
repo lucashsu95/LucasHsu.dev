@@ -3,7 +3,9 @@ head:
   - - meta
     - property: og:image
       content: https://lucashsu95.github.io/LucasHsu.dev/images/git-cover.jpg
-## git 筆記
+---
+
+# git 筆記
 
 ```bash
 -d // --delete：删除

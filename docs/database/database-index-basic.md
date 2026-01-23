@@ -18,7 +18,7 @@ head:
       content: article
   - - meta
     - property: og:image
-      content: ./database-index-basic-cover.png
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/mysql-cover.jpg
 ---
 
 # 資料庫索引基礎入門：從零開始理解索引原理

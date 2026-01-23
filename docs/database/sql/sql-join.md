@@ -19,7 +19,7 @@ head:
       content: article
   - - meta
     - property: og:image
-      content: https://lucashsu95.github.io/LucasHsu.dev/assets/sql-join/image.png
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/sql-cover.jpg
 ---
 
 # SQL JOIN 完全指南：從基礎到實戰

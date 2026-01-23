@@ -18,36 +18,49 @@ head:
       content: article
   - - meta
     - property: og:image
-      content: ./database-index-advanced-cover.png
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/mysql-cover.jpg
 ---
 
 # 進階索引實戰：B-Tree、複合索引與 Hash Map 全解析
 
-> 本文將「索引」觀念與前端離線快取 (Service Worker / PWA) 類比，幫助剛接觸後端資料庫的新手也能快速理解「**為何加索引像是替資料上快取**」。全篇以 MySQL 為例，但概念同樣適用於 PostgreSQL、SQL Server 等主流 RDBMS。
+> 📝 TL;DR：B-Tree 支援範圍/排序查詢，Hash 適合等值熱點；複合索引遵循「等值在前、範圍在後、高選擇性優先」原則；覆蓋索引可避免回表，定期維護確保效能。
 
-## 文章目錄
+## 前置知識
 
-1. [索引 ≈ PWA 快取：觀念對照圖](#索引--pwa-快取觀念對照圖)
-2. [B-Tree／B+Tree：關聯式資料庫的預設索引](#b-treeb+tree關聯式資料庫的預設索引)
-3. [Hash Index：O(1) 等值查詢神器](#hash-indexo1-等值查詢神器)
-4. [複合索引（Composite Index）](#複合索引composite-multiple-column-index)
-5. [快取策略 vs. 索引策略](#快取策略-vs-索引策略最佳化思路對照)
-6. [實戰案例：從 3 秒 → 50 毫秒](#實戰從-3-秒--50-毫秒)
-7. [索引維護與監控](#索引維護與監控)
-8. [常見地雷與排雷技巧](#常見地雷與排雷技巧)
+在開始之前，建議你先了解以下概念：
 
-## 0. 索引 ≈ PWA 快取：觀念對照圖
+- **資料庫索引基礎** - [資料庫索引基礎](/database/database-index-basic) - 理解索引的基本原理
+- **SQL 查詢基礎** - 熟悉 SELECT、WHERE、JOIN 等語法
+- **EXPLAIN 分析** - 了解如何查看查詢計劃
 
-| Web PWA                     | Database                    | 共通核心                         |
-| --------------------------- | --------------------------- | -------------------------------- |
-| Service Worker Cache API    | B-Tree / Hash Index         | 以空間換時間，加速存取           |
-| Cache Key                   | 索引 Key                    | 唯一定位資料位置                 |
-| Cache First / Network First | Index Lookup / Table Scan   | 先查快取 (索引)，再回源 (資料表) |
-| 緩存更新 (Revalidate)       | 索引維護 (UPDATE / REBUILD) | 保持資料與索引一致               |
+## 什麼是複合索引？
 
-**結論**：快取如何讓 PWA 離線秒開，索引就如何讓資料庫查詢「不掃全表」。
+### 為什麼需要學習它？
 
----
+複合索引是包含多個欄位的索引，可以大幅提升多條件查詢的效能：
+
+- **解決什麼問題？** 多條件 WHERE 查詢慢、單欄位索引無法滿足複雜查詢
+- **有什麼優勢？** 一次索引滿足多個查詢條件，減少 I/O 次數
+- **什麼時候會用到？** 經常同時查詢多個欄位時，如 `WHERE country='TW' AND status='paid'`
+
+### 複合索引原理圖（最左前綴）
+
+```mermaid
+graph LR
+    A[索引鍵順序] --> B[Col1: 高選擇性/等值]
+    B --> C[Col2: 等值或次高選擇性]
+    C --> D[Col3: 範圍條件放後]
+    D --> E[葉節點有序<br/>支援範圍掃描]
+```
+
+:::warning ⚠️ 最左前綴原則
+複合索引 `(A, B, C)` 只有包含 A 的查詢才能命中！
+- ✅ `WHERE A=1` - 命中
+- ✅ `WHERE A=1 AND B=2` - 命中
+- ✅ `WHERE A=1 AND B=2 AND C>10` - 命中
+- ❌ `WHERE B=2` - 不命中！
+- ❌ `WHERE C>10` - 不命中！
+:::
 
 ## 1. B-Tree／B+Tree：關聯式資料庫的預設索引
 
@@ -87,8 +100,6 @@ CREATE INDEX idx_user_email_date ON users(email, created_at);
 2. **回表 (Key Lookup)**：非覆蓋欄位須再到資料頁讀取，等同 PWA Cache Miss。
 
 
----
-
 ## 2. Hash Index：O(1) 等值查詢神器
 
 ### 2-1 運作流程
@@ -119,8 +130,6 @@ console.log(map.get('code_abc')); //  O(1)
 
 資料庫 Hash Index 與 JavaScript `Map` 原理一致：**雜湊衝突 (collision) 需鏈結或開放定址處理**。
 
----
-
 ## 3. 複合索引（Composite / Multiple Column Index）
 
 ### 3-1 建立原則
@@ -149,8 +158,6 @@ WHERE  country='TW' AND status='paid'; -- 直接返回索引頁
 
 **結果**：I/O 降至單純索引掃描，等同 PWA Cache First 策略。
 
----
-
 ## 4. 快取策略 vs. 索引策略：最佳化思路對照
 
 | PWA 策略               | 資料庫對應                | 適用場景                   |
@@ -161,11 +168,9 @@ WHERE  country='TW' AND status='paid'; -- 直接返回索引頁
 
 > TIP：夜深人靜做 `OPTIMIZE TABLE` = 背景 Revalidate Cache。
 
----
+## 實戰案例：從 3 秒 → 50 毫秒
 
-## 5. 實戰：從 3 秒 → 50 毫秒
-
-### 5-1 問題描述
+### 問題描述
 
 ```sql
 SELECT order_id, total
@@ -177,22 +182,120 @@ AND    order_date BETWEEN '2025-01-01' AND '2025-07-01';
 
 - 100 萬筆訂單，EXPLAIN 顯示 `type: ALL`，耗時 3 秒。
 
-### 5-2 解決方案
+### 解決方案
 
 ```sql
 CREATE INDEX idx_orders_user_status_date
 ON orders(user_id, status, order_date);
 ```
 
-### 5-3 成果驗證
+### EXPLAIN 前後對比（MySQL 8.0，100 萬筆）
 
+| 狀態     | type  | rows      | Extra             | 估計耗時 |
+| -------- | ----- | --------- | ----------------- | -------- |
+| 未加索引 | ALL   | 1,000,000 | Using where       | ~3s      |
+| 新索引   | RANGE | ~120      | Using index range | ~50ms    |
+
+> 重點：`type` 從 ALL → RANGE，rows 大幅下降；若 SELECT 欄位僅索引列，可加 `USING INDEX` 成覆蓋索引，再省去回表。
+
+### 程式碼說明：
+1. 建立複合索引，依照「等值在前、範圍在後」
+2. user_id 和 status 為等值查詢，放在最前
+3. order_date 為範圍查詢，放在最後
+4. 索引命中後，rows 從 100 萬降至 120 筆，效能提升 60 倍
+
+## 實戰練習
+
+### 練習 1：設計複合索引（簡單）⭐
+
+**任務：** 查詢條件：`WHERE tenant_id=? AND status=? AND created_at BETWEEN ...`，請設計索引並說明順序。
+
+**提示：**
+- 等值條件放前
+- 範圍條件放後
+
+:::details 參考答案
 ```sql
-EXPLAIN SELECT ... ;
--- type: RANGE / rows: 120 →  I/O 大減
--- 實測耗時 ~50 ms
+CREATE INDEX idx_tenant_status_date 
+ON your_table(tenant_id, status, created_at);
 ```
 
----
+**說明：**
+1. tenant_id 和 status 為等值查詢 (`=`)，優先級高
+2. created_at 為範圍查詢 (BETWEEN)，放最後
+3. 這樣可以充分利用索引的最左前綴特性
+:::
+
+### 練習 2：覆蓋索引判斷（簡單）⭐
+
+**任務：** SELECT 只取 `tenant_id, status, created_at`，是否會回表？
+
+**思考方向：**
+- 什麼是覆蓋索引？
+- 索引是否包含所有查詢欄位？
+
+:::details 參考答案
+若索引正是 `(tenant_id, status, created_at)`，屬於覆蓋索引，`Extra: Using index`，**不會回表**。
+
+**原因：**
+- SELECT 的所有欄位都在索引中
+- 資料庫可以直接從索引頁讀取資料
+- 省去回表查找實際資料頁的 I/O
+:::
+
+### 練習 3：排查索引失效（中等）⭐⭐
+
+**任務：** 查詢 `WHERE email LIKE '%gmail.com' AND created_at > '2025-01-01'` 變慢，如何優化？
+
+**需求：**
+1. 分析為何索引無法命中
+2. 提出優化方案
+3. 考慮替代方案
+
+**提示：**
+- 前置 `%` 對索引的影響
+- 考慮全文索引或欄位拆分
+
+:::details 參考答案與解題思路
+
+**解題思路：**
+1. **問題分析：**
+   - 前置 `%` 破壞 B-Tree 最左前綴，email 索引用不上
+   - 變成全表掃描（Table Scan）
+
+2. **優化方案：**
+
+   **方案 1：新增 domain 欄位**
+   ```sql
+   ALTER TABLE users ADD COLUMN email_domain VARCHAR(100);
+   UPDATE users SET email_domain = SUBSTRING_INDEX(email, '@', -1);
+   CREATE INDEX idx_email_domain ON users(email_domain, created_at);
+   
+   -- 查詢改寫
+   WHERE email_domain = 'gmail.com' AND created_at > '2025-01-01';
+   ```
+
+   **方案 2：使用全文索引**
+   ```sql
+   -- MySQL
+   CREATE FULLTEXT INDEX idx_email_fulltext ON users(email);
+   WHERE MATCH(email) AGAINST('gmail.com' IN BOOLEAN MODE);
+   
+   -- PostgreSQL
+   CREATE INDEX idx_email_gin ON users USING GIN(email gin_trgm_ops);
+   WHERE email LIKE '%gmail.com%';
+   ```
+
+   **方案 3：先篩 created_at，再篩 email**
+   ```sql
+   CREATE INDEX idx_created_at ON users(created_at);
+   -- 先用範圍縮小範圍，再在應用層篩選 email
+   ```
+
+**延伸思考：**
+- 如果是 `LIKE 'gmail%'` 呢？（可用索引）
+- 怎麼選擇最佳方案？（考慮查詢頻率、資料量）
+:::
 
 ## 6. 索引維護與監控
 
@@ -200,8 +303,6 @@ EXPLAIN SELECT ... ;
 2. **碎片率**：>30% 建議 REBUILD
 3. **冗餘索引偵測**：慢查詢日誌 + `SHOW INDEX` + 卡片法清理
 4. **統計資訊更新**：`ANALYZE TABLE` 保證最佳化器選對索引
-
----
 
 ## 7. 常見地雷與排雷技巧
 
@@ -211,8 +312,6 @@ EXPLAIN SELECT ... ;
 | LIKE '%keyword%' 前置百分比           | 使用全文索引 (FULLTEXT, GIN)                        |
 | 多欄都建單欄索引 → 過度索引           | 合併為複合索引，或只保留高選擇性                    |
 | 低選擇度欄位建索引 (gender)           | 搭配高選擇度欄或省略索引                            |
-
----
 
 ## 8. 小結
 

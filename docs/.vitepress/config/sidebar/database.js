@@ -11,8 +11,10 @@ export function sideBarDatabase() {
     {
       text: "SQL",
       items: [
-        { text: "JOIN 關聯式", link: "/database/sql/sql-join", activeMatch: "/database/sql/sql-join" },
+        { text: "SQL JOIN 關聯式", link: "/database/sql/sql-join", activeMatch: "/database/sql/sql-join" },
         { text: "SQL CASE...WHEN...THEN", link: "/database/sql/sql-case-when-then", activeMatch: "/database/sql/sql-case-when-then" },
+        { text: "SQL CTE", link: "/database/sql/sql-cte", activeMatch: "/database/sql/sql-cte" },
+        { text: "SQL 窗口函數", link: "/database/sql/sql-window-functions", activeMatch: "/database/sql/sql-window-functions" },
       ],
     },
   ];
