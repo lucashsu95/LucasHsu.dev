@@ -26,7 +26,10 @@ export function sidebarJava() {
         {
             text: "Spring Boot",
             items: [
+                { text: "Lazy vs Eager 載入策略", link: "/java/spring-boot/lazy", activeMatch: '/java/lazy'},
+                { text: "JPA 持久化上下文", link: "/java/spring-boot/persistence-context", activeMatch: '/java/persistence-context'},
                 { text: "Spring Boot Swagger", link: "/java/spring-boot/swagger-docs", activeMatch: '/java/swagger-docs'},
+                { text: "Transactional 事務管理", link: "/java/spring-boot/transactional", activeMatch: '/java/transactional'},
             ],
         }
     ];
