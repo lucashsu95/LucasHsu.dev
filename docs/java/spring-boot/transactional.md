@@ -14,6 +14,9 @@ head:
   - - meta
     - property: og:type
       content: article
+  - - meta
+    - property: og:image
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/springboot-cover.png
 ---
 
 # @Transactional 事務管理
