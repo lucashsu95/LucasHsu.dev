@@ -31,32 +31,25 @@ export function nav() {
         { text: "JavaScript", link: "/javascript/網頁操作/TodoList" },
       ],
     },
-    {
-      text: "資料庫",
-      items: [
-        { text: "Database", link: "/database/database-index-basic" },
-        { text: "SQL", link: "/database/sql/sql-join" },
-      ],
-    },
-    { text: "作品集", link: "/portfolio/" },
-    {
-      text: "開發工具",
-      items: [
-        { text: "Git", link: "/git/" },
-        { text: "VS Code 安裝", link: "/other/安裝vscode" },
-        {
-          text: "ESLint 和 Prettier 設定",
-          link: "/other/init-eslint-prettier",
-        },
-        {
-          text: "jsconfig.json 和 vite.config.js 設定",
-          link: "/other/init-jsconfig-viteConfig",
-        },
-        {
-          text: "在 Windows 安裝 WSL",
-          link: "/other/install-wsl",
-        },
-      ],
-    },
+{
+  text: "資料庫",
+  items: [
+  { text: "Database", link: "/database/database-index-basic" },
+  { text: "SQL", link: "/database/sql/sql-join" },
+  ],
+  },
+  {
+  text: "TypeScript",
+  link: "/typescript/utility-types",
+  },
+{ text: "作品集", link: "/portfolio/" },
+{
+  text: "DevOps",
+  items: [
+  { text: "Tmux 終端機多工器", link: "/devops/tmux-guide" },
+  { text: "Git", link: "/git/" },
+  ],
+  },
+  { text: "開發工具", link: "/other/" },
   ];
 }

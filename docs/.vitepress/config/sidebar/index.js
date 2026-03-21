@@ -7,3 +7,5 @@ export * from './css';
 export * from './javascript';
 export * from './java';
 export * from './database';
+export * from './typescript';
+export * from './devops';

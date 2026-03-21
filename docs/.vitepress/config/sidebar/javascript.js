@@ -41,10 +41,17 @@ export function sidebarJavascript() {
         { text: 'FP 入門指南', link: '/javascript/advanced/functional-programming-intro', activeMatch: '/javascript/advanced/functional-programming-intro' },
         { text: 'Currying 讓函數更加靈活的魔法', link: '/javascript/advanced/currying-guide', activeMatch: '/javascript/advanced/currying-guide' },
         { text: 'Functor 容器與映射的藝術', link: '/javascript/advanced/functor-guide', activeMatch: '/javascript/advanced/functor-guide' },
-        { text: 'Monad FP設計的終極抽象', link: '/javascript/advanced/monad-guide', activeMatch: '/javascript/advanced/monad-guide' },
-        { text: 'Point-Free 與管線化', link: '/javascript/advanced/point-free', activeMatch: '/javascript/advanced/point-free' },
-      ]
-    },
+{ text: 'Monad FP設計的終極抽象', link: '/javascript/advanced/monad-guide', activeMatch: '/javascript/advanced/monad-guide' },
+{ text: 'Point-Free 與管線化', link: '/javascript/advanced/point-free', activeMatch: '/javascript/advanced/point-free' },
+]
+},
+{
+text: 'PWA 實戰',
+collapsed: true,
+items: [
+{ text: 'Service Worker 實戰：把網站升級成 PWA', link: '/javascript/service-worker-pwa', activeMatch: '/javascript/service-worker-pwa' },
+],
+},
     {
       text: '物件函數',
       collapsed: true,
