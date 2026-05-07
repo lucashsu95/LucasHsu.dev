@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, onBeforeUnmount } from "vue";
 
 const { password } = defineProps(["password"]);
 const showModal = ref(true);
@@ -18,13 +18,21 @@ const contextmenuHandler = (e) => e.preventDefault();
 const copyHandler = (e) => e.preventDefault();
 const cutHandler = (e) => e.preventDefault();
 const wheelHandler = (e) => e.preventDefault();
+const popstateHandler = () => {
+  removeEvent();
+};
 
 const removeEvent = () => {
+  if (typeof window === "undefined" || typeof document === "undefined") {
+    return;
+  }
+
   window.removeEventListener("keydown", keydownHandler);
   window.removeEventListener("contextmenu", contextmenuHandler);
   window.removeEventListener("copy", copyHandler);
   window.removeEventListener("cut", cutHandler);
   window.removeEventListener("wheel", wheelHandler, { passive: false });
+  window.removeEventListener("popstate", popstateHandler);
   document.body.style.overflow = "auto";
 };
 
@@ -44,15 +52,17 @@ onMounted(() => {
   if (password === "") {
     showModal.value = false;
   }
+
   window.addEventListener("keydown", keydownHandler);
   window.addEventListener("contextmenu", contextmenuHandler);
   window.addEventListener("copy", copyHandler);
   window.addEventListener("cut", cutHandler);
   window.addEventListener("wheel", wheelHandler, { passive: false });
+  window.addEventListener("popstate", popstateHandler);
   document.body.style.overflow = "hidden";
 });
 
-window.addEventListener("popstate", () => {
+onBeforeUnmount(() => {
   removeEvent();
 });
 // window.addEventListener("pushstate", () => {
