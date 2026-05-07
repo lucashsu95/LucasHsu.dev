@@ -747,9 +747,9 @@ console.log('使用優惠券後:', orderWithCoupon(initialCart));
 ### 相關文章
 
 本站相關主題：
-- [函數式程式設計入門](/javascript/advanced/functional-programming-intro) - 理解 FP 基本概念
-- [Functor 指南](/javascript/advanced/functor-guide) - 進階的函數容器概念
-- [Monad 指南](/javascript/advanced/monad-guide) - 更進階的函數組合技巧
+- [函數式程式設計入門](/concepts/fp/functional-programming-intro) - 理解 FP 基本概念
+- [Functor 指南](/concepts/fp/functor-guide) - 進階的函數容器概念
+- [Monad 指南](/concepts/fp/monad-guide) - 更進階的函數組合技巧
 
 ### 推薦資源
 

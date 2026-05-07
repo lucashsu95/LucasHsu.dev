@@ -10,3 +10,4 @@ export * from './database';
 export * from './typescript';
 export * from './devops';
 export * from './backend';
+export * from './concepts';

@@ -13,6 +13,7 @@ import {
   sidebarTypescript,
   sidebarDevops,
   sidebarBackend,
+  sidebarConcepts,
 } from "./config/sidebar";
 import { InlineLinkPreviewElementTransform } from "@nolebase/vitepress-plugin-inline-link-preview/markdown-it";
 import {
@@ -84,6 +85,7 @@ sidebar: {
 "/typescript/": sidebarTypescript(),
 "/devops/": sidebarDevops(),
     "/backend/": sidebarBackend(),
+    "/concepts/": sidebarConcepts(),
   },
     docFooter: {
       prev: "前一篇",
