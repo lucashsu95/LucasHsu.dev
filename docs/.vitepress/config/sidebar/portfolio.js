@@ -27,6 +27,7 @@ export function sidebarPortfolio() {
       text: "專題競賽作品 - 碳棄",
       collapsed: false,
       items: [
+        { text: "活動申請管理系統", link: "portfolio/專題/activity-management-system", activeMatch: "portfolio/專題/activity-management-system" },
         { text: "網站 - 碳棄", link: "portfolio/專題/網站", activeMatch: "portfolio/專題/網站" },
         { text: "遊戲 - 減碳大作戰", link: "portfolio/專題/減碳大作戰", activeMatch: "portfolio/專題/減碳大作戰" },
         { text: "AI - 減碳相機", link: "portfolio/專題/AI減碳相機", activeMatch: "portfolio/專題/AI減碳相機" },
