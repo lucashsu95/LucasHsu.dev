@@ -21,7 +21,6 @@ export function nav() {
         },
         { text: "JavaScript", link: "/javascript/" },
         { text: "Java", link: "/java/basic/install-java" },
-        { text: "PHP", link: "/php/" },
       ],
     },
     {
@@ -38,6 +37,13 @@ export function nav() {
   { text: "SQL", link: "/database/sql/sql-join" },
   ],
   },
+    {
+      text: "後端技術",
+      items: [
+        { text: "Spring Boot", link: "/backend/" },
+        { text: "PHP", link: "/php/" },
+      ],
+    },
   {
   text: "TypeScript",
   link: "/typescript/utility-types",

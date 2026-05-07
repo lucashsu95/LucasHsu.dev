@@ -22,15 +22,6 @@ export function sidebarJava() {
                 { text: "混亂到秩序的重構之旅 抽象理解", link: "/java/oop/polymorphism-abstract", activeMatch: '/java/oop/polymorphism-abstract'},
                 { text: "混亂到秩序的重構之旅 實戰應用", link: "/java/oop/oop-2", activeMatch: '/java/oop/oop-2'},
             ],
-        },
-        {
-            text: "Spring Boot",
-            items: [
-                { text: "Lazy vs Eager 載入策略", link: "/java/spring-boot/lazy", activeMatch: '/java/lazy'},
-                { text: "JPA 持久化上下文", link: "/java/spring-boot/persistence-context", activeMatch: '/java/persistence-context'},
-                { text: "Spring Boot Swagger", link: "/java/spring-boot/swagger-docs", activeMatch: '/java/swagger-docs'},
-                { text: "Transactional 事務管理", link: "/java/spring-boot/transactional", activeMatch: '/java/transactional'},
-            ],
         }
     ];
 }

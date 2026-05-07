@@ -9,3 +9,4 @@ export * from './java';
 export * from './database';
 export * from './typescript';
 export * from './devops';
+export * from './backend';

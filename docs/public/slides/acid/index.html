@@ -1,0 +1,936 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>資料庫 ACID 原理介紹</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css">
+    <link rel="stylesheet" href="themes/exbook-dark.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/highlight/monokai.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+            <section id="acid-title" class="ds" data-background-color="#181715" style="text-align:center;">
+                <h1 style="margin-top:1em;">資料庫 ACID 原理介紹</h1>
+                <p class="muted txt-body" style="margin-top:0.3em;">Atomicity · Consistency · Isolation · Durability</p>
+                <div style="margin-top:2.5em;">
+                    <p class="txt-sm muted">從事故現場出發，再回到資料庫與 Spring 交易實作</p>
+                    <p class="txt-xs muted">2026 — ACID Deep Dive</p>
+                </div>
+            </section>
+
+            <section id="acid-agenda" class="ls" data-background-color="#faf9f5">
+                <h2>這次的學習路線</h2>
+                <div style="display:flex; flex-direction:column; gap:6px; max-width:680px; margin:12px auto 0;">
+                    <div class="pipe fragment fade-up" data-fragment-index="1"><span class="pipe-n">1</span><p class="txt-sm">先看沒有 ACID 時，系統怎麼把錢、訂單與信任一起弄丟</p></div>
+                    <div class="pipe fragment fade-up" data-fragment-index="2"><span class="pipe-n">2</span><p class="txt-sm">把事故拆回 Atomicity / Consistency / Isolation / Durability 各自負責的保護</p></div>
+                    <div class="pipe fragment fade-up" data-fragment-index="3"><span class="pipe-n">3</span><p class="txt-sm">用 Before / After 與交易時間軸看懂 Race Condition、不可重複讀、幻讀</p></div>
+                    <div class="pipe fragment fade-up" data-fragment-index="4"><span class="pipe-n">4</span><p class="txt-sm">補上可動手驗證的練習：轉帳故障、雙終端機隔離等級、Crash Recovery</p></div>
+                    <div class="pipe fragment fade-up" data-fragment-index="5"><span class="pipe-n">5</span><p class="txt-sm">最後才進到 Spring Boot 程式碼：@Transactional、rollbackFor、AOP 規則</p></div>
+                    <div class="pipe fragment fade-up" data-fragment-index="6"><span class="pipe-n">6</span><p class="txt-sm">用除錯題收尾，讓學生自己找出交易管理中的坑</p></div>
+                </div>
+            </section>
+
+            <section id="pain-transfer" class="ds" data-background-color="#181715">
+                <h2>如果沒有 ACID：轉帳成功了一半</h2>
+                <div style="display:grid; grid-template-columns:1.05fr 0.95fr; gap:14px; margin-top:12px; align-items:start;">
+                    <div>
+                        <div class="step fragment fade-up" data-fragment-index="1">
+                            <div class="step-num done">1</div>
+                            <div class="step-body" style="background:rgba(204,120,92,.08); border-left:3px solid var(--ab);">
+                                <span class="step-title" style="color:var(--ald);">Lucas 轉帳 $300 給 Emma</span>
+                                <span class="step-sub">初始餘額：Lucas = $1,000，Emma = $500，總額 = $1,500。</span>
+                            </div>
+                        </div>
+                        <div class="arr fragment fade-up" data-fragment-index="1"><i class="fas fa-arrow-down"></i></div>
+                        <div class="step fragment fade-up" data-fragment-index="2">
+                            <div class="step-num">2</div>
+                            <div class="step-body">
+                                <span class="step-title">第 1 條 SQL：扣款成功</span>
+                                <span class="step-sub"><code>UPDATE account SET balance = balance - 300 WHERE id = 1;</code></span>
+                            </div>
+                        </div>
+                        <div class="arr fragment fade-up" data-fragment-index="2"><i class="fas fa-arrow-down"></i></div>
+                        <div class="step fragment fade-up" data-fragment-index="3">
+                            <div class="step-num">3</div>
+                            <div class="step-body">
+                                <span class="step-title">第 2 條 SQL 前，服務噴錯 / JVM 掛掉</span>
+                                <span class="step-sub">收款方還沒入帳，但扣款已經留在資料庫裡。</span>
+                            </div>
+                        </div>
+                        <div class="callout fragment fade-up" data-fragment-index="4" style="margin-top:12px;">
+                            <p class="txt-sm"><strong>業務感受：</strong>使用者看到「轉帳失敗」，但帳上少了 $300。客服、對帳、稽核三邊都會炸鍋。</p>
+                        </div>
+                    </div>
+                    <div class="card" style="padding:12px 14px; background:rgba(250,249,245,.05);">
+                        <h3><i class="fas fa-scale-balanced blu"></i> 餘額現場</h3>
+                        <div style="display:flex; flex-direction:column; gap:8px; margin-top:6px;">
+                            <div class="pipe"><span class="pipe-n">Before</span><p class="txt-sm">Lucas = $1,000 ｜ Emma = $500 ｜ 總額 = $1,500</p></div>
+                            <div class="pipe fragment fade-up" data-fragment-index="2"><span class="pipe-n">扣款後</span><p class="txt-sm">Lucas = $700 ｜ Emma = $500 ｜ 總額 = $1,200</p></div>
+                            <div class="pipe fragment fade-up" data-fragment-index="3" style="border-left-color:#ee5a24;"><span class="pipe-n">異常後</span><p class="txt-sm">畫面顯示失敗，但資料庫停在半成品狀態</p></div>
+                        </div>
+                        <div class="warn fragment fade-up" data-fragment-index="4" style="margin-top:10px;">
+                            <p class="txt-sm"><i class="fas fa-triangle-exclamation" style="color:#ff9f43;"></i> <strong>少掉的不是 SQL，是信任。</strong></p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="pain-concurrency-crash" class="ds" data-background-color="#181715">
+                <h2>沒有 Isolation / Durability：超賣與「Commit 後消失」</h2>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:12px;">
+                    <div class="card fragment fade-up" data-fragment-index="1" style="background:rgba(250,249,245,.05);">
+                        <h3><i class="fas fa-people-arrows blu"></i> 超賣：兩個人搶最後 1 張票</h3>
+                        <div style="display:flex; flex-direction:column; gap:6px; margin-top:6px;">
+                            <div class="pipe"><span class="pipe-n">T1</span><p class="txt-sm">小明讀到庫存 = 1</p></div>
+                            <div class="pipe"><span class="pipe-n">T2</span><p class="txt-sm">小華也讀到庫存 = 1</p></div>
+                            <div class="pipe"><span class="pipe-n">結果</span><p class="txt-sm">兩張訂單都成立，庫存卻只剩 0，看起來像沒超賣</p></div>
+                        </div>
+                        <div class="callout" style="margin-top:10px;"><p class="txt-sm">Race Condition 不是偶發 UI bug，而是隔離不足造成的資料競態。</p></div>
+                    </div>
+                    <div class="card fragment fade-up" data-fragment-index="2" style="background:rgba(204,120,92,.10); border:1px solid rgba(204,120,92,.28);">
+                        <h3><i class="fas fa-power-off blu"></i> 斷電：明明 Commit 了，重開機卻不見</h3>
+                        <div style="display:flex; flex-direction:column; gap:6px; margin-top:6px;">
+                            <div class="pipe"><span class="pipe-n">Step 1</span><p class="txt-sm">應用程式收到 <code>COMMIT OK</code></p></div>
+                            <div class="pipe"><span class="pipe-n">Step 2</span><p class="txt-sm">主機立刻掉電，資料頁還沒刷回磁碟</p></div>
+                            <div class="pipe"><span class="pipe-n">Step 3</span><p class="txt-sm">重啟後查詢：剛剛那筆成功交易消失</p></div>
+                        </div>
+                        <div class="warn" style="margin-top:10px;"><p class="txt-sm">如果 Commit 不能被信任，整個系統的 SLA、金流與審計都失去意義。</p></div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="pain-to-acid" class="ls" data-background-color="#faf9f5">
+                <h2>所以 ACID 不是背縮寫，是四道事故防線</h2>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:12px;">
+                    <div class="card fragment fade-up" data-fragment-index="1">
+                        <h3><i class="fas fa-a blu"></i> Atomicity</h3>
+                        <p class="txt-sm">防止「扣款成功、入帳失敗」這種半完成狀態留在資料庫。</p>
+                    </div>
+                    <div class="card fragment fade-up" data-fragment-index="1">
+                        <h3><i class="fas fa-c blu"></i> Consistency</h3>
+                        <p class="txt-sm">防止違反 FK、NOT NULL、商業規則的髒資料混進正式帳務。</p>
+                    </div>
+                    <div class="card fragment fade-up" data-fragment-index="2">
+                        <h3><i class="fas fa-i blu"></i> Isolation</h3>
+                        <p class="txt-sm">防止併發交易互相踩踏，讓 Race Condition 變成可預期、可選擇的成本。</p>
+                    </div>
+                    <div class="card fragment fade-up" data-fragment-index="2">
+                        <h3><i class="fas fa-d blu"></i> Durability</h3>
+                        <p class="txt-sm">保證系統一旦回覆 Commit 成功，重開機後這筆資料還在。</p>
+                    </div>
+                </div>
+                <div class="callout fragment fade-up" data-fragment-index="3" style="margin-top:12px;">
+                    <p class="txt-sm">接下來每個特性都會先回答一個問題：<strong>它到底擋住了哪一種事故？</strong></p>
+                </div>
+            </section>
+
+            <section id="acid-map" class="ds" data-background-color="#181715">
+                <h2>ACID 四大特性，回到使用者會遇到的問題</h2>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:12px;">
+                    <div class="cache-card cache-c1 fragment fade-up" data-fragment-index="1">
+                        <span class="cache-card-num">A</span>
+                        <span class="cache-card-title">Atomicity 原子性</span>
+                        <span class="cache-card-sub">交易要嘛全部成功，要嘛全部失敗。它解決的是「資料停在中間狀態」的事故。</span>
+                        <span class="cache-pill">ALL OR NOTHING</span>
+                    </div>
+                    <div class="cache-card cache-c2 fragment fade-up" data-fragment-index="1">
+                        <span class="cache-card-num">C</span>
+                        <span class="cache-card-title">Consistency 一致性</span>
+                        <span class="cache-card-sub">交易前後都要滿足 schema 與業務規則，資料庫不能接受不可能存在的狀態。</span>
+                        <span class="cache-pill">VALID STATE</span>
+                    </div>
+                    <div class="cache-card cache-c1 fragment fade-up" data-fragment-index="2">
+                        <span class="cache-card-num">I</span>
+                        <span class="cache-card-title">Isolation 隔離性</span>
+                        <span class="cache-card-sub">多筆交易同時跑時，也要像各自在自己的世界裡執行，彼此看不到不該看到的中間值。</span>
+                        <span class="cache-pill">SAFE CONCURRENCY</span>
+                    </div>
+                    <div class="cache-card cache-c2 fragment fade-up" data-fragment-index="2">
+                        <span class="cache-card-num">D</span>
+                        <span class="cache-card-title">Durability 持久性</span>
+                        <span class="cache-card-sub">Commit 成功後，資料要能穿越斷電、重啟與 Crash Recovery，不能只活在記憶體裡。</span>
+                        <span class="cache-pill">SURVIVES CRASH</span>
+                    </div>
+                </div>
+            </section>
+
+            <section id="atomicity-before-after" class="ds" data-background-color="#181715">
+                <h2>Atomicity：同一筆轉帳，Before / After 差在哪？</h2>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:12px; align-items:start;">
+                    <div class="card" style="background:rgba(250,249,245,.05);">
+                        <h3><i class="fas fa-xmark" style="color:#ff9f43;"></i> Before：沒有交易邊界</h3>
+                        <div style="display:flex; flex-direction:column; gap:6px; margin-top:6px;">
+                            <div class="pipe"><span class="pipe-n">1</span><p class="txt-sm">Lucas $1,000 → 扣 $300 後剩 $700</p></div>
+                            <div class="pipe"><span class="pipe-n">2</span><p class="txt-sm">Emma 本該 $500 → $800，但第 2 條 SQL 沒跑到</p></div>
+                            <div class="pipe"><span class="pipe-n">3</span><p class="txt-sm">總額從 $1,500 變成 $1,200，$300 憑空消失</p></div>
+                        </div>
+                    </div>
+                    <div class="card" style="background:rgba(204,120,92,.12); border:1px solid rgba(204,120,92,.32);">
+                        <h3><i class="fas fa-check" style="color:var(--ald);"></i> After：扣款失敗就整筆回滾</h3>
+                        <div style="display:flex; flex-direction:column; gap:6px; margin-top:6px;">
+                            <div class="pipe fragment fade-up" data-fragment-index="1"><span class="pipe-n">1</span><p class="txt-sm">扣款後遇到例外，交易進入 rollback</p></div>
+                            <div class="pipe fragment fade-up" data-fragment-index="2"><span class="pipe-n">2</span><p class="txt-sm">Undo Log 把 Lucas 餘額從 $700 還原回 $1,000</p></div>
+                            <div class="pipe fragment fade-up" data-fragment-index="3"><span class="pipe-n">3</span><p class="txt-sm">Emma 維持 $500，總額仍是 $1,500</p></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="callout fragment fade-up" data-fragment-index="3" style="margin-top:10px;">
+                    <p class="txt-sm">底層對應：InnoDB 會先記錄 Undo Log，必要時反向操作，把資料恢復到交易開始前。</p>
+                </div>
+
+                <!-- SVG: Undo Log 反向操作鏈 -->
+                <svg viewBox="0 0 960 68" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block;margin-top:10px;" class="fragment fade-up" data-fragment-index="4">
+                  <defs>
+                    <marker id="ul-a1" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0.5 L0,6.5 L7,3.5 z" fill="rgba(204,120,92,0.8)"/></marker>
+                    <marker id="ul-a2" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0.5 L0,6.5 L7,3.5 z" fill="#ee5a24"/></marker>
+                    <marker id="ul-a3" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0.5 L0,6.5 L7,3.5 z" fill="rgba(93,184,166,0.85)"/></marker>
+                  </defs>
+
+                  <!-- Track line -->
+                  <line x1="10" y1="38" x2="950" y2="38" stroke="rgba(250,249,245,0.06)" stroke-width="1"/>
+
+                  <!-- Label -->
+                  <text x="480" y="10" text-anchor="middle" fill="rgba(250,249,245,0.28)" font-size="9" font-family="Inter,sans-serif" letter-spacing="0.1em">UNDO LOG — InnoDB 的回溯路徑</text>
+
+                  <!-- Node 1: SQL 執行 -->
+                  <rect x="8" y="20" width="148" height="36" rx="7" fill="rgba(204,120,92,0.13)" stroke="rgba(204,120,92,0.48)" stroke-width="1.3"/>
+                  <text x="82" y="35" text-anchor="middle" fill="#cc785c" font-size="11" font-weight="700" font-family="Inter,sans-serif">① SQL 執行</text>
+                  <text x="82" y="50" text-anchor="middle" fill="rgba(250,249,245,0.52)" font-size="9.5" font-family="Inter,sans-serif">balance 1000 → 700</text>
+
+                  <!-- Arrow 1→2 -->
+                  <line x1="158" y1="38" x2="202" y2="38" stroke="rgba(204,120,92,0.65)" stroke-width="1.4" marker-end="url(#ul-a1)"/>
+
+                  <!-- Node 2: Undo Log 先寫 -->
+                  <rect x="204" y="20" width="165" height="36" rx="7" fill="rgba(250,249,245,0.05)" stroke="rgba(250,249,245,0.16)" stroke-width="1.3"/>
+                  <text x="286" y="35" text-anchor="middle" fill="rgba(250,249,245,0.85)" font-size="11" font-weight="700" font-family="Inter,sans-serif">② Undo Log 先寫入</text>
+                  <text x="286" y="50" text-anchor="middle" fill="rgba(250,249,245,0.42)" font-size="9.5" font-family="Inter,sans-serif">舊值 balance = 1000</text>
+
+                  <!-- Arrow 2→3 -->
+                  <line x1="371" y1="38" x2="414" y2="38" stroke="rgba(204,120,92,0.65)" stroke-width="1.4" marker-end="url(#ul-a1)"/>
+
+                  <!-- Node 3: 例外 -->
+                  <rect x="416" y="20" width="128" height="36" rx="7" fill="rgba(238,90,36,0.18)" stroke="rgba(238,90,36,0.6)" stroke-width="1.4"/>
+                  <text x="480" y="35" text-anchor="middle" fill="#ff9f43" font-size="11" font-weight="700" font-family="Inter,sans-serif">③ 例外 / Crash</text>
+                  <text x="480" y="50" text-anchor="middle" fill="rgba(250,249,245,0.48)" font-size="9.5" font-family="Inter,sans-serif">交易中斷，觸發 rollback</text>
+
+                  <!-- Arrow 3→4 -->
+                  <line x1="546" y1="38" x2="590" y2="38" stroke="#ee5a24" stroke-width="1.4" marker-end="url(#ul-a2)"/>
+
+                  <!-- Node 4: Rollback 讀 Undo -->
+                  <rect x="592" y="20" width="170" height="36" rx="7" fill="rgba(250,249,245,0.06)" stroke="rgba(250,249,245,0.18)" stroke-width="1.3"/>
+                  <text x="677" y="35" text-anchor="middle" fill="rgba(250,249,245,0.85)" font-size="11" font-weight="700" font-family="Inter,sans-serif">④ Rollback 讀 Undo Log</text>
+                  <text x="677" y="50" text-anchor="middle" fill="rgba(250,249,245,0.42)" font-size="9.5" font-family="Inter,sans-serif">依序執行反向 SQL</text>
+
+                  <!-- Arrow 4→5 -->
+                  <line x1="764" y1="38" x2="808" y2="38" stroke="rgba(93,184,166,0.8)" stroke-width="1.4" marker-end="url(#ul-a3)"/>
+
+                  <!-- Node 5: 還原完成 -->
+                  <rect x="810" y="20" width="148" height="36" rx="7" fill="rgba(93,184,166,0.14)" stroke="rgba(93,184,166,0.48)" stroke-width="1.4"/>
+                  <text x="884" y="35" text-anchor="middle" fill="#5db8a6" font-size="11" font-weight="700" font-family="Inter,sans-serif">⑤ 資料還原完成</text>
+                  <text x="884" y="50" text-anchor="middle" fill="rgba(250,249,245,0.5)" font-size="9.5" font-family="Inter,sans-serif">balance 回到 1000 ✓</text>
+                </svg>
+            </section>
+
+            <section id="innodb-intro" class="ds" data-background-color="#181715">
+                <h2>你用的 MySQL，底層其實是 InnoDB 在跑</h2>
+                <div style="display:grid; grid-template-columns:1.1fr 0.9fr; gap:14px; margin-top:14px; align-items:start;">
+                    <div style="display:flex; flex-direction:column; gap:8px;">
+                        <div class="callout" style="margin-bottom:4px;">
+                            <p class="txt-sm">MySQL 不是只有一種儲存方式 — 它支援可抽換的 <strong>Storage Engine</strong>，而大多數人根本沒注意到自己在用哪一個。</p>
+                        </div>
+                        <div class="layer-box lv fragment fade-up" data-fragment-index="1">
+                            <div>
+                                <p class="txt-sm" style="font-weight:600; color:var(--ald);">InnoDB <span class="badge bb" style="margin-left:6px;">預設引擎 ≥ MySQL 5.5</span></p>
+                                <p class="txt-xs muted" style="margin-top:3px;">支援 Transaction、外鍵、MVCC、Crash Recovery — ACID 四件事它全包。</p>
+                            </div>
+                        </div>
+                        <div class="layer-box lsv fragment fade-up" data-fragment-index="2">
+                            <div>
+                                <p class="txt-sm" style="font-weight:600;">MyISAM</p>
+                                <p class="txt-xs muted" style="margin-top:3px;">速度快、全文搜尋強，但<strong>不支援 Transaction</strong>，沒有 ACID 保護。</p>
+                            </div>
+                        </div>
+                        <div class="layer-box lm fragment fade-up" data-fragment-index="2">
+                            <div>
+                                <p class="txt-sm" style="font-weight:600;">Memory / CSV / Archive…</p>
+                                <p class="txt-xs muted" style="margin-top:3px;">各有特殊用途，同樣沒有完整的 ACID 支援。</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="display:flex; flex-direction:column; gap:8px;">
+                        <div class="card fragment fade-up" data-fragment-index="3" style="background:rgba(250,249,245,.05);">
+                            <h3><i class="fas fa-terminal blu"></i> 確認你的引擎</h3>
+                            <pre style="margin-top:6px;"><code class="language-sql" data-trim>
+-- 看單一資料表用哪個引擎
+SHOW TABLE STATUS
+  WHERE Name = 'account'\G
+
+-- 建表時指定（通常不需要，預設就是 InnoDB）
+CREATE TABLE account (
+  id   BIGINT PRIMARY KEY,
+  ...
+) ENGINE = InnoDB;
+                            </code></pre>
+                        </div>
+                        <div class="warn fragment fade-up" data-fragment-index="4">
+                            <p class="txt-sm"><i class="fas fa-triangle-exclamation" style="color:#ff9f43;"></i> 舊專案 migration 或手動建表時，若沒指定引擎，<strong>不同 MySQL 版本的預設值可能不同</strong>，值得確認一次。</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="innodb-acid" class="ds" data-background-color="#181715">
+                <h2>InnoDB 怎麼把 ACID 四件事都做進去的？</h2>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:14px;">
+                    <div class="cache-card cache-c1 fragment fade-up" data-fragment-index="1">
+                        <span class="cache-card-num">A — Atomicity</span>
+                        <span class="cache-card-title">Undo Log</span>
+                        <span class="cache-card-sub">每次寫入前先記舊值到 Undo Log。交易失敗時，InnoDB 依序反向執行，把資料還原回原始狀態。</span>
+                        <span class="cache-pill">ALL OR NOTHING</span>
+                    </div>
+                    <div class="cache-card cache-c2 fragment fade-up" data-fragment-index="1">
+                        <span class="cache-card-num">D — Durability</span>
+                        <span class="cache-card-title">Redo Log（WAL）</span>
+                        <span class="cache-card-sub">Commit 前先把變更寫進 Redo Log（Write-Ahead Log）。斷電重啟後，InnoDB 重播 Redo Log，確保已 Commit 的資料不丟失。</span>
+                        <span class="cache-pill">SURVIVES CRASH</span>
+                    </div>
+                    <div class="cache-card cache-c1 fragment fade-up" data-fragment-index="2">
+                        <span class="cache-card-num">I — Isolation</span>
+                        <span class="cache-card-title">MVCC + Locking</span>
+                        <span class="cache-card-sub">透過多版本並行控制（MVCC）讓讀不擋寫，搭配行鎖（Row Lock）管理寫衝突，預設隔離等級為 REPEATABLE READ。</span>
+                        <span class="cache-pill">SAFE CONCURRENCY</span>
+                    </div>
+                    <div class="cache-card cache-c2 fragment fade-up" data-fragment-index="2">
+                        <span class="cache-card-num">C — Consistency</span>
+                        <span class="cache-card-title">約束 + 前兩者合力</span>
+                        <span class="cache-card-sub">外鍵（FK）、CHECK、NOT NULL 由引擎層強制執行；Atomicity 與 Isolation 再確保交易前後都不會留下不合法的中間狀態。</span>
+                        <span class="cache-pill">VALID STATE</span>
+                    </div>
+                </div>
+                <div class="callout fragment fade-up" data-fragment-index="3" style="margin-top:12px;">
+                    <p class="txt-sm">所以你在 Spring 寫 <code>@Transactional</code> 時，<strong>真正幫你做事的是 InnoDB</strong>；Spring 只是在對的時機呼叫 <code>BEGIN</code> / <code>COMMIT</code> / <code>ROLLBACK</code>。</p>
+                </div>
+            </section>
+
+            <section id="atomicity-transactional-intro" class="ls" data-background-color="#faf9f5">
+                <h2><code>@Transactional</code> 是什麼？</h2>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:12px; align-items:start;">
+                    <div class="card">
+                        <h3><i class="fas fa-border-all blu"></i> 一句話理解</h3>
+                        <p class="txt-sm"><code>@Transactional</code> 是 Spring 用來宣告「這段方法要放在同一筆資料庫交易裡」的註解。</p>
+                        <div class="callout" style="margin-top:10px;">
+                            <p class="txt-sm">它幫你畫出交易邊界：<strong>方法開始 = begin，方法正常結束 = commit，途中丟例外 = rollback。</strong></p>
+                        </div>
+                    </div>
+                    <div class="card" style="background:rgba(204,120,92,.10); border:1px solid rgba(204,120,92,.22);">
+                        <h3><i class="fas fa-link blu"></i> 套到轉帳場景</h3>
+                        <div style="display:flex; flex-direction:column; gap:6px; margin-top:6px;">
+                            <div class="pipe"><span class="pipe-n">BEGIN</span><p class="txt-sm">扣款與入帳先被包成同一個工作單位</p></div>
+                            <div class="pipe"><span class="pipe-n">RUN</span><p class="txt-sm">中間任何一步失敗，都不准留下半成品資料</p></div>
+                            <div class="pipe"><span class="pipe-n">END</span><p class="txt-sm">只有全部成功，Spring 才會替你提交這筆交易</p></div>
+                        </div>
+                    </div>
+                </div>
+                <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; margin-top:12px;">
+                    <div class="warn fragment fade-up" data-fragment-index="1">
+                        <p class="txt-sm"><strong>誰負責？</strong><br>Spring Transaction Manager</p>
+                    </div>
+                    <div class="warn fragment fade-up" data-fragment-index="2">
+                        <p class="txt-sm"><strong>保護什麼？</strong><br>同方法內的多個 SQL 要一起成功 / 失敗</p>
+                    </div>
+                    <div class="warn fragment fade-up" data-fragment-index="3">
+                        <p class="txt-sm"><strong>常見誤解</strong><br>它不是魔法；邊界畫錯、例外處理錯，仍然會出事故</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="atomicity-lab" class="ls" data-background-color="#faf9f5">
+                <h2>Atomicity 練習：先故意不加 Transaction</h2>
+                <div style="display:grid; grid-template-columns:0.9fr 1.1fr; gap:16px; margin-top:12px; align-items:start;">
+                    <div>
+                        <div class="step fragment fade-up" data-fragment-index="1">
+                            <div class="step-num done">1</div>
+                            <div class="step-body" style="background:rgba(204,120,92,.08); border-left:3px solid var(--ab);">
+                                <span class="step-title" style="color:var(--ald);">先跑錯的版本</span>
+                                <span class="step-sub">不要加 <code>@Transactional</code>，先觀察半完成資料真的會留下來。</span>
+                            </div>
+                        </div>
+                        <div class="arr fragment fade-up" data-fragment-index="1"><i class="fas fa-arrow-down"></i></div>
+                        <div class="step fragment fade-up" data-fragment-index="2">
+                            <div class="step-num">2</div>
+                            <div class="step-body">
+                                <span class="step-title">在扣款後故意丟例外</span>
+                                <span class="step-sub">執行到一半中斷，立刻去查 <code>account</code> 表。</span>
+                            </div>
+                        </div>
+                        <div class="arr fragment fade-up" data-fragment-index="2"><i class="fas fa-arrow-down"></i></div>
+                        <div class="step fragment fade-up" data-fragment-index="3">
+                            <div class="step-num">3</div>
+                            <div class="step-body">
+                                <span class="step-title">再補上 <code>@Transactional</code></span>
+                                <span class="step-sub">比較兩次執行後 Lucas / Emma 餘額差異，感受 rollback 的價值。</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <h3><i class="fas fa-code blu"></i> 反例：沒有 Transaction 的轉帳</h3>
+                        <pre><code class="language-java">public void transfer(Long fromId, Long toId, BigDecimal amount) {
+    accountRepository.debit(fromId, amount);
+
+    if (true) {
+        throw new IllegalStateException("模擬中途故障");
+    }
+
+    accountRepository.credit(toId, amount);
+}
+                        </code></pre>
+                        <div class="warn" style="margin-top:10px;">
+                            <p class="txt-sm"><strong>預期結果：</strong>例外有拋出，但扣款已經寫進資料庫，這就是沒有 Atomicity 的世界。</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="consistency-errors" class="ds" data-background-color="#181715">
+                <h2>Consistency：資料庫會直接拒絕不合理的狀態</h2>
+                <div style="display:grid; grid-template-columns:0.95fr 1.05fr; gap:14px; margin-top:12px; align-items:start;">
+                    <div class="card" style="background:rgba(250,249,245,.05);">
+                        <h3><i class="fas fa-ruler-combined blu"></i> 先定規則</h3>
+                        <pre><code class="language-sql" data-trim>
+CREATE TABLE transfer_log (
+  id BIGINT PRIMARY KEY,
+  from_account_id BIGINT NOT NULL,
+  to_account_id BIGINT NOT NULL,
+  amount DECIMAL(12,2) NOT NULL,
+  CONSTRAINT fk_to_account
+    FOREIGN KEY (to_account_id) REFERENCES account(id)
+);
+                        </code></pre>
+                        <p class="txt-sm muted" style="margin-top:8px;">NOT NULL 與 FOREIGN KEY 不是裝飾，它們是最後一道機械式防呆。</p>
+                    </div>
+                    <div class="card" style="background:rgba(204,120,92,.10); border:1px solid rgba(204,120,92,.28);">
+                        <h3><i class="fas fa-terminal blu"></i> 實際錯誤畫面 / 情境</h3>
+                        <pre><code class="language-sql" data-trim>
+INSERT INTO transfer_log (id, from_account_id, to_account_id, amount)
+VALUES (9001, 1, NULL, 300.00);
+-- ERROR 1048 (23000): Column 'to_account_id' cannot be null
+
+INSERT INTO transfer_log (id, from_account_id, to_account_id, amount)
+VALUES (9002, 1, 9999, 300.00);
+-- ERROR 1452 (23000): Cannot add or update a child row:
+-- a foreign key constraint fails
+                        </code></pre>
+                        <div class="callout" style="margin-top:10px;"><p class="txt-sm">Consistency 的意思不是「不會出錯」，而是「錯的資料進不去」。</p></div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="isolation-race" class="ds" data-background-color="#181715">
+                <h2>Isolation：Race Condition / Lost Update 用時間軸看最清楚</h2>
+                <div class="card" style="margin-top:10px; padding:12px 14px; background:rgba(250,249,245,.05);">
+                    <p class="txt-sm muted" style="margin-bottom:8px;">場景：兩個交易同時修改同一個帳戶，正確答案應該是 $1,000 - $100 - $50 = $850。</p>
+                    <div style="display:grid; grid-template-columns:78px 1fr 1fr; gap:8px; align-items:center;">
+                        <p class="txt-xs muted">時間</p>
+                        <p class="txt-xs muted"><strong>Transaction A</strong></p>
+                        <p class="txt-xs muted"><strong>Transaction B</strong></p>
+
+                        <p><span class="badge bb">t1</span></p>
+                        <p class="txt-sm">讀到 balance = 1000</p>
+                        <p class="txt-sm muted">—</p>
+
+                        <p class="fragment fade-up" data-fragment-index="1"><span class="badge bb">t2</span></p>
+                        <p class="txt-sm fragment fade-up" data-fragment-index="1">A 準備扣 100，暫存新值 900</p>
+                        <p class="txt-sm fragment fade-up" data-fragment-index="1">讀到 balance = 1000</p>
+
+                        <p class="fragment fade-up" data-fragment-index="2"><span class="badge bb">t3</span></p>
+                        <p class="txt-sm fragment fade-up" data-fragment-index="2">UPDATE balance = 900 並提交</p>
+                        <p class="txt-sm fragment fade-up" data-fragment-index="2">B 仍拿著舊值 1000</p>
+
+                        <p class="fragment fade-up" data-fragment-index="3"><span class="badge bb">t4</span></p>
+                        <p class="txt-sm fragment fade-up" data-fragment-index="3">A 完成</p>
+                        <p class="txt-sm fragment fade-up" data-fragment-index="3">UPDATE balance = 950 並提交</p>
+                    </div>
+                    <div class="warn fragment fade-up" data-fragment-index="4" style="margin-top:8px;">
+                        <p class="txt-sm"><strong>結果：</strong>最後餘額變成 $950，不是 $850。後寫入的人把前一個人的結果蓋掉了。</p>
+                    </div>
+                </div>
+
+                <!-- SVG: Lost Update 視覺時間軸 -->
+                <svg viewBox="0 0 960 108" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block;margin-top:10px;" class="fragment fade-up" data-fragment-index="5">
+                  <defs>
+                    <marker id="lu-a1" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0.5 L0,6.5 L7,3.5 z" fill="rgba(204,120,92,0.75)"/></marker>
+                    <marker id="lu-a2" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0.5 L0,6.5 L7,3.5 z" fill="rgba(93,184,166,0.75)"/></marker>
+                    <marker id="lu-a3" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0.5 L0,6.5 L7,3.5 z" fill="#ee5a24"/></marker>
+                  </defs>
+
+                  <!-- Column labels t1–t4 -->
+                  <text x="210" y="12" text-anchor="middle" fill="rgba(250,249,245,0.32)" font-size="11" font-family="Inter,sans-serif" font-weight="600">t₁</text>
+                  <text x="400" y="12" text-anchor="middle" fill="rgba(250,249,245,0.32)" font-size="11" font-family="Inter,sans-serif" font-weight="600">t₂</text>
+                  <text x="610" y="12" text-anchor="middle" fill="rgba(250,249,245,0.32)" font-size="11" font-family="Inter,sans-serif" font-weight="600">t₃</text>
+                  <text x="800" y="12" text-anchor="middle" fill="rgba(250,249,245,0.32)" font-size="11" font-family="Inter,sans-serif" font-weight="600">t₄</text>
+                  <!-- Vertical guide lines -->
+                  <line x1="210" y1="16" x2="210" y2="105" stroke="rgba(250,249,245,0.06)" stroke-width="1" stroke-dasharray="3,3"/>
+                  <line x1="400" y1="16" x2="400" y2="105" stroke="rgba(250,249,245,0.06)" stroke-width="1" stroke-dasharray="3,3"/>
+                  <line x1="610" y1="16" x2="610" y2="105" stroke="rgba(250,249,245,0.06)" stroke-width="1" stroke-dasharray="3,3"/>
+                  <line x1="800" y1="16" x2="800" y2="105" stroke="rgba(250,249,245,0.06)" stroke-width="1" stroke-dasharray="3,3"/>
+
+                  <!-- Lane labels -->
+                  <text x="84" y="44" text-anchor="middle" fill="#cc785c" font-size="12" font-weight="700" font-family="Inter,sans-serif">T A</text>
+                  <text x="84" y="57" text-anchor="middle" fill="rgba(250,249,245,0.35)" font-size="9.5" font-family="Inter,sans-serif">扣 $100</text>
+                  <text x="84" y="82" text-anchor="middle" fill="rgba(93,184,166,0.9)" font-size="12" font-weight="700" font-family="Inter,sans-serif">T B</text>
+                  <text x="84" y="95" text-anchor="middle" fill="rgba(250,249,245,0.35)" font-size="9.5" font-family="Inter,sans-serif">扣 $50</text>
+
+                  <!-- TA timeline -->
+                  <line x1="105" y1="47" x2="870" y2="47" stroke="rgba(204,120,92,0.2)" stroke-width="1.3"/>
+                  <!-- TB timeline -->
+                  <line x1="105" y1="85" x2="870" y2="85" stroke="rgba(93,184,166,0.2)" stroke-width="1.3"/>
+
+                  <!-- TA: t1 READ 1000 -->
+                  <circle cx="210" cy="47" r="7" fill="rgba(204,120,92,0.85)" stroke="#cc785c" stroke-width="1.2"/>
+                  <text x="210" y="36" text-anchor="middle" fill="rgba(250,249,245,0.75)" font-size="9.5" font-family="Inter,sans-serif">READ=1000</text>
+
+                  <!-- TA: t3 WRITE 900 + COMMIT -->
+                  <circle cx="610" cy="47" r="7" fill="rgba(204,120,92,0.85)" stroke="#cc785c" stroke-width="1.2"/>
+                  <text x="610" y="36" text-anchor="middle" fill="rgba(250,249,245,0.75)" font-size="9.5" font-family="Inter,sans-serif">WRITE=900</text>
+                  <rect x="628" y="38" width="62" height="18" rx="4" fill="rgba(204,120,92,0.28)" stroke="rgba(204,120,92,0.6)" stroke-width="1"/>
+                  <text x="659" y="51" text-anchor="middle" fill="#cc785c" font-size="9" font-weight="700" font-family="Inter,sans-serif">COMMIT</text>
+
+                  <!-- TB: t2 READ 1000 (stale) -->
+                  <circle cx="400" cy="85" r="7" fill="rgba(93,184,166,0.8)" stroke="rgba(93,184,166,0.95)" stroke-width="1.2"/>
+                  <text x="400" y="100" text-anchor="middle" fill="rgba(250,249,245,0.75)" font-size="9.5" font-family="Inter,sans-serif">READ=1000</text>
+                  <!-- Stale warning -->
+                  <text x="400" y="73" text-anchor="middle" fill="#ff9f43" font-size="9" font-family="Inter,sans-serif">⚠ 讀到舊值</text>
+
+                  <!-- TB: t4 WRITE 950 + COMMIT -->
+                  <circle cx="800" cy="85" r="7" fill="rgba(93,184,166,0.8)" stroke="rgba(93,184,166,0.95)" stroke-width="1.2"/>
+                  <text x="800" y="100" text-anchor="middle" fill="rgba(250,249,245,0.75)" font-size="9.5" font-family="Inter,sans-serif">WRITE=950</text>
+                  <rect x="818" y="76" width="62" height="18" rx="4" fill="rgba(93,184,166,0.2)" stroke="rgba(93,184,166,0.55)" stroke-width="1"/>
+                  <text x="849" y="89" text-anchor="middle" fill="rgba(93,184,166,0.9)" font-size="9" font-weight="700" font-family="Inter,sans-serif">COMMIT</text>
+
+                  <!-- Overwrite indicator -->
+                  <line x1="800" y1="56" x2="800" y2="76" stroke="#ee5a24" stroke-width="1.6" stroke-dasharray="3,2" marker-end="url(#lu-a3)"/>
+                  <text x="812" y="68" fill="#ee5a24" font-size="9" font-family="Inter,sans-serif" font-weight="600">覆蓋!</text>
+
+                  <!-- Result box -->
+                  <rect x="895" y="56" width="58" height="38" rx="6" fill="rgba(238,90,36,0.2)" stroke="#ee5a24" stroke-width="1.5"/>
+                  <text x="924" y="72" text-anchor="middle" fill="#ee5a24" font-size="10" font-weight="700" font-family="Inter,sans-serif">950</text>
+                  <text x="924" y="87" text-anchor="middle" fill="rgba(250,249,245,0.45)" font-size="8.5" font-family="Inter,sans-serif">≠ 850 ❌</text>
+                </svg>
+            </section>
+
+            <section id="isolation-anomalies" class="ls" data-background-color="#faf9f5">
+                <h2>不可重複讀 vs 幻讀：差別在「同一列變了」還是「結果集合變了」</h2>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:12px; align-items:start;">
+                    <div class="card">
+                        <h3><i class="fas fa-repeat blu"></i> 不可重複讀 Non-repeatable Read</h3>
+                        <div style="display:grid; grid-template-columns:62px 1fr 1fr; gap:6px; margin-top:6px; align-items:center;">
+                            <p class="txt-xs muted">時間</p>
+                            <p class="txt-xs muted"><strong>T1</strong></p>
+                            <p class="txt-xs muted"><strong>T2</strong></p>
+                            <p><span class="badge bb">t1</span></p>
+                            <p class="txt-sm">SELECT balance → 1000</p>
+                            <p class="txt-sm muted">—</p>
+                            <p><span class="badge bb">t2</span></p>
+                            <p class="txt-sm">同一交易內等待</p>
+                            <p class="txt-sm">UPDATE balance = 1200; COMMIT;</p>
+                            <p><span class="badge bb">t3</span></p>
+                            <p class="txt-sm">再次 SELECT → 1200</p>
+                            <p class="txt-sm muted">同一列、同一條查詢，結果變了</p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <h3><i class="fas fa-clone blu"></i> 幻讀 Phantom Read</h3>
+                        <div style="display:grid; grid-template-columns:62px 1fr 1fr; gap:6px; margin-top:6px; align-items:center;">
+                            <p class="txt-xs muted">時間</p>
+                            <p class="txt-xs muted"><strong>T1</strong></p>
+                            <p class="txt-xs muted"><strong>T2</strong></p>
+                            <p><span class="badge bb">t1</span></p>
+                            <p class="txt-sm">SELECT COUNT(*) WHERE amount &gt; 1000 → 3</p>
+                            <p class="txt-sm muted">—</p>
+                            <p><span class="badge bb">t2</span></p>
+                            <p class="txt-sm">同一交易內等待</p>
+                            <p class="txt-sm">INSERT 新轉帳 5000; COMMIT;</p>
+                            <p><span class="badge bb">t3</span></p>
+                            <p class="txt-sm">再次查詢 → 4</p>
+                            <p class="txt-sm muted">不是某一列變了，是整個結果集合多出一筆</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="callout fragment fade-up" data-fragment-index="1" style="margin-top:10px;">
+                    <p class="txt-sm">READ COMMITTED 常見不可重複讀；MySQL InnoDB 的 REPEATABLE READ 會靠 snapshot + next-key lock 壓低幻讀風險。</p>
+                </div>
+
+                <!-- SVG: 非重複讀 vs 幻讀 視覺對比 -->
+                <svg viewBox="0 0 960 78" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block;margin-top:8px;" class="fragment fade-up" data-fragment-index="2">
+                  <!-- Left: Non-repeatable read visual -->
+                  <!-- Label -->
+                  <text x="230" y="12" text-anchor="middle" fill="rgba(20,20,19,0.35)" font-size="9" font-family="Inter,sans-serif" letter-spacing="0.08em">不可重複讀：同一列值被修改</text>
+
+                  <!-- Row before T2 -->
+                  <rect x="30" y="20" width="160" height="28" rx="5" fill="rgba(93,184,166,0.12)" stroke="rgba(93,184,166,0.5)" stroke-width="1.2"/>
+                  <text x="55" y="31" fill="rgba(20,20,19,0.5)" font-size="9" font-family="Inter,sans-serif">id=1</text>
+                  <text x="110" y="31" text-anchor="middle" fill="rgba(20,20,19,0.75)" font-size="10" font-weight="600" font-family="Inter,sans-serif">balance=1000</text>
+                  <text x="110" y="42" text-anchor="middle" fill="rgba(20,20,19,0.4)" font-size="8.5" font-family="Inter,sans-serif">T1 第一次讀</text>
+
+                  <!-- Arrow -->
+                  <line x1="196" y1="34" x2="240" y2="34" stroke="rgba(20,20,19,0.3)" stroke-width="1.2" marker-end="url(#an-a1)"/>
+                  <defs>
+                    <marker id="an-a1" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0.5 L0,6.5 L7,3.5 z" fill="rgba(20,20,19,0.35)"/></marker>
+                    <marker id="an-a2" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0.5 L0,6.5 L7,3.5 z" fill="#ee5a24"/></marker>
+                  </defs>
+                  <!-- T2 modifies -->
+                  <text x="218" y="28" text-anchor="middle" fill="#cc785c" font-size="8.5" font-family="Inter,sans-serif" font-weight="600">T2 UPDATE</text>
+
+                  <!-- Row after T2 -->
+                  <rect x="242" y="20" width="160" height="28" rx="5" fill="rgba(238,90,36,0.12)" stroke="rgba(238,90,36,0.5)" stroke-width="1.2"/>
+                  <text x="267" y="31" fill="rgba(20,20,19,0.5)" font-size="9" font-family="Inter,sans-serif">id=1</text>
+                  <text x="322" y="31" text-anchor="middle" fill="#ee5a24" font-size="10" font-weight="700" font-family="Inter,sans-serif">balance=1200</text>
+                  <text x="322" y="42" text-anchor="middle" fill="rgba(20,20,19,0.4)" font-size="8.5" font-family="Inter,sans-serif">T1 再讀，值變了！</text>
+
+                  <!-- Key distinction label left -->
+                  <rect x="30" y="56" width="372" height="18" rx="4" fill="rgba(93,184,166,0.1)" stroke="rgba(93,184,166,0.3)" stroke-width="1"/>
+                  <text x="216" y="68" text-anchor="middle" fill="rgba(20,20,19,0.65)" font-size="9.5" font-family="Inter,sans-serif">同一列（id=1）的值被另一筆交易修改 → 重新讀出現不同結果</text>
+
+                  <!-- Divider -->
+                  <line x1="480" y1="12" x2="480" y2="76" stroke="rgba(20,20,19,0.1)" stroke-width="1.2" stroke-dasharray="4,3"/>
+
+                  <!-- Right: Phantom read visual -->
+                  <text x="718" y="12" text-anchor="middle" fill="rgba(20,20,19,0.35)" font-size="9" font-family="Inter,sans-serif" letter-spacing="0.08em">幻讀：結果集合行數改變</text>
+
+                  <!-- Table before insert: 3 rows -->
+                  <rect x="502" y="18" width="100" height="44" rx="5" fill="rgba(93,184,166,0.1)" stroke="rgba(93,184,166,0.45)" stroke-width="1.2"/>
+                  <text x="552" y="31" text-anchor="middle" fill="rgba(20,20,19,0.55)" font-size="9" font-family="Inter,sans-serif">3 筆 &gt; 1000</text>
+                  <text x="552" y="44" text-anchor="middle" fill="rgba(20,20,19,0.38)" font-size="8.5" font-family="Inter,sans-serif">T1 COUNT = 3</text>
+                  <!-- 3 row indicators -->
+                  <rect x="514" y="51" width="76" height="5" rx="2" fill="rgba(93,184,166,0.35)"/>
+
+                  <!-- Arrow -->
+                  <line x1="608" y1="38" x2="650" y2="38" stroke="rgba(20,20,19,0.3)" stroke-width="1.2" marker-end="url(#an-a1)"/>
+                  <text x="629" y="30" text-anchor="middle" fill="#cc785c" font-size="8.5" font-family="Inter,sans-serif" font-weight="600">T2 INSERT</text>
+
+                  <!-- Table after insert: 4 rows (phantom row highlighted) -->
+                  <rect x="652" y="18" width="100" height="44" rx="5" fill="rgba(238,90,36,0.1)" stroke="rgba(238,90,36,0.45)" stroke-width="1.2"/>
+                  <text x="702" y="31" text-anchor="middle" fill="#ee5a24" font-size="9" font-weight="700" font-family="Inter,sans-serif">4 筆 &gt; 1000</text>
+                  <text x="702" y="44" text-anchor="middle" fill="rgba(20,20,19,0.38)" font-size="8.5" font-family="Inter,sans-serif">T1 COUNT = 4 !</text>
+                  <!-- 4 row indicators, last one highlighted -->
+                  <rect x="664" y="51" width="76" height="5" rx="2" fill="rgba(93,184,166,0.35)"/>
+                  <rect x="726" y="51" width="14" height="5" rx="2" fill="#ee5a24"/>
+
+                  <!-- Phantom row label -->
+                  <text x="762" y="57" fill="#ee5a24" font-size="8.5" font-family="Inter,sans-serif">幻影列</text>
+
+                  <!-- Key distinction label right -->
+                  <rect x="502" y="56" width="414" height="18" rx="4" fill="rgba(238,90,36,0.07)" stroke="rgba(238,90,36,0.25)" stroke-width="1"/>
+                  <text x="709" y="68" text-anchor="middle" fill="rgba(20,20,19,0.65)" font-size="9.5" font-family="Inter,sans-serif">不是現有列被修改，是 INSERT 讓查詢結果憑空多出新的列</text>
+                </svg>
+            </section>
+
+            <section id="isolation-lab" class="ls" data-background-color="#faf9f5">
+                <h2>Isolation 練習：開兩個 MySQL 終端機親手觀察</h2>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:12px; align-items:start;">
+                    <div class="card">
+                        <h3><i class="fas fa-terminal blu"></i> Terminal A</h3>
+                        <pre><code class="language-sql" data-trim>
+SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED;
+BEGIN;
+SELECT balance FROM account WHERE id = 1;
+-- 先不要 commit，保持交易開著
+SELECT balance FROM account WHERE id = 1;
+COMMIT;
+                        </code></pre>
+                    </div>
+                    <div class="card">
+                        <h3><i class="fas fa-terminal blu"></i> Terminal B</h3>
+                        <pre><code class="language-sql" data-trim>
+UPDATE account
+SET balance = balance + 200
+WHERE id = 1;
+COMMIT;
+
+-- 再回到 Terminal A 重跑第二次 SELECT
+                        </code></pre>
+                    </div>
+                </div>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:10px;">
+                    <div class="warn fragment fade-up" data-fragment-index="1"><p class="txt-sm"><strong>觀察 1：</strong>READ COMMITTED 下，Terminal A 兩次 SELECT 可能看到不同餘額。</p></div>
+                    <div class="warn fragment fade-up" data-fragment-index="2"><p class="txt-sm"><strong>觀察 2：</strong>改成 REPEATABLE READ 再做一次，比較第二次 SELECT 是否維持同一個 snapshot。</p></div>
+                </div>
+            </section>
+
+            <section id="durability-lab" class="ds" data-background-color="#181715">
+                <h2>Durability：Commit 後關機，重開機資料還在嗎？</h2>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:12px; align-items:start;">
+                    <div class="card" style="background:rgba(250,249,245,.05);">
+                        <h3><i class="fas fa-flask blu"></i> 實驗設計</h3>
+                        <div style="display:flex; flex-direction:column; gap:6px; margin-top:6px;">
+                            <div class="pipe"><span class="pipe-n">1</span><p class="txt-sm">BEGIN → UPDATE account SET balance = 700 WHERE id = 1</p></div>
+                            <div class="pipe"><span class="pipe-n">2</span><p class="txt-sm">執行 <code>COMMIT</code>，等應用收到成功回應</p></div>
+                            <div class="pipe"><span class="pipe-n">3</span><p class="txt-sm">立刻模擬斷電 / Crash，再重啟 MySQL</p></div>
+                            <div class="pipe"><span class="pipe-n">4</span><p class="txt-sm">重新查詢同一筆資料，確認 700 還在不在</p></div>
+                        </div>
+                    </div>
+                    <div class="card" style="background:rgba(204,120,92,.10); border:1px solid rgba(204,120,92,.28);">
+                        <h3><i class="fas fa-hard-drive blu"></i> Before / After 對比</h3>
+                        <div class="step fragment fade-up" data-fragment-index="1" style="margin-top:4px;">
+                            <div class="step-num">X</div>
+                            <div class="step-body"><span class="step-title">如果沒有 WAL / Redo Log</span><span class="step-sub">Commit 回覆太早，資料頁還沒刷回磁碟，重開後可能回到舊值。</span></div>
+                        </div>
+                        <div class="arr fragment fade-up" data-fragment-index="1"><i class="fas fa-arrow-down"></i></div>
+                        <div class="step fragment fade-up" data-fragment-index="2">
+                            <div class="step-num done">✓</div>
+                            <div class="step-body" style="background:rgba(204,120,92,.08); border-left:3px solid var(--ab);"><span class="step-title" style="color:var(--ald);">InnoDB 的承諾</span><span class="step-sub">先把變更寫進 Redo Log，再回覆 Commit；若中途 Crash，重啟時 replay log 把資料補回來。</span></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="callout fragment fade-up" data-fragment-index="3" style="margin-top:10px;">
+                    <p class="txt-sm">一句話記：<strong>Commit 成功 = 可以從 log 恢復，不是剛好來得及把每個 data page 都刷盤。</strong></p>
+                </div>
+
+                <!-- SVG: WAL Write-Ahead Logging 兩條路徑 -->
+                <svg viewBox="0 0 960 80" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block;margin-top:10px;" class="fragment fade-up" data-fragment-index="4">
+                  <defs>
+                    <marker id="wal-a1" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0.5 L0,6.5 L7,3.5 z" fill="rgba(204,120,92,0.75)"/></marker>
+                    <marker id="wal-a2" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0.5 L0,6.5 L7,3.5 z" fill="rgba(93,184,166,0.8)"/></marker>
+                    <marker id="wal-a3" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0.5 L0,6.5 L7,3.5 z" fill="#ee5a24"/></marker>
+                  </defs>
+
+                  <!-- Top lane label -->
+                  <text x="10" y="22" fill="rgba(250,249,245,0.3)" font-size="9" font-family="Inter,sans-serif" letter-spacing="0.08em">正常路徑</text>
+                  <!-- Bottom lane label -->
+                  <text x="10" y="68" fill="rgba(250,249,245,0.3)" font-size="9" font-family="Inter,sans-serif" letter-spacing="0.08em">Crash 恢復</text>
+
+                  <!-- ── NORMAL PATH (top) ── -->
+                  <!-- N1: SQL 操作 -->
+                  <rect x="80" y="14" width="110" height="26" rx="6" fill="rgba(204,120,92,0.13)" stroke="rgba(204,120,92,0.45)" stroke-width="1.3"/>
+                  <text x="135" y="31" text-anchor="middle" fill="#cc785c" font-size="10.5" font-weight="700" font-family="Inter,sans-serif">SQL 操作</text>
+                  <!-- Arrow -->
+                  <line x1="192" y1="27" x2="236" y2="27" stroke="rgba(204,120,92,0.65)" stroke-width="1.3" marker-end="url(#wal-a1)"/>
+                  <!-- N2: Redo Log 先寫磁碟 -->
+                  <rect x="238" y="14" width="162" height="26" rx="6" fill="rgba(250,249,245,0.06)" stroke="rgba(250,249,245,0.2)" stroke-width="1.3"/>
+                  <text x="319" y="24" text-anchor="middle" fill="rgba(250,249,245,0.85)" font-size="10.5" font-weight="700" font-family="Inter,sans-serif">Redo Log 先寫入磁碟</text>
+                  <text x="319" y="35" text-anchor="middle" fill="rgba(250,249,245,0.38)" font-size="8.5" font-family="Inter,sans-serif">WAL：log before data page</text>
+                  <!-- Arrow -->
+                  <line x1="402" y1="27" x2="446" y2="27" stroke="rgba(204,120,92,0.65)" stroke-width="1.3" marker-end="url(#wal-a1)"/>
+                  <!-- N3: Buffer Pool 記憶體 -->
+                  <rect x="448" y="14" width="148" height="26" rx="6" fill="rgba(250,249,245,0.05)" stroke="rgba(250,249,245,0.16)" stroke-width="1.3"/>
+                  <text x="522" y="24" text-anchor="middle" fill="rgba(250,249,245,0.8)" font-size="10.5" font-weight="700" font-family="Inter,sans-serif">Buffer Pool 更新</text>
+                  <text x="522" y="35" text-anchor="middle" fill="rgba(250,249,245,0.35)" font-size="8.5" font-family="Inter,sans-serif">資料頁暫留記憶體</text>
+                  <!-- Arrow -->
+                  <line x1="598" y1="27" x2="642" y2="27" stroke="rgba(93,184,166,0.7)" stroke-width="1.3" marker-end="url(#wal-a2)"/>
+                  <!-- N4: COMMIT OK -->
+                  <rect x="644" y="14" width="110" height="26" rx="6" fill="rgba(93,184,166,0.15)" stroke="rgba(93,184,166,0.48)" stroke-width="1.4"/>
+                  <text x="699" y="31" text-anchor="middle" fill="#5db8a6" font-size="10.5" font-weight="700" font-family="Inter,sans-serif">COMMIT OK ✓</text>
+
+                  <!-- ── CRASH PATH (bottom) ── -->
+                  <!-- C1: CRASH -->
+                  <rect x="80" y="58" width="110" height="18" rx="5" fill="rgba(238,90,36,0.18)" stroke="rgba(238,90,36,0.55)" stroke-width="1.3"/>
+                  <text x="135" y="71" text-anchor="middle" fill="#ff9f43" font-size="10" font-weight="700" font-family="Inter,sans-serif">系統 Crash</text>
+                  <!-- Arrow -->
+                  <line x1="192" y1="67" x2="236" y2="67" stroke="#ee5a24" stroke-width="1.3" marker-end="url(#wal-a3)"/>
+                  <!-- C2: 讀 Redo Log -->
+                  <rect x="238" y="58" width="148" height="18" rx="5" fill="rgba(250,249,245,0.05)" stroke="rgba(250,249,245,0.18)" stroke-width="1.3"/>
+                  <text x="312" y="71" text-anchor="middle" fill="rgba(250,249,245,0.82)" font-size="10" font-weight="700" font-family="Inter,sans-serif">重啟讀 Redo Log</text>
+                  <!-- Arrow -->
+                  <line x1="388" y1="67" x2="432" y2="67" stroke="#ee5a24" stroke-width="1.3" marker-end="url(#wal-a3)"/>
+                  <!-- C3: Replay -->
+                  <rect x="434" y="58" width="100" height="18" rx="5" fill="rgba(250,249,245,0.05)" stroke="rgba(250,249,245,0.16)" stroke-width="1.3"/>
+                  <text x="484" y="71" text-anchor="middle" fill="rgba(250,249,245,0.82)" font-size="10" font-weight="700" font-family="Inter,sans-serif">Replay 操作</text>
+                  <!-- Arrow -->
+                  <line x1="536" y1="67" x2="580" y2="67" stroke="rgba(93,184,166,0.7)" stroke-width="1.3" marker-end="url(#wal-a2)"/>
+                  <!-- C4: Restored -->
+                  <rect x="582" y="58" width="130" height="18" rx="5" fill="rgba(93,184,166,0.14)" stroke="rgba(93,184,166,0.45)" stroke-width="1.4"/>
+                  <text x="647" y="71" text-anchor="middle" fill="#5db8a6" font-size="10" font-weight="700" font-family="Inter,sans-serif">資料完整恢復 ✓</text>
+
+                  <!-- Vertical bridge showing same Redo Log is used both ways -->
+                  <line x1="319" y1="42" x2="319" y2="56" stroke="rgba(250,249,245,0.12)" stroke-width="1" stroke-dasharray="3,2"/>
+                  <text x="335" y="52" fill="rgba(250,249,245,0.22)" font-size="8" font-family="Inter,sans-serif">同一份 Log</text>
+                </svg>
+            </section>
+
+            <section id="spring-transactional" class="ds" data-background-color="#181715">
+                <h2>程式碼進場：用教學模式拆解 <code>@Transactional</code></h2>
+                <div style="display:grid; grid-template-columns:1.12fr 0.88fr; gap:16px; margin-top:12px; align-items:start;">
+                    <div class="card" style="background:rgba(250,249,245,.05);">
+                        <h3><i class="fab fa-java blu"></i> TransactionService.java</h3>
+                        <div class="fragment fade-up" data-fragment-index="1">
+                        <pre><code class="language-java" data-line-numbers="3-8|3-4|5-6|7" data-sync-steps="1,2,3,4">
+@Transactional(rollbackFor = Exception.class)
+public void transfer(Long fromId, Long toId, BigDecimal amount) throws Exception {
+    accountRepository.debit(fromId, amount);
+    auditRepository.save(new TransferAudit(fromId, toId, amount));
+    if (riskService.shouldFail(fromId, toId)) {
+        throw new Exception("simulate checked exception");
+    }
+    accountRepository.credit(toId, amount);
+}
+                        </code></pre>
+                        </div>
+                    </div>
+                    <div style="display:flex; flex-direction:column; gap:8px;">
+                        <div class="step fragment fade-up" data-fragment-index="1">
+                            <div class="step-num done">1</div>
+                            <div class="step-body" style="background:rgba(204,120,92,.08); border-left:3px solid var(--ab);"><span class="step-title" style="color:var(--ald);">第 1 行：畫出交易邊界</span><span class="step-sub">整個方法在同一個 transaction 內，要嘛一起成功，要嘛一起 rollback。</span></div>
+                        </div>
+                        <div class="step fragment fade-up" data-fragment-index="2">
+                            <div class="step-num">2</div>
+                            <div class="step-body"><span class="step-title">把扣款與稽核紀錄放在同一單位</span><span class="step-sub">不要讓 audit 先成功、主交易卻失敗，否則對帳時會看到幽靈紀錄。</span></div>
+                        </div>
+                        <div class="step fragment fade-up" data-fragment-index="3">
+                            <div class="step-num">3</div>
+                            <div class="step-body"><span class="step-title"故意丟 checked exception</span><span class="step-sub">這就是為什麼要寫 <code>rollbackFor = Exception.class</code>，不然預設不會回滾。</span></div>
+                        </div>
+                        <div class="step fragment fade-up" data-fragment-index="4">
+                            <div class="step-num">4</div>
+                            <div class="step-body"><span class="step-title">只有前面都成功，才真正入帳</span><span class="step-sub">交易在方法正常結束後提交，才算完成這筆轉帳。</span></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="rollbackfor-why" class="ls" data-background-color="#faf9f5">
+                <h2>為什麼要寫 <code>rollbackFor = Exception.class</code>？</h2>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:12px; align-items:start;">
+                    <div class="card">
+                        <h3><i class="fas fa-bug" style="color:#ff9f43;"></i> 預設寫法：事故版</h3>
+                        <pre><code class="language-java" data-trim>
+@Transactional
+public void transfer(...) throws Exception {
+    accountRepository.debit(fromId, amount);
+    throw new Exception("核心銀行回傳 checked exception");
+}
+                        </code></pre>
+                        <div class="warn" style="margin-top:10px;">
+                            <p class="txt-sm"><strong>事故結果：</strong>畫面有 exception，但因為它是 checked exception，Spring 預設可能照樣 commit 扣款。</p>
+                        </div>
+                    </div>
+                    <div class="card" style="background:rgba(204,120,92,.10); border:1px solid rgba(204,120,92,.28);">
+                        <h3><i class="fas fa-shield-alt blu"></i> 修正版：明確把 checked exception 也回滾</h3>
+                        <pre><code class="language-java" data-trim>
+@Transactional(rollbackFor = Exception.class)
+public void transfer(...) throws Exception {
+    accountRepository.debit(fromId, amount);
+    throw new Exception("核心銀行回傳 checked exception");
+}
+                        </code></pre>
+                        <div class="callout" style="margin-top:10px;">
+                            <p class="txt-sm"><strong>修正後：</strong>同樣拋出例外，但 Lucas 仍維持 $1,000，不會留下「系統說失敗、資料卻已提交」的生產事故。</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="aop-steps" class="ds" data-background-color="#181715">
+                <h2>複雜設定別一次貼完：AOP 交易管理拆成 3 步</h2>
+                <div style="display:flex; flex-direction:column; gap:8px; margin-top:12px; max-width:920px; margin-left:auto; margin-right:auto;">
+                    <div class="step fragment fade-up" data-fragment-index="1">
+                        <div class="step-num done">1</div>
+                        <div class="step-body" style="background:rgba(204,120,92,.08); border-left:3px solid var(--ab);">
+                            <span class="step-title" style="color:var(--ald);">Step 1：先講命名規則，學生才知道誰會吃到交易</span>
+                            <pre><code class="language-java" data-trim>
+namedMap.put("save*", requiredAttribute);
+namedMap.put("update*", requiredAttribute);
+namedMap.put("find*", readOnlyAttribute);
+namedMap.put("get*", readOnlyAttribute);
+                            </code></pre>
+                        </div>
+                    </div>
+                    <div class="step fragment fade-up" data-fragment-index="2">
+                        <div class="step-num">2</div>
+                        <div class="step-body">
+                            <span class="step-title">Step 2：再補交易屬性，說清楚 propagation / rollback / readOnly</span>
+                            <pre><code class="language-java" data-trim>
+requiredAttribute.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+requiredAttribute.setRollbackRules(List.of(new RollbackRuleAttribute(RuntimeException.class)));
+readOnlyAttribute.setReadOnly(true);
+                            </code></pre>
+                        </div>
+                    </div>
+                    <div class="step fragment fade-up" data-fragment-index="3">
+                        <div class="step-num">3</div>
+                        <div class="step-body">
+                            <span class="step-title">Step 3：最後才注入結果，讓大家理解代理物件是怎麼套用規則的</span>
+                            <pre><code class="language-java" data-trim>
+attributeSource.setNameMap(namedMap);
+return new TransactionInterceptor(transactionManager, attributeSource);
+                            </code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="debug-quiz" class="ds" data-background-color="#181715">
+                <h2>找坑練習：這段交易程式碼哪裡會出事？</h2>
+                <div style="display:grid; grid-template-columns:1.12fr 0.88fr; gap:16px; margin-top:12px; align-items:start;">
+                    <div class="card" style="background:rgba(250,249,245,.05);">
+                        <h3><i class="fas fa-magnifying-glass blu"></i> Debug Quiz</h3>
+                        <pre><code class="language-java" data-trim>
+public void processBatch(List&lt;TransferCmd&gt; cmds) {
+    for (TransferCmd cmd : cmds) {
+        try {
+            this.saveTransfer(cmd);              // [1]
+        } catch (Exception e) {                 // [2]
+            log.warn("ignore", e);
+        }
+    }
+}
+
+@Transactional
+public void saveTransfer(TransferCmd cmd) {
+    accountRepo.lockById(cmd.fromId());        // [3]
+    accountRepo.lockById(cmd.toId());
+    notificationClient.send(cmd.userId());     // [4]
+    // debit + credit ...
+}
+                        </code></pre>
+                    </div>
+                    <div style="display:flex; flex-direction:column; gap:8px;">
+                        <div class="warn fragment fade-up" data-fragment-index="1"><p class="txt-sm"><strong>[1]</strong> self-invocation：<code>this.saveTransfer()</code> 不會經過 Spring proxy，<code>@Transactional</code> 可能直接失效。</p></div>
+                        <div class="warn fragment fade-up" data-fragment-index="2"><p class="txt-sm"><strong>[2]</strong> 吞掉例外：學生常以為「有 log 就好」，但交易是否回滾、上層是否知道失敗，會一起變得不透明。</p></div>
+                        <div class="warn fragment fade-up" data-fragment-index="3"><p class="txt-sm"><strong>[3]</strong> 鎖順序依輸入而變：A→B 與 B→A 可能互相等待，導致 deadlock。</p></div>
+                        <div class="warn fragment fade-up" data-fragment-index="4"><p class="txt-sm"><strong>[4]</strong> 長交易：把遠端通知放在交易內，會占住連線、拉長鎖持有時間，放大效能與死鎖風險。</p></div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="acid-closing" class="ds" data-background-color="#181715" style="text-align:center;">
+                <h1 style="margin-top:1.0em;">ACID 不是縮寫題，是事故防線</h1>
+                <p class="txt-body muted" style="margin-top:0.5em;">先讓學生感受到痛，再讓他們看到資料庫與框架如何把痛點收斂成可驗證的保護。</p>
+                <div style="margin-top:1.8em; display:flex; justify-content:center; flex-wrap:wrap; gap:6px;">
+                    <span class="badge bb"><i class="fas fa-money-bill-transfer"></i> Atomicity 防半成功</span>
+                    <span class="badge"><i class="fas fa-list-check"></i> Consistency 擋髒資料</span>
+                    <span class="badge"><i class="fas fa-people-arrows-left-right"></i> Isolation 管併發</span>
+                    <span class="badge"><i class="fas fa-hard-drive"></i> Durability 保 commit</span>
+                </div>
+                <div class="callout" style="margin-top:1.6em; max-width:760px; margin-left:auto; margin-right:auto; text-align:left;">
+                    <p class="txt-sm">收尾提問：<strong>如果今天線上出現「錢少了、訂單重複了、重啟後資料不見了」三種事故，你會先懷疑 ACID 的哪一個環節？</strong></p>
+                </div>
+            </section>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/markdown/markdown.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/highlight/highlight.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/notes/notes.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/math/math.js"></script>
+    <script>
+        Reveal.initialize({
+            width: 1200,
+            height: 700,
+            margin: 0.04,
+            center: true,
+            hash: true,
+            slideNumber: 'c/t',
+            progress: true,
+            controls: true,
+            transition: 'slide',
+            backgroundTransition: 'fade',
+            transitionSpeed: 'default',
+            plugins: [RevealMarkdown, RevealHighlight, RevealNotes, RevealMath.KaTeX]
+        });
+    </script>
+</body>
+</html>

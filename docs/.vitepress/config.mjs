@@ -1,17 +1,18 @@
 import { defineConfig, loadEnv } from "vitepress";
 import { nav } from "./config/nav";
 import {
-sidebarGit,
-sidebarPythonNation,
-sidebarPythonNoob,
-sidebarPortfolio,
-sidebarPhp,
-sidebarCss,
-sidebarJavascript,
-sidebarJava,
-sideBarDatabase,
-sidebarTypescript,
-sidebarDevops,
+  sidebarGit,
+  sidebarPythonNation,
+  sidebarPythonNoob,
+  sidebarPortfolio,
+  sidebarPhp,
+  sidebarCss,
+  sidebarJavascript,
+  sidebarJava,
+  sideBarDatabase,
+  sidebarTypescript,
+  sidebarDevops,
+  sidebarBackend,
 } from "./config/sidebar";
 import { InlineLinkPreviewElementTransform } from "@nolebase/vitepress-plugin-inline-link-preview/markdown-it";
 import {
@@ -82,7 +83,8 @@ sidebar: {
 "/database/": sideBarDatabase(),
 "/typescript/": sidebarTypescript(),
 "/devops/": sidebarDevops(),
-},
+    "/backend/": sidebarBackend(),
+  },
     docFooter: {
       prev: "前一篇",
       next: "下一篇",
