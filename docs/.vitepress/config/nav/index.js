@@ -28,15 +28,9 @@ export function nav() {
       items: [
         { text: "CSS", link: "/css/" },
         { text: "JavaScript", link: "/javascript/網頁操作/TodoList" },
+        { text: "TypeScript", link: "/typescript/utility-types" },
       ],
     },
-{
-  text: "資料庫",
-  items: [
-  { text: "Database", link: "/database/database-index-basic" },
-  { text: "SQL", link: "/database/sql/sql-join" },
-  ],
-  },
     {
       text: "後端技術",
       items: [
@@ -44,18 +38,28 @@ export function nav() {
         { text: "PHP", link: "/php/" },
       ],
     },
-  {
-  text: "TypeScript",
-  link: "/typescript/utility-types",
-  },
-{ text: "作品集", link: "/portfolio/" },
-{
-  text: "DevOps",
-  items: [
-  { text: "Tmux 終端機多工器", link: "/devops/tmux-guide" },
-  { text: "Git", link: "/git/" },
-  ],
-  },
-  { text: "開發工具", link: "/other/" },
+    {
+      text: "資料庫",
+      items: [
+        { text: "Database", link: "/database/database-index-basic" },
+        { text: "SQL", link: "/database/sql/sql-join" },
+      ],
+    },
+    {
+      text: "概念",
+      items: [
+        { text: "Clean Architecture", link: "/concepts/clean-architecture" },
+        { text: "FP 入門指南", link: "/concepts/fp/functional-programming-intro" },
+      ],
+    },
+    { text: "作品集", link: "/portfolio/" },
+    {
+      text: "DevOps",
+      items: [
+        { text: "Tmux 終端機多工器", link: "/devops/tmux-guide" },
+        { text: "Git", link: "/git/" },
+        { text: "開發工具", link: "/other/" },
+      ],
+    },
   ];
 }
