@@ -96,5 +96,115 @@ for i in inp:
 
 10. **`__getitem__(elem)`方法**：以元素作為鍵，返回元素的計數值。
 
+---
 
+## deque（雙端佇列）
+
+`deque` 是雙端佇列，兩端新增刪除都是 O(1)，比 list 的 `pop(0)` 快很多。
+
+```python
+from collections import deque
+
+dq = deque([1, 2, 3])
+
+dq.append(4)        # 右端加入 → [1,2,3,4]
+dq.appendleft(0)    # 左端加入 → [0,1,2,3,4]
+dq.pop()            # 右端彈出 → [0,1,2,3]
+dq.popleft()        # 左端彈出 → [1,2,3]
+dq.rotate(1)        # 右旋轉 → [3,1,2]
+dq.rotate(-1)       # 左旋轉 → [1,2,3]
+```
+
+:::tip 競賽常見用途
+- **BFS/DFS** 用 `deque` 當佇列，`popleft()` 是 O(1)
+- **滑動視窗** 用 `deque(maxlen=k)` 自動保持視窗大小
+- **旋轉問題** 用 `rotate()`
+:::
+
+```python
+# 滑動視窗
+dq = deque(maxlen=3)
+for x in [1, 2, 3, 4, 5]:
+    dq.append(x)
+    print(list(dq))  # [1,2,3] → [2,3,4] → [3,4,5]
+```
+
+---
+
+## namedtuple
+
+為 tuple 加上欄位名稱，讓程式碼更可讀。
+
+```python
+from collections import namedtuple
+
+# 定義
+Point = namedtuple('Point', ['x', 'y'])
+# 或
+Point = namedtuple('Point', 'x y')
+
+# 使用
+p = Point(3, 4)
+print(p.x, p.y)    # 3 4
+print(p[0], p[1])   # 3 4（也可以用索引）
+print(p._asdict())  # {'x': 3, 'y': 4}
+
+# 替換某個欄位
+p2 = p._replace(x=10)
+print(p2)  # Point(x=10, y=4)
+```
+
+:::tip 競賽常見用途
+- DFS/BFS 回傳 `(座標, 距離)` 時，用 `namedtuple` 比 tuple 更清楚
+- 排序時用 `key=lambda x: x.distance` 與 namedtuple 搭配
+:::
+
+---
+
+## OrderedDict（有序字典）
+
+Python 3.7+ 的 `dict` 已經保序了，但在舊版本或需要 `.move_to_end()` 時仍有用。
+
+```python
+from collections import OrderedDict
+
+od = OrderedDict()
+od['a'] = 1
+od['b'] = 2
+od['c'] = 3
+
+od.move_to_end('a')      # 把 'a' 移到最後
+od.move_to_end('c', last=False)  # 把 'c' 移到最前
+print(list(od.keys()))   # ['c', 'b', 'a']
+
+od.popitem(last=True)    # 彈出最後一項
+od.popitem(last=False)   # 彈出第一項
+```
+
+---
+
+## ChainMap（鏈式映射）
+
+把多個 dict 合成一個視圖，查詢時按順序找。
+
+```python
+from collections import ChainMap
+
+defaults = {'color': 'red', 'user': 'guest'}
+env = {'color': 'blue'}
+
+config = ChainMap(env, defaults)
+print(config['color'])  # blue（env 優先）
+print(config['user'])   # guest（env 沒有，找 defaults）
+
+# 有新的 override
+override = {'color': 'green', 'debug': True}
+config2 = config.new_child(override)
+print(config2['color'])  # green
+```
+
+:::tip 競賽常見用途
+- 預設值 + 覆蓋值的合併
+- 多層作用域查詢
+:::
 

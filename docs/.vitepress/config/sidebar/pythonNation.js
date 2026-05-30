@@ -275,6 +275,18 @@ export function sidebarPythonNation() {
               text: "ast",
               link: "/python/112全國技藝競賽筆記/14-模組/components/ast",
             },
+            {
+              text: "decimal",
+              link: "/python/112全國技藝競賽筆記/14-模組/components/decimal",
+            },
+            {
+              text: "fractions",
+              link: "/python/112全國技藝競賽筆記/14-模組/components/fractions",
+            },
+            {
+              text: "datetime",
+              link: "/python/112全國技藝競賽筆記/14-模組/components/datetime",
+            },
           ],
         },
         {

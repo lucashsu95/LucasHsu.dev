@@ -9,6 +9,9 @@
 ## itertools
 [所有函式連結](https://steam.oxxostudio.tw/category/python/library/itertools.html)、[官方文檔](https://docs.python.org/zh-cn/3/library/itertools.html)、[懶人包](./components/itertools.md)
 
+## datetime
+處理日期時間的模組，日期加減、格式轉換、閏年判斷都搞定。[懶人包](./components/datetime.md)
+
 ## math
 求最大公因數、求最小公倍數、還有PI、`將 4 的值傳回 3 的冪（與 4 * 4 * 4 相同）pow(4,3)`、`平方sqrt()`。
 
@@ -26,13 +29,7 @@
 
 ## decimal
 在python中浮點數相乘會有誤差<br>
-在python中`0.0001 * 3 = 0.000300000003`，很奇怪對吧,用decimal就不用怕了
-```python
-from decimal import *
-a = Decimal(a) 
-b = Decimal(b)
-print(a * b)
-```
+在python中`0.0001 * 3 = 0.000300000003`，很奇怪對吧,用decimal就不用怕了[懶人包](./components/decimal.md)
 
 ## functools
 把`@catch`放在def函式的上面。這樣就不怕超時了[官方文檔](https://docs.python.org/3/library/functools.html)。
@@ -44,7 +41,7 @@ print(a * b)
 `queue.Queue()`、`queue.PriorityQueue()`、`queue.LifoQueue()`
 
 ## fractions
-做分數運算，這樣就不用考慮分母不一樣還要通分之類的。[官方文檔](https://docs.python.org/3/library/fractions.html)、[菜鳥教程](https://www.runoob.com/note/24857)
+做分數運算，這樣就不用考慮分母不一樣還要通分之類的。[官方文檔](https://docs.python.org/3/library/fractions.html)、[菜鳥教程](https://www.runoob.com/note/24857)、[懶人包](./components/fractions.md)
 
 ## re
 提供了正規表示式的功能，可以用來進行複雜的字串比對和處理。`re.findall(pattern,st)`、`re.split(r'[,.:;]',st)`、[懶人包](./components/regex)
