@@ -58,7 +58,16 @@ export function nav() {
       items: [
         { text: "Tmux 終端機多工器", link: "/devops/tmux-guide" },
         { text: "Git", link: "/git/" },
-        { text: "開發工具", link: "/other/" },
+      ],
+    },
+    {
+      text: "開發工具",
+      items: [
+        { text: "VSCode 安裝", link: "/other/安裝vscode" },
+        { text: "WSL 安裝設定", link: "/other/install-wsl" },
+        { text: "ESLint/Prettier 設定", link: "/other/init-eslint-prettier" },
+        { text: "jsconfig/viteConfig", link: "/other/init-jsconfig-viteConfig" },
+        { text: "LaTeX DevContainer", link: "/other/latex-devcontainer-guide" },
       ],
     },
   ];

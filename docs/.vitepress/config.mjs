@@ -14,6 +14,7 @@ import {
   sidebarDevops,
   sidebarBackend,
   sidebarConcepts,
+  sidebarOther,
 } from "./config/sidebar";
 import { InlineLinkPreviewElementTransform } from "@nolebase/vitepress-plugin-inline-link-preview/markdown-it";
 import {
@@ -72,21 +73,22 @@ export default defineConfig({
   themeConfig: {
     logo: "/logo/favicon.ico",
     nav: nav(),
-sidebar: {
-"/python/112全國技藝競賽筆記": sidebarPythonNation(),
-"/python/新手上路系列": sidebarPythonNoob(),
-"/portfolio/": sidebarPortfolio(),
-"/php/": sidebarPhp(),
-"/javascript/": sidebarJavascript(),
-"/css/": sidebarCss(),
-"/git/": sidebarGit(),
-"/java/": sidebarJava(),
-"/database/": sideBarDatabase(),
-"/typescript/": sidebarTypescript(),
-"/devops/": sidebarDevops(),
-    "/backend/": sidebarBackend(),
-    "/concepts/": sidebarConcepts(),
-  },
+    sidebar: {
+      "/python/112全國技藝競賽筆記": sidebarPythonNation(),
+      "/python/新手上路系列": sidebarPythonNoob(),
+      "/portfolio/": sidebarPortfolio(),
+      "/php/": sidebarPhp(),
+      "/javascript/": sidebarJavascript(),
+      "/css/": sidebarCss(),
+      "/git/": sidebarGit(),
+      "/java/": sidebarJava(),
+      "/database/": sideBarDatabase(),
+      "/typescript/": sidebarTypescript(),
+      "/devops/": sidebarDevops(),
+      "/backend/": sidebarBackend(),
+      "/concepts/": sidebarConcepts(),
+      "/other/": sidebarOther(),
+    },
     docFooter: {
       prev: "前一篇",
       next: "下一篇",
