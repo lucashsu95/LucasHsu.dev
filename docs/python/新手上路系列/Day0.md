@@ -42,7 +42,7 @@ head:
 ![](./Day0/image-1.jpg)
 
 ## 安裝環境、編輯器
-[安裝vscode](../../other/安裝vscode)
+[install-vscode](../../devops/install-vscode)
 
 ## print()
 

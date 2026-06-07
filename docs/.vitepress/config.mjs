@@ -12,7 +12,7 @@ import {
   sideBarDatabase,
   sidebarTypescript,
   sidebarDevops,
-  sidebarBackend,
+  sidebarSpringboot,
   sidebarConcepts,
   sidebarOther,
 } from "./config/sidebar";
@@ -85,7 +85,7 @@ export default defineConfig({
       "/database/": sideBarDatabase(),
       "/typescript/": sidebarTypescript(),
       "/devops/": sidebarDevops(),
-      "/backend/": sidebarBackend(),
+      "/springboot/": sidebarSpringboot(),
       "/concepts/": sidebarConcepts(),
       "/other/": sidebarOther(),
     },

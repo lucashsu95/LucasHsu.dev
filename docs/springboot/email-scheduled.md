@@ -568,21 +568,21 @@ public class MyScheduler { ... }
 
 ### 相關文章
 
-- [後端技術總覽](/backend/) - 後端文章入口
-- [Spring Boot Swagger 教學](/backend/spring-boot/swagger-docs) - API 文件整合做法
-- [Spring Boot 分頁與 N+1 問題](/backend/spring-boot/spring-data-pagination) - 效能觀念一起補
+- [後端技術總覽](/) - 後端文章入口
+- [Spring Boot Swagger 教學](/springboot/swagger-docs) - API 文件整合做法
+- [Spring Boot 分頁與 N+1 問題](/springboot/data-pagination) - 效能觀念一起補
 
 ### 推薦資源
 
-- [Spring Boot 官方文件 - Email](https://docs.spring.io/spring-boot/docs/2.6.6/reference/htmlsingle/#io.email) - 官方，最權威
+- [Spring Boot 官方文件 - Email](https://docs.spring.io/springboot/docs/2.6.6/reference/htmlsingle/#io.email) - 官方，最權威
 - [Baeldung - Spring Email](https://www.baeldung.com/spring-email) - 實戰範例超多
 - [Cron 表達式產生器](https://crontab.guru/) - 用來驗證你的 Cron 是否正確（記得轉成 6 欄位）
 
 ### 下一步學習
 
 - 如果你想深入了解排程，建議閱讀 [Spring Task Execution](https://docs.spring.io/spring-framework/docs/5.3.x/reference/html/integration.html#scheduling)。
-- 想把資料查詢一起顧好？接著看 [Spring Boot 分頁與 N+1 問題](/backend/spring-boot/spring-data-pagination)。
-- 想把 API 文件一起補齊？接著看 [Swagger 教學](/backend/spring-boot/swagger-docs)。
+- 想把資料查詢一起顧好？接著看 [Spring Boot 分頁與 N+1 問題](/springboot/data-pagination)。
+- 想把 API 文件一起補齊？接著看 [Swagger 教學](/springboot/swagger-docs)。
 
 ## 總結
 

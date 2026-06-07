@@ -30,17 +30,17 @@ head:
 
 ## 文章總覽
 
-- [@Transactional 事務管理](/backend/spring-boot/transactional)
-- [JPA 持久化上下文](/backend/spring-boot/persistence-context)
-- [Lazy vs Eager 載入策略](/backend/spring-boot/lazy)
-- [Spring Boot 分頁與 N+1 問題](/backend/spring-boot/spring-data-pagination)
-- [Swagger 教學](/backend/spring-boot/swagger-docs)
-- [Spring Boot Email 與 Scheduled 排程實作](/backend/spring-boot/spring-boot-email-scheduled)
+- [@Transactional 事務管理](/springboot/transactional)
+- [JPA 持久化上下文](/springboot/persistence-context)
+- [Lazy vs Eager 載入策略](/springboot/lazy)
+- [Spring Boot 分頁與 N+1 問題](/springboot/data-pagination)
+- [Swagger 教學](/springboot/swagger-docs)
+- [Spring Boot Email 與 Scheduled 排程實作](/springboot/email-scheduled)
 
 ## 建議閱讀順序
 
-1. 先看 [`@Transactional 事務管理`](/backend/spring-boot/transactional)，不然很多交易行為你只會背，不會用。
-2. 接著看 [`JPA 持久化上下文`](/backend/spring-boot/persistence-context)，把 EntityManager 跟 dirty checking 釐清。
-3. 再補 [`Lazy vs Eager 載入策略`](/backend/spring-boot/lazy) 跟 [`Spring Boot 分頁與 N+1 問題`](/backend/spring-boot/spring-data-pagination)。
-4. 最後有需要再看 [`Swagger 教學`](/backend/spring-boot/swagger-docs) 和 [`Email 與 Scheduled 排程實作`](/backend/spring-boot/spring-boot-email-scheduled)。
+1. 先看 [`@Transactional 事務管理`](/springboot/transactional)，不然很多交易行為你只會背，不會用。
+2. 接著看 [`JPA 持久化上下文`](/springboot/persistence-context)，把 EntityManager 跟 dirty checking 釐清。
+3. 再補 [`Lazy vs Eager 載入策略`](/springboot/lazy) 跟 [`Spring Boot 分頁與 N+1 問題`](/springboot/data-pagination)。
+4. 最後有需要再看 [`Swagger 教學`](/springboot/swagger-docs) 和 [`Email 與 Scheduled 排程實作`](/springboot/email-scheduled)。
 

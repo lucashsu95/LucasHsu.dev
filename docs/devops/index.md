@@ -21,7 +21,7 @@ head:
 ## 文章列表
 
 ### 編輯器設定
-- [VSCode 安裝與設定](./安裝vscode) — 從零開始安裝 Visual Studio Code 並完成基本設定
+- [VSCode 安裝與設定](./install-vscode) — 從零開始安裝 Visual Studio Code 並完成基本設定
 
 ### 跨平台開發環境
 - [WSL 安裝與 VS Code 連線指南](./install-wsl) — 在 Windows 上啟用 WSL2、建立 Ubuntu 環境
