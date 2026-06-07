@@ -1,6 +1,7 @@
 # 用 Dev Container 寫 LaTeX — 零環境安裝教學
 
 > 只需要 **VSCode + Docker**，不需要安裝 MiKTeX 或 TeX Live，任何電腦都能編譯。
+>
 ## 前置需求
 
 | 工具 | 說明 |
@@ -21,6 +22,7 @@ your-project/
 │   └── settings.json
 └── main.tex
 ```
+
 ## 步驟一：建立 Dockerfile
 
 新增 `.devcontainer/Dockerfile`：
@@ -36,6 +38,7 @@ RUN apt-get update && apt-get install -y \
 ```
 
 > `texlive/texlive:latest` 已包含完整 TeX Live，xelatex、xeCJK 等套件全部內建。
+>
 ## 步驟二：建立 devcontainer.json
 
 新增 `.devcontainer/devcontainer.json`：
@@ -57,6 +60,7 @@ RUN apt-get update && apt-get install -y \
   "workspaceFolder": "/workspace"
 }
 ```
+
 ## 步驟三：建立 VSCode settings.json
 
 新增 `.vscode/settings.json`：
@@ -123,6 +127,7 @@ RUN apt-get update && apt-get install -y \
 ```
 
 > 容器內預設有 Noto CJK 字型，直接使用即可。
+>
 ## 步驟五：啟動 Dev Container
 
 1. 用 VSCode 開啟專案資料夾
@@ -142,6 +147,42 @@ RUN apt-get update && apt-get install -y \
 
 PDF 會在側欄自動開啟預覽。
 
+## 進階：多個專案共用同一個 image
+
+如果有多個 LaTeX 專案（例如出題目、筆記），可以把 image 推到 Docker Hub，所有專案共用，不需要每個都放 Dockerfile
+
+**build 並推上 Docker Hub：**
+
+```bash
+
+cd .devcontainer
+
+docker build -t yourname/latex-devcontainer:latest .
+
+docker push yourname/latex-devcontainer:latest
+
+```
+
+**其他專案的 `devcontainer.json` 改用 image：**
+
+```json
+{
+  "name": "LaTeX",
+  "image": "lucas0423/latex-devcontainer:latest",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "James-Yu.latex-workshop"
+      ]
+    }
+  },
+  "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind",
+  "workspaceFolder": "/workspace"
+}
+```
+
+這樣其他專案 Reopen in Container 直接 pull image，不需要重 build。
+
 ## 常見問題
 
 **Q：第一次 build 很慢？**  
@@ -156,6 +197,7 @@ A：在 `Dockerfile` 的 `RUN` 加上 `tlmgr install <套件名>` 即可。
 ```dockerfile
 RUN tlmgr install forest pgf-pie
 ```
+
 ## 搭配 Git 使用
 
 建議在 `.gitignore` 加入編譯產生的暫存檔：
@@ -172,3 +214,4 @@ RUN tlmgr install forest pgf-pie
 ```
 
 > 如果 PDF 需要版控（例如交報告），可以移除最後一行。
+
