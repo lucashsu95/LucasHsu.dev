@@ -1,3 +1,27 @@
+---
+title: Dev Container 寫 LaTeX 完整教學 | LucasHsu.dev
+description: 不需要在本機安裝 MiKTeX 或 TeX Live，只要 VSCode + Docker 就能編譯 LaTeX。這篇教你用 Dev Container 建立零環境的 LaTeX 開發環境，包含 Dockerfile、devcontainer.json 配置、中文支援、xelatex 編譯與 Git 整合。
+head:
+- - meta
+  - name: author
+    content: 許恩綸
+- - meta
+  - name: keywords
+    content: LaTeX, Dev Container, Docker, VSCode, TeX Live, xelatex, xeCJK, 中文排版, 容器開發, DevOps
+- - meta
+  - property: og:title
+    content: Dev Container 寫 LaTeX 完整教學 — 零環境安裝
+- - meta
+  - property: og:description
+    content: 只需要 VSCode + Docker，不需要安裝任何 TeX 發行版。完整教學包含 Dockerfile 配置、devcontainer.json、中文 xelatex 編譯與多專案共用 image。
+- - meta
+  - property: og:type
+    content: article
+- - meta
+  - property: og:image
+    content: https://lucashsu95.github.io/LucasHsu.dev/images/latex-devcontainer-cover.png
+---
+
 # 用 Dev Container 寫 LaTeX — 零環境安裝教學
 
 > 只需要 **VSCode + Docker**，不需要安裝 MiKTeX 或 TeX Live，任何電腦都能編譯。
@@ -214,4 +238,3 @@ RUN tlmgr install forest pgf-pie
 ```
 
 > 如果 PDF 需要版控（例如交報告），可以移除最後一行。
-
