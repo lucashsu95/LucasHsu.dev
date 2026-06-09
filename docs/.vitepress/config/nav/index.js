@@ -38,11 +38,11 @@ export function nav() {
     {
       text: "工具",                                     // DevOps + 開發工具合併
       items: [
-        { text: "VSCode", link: "/other/install-vscode" },
-        { text: "WSL", link: "/other/install-wsl" },
-        { text: "ESLint / Prettier", link: "/other/init-eslint-prettier" },
-        { text: "jsconfig / viteConfig", link: "/other/init-jsconfig-viteConfig" },
-        { text: "LaTeX DevContainer", link: "/other/latex-devcontainer-guide" },
+        { text: "VSCode", link: "/devops/install-vscode" },
+        { text: "WSL", link: "/devops/install-wsl" },
+        { text: "ESLint / Prettier", link: "/devops/init-eslint-prettier" },
+        { text: "jsconfig / viteConfig", link: "/devops/init-jsconfig-viteConfig" },
+        { text: "LaTeX DevContainer", link: "/devops/latex-devcontainer-guide" },
         { text: "Git", link: "/git/" },
         { text: "Tmux", link: "/devops/tmux-guide" },
         { text: "Docker", link: "/devops/docker-resource" },

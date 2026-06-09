@@ -224,9 +224,9 @@ tmux kill-server
 
 ## 設定檔 ~/.tmux.conf
 
-Tmux 的設定檔放在 `~/.tmux.conf`，可以自定義各種行為。
+Tmux 的設定檔放在 `~/.tmux.conf`，可以自定義各種行為。下面是我的推薦設定，分為 10 個區塊，你可以直接複製貼上。
 
-### 我的推薦設定
+### 我的完整設定檔
 
 ```bash
 # 創建設定檔
@@ -237,8 +237,10 @@ nano ~/.tmux.conf
 
 ```conf
 # ============================================
-# 1. 前置鍵改成 Ctrl + a（比較好按）
+# 1. 前置鍵設定
 # ============================================
+
+# 把 Ctrl + b 改成 Ctrl + a（比較好按）
 unbind C-b
 set -g prefix C-a
 bind C-a send-prefix
@@ -246,21 +248,40 @@ bind C-a send-prefix
 # ============================================
 # 2. 基本顯示設定
 # ============================================
+
+# 設定預設終端類型
 set -g default-terminal "screen-256color"
-set -g mouse on  # 啟用滑鼠（可以點 pane、滾動）
-set -g history-limit 10000  # 歷史記錄行數
+
+# 啟用滑鼠支援（2.1+ 版本）
+set -g mouse on
+
+# 狀態列更新間隔（毫秒），設為 1 即時更新
+set -g status-interval 1
+
+# 設定滾動歷史的行數
+set -g history-limit 10000
 
 # ============================================
-# 3. 視窗編號從 1 開始（比較直覺）
+# 3. 視窗與面板編號
 # ============================================
+
+# 視窗編號從 1 開始（而非 0）
 set -g base-index 1
+
+# Pane 編號也從 1 開始
 setw -g pane-base-index 1
 
 # ============================================
-# 4. 分割快捷鍵改成更直覺的
+# 4. 分割快捷鍵（更直覺）
 # ============================================
-bind | split-window -h  # 用 | 水平分割
-bind - split-window -v  # 用 - 垂直分割
+
+# 用 | 水平分割（原本是 %）
+unbind %
+bind | split-window -h
+
+# 用 - 垂直分割（原本是 "）
+unbind '"'
+bind - split-window -v
 
 # ============================================
 # 5. Vim 風格切換 pane
@@ -271,31 +292,92 @@ bind k select-pane -U
 bind l select-pane -R
 
 # ============================================
-# 6. 快速重新載入設定檔
+# 6. 面板大小調整（Alt + 方向鍵）
 # ============================================
-bind r source-file ~/.tmux.conf \; display "Reloaded!"
+bind -n M-Up resize-pane -U 5
+bind -n M-Down resize-pane -D 5
+bind -n M-Left resize-pane -L 5
+bind -n M-Right resize-pane -R 5
 
 # ============================================
-# 7. 複製模式用 Vim 風格
+# 7. 快速重新載入設定檔
+# ============================================
+bind r source-file ~/.tmux.conf \; display "Configuration reloaded!"
+
+# ============================================
+# 8. 複製模式用 Vim 風格
 # ============================================
 setw -g mode-keys vi
 bind -T copy-mode-vi v send -X begin-selection
 bind -T copy-mode-vi y send -X copy-selection-and-cancel
+bind -T copy-mode-vi V send -X select-line
+bind -T copy-mode-vi C-v send -X rectangle-toggle
 
 # ============================================
-# 8. 狀態列美化
+# 9. 狀態列美化
 # ============================================
 set -g status-bg black
 set -g status-fg white
+set -g window-status-style "bg=colour234,fg=colour245"
+set -g window-status-current-style "bg=colour235,fg=colour255"
 set -g status-left "#[bg=green,fg=black] #S #[default] | "
-set -g status-right "%H:%M:%S "
+set -g status-right "#[fg=cyan]%H:%M:%S "
+
+# ============================================
+# 10. 其他有用設定
+# ============================================
+
+# 自動重新命名視窗
+setw -g automatic-rename on
+
+# 在終端標題欄顯示 session 和視窗名稱
+set -g set-titles on
+set -g set-titles-string '#H - #S - #W'
+
+# 視窗切換時延遲更短（毫秒）
+set -s escape-time 1
 ```
 
-改完後按 `Prefix + r`（或重開 Tmux）就會生效。
+改完後按 `Prefix + r`（或執行 `tmux source-file ~/.tmux.conf`）就會生效。
 
-### 如果你問我：為什麼要改前置鍵？
-
+:::tip 為什麼要改前置鍵？
 `Ctrl + b` 太遠了，`Ctrl + a` 就在小指旁邊。用久了你會感謝自己有改這個。
+:::
+
+### 進階：使用 TPM 插件
+
+如果你想要更強的功能，可以裝 Tmux Plugin Manager（TPM）：
+
+```bash
+git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+```
+
+然後在 `~/.tmux.conf` 最下方加入：
+
+```conf
+# ============================================
+# TPM 插件設定（放在設定檔最底部）
+# ============================================
+
+# 插件列表
+set -g @plugin 'tmux-plugins/tpm'
+set -g @plugin 'tmux-plugins/tmux-sensible'          # 智能預設設定
+set -g @plugin 'tmux-plugins/tmux-prefix-highlight'  # 前置鍵高亮
+set -g @plugin 'tmux-plugins/tmux-sessionist'        # 增強 session 管理
+set -g @plugin 'tmux-plugins/tmux-resurrect'         # 儲存/恢復會話
+set -g @plugin 'tmux-plugins/tmux-continuum'         # 自動儲存（每 15 分）
+set -g @plugin 'tmux-plugins/tmux-yank'              # 增強複製功能
+set -g @plugin 'tmux-plugins/tmux-open'              # 快速打開 URL
+
+# 自動恢復（continuum）
+set -g @continuum-save-interval '15'
+set -g @continuum-restore 'on'
+
+# 初始化 TPM（此行必須位於設定檔最後）
+run '~/.tmux/plugins/tpm/tpm'
+```
+
+重新載入設定後，按 `Prefix + I`（大寫 I）安裝所有插件。
 
 ## 進階：自動化開發環境腳本
 
@@ -540,6 +622,7 @@ chmod +x dev.sh
 
 ### 本站相關文章
 
+- [Tmux 完整操作手冊](./tmux-reference-manual) — 完整版手冊含進階操作、大師腳本、WSL2 剪貼簿
 - [資料庫索引基礎](/database/database-index-basic) — 優化查詢效能
 
 ### 外部資源

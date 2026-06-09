@@ -30,5 +30,9 @@ head:
 - [ESLint 與 Prettier 設定](./init-eslint-prettier) — 在專案中導入 ESLint 和 Prettier 統一程式碼風格
 - [jsconfig / viteConfig 初始化](./init-jsconfig-viteConfig) — jsconfig 與 Vite 設定檔配置
 
+### Terminal 多工
+- [Tmux 終端機多工器完全指南](./tmux-guide) — 從零開始學 Tmux，含安裝、操作、設定檔
+- [Tmux 完整操作手冊](./tmux-reference-manual) — 進階操作、快捷鍵完整對照表、WSL2 剪貼簿
+
 ### Container 開發
 - [LaTeX DevContainer 指南](./latex-devcontainer-guide) — 用 Dev Container 寫 LaTeX，不需在本機安裝 TeX Live
