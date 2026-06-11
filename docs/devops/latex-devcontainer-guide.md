@@ -59,6 +59,10 @@ RUN apt-get update && apt-get install -y \
     git \
     latexmk \
     && rm -rf /var/lib/apt/lists/*
+
+# 安裝自訂字型
+COPY ./fonts/ /usr/local/share/fonts/
+RUN fc-cache -fv
 ```
 
 > `texlive/texlive:latest` 已包含完整 TeX Live，xelatex、xeCJK 等套件全部內建。
@@ -170,6 +174,15 @@ RUN apt-get update && apt-get install -y \
 | CLI 編譯 | 在 VSCode 終端機輸入 `xelatex main.tex` |
 
 PDF 會在側欄自動開啟預覽。
+
+**也可以用(這樣連VSCode都不用開)**
+
+```bash
+docker run --rm -v $(pwd):/workspace lucas0423/latex-devcontainer:latest \
+ xelatex /workspace/main.tex 
+```
+
+用 Docker 跑 XeLaTeX 把 problem.tex 編譯成 PDF，編譯完容器自動刪除。
 
 ## 進階：多個專案共用同一個 image
 
