@@ -178,8 +178,9 @@ PDF 會在側欄自動開啟預覽。
 **也可以用(這樣連VSCode都不用開)**
 
 ```bash
-docker run --rm -v $(pwd):/workspace lucas0423/latex-devcontainer:latest \
- xelatex /workspace/main.tex 
+cd "/home/user/birc-contest/"
+     docker run --rm -v "$(pwd):/workspace" -w /workspace lucas0423/latex-devcontainer:latest xelatex problem.tex
+     docker run --rm -v "$(pwd):/workspace" -w /workspace lucas0423/latex-devcontainer:latest xelatex problem.tex  # 第二次
 ```
 
 用 Docker 跑 XeLaTeX 把 problem.tex 編譯成 PDF，編譯完容器自動刪除。
