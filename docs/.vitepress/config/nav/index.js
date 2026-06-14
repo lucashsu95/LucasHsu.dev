@@ -17,7 +17,6 @@ export function nav() {
         {
           text: "後端",
           items: [
-            { text: "Python", link: "/python/" },       // ← 只放入口
             { text: "JavaScript", link: "/javascript/" },
             { text: "Java", link: "/java/basic/install-java" },
             { text: "Spring Boot", link: "/springboot/" },
@@ -26,6 +25,12 @@ export function nav() {
             { text: "SQL", link: "/database/sql/sql-join" },
           ],
         },
+      ],
+    },
+    {
+      text: "程式設計",
+      items: [
+        { text: "Python", link: "/python/" },
       ],
     },
     {
