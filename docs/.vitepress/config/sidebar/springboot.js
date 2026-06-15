@@ -114,6 +114,11 @@ export function sidebarSpringboot() {
           link: "/springboot/application-events",
           activeMatch: '/springboot/application-events',
         },
+        {
+          text: "Spring Boot Specification 動態查詢指南",
+          link: "/springboot/specification-guide",
+          activeMatch: '/springboot/specification-guide',
+        },
       ],
     },
     {

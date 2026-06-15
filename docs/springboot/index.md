@@ -7,7 +7,7 @@ head:
       content: 許恩綸
   - - meta
     - name: keywords
-      content: Spring Boot, 後端, JPA, Transactional, Swagger, Pagination, Scheduled, Security, AOP, File
+      content: Spring Boot, 後端, JPA, Transactional, Swagger, Pagination, Scheduled, Security, AOP, File, Specification
   - - meta
     - property: og:title
       content: 後端技術
@@ -60,6 +60,7 @@ head:
 ### 進階技術
 - [Spring Boot AOP + @Async](/springboot/aop-async)
 - [Application Events + @TransactionalEventListener](/springboot/application-events)
+- [Spring Boot Specification 動態查詢指南](/springboot/specification-guide)
 
 ### 開發工具
 - [Checkstyle / PMD / Spotless](/springboot/code-quality-tools)
