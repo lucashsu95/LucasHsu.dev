@@ -32,6 +32,7 @@ export default defineConfig({
     },
     build: {
       rollupOptions: {
+        external: ["fsevents"],
         output: {
           manualChunks: {
             mermaid: ["mermaid"],
