@@ -21,8 +21,14 @@ export function nav() {
             { text: "Java", link: "/java/basic/install-java" },
             { text: "Spring Boot", link: "/springboot/" },
             { text: "PHP", link: "/php/" },
+          ],
+        },
+        {
+          text: "資料庫",
+          items: [
             { text: "Database", link: "/database/database-index-basic" },
             { text: "SQL", link: "/database/sql/sql-join" },
+            { text: "MongoDB", link: "/database/mongodb/mongodb-tutorial" },
           ],
         },
       ],
@@ -30,7 +36,8 @@ export function nav() {
     {
       text: "程式設計",
       items: [
-        { text: "Python", link: "/python/" },
+        { text: "112 全國技藝競賽筆記", link: "/python/112全國技藝競賽筆記/" },
+        { text: "新手上路系列", link: "/python/新手上路系列/" },
       ],
     },
     {
