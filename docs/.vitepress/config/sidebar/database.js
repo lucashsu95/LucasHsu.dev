@@ -7,6 +7,7 @@ export function sideBarDatabase() {
         { text: '為什麼要資料庫正規化', link: '/database/why-database-normalization', activeMatch: '/database/why-database-normalization' },
         { text: '資料庫索引基礎入門', link: '/database/database-index-basic', activeMatch: '/database/database-index-basic' },
         { text: '進階索引實戰：B-Tree、複合索引與 Hash Map 全解析', link: '/database/database-index-advanced', activeMatch: '/database/database-index-advanced' },
+        { text: '資料庫樂觀鎖與悲觀鎖', link: '/database/optimistic-pessimistic-locking', activeMatch: '/database/optimistic-pessimistic-locking' },
       ],
     },
     {
@@ -19,5 +20,12 @@ export function sideBarDatabase() {
         { text: "SQL GROUP BY 與 HAVING", link: "/database/sql/sql-group-by-having", activeMatch: "/database/sql/sql-group-by-having" },
       ],
     },
+    {
+      text: "MongoDB",
+      items: [
+
+        { text: "tutorial", link: "/database/mongodb/mongodb-tutorial", activeMatch: "/database/mongodb/mongodb-tutorial" },
+      ]
+    }
   ];
 }

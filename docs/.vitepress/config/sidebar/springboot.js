@@ -24,6 +24,11 @@ export function sidebarSpringboot() {
           link: "/springboot/transactional",
           activeMatch: '/springboot/transactional',
         },
+        {
+          text: "樂觀鎖與悲觀鎖實作",
+          link: "/springboot/optimistic-pessimistic-locking",
+          activeMatch: '/springboot/optimistic-pessimistic-locking',
+        },
       ],
     },
     {
