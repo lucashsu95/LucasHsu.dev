@@ -33,6 +33,7 @@ head:
 ### 基礎核心
 - [@Transactional 事務管理](/springboot/transactional)
 - [JPA 持久化上下文](/springboot/persistence-context)
+- [樂觀鎖與悲觀鎖實作](/springboot/optimistic-pessimistic-locking)
 - [@Valid 用於 Service 層](/springboot/valid-service)
 
 ### 效能優化
@@ -69,7 +70,8 @@ head:
 
 1. 先看 [`@Transactional 事務管理`](/springboot/transactional)，不然很多交易行為你只會背，不會用。
 2. 接著看 [`JPA 持久化上下文`](/springboot/persistence-context)，把 EntityManager 跟 dirty checking 釐清。
-3. 再補 [`Lazy vs Eager 載入策略`](/springboot/lazy) 跟 [`Spring Boot 分頁與 N+1 問題`](/springboot/data-pagination)。
-4. 有需要再看 [`Swagger 教學`](/springboot/swagger-docs)、[`Email 與 Scheduled 排程實作`](/springboot/email-scheduled) 與 [`Security & Authentication`](/springboot/security)。
-5. 進階主題可補 [`Spring Boot AOP + @Async`](/springboot/aop-async) 和 [`Spring Boot 檔案上傳與下載`](/springboot/file-upload-download)。
+3. 再補 [`樂觀鎖與悲觀鎖實作`](/springboot/optimistic-pessimistic-locking)，處理併發衝突時必讀。
+4. 然後看 [`Lazy vs Eager 載入策略`](/springboot/lazy) 跟 [`Spring Boot 分頁與 N+1 問題`](/springboot/data-pagination)。
+5. 有需要再看 [`Swagger 教學`](/springboot/swagger-docs)、[`Email 與 Scheduled 排程實作`](/springboot/email-scheduled) 與 [`Security & Authentication`](/springboot/security)。
+6. 進階主題可補 [`Spring Boot AOP + @Async`](/springboot/aop-async) 和 [`Spring Boot 檔案上傳與下載`](/springboot/file-upload-download)。
 
