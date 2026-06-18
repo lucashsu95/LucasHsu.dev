@@ -23,8 +23,11 @@ export function sideBarDatabase() {
     {
       text: "MongoDB",
       items: [
-
-        { text: "tutorial", link: "/database/mongodb/mongodb-tutorial", activeMatch: "/database/mongodb/mongodb-tutorial" },
+        { text: "系列總覽", link: "/database/mongodb/mongodb-tutorial", activeMatch: "/database/mongodb/mongodb-tutorial" },
+        { text: "Schema 設計與 ETL 資料處理", link: "/database/mongodb/mongodb-schema-etl", activeMatch: "/database/mongodb/mongodb-schema-etl" },
+        { text: "查詢模式實戰", link: "/database/mongodb/mongodb-query-patterns", activeMatch: "/database/mongodb/mongodb-query-patterns" },
+        { text: "索引設計與效能優化", link: "/database/mongodb/mongodb-indexing", activeMatch: "/database/mongodb/mongodb-indexing" },
+        { text: "Prisma + MongoDB 實戰經驗談", link: "/database/mongodb/mongodb-prisma-lessons", activeMatch: "/database/mongodb/mongodb-prisma-lessons" },
       ]
     }
   ];
