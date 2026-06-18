@@ -52,7 +52,7 @@ Spotless 只管**格式**，不改邏輯。Checkstyle 管的是**風格與規範
 
 ### 單一模組
 
-```gradle
+```groovy
 plugins {
     id 'java'
     id 'checkstyle'
@@ -65,7 +65,7 @@ plugins {
 
 在 `subprojects` 統一套用：
 
-```gradle
+```groovy
 subprojects {
     apply plugin: 'java'
     apply plugin: 'checkstyle'
@@ -110,7 +110,7 @@ Spotless 不是幫你「檢查格式」，而是直接**改給你看**。
 
 ### 基本設定
 
-```gradle
+```groovy
 spotless {
     java {
         googleJavaFormat()        // 使用 Google Java Format
@@ -123,7 +123,7 @@ spotless {
 
 ### importOrder — 自訂 import 分組
 
-```gradle
+```groovy
 spotless {
     java {
         googleJavaFormat()
@@ -157,7 +157,7 @@ import static java.util.Collections.emptyList;
 
 ### licenseHeader — 自動版權宣告
 
-```gradle
+```groovy
 spotless {
     java {
         licenseHeader('/*\n * Copyright (C) $YEAR LucasHsu.dev\n * All rights reserved.\n */\n')
@@ -187,7 +187,7 @@ Checkstyle 只管**抱怨**，不會自動幫你改。但這些抱怨是 gold du
 
 ### Gradle 設定
 
-```gradle
+```groovy
 checkstyle {
     toolVersion = '10.12.5'
     ignoreFailures = false
@@ -297,7 +297,7 @@ PMD 是你程式碼的 X 光機。它不管命名跟排版，只在乎會不會*
 
 ### Gradle 設定
 
-```gradle
+```groovy
 pmd {
     consoleOutput = true
     toolVersion = '7.0.0'
@@ -435,7 +435,7 @@ Windows PowerShell：
 
 ### 包成 custom task
 
-```gradle
+```groovy
 tasks.register('qualityCheck') {
     dependsOn 'spotlessApply', 'spotlessCheck',
               'checkstyleMain', 'checkstyleTest',
@@ -538,7 +538,7 @@ git config --global core.autocrlf true
 
 解法 — Spotless 明確指定：
 
-```gradle
+```groovy
 spotless {
     java {
         googleJavaFormat()

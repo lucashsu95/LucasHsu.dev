@@ -135,7 +135,7 @@ window 內的細分區域，可在同一視窗內同時看到多個終端。
 
 ### 完整設定檔（10 區塊）
 
-```conf
+```ini
 # ============================================
 # 1. 前置鍵設定
 # ============================================
@@ -240,7 +240,7 @@ set -s escape-time 1
 
 ### 進階狀態列配置
 
-```conf
+```ini
 set -g status-left "#[bg=green]#[fg=black] #S #[default] | #[fg=blue]#H"
 set -g status-right "%a %b %d | #[fg=cyan]%H:%M:%S"
 set -g status-justify left
@@ -262,7 +262,7 @@ git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 
 在 `~/.tmux.conf` 最底部加入：
 
-```conf
+```ini
 # ============================================
 # TPM 插件設定（放在設定檔最底部）
 # ============================================
@@ -440,7 +440,7 @@ tmux send-keys -t dev:1.0 "npm test" Enter
 
 或者在設定檔中定義快捷鍵：
 
-```conf
+```ini
 bind e set synchronize-panes on \; display "Panes synchronized"
 bind E set synchronize-panes off \; display "Panes unsynchronized"
 ```
@@ -582,7 +582,7 @@ set -g visual-activity on
 
 在 `~/.tmux.conf` 加入：
 
-```conf
+```ini
 set -g mouse on
 ```
 
@@ -598,7 +598,7 @@ set -g mouse on
 
 使用 tmux-resurrect 插件：
 
-```conf
+```ini
 set -g @plugin 'tmux-plugins/tmux-resurrect'
 set -g @plugin 'tmux-plugins/tmux-continuum'
 set -g @continuum-save-interval '15'
@@ -656,7 +656,7 @@ echo "Hello" | /mnt/c/Windows/system32/clip.exe
 
 把以下內容加到 `~/.tmux.conf`（放在 TPM 的 `run` 之後）：
 
-```conf
+```ini
 # ── 剪貼簿：hook + 覆寫 tmux-yank ──────────────────
 
 # tmux buffer 變更 → 完整路徑餵 clip.exe

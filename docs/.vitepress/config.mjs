@@ -30,6 +30,20 @@ export default defineConfig({
     define: {
       "process.env": env,
     },
+    build: {
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            mermaid: ["mermaid"],
+            nolebase: [
+              "@nolebase/vitepress-plugin-enhanced-readabilities",
+              "@nolebase/vitepress-plugin-git-changelog",
+              "@nolebase/vitepress-plugin-inline-link-preview",
+            ],
+          },
+        },
+      },
+    },
     optimizeDeps: {
       include: ["mermaid"],
       exclude: [

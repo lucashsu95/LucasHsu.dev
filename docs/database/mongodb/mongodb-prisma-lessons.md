@@ -253,7 +253,7 @@ echo "Business: $(db.business.countDocuments()) 筆"
 
 ### 4.4 環境變數
 
-```env
+```bash
 # 開發環境（Docker）
 DATABASE_URL=mongodb://mongodb:27017/yelp_db
 
