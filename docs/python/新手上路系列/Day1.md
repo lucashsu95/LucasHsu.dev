@@ -32,6 +32,16 @@ head:
 4. 數學運算子
 5. 比較運算子
 
+## 簡報版本
+
+如果你想直接看原本的 HTML 投影片，點這裡：
+
+<SlideButton 
+  slug="python-day01" 
+  title="python Day01" 
+  description="透過投影片快速掌握變數、輸入輸出函數" 
+/>
+
 ## 輸入 Input
 
 ### 單行輸入

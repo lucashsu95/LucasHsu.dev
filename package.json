@@ -10,6 +10,7 @@
     "markdown-it-mathjax3": "^4.3.2",
     "medium-zoom": "^1.1.0",
     "mermaid": "^11.12.2",
+    "playwright-chromium": "^1.61.0",
     "vitepress": "1.0.0-rc.42",
     "vitepress-plugin-google-analytics": "^1.0.2",
     "vitepress-plugin-life-progress": "^0.0.3",
@@ -29,10 +30,5 @@
     "busuanzi.pure.js": "^1.0.3",
     "viewerjs": "^1.11.6",
     "vitepress-plugin-back-to-top": "^1.0.1"
-  },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "playwright-chromium"
-    ]
   }
 }

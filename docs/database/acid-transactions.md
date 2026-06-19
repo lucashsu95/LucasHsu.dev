@@ -45,9 +45,13 @@ head:
 
 ## 簡報版本
 
-如果你想直接看原本的 HTML 投影片，點這條就會直接進簡報：
+如果你想直接看原本的 HTML 投影片，點這裡：
 
-- [開啟 ACID HTML 簡報](/slides/acid/index.html#/acid-title)
+<SlideButton 
+  slug="acid" 
+  title="ACID 屬性深度解析" 
+  description="透過投影片快速掌握資料庫 ACID 核心概念" 
+/>
 
 ## 先看沒有 ACID 會怎樣
 
