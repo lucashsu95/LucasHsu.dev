@@ -18,6 +18,9 @@ importers:
         specifier: ^1.0.1
         version: 1.0.1(typescript@5.9.3)
     devDependencies:
+      '@iconify-json/mdi':
+        specifier: ^1.2.3
+        version: 1.2.3
       '@nolebase/vitepress-plugin-enhanced-mark':
         specifier: ^2.6.1
         version: 2.6.1(@algolia/client-search@4.24.0)(@types/node@18.19.130)(axios@1.18.0)(markdown-it-mathjax3@4.3.2)(postcss@8.5.15)(search-insights@2.15.0)(typescript@5.9.3)
@@ -680,6 +683,9 @@ packages:
 
   '@iconify-json/icon-park-outline@1.2.1':
     resolution: {integrity: sha512-cNvUJL9mk3xOfyffErQuxvyRCWk0hCx1M8AEyGmNXjqIfgPC25OChCstt0KFB3IULS+hw9es+uA7pvVPmQh+AA==}
+
+  '@iconify-json/mdi@1.2.3':
+    resolution: {integrity: sha512-O3cLwbDOK7NNDf2ihaQOH5F9JglnulNDFV7WprU2dSoZu3h3cWH//h74uQAB87brHmvFVxIOkuBX2sZSzYhScg==}
 
   '@iconify-json/octicon@1.2.1':
     resolution: {integrity: sha512-4w7yMipQtp6s6aCHrSVlVXsf0OCBQ8CRmUTkMQUBexR42SXl4z5GnaUyaOMVoZttfgaBNnj0mlMB5T1cmRDgTg==}
@@ -4452,6 +4458,10 @@ snapshots:
       '@iconify/types': 2.0.0
 
   '@iconify-json/icon-park-outline@1.2.1':
+    dependencies:
+      '@iconify/types': 2.0.0
+
+  '@iconify-json/mdi@1.2.3':
     dependencies:
       '@iconify/types': 2.0.0
 
