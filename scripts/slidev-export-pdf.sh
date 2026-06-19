@@ -14,7 +14,7 @@ SLUG="$1"
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
 SLIDES_DIR="$PROJECT_DIR/docs/slides/$SLUG"
-OUTPUT_DIR="$PROJECT_DIR/docs/.vitepress/dist/slides"
+OUTPUT_DIR="$PROJECT_DIR/docs/public/slides"
 
 if [ ! -f "$SLIDES_DIR/slides.md" ]; then
   echo "Error: No slides.md found for '$SLUG' at $SLIDES_DIR"

@@ -11,7 +11,7 @@ const props = defineProps({
 
 const basePath = "/LucasHsu.dev/";
 
-const slideUrl = computed(() => `${basePath}slides/${props.slug}/`);
+const slideUrl = computed(() => `${basePath}slides/${props.slug}/index.html`);
 const pdfUrl = computed(() => props.pdf || `${basePath}slides/${props.slug}.pdf`);
 const thumbnailUrl = computed(() => props.thumbnail || `${basePath}slides/${props.slug}/thumbnail.png`);
 </script>

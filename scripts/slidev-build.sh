@@ -8,7 +8,7 @@ set -e
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
 SLIDES_DIR="$PROJECT_DIR/docs/slides"
-OUTPUT_DIR="$PROJECT_DIR/docs/.vitepress/dist/slides"
+OUTPUT_DIR="$PROJECT_DIR/docs/public/slides"
 BASE_PATH="/LucasHsu.dev/slides"
 
 generate_thumbnail() {
