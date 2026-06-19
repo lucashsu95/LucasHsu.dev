@@ -1,6 +1,12 @@
 docs/.vitepress/dist
 docs/.vitepress/cache
 
+# Slidev build output
+docs/slides/**/docs/public/
+docs/slides/**/*.pdf
+docs/slides/**/thumbnail.png
+
+
 # Logs
 logs
 *.log
