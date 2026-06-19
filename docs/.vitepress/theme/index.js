@@ -46,6 +46,7 @@ import "@nolebase/vitepress-plugin-git-changelog/client/style.css";
 import TocList from "./components/TocList.vue";
 import CarrySystem from "./components/CarrySystem.vue";
 import SecretPage from "./components/SecretPage.vue";
+import SlideButton from "./components/SlideButton.vue";
 
 function reloadBusuanzi() {
   const busuanziScriptId = "busuanzi-script";
@@ -91,6 +92,7 @@ export default {
     app.component("TocList", TocList);
     app.component('CarrySystem',CarrySystem);
     app.component('SecretPage',SecretPage);
+    app.component('SlideButton',SlideButton);
   },
   setup() {
     vitepressLifeProgress();

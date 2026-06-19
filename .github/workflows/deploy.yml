@@ -25,6 +25,9 @@ jobs:
       - name: Create .env file
         run: echo "VITE_GOOGLE_ANALYTICS_ID=${{ secrets.VITE_GOOGLE_ANALYTICS_ID }}" > .env
 
+      - name: Build Slidev Presentations
+        run: bash scripts/slidev-build.sh
+
       - name: Build
         run: pnpm build
 

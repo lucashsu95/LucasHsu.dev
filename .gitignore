@@ -132,10 +132,9 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
-
 sidebarData.json
 
 AGENTS.md
 nul
 skills.md.sisyphus/
-yelp-analysis-vue-express-mongodb/
+.sisyphus

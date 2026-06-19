@@ -5,6 +5,8 @@
     "@nolebase/vitepress-plugin-git-changelog": "^2.6.1",
     "@nolebase/vitepress-plugin-highlight-targeted-heading": "^2.6.1",
     "@nolebase/vitepress-plugin-inline-link-preview": "^2.6.1",
+    "@slidev/cli": "^0.49.28",
+    "@slidev/theme-seriph": "^0.25.0",
     "markdown-it-mathjax3": "^4.3.2",
     "medium-zoom": "^1.1.0",
     "mermaid": "^11.12.2",
@@ -17,11 +19,20 @@
     "dev": "vitepress dev docs",
     "build": "NODE_OPTIONS=\"--max-old-space-size=4096\" vitepress build docs",
     "preview": "vitepress preview docs",
-    "generate-sidebar": "node generateSidebar.js"
+    "generate-sidebar": "node generateSidebar.js",
+    "slidev:build:acid": "slidev build docs/slides/acid/slides.md --out ../../.vitepress/dist/slides/acid --base /LucasHsu.dev/slides/acid/",
+    "slidev:dev:acid": "slidev docs/slides/acid/slides.md --remote",
+    "slidev:export:acid": "slidev export docs/slides/acid/slides.md --format pdf --output ../../.vitepress/dist/slides/acid.pdf --with-clicks",
+    "slidev:build:all": "pnpm slidev:build:acid"
   },
   "dependencies": {
     "busuanzi.pure.js": "^1.0.3",
     "viewerjs": "^1.11.6",
     "vitepress-plugin-back-to-top": "^1.0.1"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "playwright-chromium"
+    ]
   }
 }
