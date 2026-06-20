@@ -17,26 +17,6 @@ fonts:
 css: unocss
 ---
 
-<style>
-:root {
-  --py-blue: #4B8BBE;
-  --py-yellow: #FFD43B;
-  --term-bg: #0d1117;
-  --term-green: #7ee787;
-}
-.slidev-layout {
-  font-family: 'Inter', sans-serif;
-}
-.font-mono, code, pre {
-  font-family: 'JetBrains Mono', monospace !important;
-}
-.prompt::before {
-  content: ">>> ";
-  color: var(--py-yellow);
-  font-weight: bold;
-}
-</style>
-
 <div class="absolute inset-0 bg-gradient-to-br from-[#0d1117] via-[#0d1117] to-[#13202c]"></div>
 
 <div class="relative z-10">
