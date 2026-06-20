@@ -24,7 +24,10 @@
     "slidev:build:acid": "slidev build docs/slides/acid/slides.md --out ../../.vitepress/dist/slides/acid --base /LucasHsu.dev/slides/acid/",
     "slidev:dev:acid": "slidev docs/slides/acid/slides.md --remote",
     "slidev:export:acid": "slidev export docs/slides/acid/slides.md --format pdf --output ../../.vitepress/dist/slides/acid.pdf --with-clicks",
-    "slidev:build:all": "pnpm slidev:build:acid"
+    "slidev:dev:python-day01": "slidev docs/slides/python-day01/slides.md --remote",
+    "slidev:build:python-day01": "slidev build docs/slides/python-day01/slides.md --out ../../.vitepress/dist/slides/python-day01 --base /LucasHsu.dev/slides/python-day01/",
+    "slidev:export:python-day01": "slidev export docs/slides/python-day01/slides.md --format pdf --output docs/public/slides/python-day01.pdf --with-clicks",
+    "slidev:build:all": "pnpm slidev:build:acid && pnpm slidev:build:python-day01"
   },
   "dependencies": {
     "busuanzi.pure.js": "^1.0.3",
