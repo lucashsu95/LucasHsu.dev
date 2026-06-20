@@ -147,3 +147,5 @@ skills.md.sisyphus/
 .omo
 docs/public/slides/*
 !docs/public/slides/acid/
+.agents
+skills-lock.json
