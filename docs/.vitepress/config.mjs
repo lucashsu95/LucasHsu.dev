@@ -17,10 +17,10 @@ import {
   sidebarOther,
 } from "./config/sidebar";
 import { InlineLinkPreviewElementTransform } from "@nolebase/vitepress-plugin-inline-link-preview/markdown-it";
-import {
-  GitChangelog,
-  GitChangelogMarkdownSection,
-} from '@nolebase/vitepress-plugin-git-changelog/vite'
+// import {
+//   GitChangelog,
+//   GitChangelogMarkdownSection,
+// } from '@nolebase/vitepress-plugin-git-changelog/vite'
 import { MermaidMarkdown, MermaidPlugin } from "vitepress-plugin-mermaid";
 
 const env = loadEnv("", process.cwd());
@@ -64,10 +64,10 @@ export default defineConfig({
       ]
     },
     plugins: [
-      GitChangelog({
-        repoURL: () => 'https://github.com/lucashsu95/LucasHsu.dev',
-      }),
-      GitChangelogMarkdownSection(),
+      // GitChangelog({
+      //   repoURL: () => 'https://github.com/lucashsu95/LucasHsu.dev',
+      // }),
+      // GitChangelogMarkdownSection(),
       MermaidPlugin()
     ],
   },
