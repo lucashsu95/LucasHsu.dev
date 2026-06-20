@@ -3,7 +3,6 @@
     "@iconify-json/mdi": "^1.2.3",
     "@nolebase/vitepress-plugin-enhanced-mark": "^2.6.1",
     "@nolebase/vitepress-plugin-enhanced-readabilities": "^2.6.1",
-    "@nolebase/vitepress-plugin-git-changelog": "^2.6.1",
     "@nolebase/vitepress-plugin-highlight-targeted-heading": "^2.6.1",
     "@nolebase/vitepress-plugin-inline-link-preview": "^2.6.1",
     "@slidev/cli": "^0.49.28",

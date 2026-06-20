@@ -26,6 +26,7 @@ import { MermaidMarkdown, MermaidPlugin } from "vitepress-plugin-mermaid";
 const env = loadEnv("", process.cwd());
 
 export default defineConfig({
+  srcExclude: ['slides/**/*.md'],
   vite: {
     define: {
       "process.env": env,
@@ -38,7 +39,6 @@ export default defineConfig({
             mermaid: ["mermaid"],
             nolebase: [
               "@nolebase/vitepress-plugin-enhanced-readabilities",
-              "@nolebase/vitepress-plugin-git-changelog",
               "@nolebase/vitepress-plugin-inline-link-preview",
             ],
           },

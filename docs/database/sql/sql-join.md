@@ -292,7 +292,12 @@ graph TD
 **user_quotas 資料表**
 ![user_quotas 表](../assets/sql-join/image-2.png)
 
-<a href='../assets/sql-join/test.sql' download='test.sql'>📥 下載完整測試資料檔 `test.sql`</a>
+<FileDownloadCard
+  filePath="../assets/sql-join/test.sql"
+  fileName="test.sql"
+  fileSize="2970"
+  downloadUrl="../assets/sql-join/test.sql"
+/>
 
 ### 練習 1：基礎 JOIN 查詢（簡單）⭐
 
