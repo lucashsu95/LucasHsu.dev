@@ -1,17 +1,126 @@
 :root {
-  --py-blue: #4B8BBE;
-  --py-yellow: #FFD43B;
+  --py-blue: #4b8bbe;
+  --py-yellow: #ffd43b;
+  --py-dark-blue: #306998;
   --term-bg: #0d1117;
   --term-green: #7ee787;
+  --code-bg: #0d1117;
 }
+
+#slidev-goto-dialog .autocomplete-list {
+  display: none;
+}
+
+#slidev-goto-dialog:not(.-top-20) .autocomplete-list {
+  display: block;
+}
+
 .slidev-layout {
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
+  letter-spacing: 0.01em;
 }
-.font-mono, code, pre {
-  font-family: 'JetBrains Mono', monospace !important;
+
+.font-mono,
+code,
+pre {
+  font-family: "JetBrains Mono", monospace !important;
 }
+
 .prompt::before {
   content: ">>> ";
   color: var(--py-yellow);
   font-weight: bold;
+}
+
+/* Python syntax token overrides */
+.token.comment {
+  color: #8b949e;
+}
+.token.string {
+  color: #7ee787;
+}
+.token.number {
+  color: #79c0ff;
+}
+.token.keyword {
+  color: #ff7b72;
+}
+.token.function {
+  color: #d2a8ff;
+}
+.token.operator {
+  color: #ffa657;
+}
+.token.builtin {
+  color: #ffa657;
+}
+
+/* Fade transitions for smoother slide transitions */
+.slidev-slide {
+  transition: opacity 0.2s ease;
+}
+
+/* Card hover effects */
+.slidev-layout .rounded-lg {
+  transition: all 0.2s ease;
+}
+
+/* Gradient accent lines */
+.slidev-layout h1::after {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--py-blue), var(--py-yellow));
+  margin-top: 8px;
+  border-radius: 2px;
+}
+
+.slidev-layout.section h1::after,
+.slidev-layout.cover h1::after {
+  display: none;
+}
+
+/* Code block styling enhancement */
+.slidev-code {
+  border: 1px solid rgba(75, 139, 190, 0.15) !important;
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+/* Smooth scroll within slide */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Table styling */
+.slidev-layout table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.slidev-layout th {
+  background: rgba(75, 139, 190, 0.1);
+  border-color: rgba(75, 139, 190, 0.3);
+}
+
+.slidev-layout td,
+.slidev-layout th {
+  padding: 8px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.slidev-layout h1 {
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+.card-hover {
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-4px);
 }
