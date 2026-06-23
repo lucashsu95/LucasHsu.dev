@@ -45,6 +45,11 @@ export function sidebarSpringboot() {
           link: "/springboot/data-pagination",
           activeMatch: '/springboot/data-pagination',
         },
+        {
+          text: "Record DTO Projection 實戰指南",
+          link: "/springboot/record-dto-projection",
+          activeMatch: '/springboot/record-dto-projection',
+        },
       ],
     },
     {
