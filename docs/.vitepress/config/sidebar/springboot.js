@@ -50,6 +50,11 @@ export function sidebarSpringboot() {
           link: "/springboot/record-dto-projection",
           activeMatch: '/springboot/record-dto-projection',
         },
+        {
+          text: "Virtual Threads 實戰指南",
+          link: "/springboot/virtual-threads-spring-boot",
+          activeMatch: '/springboot/virtual-threads-spring-boot',
+        },
       ],
     },
     {
