@@ -22,7 +22,7 @@ head:
       content: article
   - - meta
     - property: og:image
-      content: https://lucashsu95.github.io/LucasHsu.dev/images/java-cover.jpg
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/java-cover.webp
   - - meta
     - property: og:url
       content: https://lucashsu95.github.io/LucasHsu.dev/java/oop/class-object-interface.html  
@@ -101,7 +101,7 @@ head:
             "@type": "WebPage",
             "@id": "https://lucashsu95.github.io/LucasHsu.dev/java/oop/class-object-interface.html"
           },
-          "image": "https://lucashsu95.github.io/LucasHsu.dev/images/java-cover.jpg",
+          "image": "https://lucashsu95.github.io/LucasHsu.dev/images/java-cover.webp",
           "articleSection": "Java程式設計",
           "keywords": ["Java Class", "Java Object", "Java Interface", "物件導向設計", "介面實作", "類別建構", "SmartLight", "OOP基礎"],
           "about": [

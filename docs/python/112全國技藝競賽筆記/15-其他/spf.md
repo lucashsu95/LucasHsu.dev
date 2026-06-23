@@ -22,7 +22,7 @@ head:
       content: article
   - - meta
     - property: og:image
-      content: https://lucashsu95.github.io/LucasHsu.dev/images/python-cover.jpg
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/python-cover.webp
   - - meta
     - property: og:url
       content: https://lucashsu95.github.io/LucasHsu.dev/python/112全國技藝競賽筆記/15-其他/spf.html  
@@ -101,7 +101,7 @@ head:
             "@type": "WebPage",
             "@id": "https://lucashsu95.github.io/LucasHsu.dev/python/112全國技藝競賽筆記/15-其他/spf.html"
           },
-          "image": "https://lucashsu95.github.io/LucasHsu.dev/images/python-cover.jpg",
+          "image": "https://lucashsu95.github.io/LucasHsu.dev/images/python-cover.webp",
           "articleSection": "Python演算法與數論",
           "keywords": ["SPF最小質因數", "Smallest Prime Factor", "質因數分解", "Python篩法", "數論演算法", "質數判別", "全國技藝競賽", "Python競賽程式"],
           "about": [

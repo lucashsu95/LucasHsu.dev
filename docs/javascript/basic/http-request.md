@@ -17,7 +17,7 @@ head:
       content: article
   - - meta
     - property: og:image
-      content: https://lucashsu95.github.io/LucasHsu.dev/images/javascript-cover.jpg
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/javascript-cover.webp
   - - meta
     - name: description
       content: HTTP 方法與狀態碼概覽，搭配 fetch GET/POST 範例、流程圖、練習題與常見 FAQ。

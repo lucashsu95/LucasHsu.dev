@@ -36,7 +36,7 @@ head:
 ::: tip 題目
 試著用`grid`製作下方的表格
 :::
-![alt text](../assets/basic/grid/image.png)
+![alt text](../assets/basic/grid/image.webp)
 
 ## 影片教學連結
 - [css grid 教學 - Youtube](https://www.youtube.com/watch?v=jV2maiP0Z7s)

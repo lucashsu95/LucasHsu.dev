@@ -18,7 +18,7 @@ head:
       content: article
   - - meta
     - property: og:image
-      content: https://lucashsu95.github.io/LucasHsu.dev/images/mysql-cover.jpg
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/mysql-cover.webp
   - - meta
     - name: description
       content: 完整的資料庫正規化教學指南，學習如何減少資料冗餘、避免資料異常，以及正規化與反正規化的選擇策略。

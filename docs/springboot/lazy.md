@@ -16,7 +16,7 @@ head:
       content: article
   - - meta
     - property: og:image
-      content: https://lucashsu95.github.io/LucasHsu.dev/images/springboot-cover-2.png
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/springboot-cover-2.webp
 ---
 
 # Lazy vs Eager：載入時機的對決

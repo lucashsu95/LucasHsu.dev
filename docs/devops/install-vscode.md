@@ -29,7 +29,7 @@ head:
 然後在左邊會看到這些選項，去點四個方塊的那個
 就是圖片中第5個icon
 
-![alt text](./assets/install-vscode/image.png)
+![alt text](./assets/install-vscode/image.webp)
 
 按下去
 然後在搜尋框打中文
@@ -39,14 +39,14 @@ install 是下載的意思<br>
 uninstall 是解除安裝的意思
 :::
 
-![alt text](./assets/install-vscode/image-1.png)
+![alt text](./assets/install-vscode/image-1.webp)
 
 ::: warning 注意
 然後右下角會跳出訊息 問你要不要改語言
 當然是直接點擊`Change Language and Restart`
 :::
 
-![alt text](./assets/install-vscode/image-2.png)
+![alt text](./assets/install-vscode/image-2.webp)
 
 
 ## 開始連結資料夾
@@ -55,7 +55,7 @@ uninstall 是解除安裝的意思
 2. 在到vscode的左上角點擊【檔案】
 3. 然後可以找到【開啟資料夾】的選項
 
-![alt text](./assets/install-vscode/image-3.png)
+![alt text](./assets/install-vscode/image-3.webp)
 
 選擇剛剛建好的資料夾
 按【選擇資料夾】
@@ -63,7 +63,7 @@ uninstall 是解除安裝的意思
 ## Auto Save
 在儲存時自動格式化文件
 到左下角的齒輪 -> 設定 -> 搜尋框打`auto save`
-![alt text](./assets/install-vscode/image-4.png)
+![alt text](./assets/install-vscode/image-4.webp)
 
 ## 可以安裝的掛件
 

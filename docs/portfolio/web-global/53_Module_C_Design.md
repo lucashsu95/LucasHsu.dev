@@ -12,5 +12,5 @@
 ## Demo
 [DEMO](https://lucashsu95.github.io/web-global-public/53/module_C/)
 
-![alt text](./53_Module_C_Design/image.png)
+![alt text](./53_Module_C_Design/image.webp)
 

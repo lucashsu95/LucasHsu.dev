@@ -17,7 +17,7 @@ head:
       content: article
   - - meta
     - property: og:image
-      content: https://lucashsu95.github.io/LucasHsu.dev/images/javascript-cover.jpg
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/javascript-cover.webp
   - - meta
     - name: description
       content: 用早餐流程解釋同步與異步、Promise、async/await，含錯誤處理、事件迴圈與練習題。

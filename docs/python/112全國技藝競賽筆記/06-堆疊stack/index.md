@@ -1,6 +1,6 @@
 # 堆疊stack 後進先出(LIFO)
 
-![](./image.png)
+![](./image.webp)
 
 
 ## 介紹

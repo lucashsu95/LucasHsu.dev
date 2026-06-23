@@ -17,7 +17,7 @@ head:
       content: article
   - - meta
     - property: og:image
-      content: https://lucashsu95.github.io/LucasHsu.dev/images/javascript-cover.jpg
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/javascript-cover.webp
   - - meta
     - name: description
       content: JavaScript ES modules 的 export/import 基礎、命名與預設匯出、重匯出、常見陷阱與練習題。

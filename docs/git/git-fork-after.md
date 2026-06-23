@@ -17,7 +17,7 @@ head:
       content: article
   - - meta
     - property: og:image
-      content: https://lucashsu95.github.io/LucasHsu.dev/images/git-cover.jpg
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/git-cover.webp
 ---
 
 # Git Fork
@@ -265,8 +265,8 @@ git rebase upstream/main
 2. 手動測試步驟
 
 ## 截圖（如適用）
-![before](before.png)
-![after](after.png)
+![before](before.webp)
+![after](after.webp)
 
 ## 相關 Issue
 Closes #123

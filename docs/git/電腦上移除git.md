@@ -17,7 +17,7 @@ head:
       content: article
   - - meta
     - property: og:image
-      content: https://lucashsu95.github.io/LucasHsu.dev/images/git-cover.jpg
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/git-cover.webp
 ---
 
 # 移除 Git 認證教學 

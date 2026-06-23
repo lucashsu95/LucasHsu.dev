@@ -22,7 +22,7 @@ head:
       content: article
   - - meta
     - property: og:image
-      content: https://lucashsu95.github.io/LucasHsu.dev/images/java-cover.jpg
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/java-cover.webp
   - - meta
     - property: og:url
       content: https://lucashsu95.github.io/LucasHsu.dev/java/oop/class-object-interface.html  
@@ -101,7 +101,7 @@ head:
             "@type": "WebPage",
             "@id": "https://lucashsu95.github.io/LucasHsu.dev/java/oop/polymorphism-abstract.html"
           },
-          "image": "https://lucashsu95.github.io/LucasHsu.dev/images/java-cover.jpg",
+          "image": "https://lucashsu95.github.io/LucasHsu.dev/images/java-cover.webp",
           "articleSection": "Java程式設計",
           "keywords": ["Java多型", "Polymorphism", "抽象類別", "組合模式", "Interface進階", "extends vs implements", "通知系統設計", "OOP進階"],
           "about": [

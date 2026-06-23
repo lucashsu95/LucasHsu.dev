@@ -22,7 +22,7 @@ head:
       content: article
   - - meta
     - property: og:image
-      content: https://lucashsu95.github.io/LucasHsu.dev/images/java-cover.jpg
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/java-cover.webp
   - - meta
     - property: og:url
       content: https://lucashsu95.github.io/LucasHsu.dev/java/oop/oop-1.html  
@@ -95,7 +95,7 @@ head:
             "@type": "WebPage",
             "@id": "https://lucashsu95.github.io/LucasHsu.dev/java/oop/oop-1.html"
           },
-          "image": "https://lucashsu95.github.io/LucasHsu.dev/images/java-cover.jpg",
+          "image": "https://lucashsu95.github.io/LucasHsu.dev/images/java-cover.webp",
           "articleSection": "Java程式設計",
           "keywords": ["Java", "OOP", "物件導向程式設計", "Interface", "多型", "程式重構", "設計模式"],
           "audience": {

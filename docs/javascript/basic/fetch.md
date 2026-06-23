@@ -17,7 +17,7 @@ head:
       content: article
   - - meta
     - property: og:image
-      content: https://lucashsu95.github.io/LucasHsu.dev/images/javascript-cover.jpg
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/javascript-cover.webp
   - - meta
     - name: description
       content: fetch() 的核心概念、GET/POST 範例、錯誤與逾時處理、可執行練習與延伸閱讀。

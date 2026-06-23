@@ -19,7 +19,7 @@ head:
     content: article
 - - meta
   - property: og:image
-    content: https://lucashsu95.github.io/LucasHsu.dev/images/typescript-cover.jpg
+    content: https://lucashsu95.github.io/LucasHsu.dev/images/typescript-cover.webp
 ---
 
 # TypeScript 工具類型實戰指南

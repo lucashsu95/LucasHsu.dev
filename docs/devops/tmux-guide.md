@@ -19,7 +19,7 @@ head:
     content: article
 - - meta
   - property: og:image
-    content: https://lucashsu95.github.io/LucasHsu.dev/images/tmux-cover.jpg
+    content: https://lucashsu95.github.io/LucasHsu.dev/images/tmux-cover.webp
 ---
 
 # Tmux 終端機多工器完全指南

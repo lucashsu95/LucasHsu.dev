@@ -61,7 +61,7 @@ F I
 F J
 ```
 
-![alt text](./assets/DFS-and-BFS/image.png)
+![alt text](./assets/DFS-and-BFS/image.webp)
 
 **順變介紹一下**<br>
 - **紅色**的是**根路徑**(A節點)

@@ -2,7 +2,7 @@
 head:
   - - meta
     - property: og:image
-      content: https://lucashsu95.github.io/LucasHsu.dev/images/javascript-cover.jpg
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/javascript-cover.webp
 ---
 
 # Web Components 實戰篇：企業級應用與最佳實踐

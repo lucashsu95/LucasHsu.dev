@@ -19,7 +19,7 @@ head:
     content: article
 - - meta
   - property: og:image
-    content: https://lucashsu95.github.io/LucasHsu.dev/images/pwa-cover.jpg
+    content: https://lucashsu95.github.io/LucasHsu.dev/images/pwa-cover.webp
 ---
 
 # Service Worker 實戰：把網站升級成 PWA

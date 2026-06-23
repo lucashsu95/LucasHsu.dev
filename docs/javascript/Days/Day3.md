@@ -18,16 +18,16 @@ head:
       content: article
   - - meta
     - property: og:image
-      content: https://lucashsu95.github.io/LucasHsu.dev/images/javascript-cover.jpg
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/javascript-cover.webp
 ---
 
-<img src="../assets/Days/javascript-title-img.png" alt="javascript-title-img" class="title-img" />
+<img src="../assets/Days/javascript-title-img.webp" alt="javascript-title-img" class="title-img" />
 
 # Javascript Day3 迴圈 For & While
 
 ## For
 
-![image](https://hackmd.io/_uploads/ByaJh8D71g.png)
+![image](https://hackmd.io/_uploads/ByaJh8D71g.webp)
 
 ### 簡單範例
 ```javascript:line-numbers
@@ -43,7 +43,7 @@ for (let i = 0; i < 10; i++) {
 
 ## While
 
-![image](https://hackmd.io/_uploads/ry6s68DQyx.png)
+![image](https://hackmd.io/_uploads/ry6s68DQyx.webp)
 
 ### 簡單範例
 ```javascript:line-numbers

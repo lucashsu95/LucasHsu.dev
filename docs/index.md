@@ -5,7 +5,7 @@ hero:
   name: "LucasHsu.dev"
   text: "部落格&作品集&比賽事蹟&演算法筆記"
   tagline: Everything's gonna be okay🪲
-  image: /logo/avatar.png
+  image: /logo/avatar.webp
   actions:
     - theme: brand
       text: Get Start

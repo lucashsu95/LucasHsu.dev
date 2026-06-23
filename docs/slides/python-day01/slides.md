@@ -23,7 +23,7 @@ drawings:
 selectable: true
 record: user
 seoMeta:
-  ogImage: https://lucashsu.dev/og-python-day01.png
+  ogImage: https://lucashsu.dev/og-python-day01.webp
   ogTitle: Python Day01 — 變數・型別・輸入輸出
   description: Python 程式設計入門第一課：型別心智模型、變數、輸入輸出、數學運算子與條件判斷
 exportFilename: python-day01

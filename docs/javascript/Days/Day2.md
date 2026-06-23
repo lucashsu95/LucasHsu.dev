@@ -18,11 +18,11 @@ head:
       content: article
   - - meta
     - property: og:image
-      content: https://lucashsu95.github.io/LucasHsu.dev/images/javascript-cover.jpg
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/javascript-cover.webp
       
 ---
 
-<img src="../assets/Days/javascript-title-img.png" alt="javascript-title-img" class="title-img" />
+<img src="../assets/Days/javascript-title-img.webp" alt="javascript-title-img" class="title-img" />
 
 # Javascript Day2 判斷式 IF...ELSE
 

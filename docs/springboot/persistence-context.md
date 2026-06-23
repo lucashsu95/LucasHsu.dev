@@ -16,7 +16,7 @@ head:
       content: article
   - - meta
     - property: og:image
-      content: https://lucashsu95.github.io/LucasHsu.dev/images/springboot-cover.png
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/springboot-cover.webp
 ---
 
 # JPA 持久化上下文：Entity 的人生四階段

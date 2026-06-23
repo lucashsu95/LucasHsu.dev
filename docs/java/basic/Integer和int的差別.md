@@ -19,7 +19,7 @@ head:
       content: article
   - - meta
     - property: og:image
-      content: https://lucashsu95.github.io/LucasHsu.dev/images/java-cover.jpg
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/java-cover.webp
 ---
 
 # Integer 和 int 的差別

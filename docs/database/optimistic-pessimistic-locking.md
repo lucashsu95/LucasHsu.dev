@@ -19,7 +19,7 @@ head:
       content: article
   - - meta
     - property: og:image
-      content: https://lucashsu95.github.io/LucasHsu.dev/images/mysql-cover-2.jpg
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/mysql-cover-2.webp
 ---
 
 # 資料庫樂觀鎖與悲觀鎖｜概念說明

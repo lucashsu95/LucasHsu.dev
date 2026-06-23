@@ -19,7 +19,7 @@ head:
       content: article
   - - meta
     - property: og:image
-      content: https://lucashsu95.github.io/LucasHsu.dev/images/python-cover.jpg
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/python-cover.webp
 ---
 
 # python-新手上路-Day0｜建置環境
@@ -33,13 +33,13 @@ head:
 
 ## 安裝python
 首先，到[官網](https://www.python.org/)，點download
-![](https://hackmd.io/_uploads/SJAg3kIGp.png)
+![](https://hackmd.io/_uploads/SJAg3kIGp.webp)
 
 ::: warning 注意
 點exe檔 之後就會看到視窗下方有兩行，把那兩個框框抅起來
 :::
 
-![](./Day0/image-1.jpg)
+![](./Day0/image-1.webp)
 
 ## 安裝環境、編輯器
 [install-vscode](../../devops/install-vscode)
@@ -52,7 +52,7 @@ head:
 1. 點【檔案】按鈕->【開啟資料夾】(~~沒有資料夾可以在桌面創一個~~)
 2. 然後檔案那裡就可以看到四個按鈕
 
-![](https://hackmd.io/_uploads/r1LgexUM6.png)
+![](https://hackmd.io/_uploads/r1LgexUM6.webp)
 
 3. 四個按鈕的功能分別是【新增檔案】【新增資料夾】【重新整理】【摺疊資料夾】
 4. 就直接點第一個按鈕

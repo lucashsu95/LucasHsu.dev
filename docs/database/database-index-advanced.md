@@ -18,7 +18,7 @@ head:
       content: article
   - - meta
     - property: og:image
-      content: https://lucashsu95.github.io/LucasHsu.dev/images/mysql-cover.jpg
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/mysql-cover.webp
 ---
 
 # 進階索引實戰：B-Tree、複合索引與 Hash Map 全解析

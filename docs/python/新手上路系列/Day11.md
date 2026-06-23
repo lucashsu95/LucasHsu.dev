@@ -189,7 +189,7 @@ xyz
 ## 6. 巴斯卡三角形
 
 試寫一程式印出指定大小之巴斯卡三角形
-![](https://hackmd.io/_uploads/SyF_qIKbp.png)
+![](https://hackmd.io/_uploads/SyF_qIKbp.webp)
 
 ::: danger 小挑戰
 請用遞迴實做

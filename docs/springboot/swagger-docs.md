@@ -16,7 +16,7 @@ head:
       content: article
   - - meta
     - property: og:image
-      content: https://lucashsu95.github.io/LucasHsu.dev/images/springboot-cover.jpg
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/springboot-cover.webp
 ---
 
 # Swagger 教學：在 Spring Boot 打造可閱讀 API 文件

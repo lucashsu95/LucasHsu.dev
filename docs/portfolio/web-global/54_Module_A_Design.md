@@ -12,4 +12,4 @@
 ## Demo
 [DEMO](https://lucashsu95.github.io/web-global-public/54/module_A/)
 
-![alt text](./54_Module_A_Design/image.png)
+![alt text](./54_Module_A_Design/image.webp)

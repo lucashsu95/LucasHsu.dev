@@ -2,7 +2,7 @@
 head:
   - - meta
     - property: og:image
-      content: https://lucashsu95.github.io/LucasHsu.dev/images/git-cover.jpg
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/git-cover.webp
 ---
 
 # git 筆記

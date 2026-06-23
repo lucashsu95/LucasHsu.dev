@@ -20,7 +20,7 @@ head:
       content: article
   - - meta
     - property: og:image
-      content: https://lucashsu95.github.io/LucasHsu.dev/images/javascript-cover.jpg
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/javascript-cover.webp
   - - meta
     - name: description
       content: 從零建構功能導向架構，遷移既有專案，Next.js 15 實戰，fp-ts 與 Ramda 選擇指南

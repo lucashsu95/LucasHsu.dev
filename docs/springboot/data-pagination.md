@@ -19,7 +19,7 @@ head:
       content: article
   - - meta
     - property: og:image
-      content: https://lucashsu95.github.io/LucasHsu.dev/images/springboot-cover-2.png
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/springboot-cover-2.webp
 ---
 
 # Spring Boot 分頁與 N+1 問題

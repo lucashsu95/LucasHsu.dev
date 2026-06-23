@@ -16,7 +16,7 @@ head:
       content: article
   - - meta
     - property: og:image
-      content: https://lucashsu95.github.io/LucasHsu.dev/images/sql-cover.jpg
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/sql-cover.webp
 ---
 
 # SQL CTE（通用表達式）完全指南

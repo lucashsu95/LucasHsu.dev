@@ -18,7 +18,7 @@ head:
       content: article
   - - meta
     - property: og:image
-      content: https://lucashsu95.github.io/LucasHsu.dev/images/git-cover.jpg
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/git-cover.webp
 ---
 
 # Git 安裝與初始設定
@@ -242,11 +242,11 @@ Hi your-username! You've successfully authenticated, but GitHub does not provide
 
 1. 登入 [GitHub](https://github.com/)
 2. 點擊右上角 **+**  **New repository**
-   ![new-green-btn-1](./imgs/new-green-btn-1.jpg)
+   ![new-green-btn-1](./imgs/new-green-btn-1.webp)
 
     或是找到
 
-    ![new-green-btn-2](./imgs/new-green-btn-2.jpg)
+    ![new-green-btn-2](./imgs/new-green-btn-2.webp)
 3. 填寫：
    - **Repository name**：`my-first-repo`
    - **Description**：（選填）
@@ -256,7 +256,7 @@ Hi your-username! You've successfully authenticated, but GitHub does not provide
 
  **小技巧**：第一個專案建議選 Public，讓自己的作品被看見！
 
- ![](./imgs/image.png)
+ ![](./imgs/image.webp)
 
 ---
 

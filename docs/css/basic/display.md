@@ -151,9 +151,9 @@ flowchart TD
 
 ## 小遊戲
 
-1. ![](https://hackmd.io/_uploads/Sy-11PNRn.png)
+1. ![](https://hackmd.io/_uploads/Sy-11PNRn.webp)
     [flex小青蛙](https://flexboxfroggy.com/#zh-tw)
-2. ![](https://hackmd.io/_uploads/SJB6CLNCn.png)
+2. ![](https://hackmd.io/_uploads/SJB6CLNCn.webp)
     [grid花園](https://cssgridgarden.com/#zh-tw)
 
 ## 實戰練習

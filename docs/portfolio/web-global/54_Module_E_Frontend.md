@@ -7,7 +7,7 @@
 - 輸入人數
 - 選擇內用or外帶
 
-![alt text](./54_Module_E_Frontend/image.png)
+![alt text](./54_Module_E_Frontend/image.webp)
 
 ### 點餐畫面
 - 點擊【+】來點餐，會出現在又邊的"未點"的側邊欄
@@ -19,14 +19,14 @@
   - 登入
   - 使用彈跳視窗
 
-![alt text](./54_Module_E_Frontend/image-1.png)
+![alt text](./54_Module_E_Frontend/image-1.webp)
 
 ### 確認餐點畫面
-![alt text](./54_Module_E_Frontend/image-2.png)
+![alt text](./54_Module_E_Frontend/image-2.webp)
 
 ### 訂單成立畫面
 - 按下**繼續點餐**按鈕後，回到點餐頁面並將已成立訂單的餐點內容移至"已點"清單中，且清除"未點"清單中的內容
-![alt text](./54_Module_E_Frontend/image-3.png)
+![alt text](./54_Module_E_Frontend/image-3.webp)
 
 ## Language & Framework
 ![vue,vite,bootstrap](https://skillicons.dev/icons?theme=light&i=html,css,vue,vite,bootstrap)

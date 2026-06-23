@@ -16,7 +16,7 @@ head:
       content: article
   - - meta
     - property: og:image
-      content: https://lucashsu95.github.io/LucasHsu.dev/images/springboot-cover.png
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/springboot-cover.webp
 ---
 
 # Spring Boot Specification 完全指南：動態查詢的設計與實戰

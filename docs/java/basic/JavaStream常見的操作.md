@@ -14,7 +14,7 @@ head:
       content: article
   - - meta
     - property: og:image
-      content: https://lucashsu95.github.io/LucasHsu.dev/images/java-cover.jpg
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/java-cover.webp
   - - meta
     - property: title
       content: Java Stream 常見操作完整指南 | LucasHsu.dev

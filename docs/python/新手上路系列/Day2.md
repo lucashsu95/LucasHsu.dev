@@ -19,7 +19,7 @@ head:
       content: article
   - - meta
     - property: og:image
-      content: https://lucashsu95.github.io/LucasHsu.dev/images/python-cover.jpg
+      content: https://lucashsu95.github.io/LucasHsu.dev/images/python-cover.webp
 ---
 
 # python-新手上路-Day2 ｜流程控制 if...else ｜格式化 f-string

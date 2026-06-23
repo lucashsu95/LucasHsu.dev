@@ -19,7 +19,7 @@ head:
     content: article
 - - meta
   - property: og:image
-    content: https://lucashsu95.github.io/LucasHsu.dev/images/latex-devcontainer-cover.png
+    content: https://lucashsu95.github.io/LucasHsu.dev/images/latex-devcontainer-cover.webp
 ---
 
 # 用 Dev Container 寫 LaTeX — 零環境安裝教學

@@ -42,7 +42,7 @@ vscode左上角裡有個`檔案`、`開啟資料夾`
 
 ~~要是找不到請去洗眼睛~~
 
-![Untitled](./assets/php-day1/Untitled.png)
+![Untitled](./assets/php-day1/Untitled.webp)
 
 ## 創檔案寫程式
 

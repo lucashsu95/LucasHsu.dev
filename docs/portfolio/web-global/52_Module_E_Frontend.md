@@ -17,4 +17,4 @@
 
 [DEMO](https://lucashsu95.github.io/web-global-public/52/module_E/)
 
-![alt text](52_Module_E_Frontend/學生管理系統.png)
+![alt text](52_Module_E_Frontend/學生管理系統.webp)
