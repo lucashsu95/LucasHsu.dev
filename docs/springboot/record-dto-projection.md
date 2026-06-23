@@ -1394,7 +1394,7 @@ public class OrderReportService {
 ### 下一步學習
 
 - 如果你想深入了解 **JPQL 與 Criteria API 進階查詢**，建議閱讀 [Spring Data JPA 進階查詢技巧](/springboot/specification-guide)
-- 準備好挑戰了嗎？看看 [虛擬執行緒在 Spring Boot 的實戰](/docs/java/virtual-threads-spring-boot) — 結合 Virtual Threads 進一步提升高併發吞吐量
+- 準備好挑戰了嗎？看看 [Virtual Threads 實戰指南](/springboot/virtual-threads-spring-boot) — 結合 Virtual Threads 進一步提升高併發吞吐量
 
 ## 總結
 
