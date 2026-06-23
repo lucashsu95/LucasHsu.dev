@@ -1430,9 +1430,8 @@ management:
 
 - [JEP 444: Virtual Threads (OpenJDK)](https://openjdk.org/jeps/444) - Virtual Threads 的正式規格與設計文件，適合深入了解技術細節
 - [Spring Boot 3.2 Release Notes - Virtual Threads](https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-3.2-Release-Notes#support-for-virtual-threads) - Spring Boot 官方對 Virtual Threads 的支援說明
-- [Baeldung: Virtual Threads in Spring Boot](https://www.baeldung.com/spring-boot-virtual-threads) - 入門友善的教學，包含可執行的程式碼範例
-- [Inside Java: Virtual Threads (YouTube)](https://www.youtube.com/watch?v=Z5Zy5C4C4vA) - Java 團隊的 Virtual Threads 技術分享與設計理念
-- [JDK 21 Virtual Threads 效能測試](https://www.infoq.com/articles/java-virtual-threads-performance/) - InfoQ 的深度效能分析報告
+- [Virtual Threads in Spring Boot (Soham Kamani)](https://www.sohamkamani.com/java/virtual-threads-spring-boot/) - 入門友善的教學，包含可執行的程式碼範例與效能基準測試
+- [Java Virtual Thread: Performance Benchmarking (MadPlay)](https://madplay.github.io/en/post/java-virtual-thread-performance) - 使用 JMH 進行 I/O 與 CPU 密集型任務的效能基準測試分析
 
 ### 下一步學習
 
