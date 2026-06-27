@@ -9,6 +9,7 @@ export function sidebarDevops() {
         { text: 'Tmux 終端機多工器進階指南', link: '/devops/tmux-reference-manual', activeMatch: '/devops/tmux-reference-manual' },
         { text: 'VSCode 安裝與設定', link: '/devops/install-vscode', activeMatch: '/devops/install-vscode' },
         { text: 'WSL 安裝與 VS Code 連線', link: '/devops/install-wsl', activeMatch: '/devops/install-wsl' },
+        { text: 'WSL 自動備份腳本與排程設定', link: '/devops/wsl-backup-script', activeMatch: '/devops/wsl-backup-script' },
         { text: 'ESLint 與 Prettier 設定', link: '/devops/init-eslint-prettier', activeMatch: '/devops/init-eslint-prettier' },
         { text: 'jsconfig / viteConfig 初始化', link: '/devops/init-jsconfig-viteConfig', activeMatch: '/devops/init-jsconfig-viteConfig' },
         { text: 'LaTeX DevContainer 指南', link: '/devops/latex-devcontainer-guide', activeMatch: '/devops/latex-devcontainer-guide' },

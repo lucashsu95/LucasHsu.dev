@@ -8,6 +8,7 @@ export function sideBarDatabase() {
         { text: '資料庫索引基礎入門', link: '/database/database-index-basic', activeMatch: '/database/database-index-basic' },
         { text: '進階索引實戰：B-Tree、複合索引與 Hash Map 全解析', link: '/database/database-index-advanced', activeMatch: '/database/database-index-advanced' },
         { text: '資料庫樂觀鎖與悲觀鎖', link: '/database/optimistic-pessimistic-locking', activeMatch: '/database/optimistic-pessimistic-locking' },
+        { text: '重設 MySQL Root 密碼（Windows）', link: '/database/mysql-reset-root-password-windows', activeMatch: '/database/mysql-reset-root-password-windows' },
       ],
     },
     {
