@@ -24,7 +24,7 @@ head:
 
 在開始之前，建議你先了解以下概念：
 
-- **WSL 基本操作** - [WSL 安裝與 VS Code 連線指南](/docs/devops/install-wsl.md) 了解如何安裝與管理 WSL
+- **WSL 基本操作** - [WSL 安裝與 VS Code 連線指南](/devops/install-wsl) 了解如何安裝與管理 WSL
 - **PowerShell 基礎** - 知道如何以系統管理員身分執行、基本語法與執行原則
 - **工作排程器** - Windows 內建的自動化排程工具
 
@@ -524,8 +524,8 @@ wsl -d Ubuntu -u root bash -c "
 ### 相關文章
 
 本站相關主題：
-- [WSL 安裝與 VS Code 連線指南](/docs/devops/install-wsl.md) - WSL 完整安裝與設定教學
-- [tmux 使用指南](/docs/devops/tmux-guide.md) - 終端機多工管理工具
+- [WSL 安裝與 VS Code 連線指南](/devops/install-wsl) - WSL 完整安裝與設定教學
+- [Tmux 終端機多工器完全指南](/devops/tmux-guide) - 終端機多工管理工具
 
 ### 推薦資源
 
