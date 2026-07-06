@@ -1,6 +1,5 @@
 ---
 theme: seriph
-base: /LucasHsu.dev/slides/python-day01/
 title: Python Day01 — 變數・型別・輸入輸出
 layout: cover
 ui:
@@ -13,8 +12,8 @@ lineNumbers: true
 routerMode: hash
 colorSchema: dark
 fonts:
-  sans: 'Inter'
-  mono: 'JetBrains Mono'
+  sans: "Inter"
+  mono: "JetBrains Mono"
 css: unocss
 drawings:
   persist: true
@@ -106,8 +105,10 @@ exportFilename: python-day01
 -->
 
 ---
+
 layout: default
 hideInToc: true
+
 ---
 
 <div class="font-mono text-xs text-gray-500 mb-4">
@@ -135,8 +136,10 @@ hideInToc: true
 -->
 
 ---
+
 layout: section
 transition: fade
+
 ---
 
 <div class="font-mono text-[#FFD43B] text-sm mb-2">PART 01</div>
@@ -146,8 +149,8 @@ transition: fade
 <p class="text-gray-400 text-lg font-mono mt-2">程式眼中的世界，只有幾種「形狀」</p>
 
 ---
-transition: slide-up
----
+
+## transition: slide-up
 
 # 一個容器，五種形狀
 
@@ -198,8 +201,8 @@ Python 把資料分成幾種基本「形狀」(type)，每種形狀能做的事�
 -->
 
 ---
-transition: slide-up
----
+
+## transition: slide-up
 
 # 型別的層級關係
 
@@ -239,8 +242,8 @@ mindmap
 -->
 
 ---
-transition: slide-up
----
+
+## transition: slide-up
 
 # 看起來像，但不是同一種
 
@@ -290,8 +293,10 @@ transition: slide-up
 -->
 
 ---
+
 layout: section
 transition: fade
+
 ---
 
 <div class="font-mono text-[#FFD43B] text-sm mb-2">PART 02</div>
@@ -437,8 +442,10 @@ Python 一行搞定。
 -->
 
 ---
+
 layout: section
 transition: fade
+
 ---
 
 <div class="font-mono text-[#FFD43B] text-sm mb-2">PART 03</div>
@@ -448,8 +455,8 @@ transition: fade
 <p class="text-gray-400 text-lg font-mono mt-2">用 print() 把資料說出來</p>
 
 ---
-transition: slide-up
----
+
+## transition: slide-up
 
 # 從「印出」到「組合」
 
@@ -461,6 +468,7 @@ print('hi')       # 預設換行，所以 hi 印兩行
 <div v-click="1">
 
 輸出結果：
+
 ```sh
 hi
 hi
@@ -599,7 +607,6 @@ print(f'{42:05d}')        # 00042
   <span class="text-gray-400">修改下方數字，看格式變化：</span>
 </div>
 
-
 <div v-click="1">
 
 ```python {height: '140px'}
@@ -618,8 +625,10 @@ print(f'{42:05d}')
 -->
 
 ---
+
 layout: section
 transition: fade
+
 ---
 
 <div class="font-mono text-[#FFD43B] text-sm mb-2">PART 04</div>
@@ -629,8 +638,8 @@ transition: fade
 <p class="text-gray-400 text-lg font-mono mt-2">讓程式可以「聽」使用者說話</p>
 
 ---
-transition: slide-up
----
+
+## transition: slide-up
 
 # 資料的流向
 
@@ -653,9 +662,11 @@ sequenceDiagram
 </div>
 
 ---
+
 layout: two-cols
 layoutClass: gap-8
 transition: slide-up
+
 ---
 
 # 單行輸入
@@ -748,8 +759,8 @@ for _ in range(n):
 </div>
 
 ---
-transition: slide-up
----
+
+## transition: slide-up
 
 # 檔案輸入：用 < 餵資料給程式
 
@@ -837,8 +848,10 @@ macOS 和 Linux 通常預設就是 UTF-8，但 Windows 可能會是 Big5 或其�
 -->
 
 ---
+
 layout: section
 transition: fade
+
 ---
 
 <div class="font-mono text-[#FFD43B] text-sm mb-2">PART 05</div>
@@ -848,20 +861,20 @@ transition: fade
 <p class="text-gray-400 text-lg font-mono mt-2">讓數字動起來</p>
 
 ---
-transition: slide-up
----
+
+## transition: slide-up
 
 # 運算子總覽
 
-| 運算 | 程式碼 | 說明 | 範例結果 |
-| --- | --- | --- | --- |
-| 加法 | `n + 2` | Addition | <span class="text-gray-500 font-mono">n=10 → 12</span> |
-| 減法 | `n - 2` | Subtraction | <span class="text-gray-500 font-mono">n=10 → 8</span> |
-| 乘法 | `n * 2` | Multiplication | <span class="text-gray-500 font-mono">n=10 → 20</span> |
-| 除法 | `n / 2` | Division（一律回傳 float） | <span class="text-gray-500 font-mono">n=10 → 5.0</span> |
-| 整數除法 | `n // 2` | 無條件捨去取整數 | <span class="text-gray-500 font-mono">n=10 → 5</span> |
-| 次方 | `n ** 6` | Power | <span class="text-gray-500 font-mono">n=10 → 1000000</span> |
-| 取餘數 | `n % 6` | Modulo（常用來判斷奇偶、倍數） | <span class="text-gray-500 font-mono">n=10 → 4</span> |
+| 運算     | 程式碼   | 說明                           | 範例結果                                                    |
+| -------- | -------- | ------------------------------ | ----------------------------------------------------------- |
+| 加法     | `n + 2`  | Addition                       | <span class="text-gray-500 font-mono">n=10 → 12</span>      |
+| 減法     | `n - 2`  | Subtraction                    | <span class="text-gray-500 font-mono">n=10 → 8</span>       |
+| 乘法     | `n * 2`  | Multiplication                 | <span class="text-gray-500 font-mono">n=10 → 20</span>      |
+| 除法     | `n / 2`  | Division（一律回傳 float）     | <span class="text-gray-500 font-mono">n=10 → 5.0</span>     |
+| 整數除法 | `n // 2` | 無條件捨去取整數               | <span class="text-gray-500 font-mono">n=10 → 5</span>       |
+| 次方     | `n ** 6` | Power                          | <span class="text-gray-500 font-mono">n=10 → 1000000</span> |
+| 取餘數   | `n % 6`  | Modulo（常用來判斷奇偶、倍數） | <span class="text-gray-500 font-mono">n=10 → 4</span>       |
 
 <div v-click class="mt-6 p-4 bg-gradient-to-r from-amber-500/10 to-transparent rounded-lg border border-amber-500/30 text-sm">
 🧠 最值得記下來的三個：
@@ -955,8 +968,10 @@ print(x)
 -->
 
 ---
+
 layout: section
 transition: fade
+
 ---
 
 <div class="font-mono text-[#FFD43B] text-sm mb-2">PART 06</div>
@@ -966,9 +981,11 @@ transition: fade
 <p class="text-gray-400 text-lg font-mono mt-2">讓程式自己做選擇</p>
 
 ---
+
 layout: two-cols
 layoutClass: gap-8
 transition: slide-up
+
 ---
 
 # 布林值與比較運算子
@@ -978,14 +995,14 @@ transition: slide-up
 - <carbon-checkmark class="text-[#7ee787] inline"/> `True`（真）
 - <carbon-close class="text-red-400 inline"/> `False`（假）
 
-| 運算子 | 效果 |
-| ------ | ---- |
-| `<` | 小於 |
-| `<=` | 小於等於 |
-| `>` | 大於 |
-| `>=` | 大於等於 |
-| `==` | 等於 |
-| `!=` | 不等於 |
+| 運算子 | 效果     |
+| ------ | -------- |
+| `<`    | 小於     |
+| `<=`   | 小於等於 |
+| `>`    | 大於     |
+| `>=`   | 大於等於 |
+| `==`   | 等於     |
+| `!=`   | 不等於   |
 
 ::right::
 
@@ -1016,11 +1033,11 @@ transition: slide-up
 
 把多個條件組合起來：
 
-| 運算子   | 意思       |
-| ----- | -------- |
-| `and` | 兩個條件都要成立 |
-| `or`  | 其中一個成立即可 |
-| `not` | 反轉結果     |
+| 運算子 | 意思             |
+| ------ | ---------------- |
+| `and`  | 兩個條件都要成立 |
+| `or`   | 其中一個成立即可 |
+| `not`  | 反轉結果         |
 
 ```python
 age = 18
@@ -1068,9 +1085,9 @@ bool([])       # False
 
 ### Truthy（視為 True）
 
-* 非 0 數字
-* 非空字串
-* 非空容器
+- 非 0 數字
+- 非空字串
+- 非空容器
 
 </div>
 
@@ -1155,12 +1172,12 @@ else:
 
 # 今日重點回顧
 
-* Python 的基本型別：int / float / str / bool / None
-* `input()` 永遠回傳 **字串**
-* `print()` 可以用 f-string 組字串
-* `/`、`//`、`%` 差異
-* 比較運算 + 邏輯運算
-* `if / elif / else` 控制流程
+- Python 的基本型別：int / float / str / bool / None
+- `input()` 永遠回傳 **字串**
+- `print()` 可以用 f-string 組字串
+- `/`、`//`、`%` 差異
+- 比較運算 + 邏輯運算
+- `if / elif / else` 控制流程
 
 ---
 
@@ -1168,9 +1185,9 @@ else:
 
 你已經可以：
 
-* 接收輸入
-* 做計算
-* 做條件判斷
-* 輸出結果
+- 接收輸入
+- 做計算
+- 做條件判斷
+- 輸出結果
 
 👉 下一堂：**迴圈（Loop）與重複執行**

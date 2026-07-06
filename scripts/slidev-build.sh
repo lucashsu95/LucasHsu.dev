@@ -16,7 +16,7 @@ generate_thumbnail() {
   local output_dir="$OUTPUT_DIR/$slug"
   local thumb_file="$output_dir/thumbnail.png"
   local temp_thumb_dir="$PROJECT_DIR/docs/.vitepress/dist/slides/temp_$slug"
-  
+
   if [ ! -f "$thumb_file" ]; then
     echo "Generating thumbnail for: $slug"
     cd "$PROJECT_DIR"
@@ -24,7 +24,7 @@ generate_thumbnail() {
     npx slidev export "$SLIDES_DIR/$slug/slides.md" \
       --format png \
       --output "$temp_thumb_dir" 2>/dev/null || true
-    
+
     # If it's a directory, move the first slide to thumbnail.png
     if [ -d "$temp_thumb_dir" ]; then
       if [ -f "$temp_thumb_dir/1.png" ]; then
