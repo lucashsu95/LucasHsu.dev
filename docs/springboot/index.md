@@ -51,9 +51,6 @@ head:
 - [Spring Profiles：dev/prod 切換](/springboot/spring-profiles)
 - [整合實作：Config + Security](/springboot/config-security-integration)
 
-### 安全認證
-- [Security & Authentication](/springboot/security)
-
 ### 檔案處理
 - [Spring Boot 檔案上傳與下載](/springboot/file-upload-download)
 - [Spring Boot Word 檔案下載](/springboot/file-word)
@@ -62,6 +59,10 @@ head:
 - [Spring Boot AOP + @Async](/springboot/aop-async)
 - [Application Events + @TransactionalEventListener](/springboot/application-events)
 - [Spring Boot Specification 動態查詢指南](/springboot/specification-guide)
+
+### 設計思想
+- [Spring Boot × FP：從 0% 到 100% 的體質改造](/springboot/fp-in-spring-boot)
+- [Spring Boot × DDD：從貧血模型到完整領域防線](/springboot/ddd-in-spring-boot)
 
 ### 開發工具
 - [Checkstyle / PMD / Spotless](/springboot/code-quality-tools)
@@ -72,6 +73,6 @@ head:
 2. 接著看 [`JPA 持久化上下文`](/springboot/persistence-context)，把 EntityManager 跟 dirty checking 釐清。
 3. 再補 [`樂觀鎖與悲觀鎖實作`](/springboot/optimistic-pessimistic-locking)，處理併發衝突時必讀。
 4. 然後看 [`Lazy vs Eager 載入策略`](/springboot/lazy) 跟 [`Spring Boot 分頁與 N+1 問題`](/springboot/data-pagination)。
-5. 有需要再看 [`Swagger 教學`](/springboot/swagger-docs)、[`Email 與 Scheduled 排程實作`](/springboot/email-scheduled) 與 [`Security & Authentication`](/springboot/security)。
+5. 有需要再看 [`Swagger 教學`](/springboot/swagger-docs) 與 [`Email 與 Scheduled 排程實作`](/springboot/email-scheduled)。
 6. 進階主題可補 [`Spring Boot AOP + @Async`](/springboot/aop-async) 和 [`Spring Boot 檔案上傳與下載`](/springboot/file-upload-download)。
 

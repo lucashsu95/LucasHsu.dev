@@ -79,17 +79,6 @@ export function sidebarSpringboot() {
       ],
     },
     {
-      text: "安全認證",
-      collapsed: false,
-      items: [
-        {
-          text: "Security & Authentication",
-          link: "/springboot/security",
-          activeMatch: '/springboot/security',
-        },
-      ],
-    },
-    {
       text: "檔案處理",
       collapsed: false,
       items: [
@@ -133,6 +122,22 @@ export function sidebarSpringboot() {
           text: "Spring Boot Specification 動態查詢指南",
           link: "/springboot/specification-guide",
           activeMatch: '/springboot/specification-guide',
+        },
+      ],
+    },
+    {
+      text: "設計思想",
+      collapsed: false,
+      items: [
+        {
+          text: "Spring Boot × FP：從 0% 到 100%",
+          link: "/springboot/fp-in-spring-boot",
+          activeMatch: '/springboot/fp-in-spring-boot',
+        },
+        {
+          text: "Spring Boot × DDD：從 0% 到 100%",
+          link: "/springboot/ddd-in-spring-boot",
+          activeMatch: '/springboot/ddd-in-spring-boot',
         },
       ],
     },
