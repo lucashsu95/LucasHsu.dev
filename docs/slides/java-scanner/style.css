@@ -111,3 +111,77 @@ html {
 .card-hover:hover {
   transform: translateY(-4px);
 }
+
+.slidev-layout {
+  overflow: hidden;
+}
+
+.cover-glow {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(83, 130, 161, 0.2), transparent 38%),
+    radial-gradient(circle at 85% 80%, rgba(231, 111, 0, 0.15), transparent 34%),
+    #0d1117;
+}
+
+.kicker {
+  color: #7ee787;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.85rem;
+}
+
+.concept-card,
+.callout,
+.scenario,
+.qa,
+.drop-zone {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  background: rgba(13, 17, 23, 0.72);
+}
+
+.concept-card { padding: 1rem; }
+.concept-card span { color: #9ca3af; }
+.concept-card.blue, .drop-zone.blue { border-color: rgba(83, 130, 161, 0.5); }
+.concept-card.orange, .drop-zone.orange { border-color: rgba(231, 111, 0, 0.5); }
+.callout { padding: 0.75rem 1rem; border-color: rgba(126, 231, 135, 0.32); font-size: 0.86rem; }
+.drop-zone { min-height: 180px; padding: 1rem; }
+.quiz-chip { margin-top: 0.75rem; padding: 0.65rem; border-radius: 8px; background: rgba(255, 255, 255, 0.06); font-size: 0.84rem; }
+
+.timeline {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr;
+  align-items: center;
+  gap: 0.45rem;
+}
+.time-node { min-height: 92px; padding: 0.8rem 0.55rem; border: 1px solid rgba(83, 130, 161, 0.5); border-radius: 10px; text-align: center; }
+.time-node span { display: block; margin-top: 0.5rem; color: #9ca3af; font-size: 0.68rem; }
+.time-node.hot { box-shadow: 0 0 24px rgba(83, 130, 161, 0.18); }
+.time-node.orange { border-color: rgba(231, 111, 0, 0.6); }
+.time-arrow { color: #6b7280; font-size: 1.35rem; }
+
+.terminal { padding: 1rem; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 10px; background: #0d1117; font-family: "JetBrains Mono", monospace; }
+.muted { color: #6b7280; }
+.green { color: #7ee787; }
+.scenario { position: relative; min-height: 100px; padding: 0.9rem; }
+.scenario span { display: block; margin-top: 0.4rem; color: #9ca3af; font-size: 0.76rem; }
+.scenario strong { position: absolute; right: 0.8rem; bottom: 0.7rem; color: #7ee787; font-family: "JetBrains Mono", monospace; }
+.qa { display: grid; grid-template-columns: 1fr 1.45fr; gap: 1rem; padding: 0.75rem 1rem; }
+.qa span { color: #9ca3af; }
+
+@media print {
+  .slidev-layout { overflow: hidden !important; }
+  [v-click] { opacity: 1 !important; visibility: visible !important; }
+  .cover-glow { background: #0d1117 !important; }
+  .timeline { gap: 0.25rem; }
+  .time-node { break-inside: avoid; }
+  .monaco-editor { border: 1px solid rgba(255, 255, 255, 0.18); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

@@ -2,420 +2,379 @@
 theme: seriph
 title: Java — Scanner 與 String[] args
 layout: cover
-ui:
-  nav: false
 transition: slide-left
 mdc: true
-comark: true
 download: true
 lineNumbers: true
 routerMode: hash
 colorSchema: dark
 fonts:
-  sans: "Inter"
-  mono: "JetBrains Mono"
-css: unocss
+  sans: Inter
+  mono: JetBrains Mono
 stylesheet: ./style.css
 drawings:
   persist: true
   enabled: true
-  presenterOnly: false
 selectable: true
-record: user
-seoMeta:
-  ogImage: https://lucashsu95.github.io/LucasHsu.dev/images/java-cover.webp
-  ogTitle: Java — Scanner 與 String[] args
-  description: 理解命令列參數與動態輸入的差異、用途與適用情境
 exportFilename: java-scanner
 ---
 
-<div
-  v-motion
-  :initial="{ opacity: 0, scale: 0.9 }"
-  :enter="{ opacity: 1, scale: 1, transition: { duration: 600 } }"
-  class="absolute inset-0 bg-gradient-to-br from-[#0d1117] via-[#0d1117] to-[#1a2332]"
-></div>
-
+<div class="cover-glow"></div>
 <div class="relative z-10">
-  <div
-    v-motion
-    :initial="{ y: -20, opacity: 0 }"
-    :enter="{ y: 0, opacity: 1, transition: { delay: 200, duration: 500 } }"
-    class="font-mono text-sm text-[#7ee787] opacity-70 mb-6"
-  >
-    <span class="text-gray-500">$</span> java A hello world
-  </div>
-
-  <h1
-    v-motion
-    :initial="{ y: 30, opacity: 0 }"
-    :enter="{ y: 0, opacity: 1, transition: { delay: 350, duration: 500 } }"
-    class="text-5xl font-bold"
-  >
-    <span class="text-[#5382A1]">Scanner</span> <span class="text-white">與</span> <span class="text-[#E76F00]">String[] args</span>
+  <div v-motion :initial="{ y: -20, opacity: 0 }" :enter="{ y: 0, opacity: 1 }" class="kicker">$ java InputLab --mode demo</div>
+  <h1 v-motion :initial="{ y: 24, opacity: 0 }" :enter="{ y: 0, opacity: 1, transition: { delay: 180 } }">
+    <span class="text-[#5382A1]">Scanner</span> 與 <span class="text-[#E76F00]">String[] args</span>
   </h1>
-
-  <p
-    v-motion
-    :initial="{ y: 30, opacity: 0 }"
-    :enter="{ y: 0, opacity: 1, transition: { delay: 500, duration: 500 } }"
-    class="text-xl text-gray-300 mt-4 font-mono"
-  >
-    <span class="text-gray-500">//</span> 兩種輸入方式，用途完全不同
-  </p>
-
-  <div
-    v-motion
-    :initial="{ y: 30, opacity: 0 }"
-    :enter="{ y: 0, opacity: 1, transition: { delay: 700, duration: 500 } }"
-    class="mt-16 font-mono text-sm text-gray-500 border-l-2 border-[#5382A1]/40 pl-4"
-  >
-    <p>
-      <span class="text-[#E76F00]">args[0]</span> = <span class="text-[#7ee787]">"hello"</span>
-      <span class="text-gray-600 ml-4">← 啟動時就確定</span>
-    </p>
-    <p class="mt-2">
-      <span class="text-[#5382A1]">Scanner</span>.nextLine() <span class="text-gray-600">← 執行中等待輸入</span>
-    </p>
-  </div>
-
-  <div
-    v-motion
-    :initial="{ opacity: 0 }"
-    :enter="{ opacity: 1, transition: { delay: 1000, duration: 400 } }"
-    class="mt-8 flex items-center gap-3 font-mono text-xs text-gray-600"
-  >
-    <carbon-location class="text-[#5382A1]" />
-    <span>LucasHsu.dev — 2026</span>
-    <carbon-time class="ml-4 text-[#E76F00]" />
-    <span>約 20 分鐘</span>
+  <p class="text-xl text-gray-300 mt-4 font-mono">// 分清「啟動前」與「執行中」</p>
+  <div class="mt-14 grid grid-cols-2 gap-5 text-sm">
+    <div v-click class="concept-card blue"><b>args</b><br><span>啟動時一次帶入</span></div>
+    <div v-click class="concept-card orange"><b>Scanner</b><br><span>執行中逐次讀取</span></div>
   </div>
 </div>
 
 <!--
-歡迎！今天的主題是 Java 兩種輸入方式：String[] args 和 Scanner。
-很多初學者會混淆這兩者，其實它們的用途完全不同。
+開場先不要談 API。請大家只記住一條時間界線：程式啟動。
+界線左邊是啟動參數，右邊才是 Scanner 的互動輸入。
 -->
 
 ---
 layout: default
-hideInToc: true
 ---
 
-<div class="font-mono text-xs text-gray-500 mb-4">
-  <span class="text-[#7ee787]">$</span> cat agenda.md
+# 先分類：它在哪個時間點出現？
+
+<div class="grid grid-cols-2 gap-5 mt-6">
+  <div class="drop-zone blue">
+    <div class="font-bold text-[#79c0ff]">🚀 啟動程式時</div>
+    <div v-click class="quiz-chip">輸出檔案路徑</div>
+    <div v-click class="quiz-chip">--debug</div>
+  </div>
+  <div class="drop-zone orange">
+    <div class="font-bold text-[#ffa657]">⌨️ 程式執行中</div>
+    <div v-click class="quiz-chip">玩家輸入答案</div>
+    <div v-click class="quiz-chip">重複詢問下一筆資料</div>
+  </div>
 </div>
 
-# 今日大綱
+<div v-click class="callout mt-6">判斷關鍵不是「文字或數字」，而是<b>輸入時機</b>。</div>
 
-<div
-  v-motion
-  :initial="{ x: -20, opacity: 0 }"
-  :enter="{ x: 0, opacity: 1, transition: { delay: 200 } }"
->
-  <Toc maxDepth="1" />
-</div>
-
-<div v-click class="mt-8 p-4 bg-gradient-to-r from-[#5382A1]/10 to-transparent rounded-lg border border-[#5382A1]/30 text-sm">
-  <span class="font-bold text-[#5382A1]">💡 核心觀念</span><br/>
-  一個是「程式啟動前就給好的」，一個是「程式跑起來才跟你要的」。
-</div>
+<!--
+先遮住答案，請學員口頭分類四個情境，再逐項揭曉。
+檔案路徑也可以互動詢問；這題問的是常見設計，而不是唯一寫法。
+-->
 
 ---
-layout: section
-transition: fade
+layout: default
 ---
 
-<div class="font-mono text-[#E76F00] text-sm mb-2">PART 01</div>
+# 一條輸入時間軸
 
-# String[] args
-
-<p class="text-gray-400 text-lg font-mono mt-2">命令列參數 — 靜態輸入</p>
-
----
-transition: slide-up
----
-
-# 什麼是命令列參數？
-
-`String[] args` 是 **main 方法的固定簽名**，用來接收程式啟動時從命令列傳入的參數：
-
-<div class="grid grid-cols-2 gap-6 mt-6">
-
-<div v-click="1" class="p-5 rounded-lg border border-[#5382A1]/40 bg-[#5382A1]/5">
-  <div class="font-mono text-lg text-[#5382A1] mb-2">靜態輸入</div>
-  <div class="text-sm text-gray-400">程式開始執行前就已經確定的值</div>
+<div class="timeline mt-14">
+  <div v-click class="time-node"><b>Shell</b><span>輸入 java A --debug</span></div>
+  <div v-click class="time-arrow">→</div>
+  <div v-click class="time-node hot"><b>JVM 啟動</b><span>建立 args[]</span></div>
+  <div v-click class="time-arrow">→</div>
+  <div v-click class="time-node"><b>main()</b><span>程式開始跑</span></div>
+  <div v-click class="time-arrow">→</div>
+  <div v-click class="time-node orange"><b>nextLine()</b><span>等待使用者</span></div>
 </div>
 
-<div v-click="2" class="p-5 rounded-lg border border-[#E76F00]/40 bg-[#E76F00]/5">
-  <div class="font-mono text-lg text-[#E76F00] mb-2">命令列傳遞</div>
-  <div class="text-sm text-gray-400">透過終端機在啟動時傳入</div>
+<div class="grid grid-cols-2 gap-4 mt-12 text-sm">
+  <div v-click class="concept-card blue">args：啟動後內容固定</div>
+  <div v-click class="concept-card orange">Scanner：每次讀取都可能等待</div>
 </div>
 
-</div>
-
-<div v-click="3" class="mt-8 font-mono text-sm bg-[#0d1117] p-4 rounded-lg border border-gray-700">
-  <span class="text-gray-500">$</span> java A <span class="text-[#7ee787]">hello</span> <span class="text-[#7ee787]">world</span><br/>
-  <span class="text-gray-600 mt-2 block">args[0] = "hello" &nbsp;·&nbsp; args[1] = "world"</span>
-</div>
-
----
-
-# 命令列參數範例
-
-```java {1-5|all}
-public static void main(String[] args) {
-    if (args.length > 0) {
-        System.out.println("Hello " + args[0]);
-    }
-}
-```
-
-<div v-click class="mt-4 grid grid-cols-2 gap-4">
-
-<div class="p-4 rounded-lg bg-[#0d1117] border border-gray-700 font-mono text-sm">
-  <span class="text-gray-500">$</span> java A<br/>
-  <span class="text-gray-600">（無輸出，args 為空）</span>
-</div>
-
-<div class="p-4 rounded-lg bg-[#0d1117] border border-gray-700 font-mono text-sm">
-  <span class="text-gray-500">$</span> java A <span class="text-[#7ee787]">Lucas</span><br/>
-  <span class="text-[#E76F00]">Hello Lucas</span>
-</div>
-
-</div>
-
-<div v-click="2" class="mt-4 p-3 bg-amber-500/10 rounded-lg border border-amber-500/30 text-sm">
-⚠️ 即使不使用 args，main 方法的簽名也<b>必須保留</b> <code>String[] args</code>
-</div>
-
----
-layout: section
-transition: fade
----
-
-<div class="font-mono text-[#E76F00] text-sm mb-2">PART 02</div>
-
-# Scanner
-
-<p class="text-gray-400 text-lg font-mono mt-2">動態輸入 — 執行中互動</p>
-
----
-transition: slide-up
----
-
-# Scanner 的用途
-
-`Scanner` 讓程式在**執行過程中**與使用者互動，暫停等待輸入：
-
-<div class="grid grid-cols-3 gap-4 mt-8">
-
-<div v-click="1" class="p-4 rounded-lg border border-[#7ee787]/40 bg-[#7ee787]/5 text-center">
-<div class="text-2xl mb-2">⏸️</div>
-<div class="text-sm font-bold text-[#7ee787]">暫停等待</div>
-<div class="text-xs text-gray-500 mt-1">程式會停下來等使用者</div>
-</div>
-
-<div v-click="2" class="p-4 rounded-lg border border-[#5382A1]/40 bg-[#5382A1]/5 text-center">
-<div class="text-2xl mb-2">⌨️</div>
-<div class="text-sm font-bold text-[#5382A1]">即時輸入</div>
-<div class="text-xs text-gray-500 mt-1">從控制台讀取內容</div>
-</div>
-
-<div v-click="3" class="p-4 rounded-lg border border-[#E76F00]/40 bg-[#E76F00]/5 text-center">
-<div class="text-2xl mb-2">🔄</div>
-<div class="text-sm font-bold text-[#E76F00]">動態互動</div>
-<div class="text-xs text-gray-500 mt-1">可多次詢問不同資料</div>
-</div>
-
-</div>
-
----
-
-# Scanner 範例
-
-```java {1-7|all}
-import java.util.Scanner;
-
-public static void main(String[] args) {
-    Scanner scanner = new Scanner(System.in);
-    System.out.print("請輸入名字：");
-    String input = scanner.nextLine();
-    System.out.println("Hello " + input);
-    scanner.close();
-}
-```
-
-<div v-click class="mt-4 font-mono text-sm bg-[#0d1117] p-4 rounded-lg border border-gray-700">
-  <span class="text-gray-500">執行流程：</span><br/>
-  1. 印出 <span class="text-[#7ee787]">"請輸入名字："</span><br/>
-  2. <span class="text-[#E76F00]">等待使用者輸入</span> ← 程式暫停<br/>
-  3. 讀取輸入並印出結果
-</div>
-
-<div v-click="2" class="mt-4 p-3 bg-[#5382A1]/10 rounded-lg border border-[#5382A1]/30 text-sm">
-💡 記得使用完畢後呼叫 <code>scanner.close()</code> 釋放資源
-</div>
-
----
-layout: section
-transition: fade
----
-
-<div class="font-mono text-[#E76F00] text-sm mb-2">PART 03</div>
-
-# 兩者比較
-
-<p class="text-gray-400 text-lg font-mono mt-2">同一個程式，兩種輸入時機</p>
+<!--
+沿箭頭逐段說明。args 不是在 main 裡「問」使用者，而是 JVM 呼叫 main 時已經傳入。
+Scanner 只有執行到讀取方法時才會阻塞。
+-->
 
 ---
 layout: two-cols
 layoutClass: gap-8
-transition: slide-up
 ---
 
-# 差異對照
+# String[] args
 
-| 特性 | String[] args | Scanner |
-| ---- | ------------- | ------- |
-| 輸入時機 | 程式啟動前 | 程式執行中 |
-| 輸入方式 | 命令列傳遞 | 控制台互動 |
-| 是否等待 | 否 | 是 |
-| 可否修改 | 啟動後固定 | 每次執行可不同 |
-
-::right::
-
-<div v-click="1">
-
-## 互動模擬
-
-<InputCompare />
-
-</div>
-
-<div v-click="2" class="mt-4 p-3 bg-amber-500/10 rounded-lg border border-amber-500/30 text-sm">
-🔑 切換上方分頁，親自感受兩種輸入的差異
-</div>
-
----
-layout: two-cols
-layoutClass: gap-6 items-center
-transition: slide-up
----
-
-# 資料的流向
-
-```mermaid {theme: 'dark', scale: 0.5}
-sequenceDiagram
-    participant CLI as 💻 命令列
-    participant P as ☕ Java
-    Note over CLI,P: args 路徑（啟動前）
-    CLI->>P: java A hello
-    P->>P: args[0]="hello"
-```
-
-<div v-click class="mt-2 p-2 bg-[#5382A1]/10 rounded-lg border border-[#5382A1]/30 text-xs leading-snug">
-📡 args 在程式「進場」時就帶好
-</div>
-
-::right::
-
-```mermaid {theme: 'dark', scale: 0.5}
-sequenceDiagram
-    participant P as ☕ Java
-    participant U as 👤 使用者
-    Note over P,U: Scanner 路徑（執行中）
-    P->>U: 請輸入名字
-    U->>P: Lucas
-    P->>P: input="Lucas"
-```
-
-<div v-click class="mt-2 p-2 bg-[#E76F00]/10 rounded-lg border border-[#E76F00]/30 text-xs leading-snug">
-📡 Scanner 是程式「跑起來」才跟你要
-</div>
-
----
-layout: section
-transition: fade
----
-
-<div class="font-mono text-[#E76F00] text-sm mb-2">PART 04</div>
-
-# 為什麼兩者都存在？
-
-<p class="text-gray-400 text-lg font-mono mt-2">不是重複，而是互補</p>
-
----
-
-# 它們可以同時使用
-
-```java {1-10|all}
-import java.util.Scanner;
-
+```java {1|2-4|5-7|all}
 public static void main(String[] args) {
-    // args：啟動時傳入的設定
-    String mode = args.length > 0 ? args[0] : "normal";
-
-    // Scanner：執行中跟使用者互動
-    Scanner scanner = new Scanner(System.in);
-    System.out.print("請輸入名字：");
-    String name = scanner.nextLine();
-    System.out.println("[" + mode + "] Hello " + name);
-    scanner.close();
+    if (args.length == 0) {
+        System.out.println("缺少名字");
+        return;
+    }
+    System.out.println("Hello " + args[0]);
 }
 ```
 
-<div v-click class="mt-4 grid grid-cols-2 gap-4">
+::right::
 
-<div class="p-4 rounded-lg border border-[#5382A1]/40 bg-[#5382A1]/5 text-sm">
-  <span class="font-bold text-[#5382A1]">args</span> → 模式設定、檔案路徑、批次參數
+## 啟動方式
+
+<div class="terminal mt-5">
+<span class="muted">$</span> java A Lucas<br>
+<span class="green">Hello Lucas</span>
 </div>
 
-<div class="p-4 rounded-lg border border-[#E76F00]/40 bg-[#E76F00]/5 text-sm">
-  <span class="font-bold text-[#E76F00]">Scanner</span> → 互動式問答、表單輸入
+<div v-click class="callout mt-5">
+永遠先檢查 <code>args.length</code>，再取索引。
 </div>
 
-</div>
+<!--
+提醒 main 的參數名稱可以改，但型別與方法簽名必須符合入口點規則。
+示範不帶參數時，保護條件避免 ArrayIndexOutOfBoundsException。
+-->
 
 ---
+layout: default
+---
 
-# 今日重點回顧
+# 程式碼如何「變成」安全版本
+
+````md magic-move {lines: true}
+```java
+System.out.println("Hello " + args[0]);
+```
+
+```java
+if (args.length > 0) {
+    System.out.println("Hello " + args[0]);
+}
+```
+
+```java
+String name = args.length > 0 ? args[0] : "guest";
+System.out.println("Hello " + name);
+```
+````
+
+<div v-click class="callout mt-4">Magic Move 呈現的是程式碼演進；每一步仍要能獨立解釋。</div>
+
+<!--
+第一版會在空參數時失敗；第二版避免例外但沒有輸出；第三版給預設值。
+請強調這是三種設計選擇，不是語法花招。
+-->
+
+---
+layout: two-cols
+layoutClass: gap-6
+---
+
+# Scanner：執行中讀取
+
+```java {1|4|5-7|8|all}
+import java.util.Scanner;
+
+public static void main(String[] args) {
+    Scanner in = new Scanner(System.in);
+    System.out.print("名字：");
+    String name = in.nextLine();
+    System.out.println("Hello " + name);
+}
+```
+
+::right::
+
+```mermaid {theme: 'dark', scale: 0.65}
+sequenceDiagram
+    participant P as Java 程式
+    participant S as System.in
+    participant U as 使用者
+    P->>U: 名字：
+    P->>S: nextLine()
+    Note over P,S: 暫停等待
+    U->>S: Lucas + Enter
+    S-->>P: "Lucas"
+```
+
+<!--
+Scanner 包住 System.in，nextLine 讀到換行符號之前的內容。
+不要把 close 當成這頁焦點；大型程式關閉 System.in 後通常不能再讀取。
+-->
+
+---
+layout: default
+---
+
+# 經典陷阱：nextInt() + nextLine()
+
+````md magic-move {lines: true}
+```java
+System.out.print("年齡：");
+int age = in.nextInt();
+System.out.print("姓名：");
+String name = in.nextLine(); // 讀到剩下的換行
+```
+
+```java
+System.out.print("年齡：");
+int age = in.nextInt();
+in.nextLine();               // 消耗換行
+System.out.print("姓名：");
+String name = in.nextLine();
+```
+
+```java
+System.out.print("年齡：");
+int age = Integer.parseInt(in.nextLine());
+System.out.print("姓名：");
+String name = in.nextLine(); // 統一整行讀取
+```
+````
+
+<div v-click class="callout mt-3">推薦初學階段：<b>全部 nextLine，再自行轉型與驗證</b>。</div>
+
+<!--
+nextInt 只取走數字 token，不會取走按下 Enter 產生的換行。
+第二版能修正；第三版讓輸入策略一致，也更容易顯示友善錯誤。
+-->
+
+---
+layout: two-cols
+layoutClass: gap-7
+---
+
+# 可編輯，但不是執行器
+
+```java {monaco}
+import java.util.Scanner;
+
+class InputLab {
+  public static void main(String[] args) {
+    Scanner in = new Scanner(System.in);
+    int age = Integer.parseInt(in.nextLine());
+    System.out.println(age + 1);
+  }
+}
+```
+
+::right::
+
+<div class="concept-card orange mt-12">
+  <b>Monaco 編輯區</b>
+  <ul class="mt-3 text-sm text-gray-300">
+    <li>可修改、選取、練習重構</li>
+    <li>可能提供語法編輯能力</li>
+    <li class="text-[#fca5a5]">此簡報沒有 Java runtime，不會執行</li>
+  </ul>
+</div>
+
+<!--
+請學員把變數改名，或加上 try/catch。
+明確說明這只是 Monaco 編輯器；要執行仍需 JDK、線上 IDE 或課堂環境。
+-->
+
+---
+layout: default
+---
+
+# 親手驗證兩種輸入
+
+<InputCompare />
+
+<div v-click class="callout mt-3">
+鍵盤：左右鍵切換分頁，Enter 驗證；最近三次結果可重播。
+</div>
+
+<!--
+先在 args 模式輸入多個詞，觀察切割後的索引；再切 Scanner 模式。
+故意送空字串展示錯誤狀態，最後用歷程重播，說明「重跑」與「繼續輸入」的差異。
+-->
+
+---
+layout: default
+---
+
+# 設計題：該選哪一個？
 
 <div class="grid grid-cols-2 gap-4 mt-6">
-
-<div v-click="1" class="p-4 rounded-lg border border-[#5382A1]/40">
-  <div class="font-bold text-[#5382A1] mb-2">String[] args</div>
-  <ul class="text-sm text-gray-400 space-y-1">
-    <li>命令列參數，啟動前確定</li>
-    <li>main 方法固定簽名，必須存在</li>
-    <li>適合批次處理、腳本傳參</li>
-  </ul>
+  <div v-click class="scenario"><b>批次轉檔</b><span>輸入路徑、輸出格式</span><strong>args</strong></div>
+  <div v-click class="scenario"><b>文字冒險</b><span>每回合選動作</span><strong>Scanner</strong></div>
+  <div v-click class="scenario"><b>啟動模式</b><span>--safe / --verbose</span><strong>args</strong></div>
+  <div v-click class="scenario"><b>註冊表單</b><span>逐欄詢問資料</span><strong>Scanner</strong></div>
 </div>
 
-<div v-click="2" class="p-4 rounded-lg border border-[#E76F00]/40">
-  <div class="font-bold text-[#E76F00] mb-2">Scanner</div>
-  <ul class="text-sm text-gray-400 space-y-1">
-    <li>動態輸入，執行中互動</li>
-    <li>程式暫停等待使用者</li>
-    <li>適合互動式應用、練習題</li>
-  </ul>
+<div v-click class="callout mt-5">同一個程式可以同時使用：args 負責設定，Scanner 負責互動。</div>
+
+<!--
+逐題請學員先投票，再揭曉右下角答案。
+實務上也可能使用 GUI、檔案或網路；此處只比較這兩種課堂工具。
+-->
+
+---
+layout: default
+---
+
+# 放在一起：設定 + 互動
+
+```java {1-3|5-7|9-12|all}
+String mode = args.length > 0
+    ? args[0]
+    : "normal";
+
+Scanner in = new Scanner(System.in);
+System.out.print("你的名字：");
+String name = in.nextLine();
+
+if (name.isBlank()) {
+    System.err.println("名字不可空白");
+    return;
+}
+System.out.printf("[%s] Hello %s%n", mode, name);
+```
+
+<!--
+mode 在啟動後不再改變；name 在程式跑到 nextLine 時才取得。
+最後補上最基本的空白驗證，連結到互動元件中的錯誤狀態。
+-->
+
+---
+layout: default
+---
+
+# 常見誤解快問快答
+
+<div class="space-y-3 mt-5 text-sm">
+  <div v-click class="qa"><b>args 是 Scanner 的縮寫？</b><span>不是；args 是 main 收到的字串陣列。</span></div>
+  <div v-click class="qa"><b>nextInt 會吃掉 Enter？</b><span>不會；換行仍留在輸入緩衝。</span></div>
+  <div v-click class="qa"><b>Monaco 的 Run 在哪裡？</b><span>本 deck 只提供編輯，不提供 Java 執行環境。</span></div>
+  <div v-click class="qa"><b>Scanner 輸入一定來自鍵盤？</b><span>不一定；Scanner 也能讀字串或檔案。</span></div>
 </div>
 
+<!--
+這頁用快速節奏檢核。每題先只顯示題目，再點一下揭示整張卡。
+最後一題為後續 I/O 課程留伏筆。
+-->
+
+---
+layout: center
+class: text-center
+---
+
+# 一句話帶走
+
+<div class="text-2xl mt-10 font-mono">
+<span class="text-[#79c0ff]">args</span> 在啟動線之前，
+<span class="text-[#ffa657]">Scanner</span> 在啟動線之後。
 </div>
 
-<div v-click="3" class="mt-8 p-4 bg-gradient-to-r from-[#5382A1]/10 to-[#E76F00]/10 rounded-lg border border-gray-700 text-sm text-center">
-兩者服務<b>不同的輸入需求</b>，可以同時存在於同一個程式中
-</div>
+<div v-click class="mt-12 text-gray-400">先判斷時間點，再選 API。</div>
+
+<!--
+請學員合上筆記，用自己的話重述這句。
+若能正確說明 nextInt 與 nextLine 的換行問題，本節目標就達成。
+-->
 
 ---
 layout: end
 class: text-center
 ---
 
-# 謝謝！
+# 謝謝
 
-<p class="text-gray-400 mt-4">延伸閱讀：<a href="https://lucashsu95.github.io/LucasHsu.dev/java/basic/什麼是固定簽名" class="text-[#5382A1]">什麼是固定簽名</a></p>
+<p class="text-gray-400 mt-5">下一步：輸入驗證、例外處理、檔案 I/O</p>
+<div class="kicker mt-10">$ java InputLab --practice</div>
 
-<div class="mt-8 font-mono text-sm text-gray-600">
-  <span class="text-[#7ee787]">$</span> java A --learn-more
-</div>
+<!--
+收尾並邀請提問。若現場有 JDK，可把 Monaco 中的版本複製到實際環境測試。
+匯出 PDF 時互動會呈現靜態初始狀態，講者備註可另行保留。
+-->
