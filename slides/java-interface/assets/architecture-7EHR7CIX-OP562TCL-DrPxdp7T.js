@@ -1,0 +1,1 @@
+import{x as e}from"./chunk-BBDM4ZFP-DLKB1Ira.js";export{e as createArchitectureServices};

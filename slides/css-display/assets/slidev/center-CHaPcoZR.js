@@ -1,0 +1,1 @@
+import{D as e,G as t,J as n,w as r}from"../modules/shiki-CnB-sRFc.js";import{M as i}from"../index-BwgMIqf2.js";var a={},o={class:`slidev-layout center h-full grid place-content-center`},s={class:`my-auto`};function c(i,a){return t(),e(`div`,o,[r(`div`,s,[n(i.$slots,`default`)])])}var l=i(a,[[`render`,c]]);export{l as t};
