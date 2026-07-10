@@ -1,244 +1,417 @@
 ---
 outline: "deep"
-
 head:
   - - meta
     - name: author
       content: 許恩綸
   - - meta
     - name: keywords
-      content: java interface, java介面, interface教學, java多型, polymorphism, 通知系統, 設計模式, java OOP, 程式設計原則, 依賴反轉, 組合模式, java教學, 軟體架構
+      content: Java Interface, implements, 多型, constructor injection, DIP, ISP, FunctionalInterface, lambda, sealed interface, 測試替身
   - - meta
     - name: description
-      content: 透過實際的跨平台通知系統案例，深入學習Java Interface設計。從基礎概念到進階組合模式，完整掌握介面在軟體架構中的應用，適合Java開發者提升程式設計技能。
+      content: 從通知系統理解 Java Interface 的契約、執行期多型、建構子注入與介面演進，並練習可測試的依賴設計。
   - - meta
     - property: og:title
-      content: Java Interface 完整教學 | 跨平台通知系統實戰開發
+      content: Java Interface：從契約到可測試設計
   - - meta
     - property: og:description
-      content: 透過實際的跨平台通知系統案例，深入學習Java Interface設計。從基礎概念到進階組合模式，完整掌握介面在軟體架構中的應用。
+      content: 用通知系統拆解 implements、多型、DIP、ISP、lambda、sealed interface 與測試替身。
   - - meta
     - property: og:type
       content: article
   - - meta
     - property: og:image
       content: https://lucashsu95.github.io/LucasHsu.dev/images/java-cover.webp
-  - - meta
-    - name: twitter:card
-      content: summary_large_image
-  - - meta
-    - name: twitter:title
-      content: Java Interface 完整教學 | 跨平台通知系統實戰開發
-  - - meta
-    - name: twitter:description
-      content: 透過實際通知系統案例學習Java Interface，從基礎到進階組合模式，提升軟體架構設計能力。
 ---
 
-# 生活化情境：跨平台通知系統
-## 問題描述：發送通知
+<script setup>
+import JavaInterfaceLab from "../../.vitepress/theme/components/JavaInterfaceLab.vue"
+</script>
 
-想像你的應用程式需要發送通知給使用者。最一開始，你只打算用電子郵件來通知。
+# Java Interface：從行為契約到可替換依賴
 
-**初始設計（不推薦）：**
-你可能會寫一個 `NotificationManager` 類別，裡面有一個方法專門處理發送電子郵件的邏輯。
+> 本篇聚焦「如何定義與依賴一份行為契約」。若你想先理解執行期多型、抽象類別與繼承的全貌，請讀[多型與抽象類別](/java/oop/polymorphism-abstract)；這裡不重講完整 OOP 階層，而是把介面用在依賴設計與測試上。
 
-```java
-public class NotificationManager {
-    public void sendEmail(String message) {
-        System.out.println("傳送電子郵件通知： " + message);
-        // ... 複雜的郵件伺服器連線、API 呼叫等實作細節
-    }
-}
-```
+## TL;DR
 
-這個設計看起來沒問題，直到有一天，你的產品經理跑來告訴你：「我們需要增加**簡訊**通知，下個月可能還要加上**App推播**通知。」
+- `interface` 宣告呼叫者可依賴的**行為契約**；`implements` 是類別對契約的承諾。
+- 介面型別變數可指向不同實作；同一個 `send()` 會在執行期派送到實際物件。
+- 建構子注入讓高層服務接收 `Notifier`，而非在內部 `new EmailNotifier()`。
+- 「依賴介面」不會自動滿足 DIP；抽象必須由高層政策需要主導，而且依賴方向確實要反轉。
+- 小而聚焦的介面通常更容易實作、組合與替換；這是 ISP 的核心。
+- Java 8 起介面可有 `default`、`static` 方法；Java 9 起可有 `private` 方法；Java 17 的 sealed classes/interfaces 正式定版。
 
-這時，你的 `NotificationManager` 類別就會開始膨脹，你會在裡面加入新的方法，甚至使用 `if/else` 或 `switch` 語句來判斷要用哪種方式傳送，這將導致程式碼變得難以維護且脆弱。
+<SlideButton
+  slug="java-interface"
+  title="Java Interface：通知依賴實驗室"
+  description="用互動投影片追蹤契約、執行期派送、建構子注入與介面演進。"
+/>
 
+## 前置知識
 
-## 第一階段解決方案：使用 interface
+建議先會：
 
-為了解決這個問題，我們應該專注於「發送通知」這個行為本身。無論是電子郵件、簡訊還是推播，它們的共同行為都是「發送一個訊息」。因此，我們定義一個 `Notifier` 介面來代表這個行為。
+- 類別、物件、方法與建構子
+- 參考型別與 `new`
+- `public`、`private`、`final`
+- `List` 與增強型 `for`
 
-### 1. 定義 `Notifier` 介面
+不熟多型也可以繼續；本文會只補足本案例需要的部分。
 
-這個介面定義了所有通知器都必須遵循的契約：有一個 `send` 方法。
-
-```java
-// Notifier.java
-/**
- * 定義通知服務的行為契約。
- * 任何能「發送」訊息的類別都必須實作此介面。
- */
-public interface Notifier {
-    void send(String message);
-}
-```
-
-### 2. 實作具體的通知類別
-
-現在，我們可以為每種通知方式建立一個獨立的類別，它們都實作 `Notifier` 介面。這讓每個類別都只專注於自己的職責，完全符合「單一職責原則」。
+## 先看問題：高層服務知道太多細節
 
 ```java
-// EmailNotifier.java
-/**
- * 透過電子郵件發送通知的具體實作。
- */
-public class EmailNotifier implements Notifier {
-    @Override
-    public void send(String message) {
-        System.out.println("發送電子郵件通知: " + message);
-        // 這裡可以放真實的電子郵件發送邏輯
-    }
-}
-
-// SmsNotifier.java
-/**
- * 透過簡訊發送通知的具體實作。
- */
-public class SmsNotifier implements Notifier {
-    @Override
-    public void send(String message) {
-        System.out.println("發送簡訊通知: " + message);
-        // 這裡可以放真實的簡訊 API 呼叫邏輯
-    }
-}
-```
-
-### 3. 核心程式碼
-
-現在，你的主程式或其他服務，只需要處理 `Notifier` 介面，而不需要知道具體是哪一種實作。這就是依賴反轉原則的體現：高層次的程式碼依賴於抽象（介面），而不是具體實作。
-
-```java
-// Main.java
-public class Main {
-    public static void main(String[] args) {
-        // 使用電子郵件通知
-        System.out.println("--- 使用 EmailNotifier ---");
-        Notifier emailNotifier = new EmailNotifier();
-        sendNotification(emailNotifier, "您的帳號已成功註冊。");
-
-        System.out.println("\n--- 使用 SmsNotifier ---");
-        // 使用簡訊通知
-        Notifier smsNotifier = new SmsNotifier();
-        sendNotification(smsNotifier, "您的訂單已出貨，編號: 12345。");
-    }
-
-    // 這個方法不關心是哪一種通知方式，它只知道要傳送訊息。
-    public static void sendNotification(Notifier notifier, String message) {
-        System.out.println("準備發送通知...");
-        notifier.send(message); // 呼叫介面的方法
-        System.out.println("通知發送完成。\n");
-    }
-}
-```
-
-**執行結果：**
-
-```
---- 使用 EmailNotifier ---
-準備發送通知...
-發送電子郵件通知: 您的帳號已成功註冊。
-通知發送完成。
-
---- 使用 SmsNotifier ---
-準備發送通知...
-發送簡訊通知: 您的訂單已出貨，編號: 12345。
-通知發送完成。
-```
-
-這個設計的優點在於：
-
-- **可擴展性（Extensibility）**： 如果未來需要新增「`App` 推播通知」，你只需要建立一個 `PushNotifier` 類別來實作 `Notifier` 介面即可，完全不需要修改現有的 `Main` 類別。
-
-- **鬆散耦合（Loose Coupling）**： `Main` 類別與 `EmailNotifier` 和 `SmsNotifier` 之間沒有直接的依賴關係，它們只透過 `Notifier` 介面進行溝通。
-
-## 延伸問題：組合通知
-
-新需求來了！你的產品經理現在希望發送一種特殊的通知：**「重要通知」**。這種通知必須同時透過電子郵件和簡訊兩種方式發送，以確保使用者一定能收到。
-
-如果沒有介面，你可能又需要在 `NotificationManager` 中寫一個新的方法，裡面包含發送郵件和簡訊的邏輯。但這會重複程式碼，並且隨著需求越來越複雜，程式會越來越難以管理。
-
-**延伸解決方案：利用 `interface` 實現多樣化組合**
-
-介面的強大之處在於它提供了**多型（Polymorphism）**的基礎，你可以將任何實作了 `Notifier` 介面的物件，都視為 `Notifier` 類型來處理。這讓我們可以建立一個新的通知器，它將多個通知器「組合」起來，實現複雜的發送行為。
-
-### 1. 建立 `CompositeNotifier` 類別
-
-這個類別本身也實作 `Notifier` 介面，但它的 `send` 方法不會自己發送，而是**委託（Delegate）**給它內部持有的所有 `Notifier` 實例來完成。
-
-```java
-import java.util.List;
-
-// CompositeNotifier.java
-/**
- * 組合多個通知器，實現同時發送給多個渠道。
- * 這本身也是一個通知器。
- */
-public class CompositeNotifier implements Notifier {
-    private final List<Notifier> notifiers;
-
-    public CompositeNotifier(List<Notifier> notifiers) {
-        this.notifiers = notifiers;
-    }
-
-    @Override
-    public void send(String message) {
-        System.out.println("正在透過多個渠道發送通知...");
-        for (Notifier notifier : notifiers) {
-            notifier.send(message);
+class NotificationService {
+    void notifyUser(String channel, String message) {
+        if (channel.equals("email")) {
+            new EmailClient().deliver(message);
+        } else if (channel.equals("sms")) {
+            new SmsClient().deliver(message);
         }
     }
 }
 ```
 
-### 2. 更新主程式
+問題不只是 `if/else` 很長。`NotificationService` 同時知道：
 
-現在，要發送「重要通知」時，我們只需要建立一個 `CompositeNotifier` 實例，將 `EmailNotifier` 和 `SmsNotifier` 傳入即可。主程式的 sendNotification 方法**完全不需要修改**，因為 `CompositeNotifier` 本身就是一個 `Notifier`！
+1. 有哪些管道；
+2. 每個 SDK 如何建立；
+3. 每個 SDK 的呼叫方式。
+
+因此新增管道、替換供應商或測試失敗情境，都可能迫使我們修改高層流程。
+
+## 契約與 `implements`
+
+### 宣告介面
 
 ```java
-// Main.java (更新後)
-import java.util.Arrays;
-import java.util.List;
+public interface Notifier {
+    void send(String message);
+}
+```
 
-public class Main {
-    public static void main(String[] args) {
-        // ... (省略先前程式碼)
+介面描述「能發送訊息」，不規定透過 SMTP、電信商 API 或推播服務。介面中的一般方法在沒有方法本體時，隱含為 `public abstract`；欄位則隱含為 `public static final`，因此不適合存放每個物件各自的可變狀態。
 
-        System.out.println("--- 發送重要通知 (Email + SMS) ---");
-        // 建立一個集合，包含所有需要的通知器
-        List<Notifier> importantNotifiers = Arrays.asList(new EmailNotifier(), new SmsNotifier());
-        
-        // 將這些通知器組合起來，變成一個新的通知器
-        Notifier compositeNotifier = new CompositeNotifier(importantNotifiers);
-        
-        // 呼叫同一個方法，但這次它會自動發送給兩個渠道
-        sendNotification(compositeNotifier, "您的密碼已成功重設，請確認！");
+### 類別履行契約
+
+```java
+public final class EmailNotifier implements Notifier {
+    @Override
+    public void send(String message) {
+        System.out.println("EMAIL > " + message);
     }
+}
 
-    public static void sendNotification(Notifier notifier, String message) {
-        // ... (方法內容不變)
+public final class SmsNotifier implements Notifier {
+    @Override
+    public void send(String message) {
+        System.out.println("SMS   > " + message);
     }
 }
 ```
 
-**執行結果：**
+`implements` 不會繼承實例狀態，也不會建立物件；它要求類別提供介面抽象方法的合法實作。實作方法必須是 `public`，不能縮小介面方法的可見性。
 
+## 多型：型別看契約，執行看物件
+
+```java
+Notifier notifier = new EmailNotifier();
+notifier.send("帳號建立完成");
+
+notifier = new SmsNotifier();
+notifier.send("驗證碼 8042");
 ```
-... (省略先前結果)
 
---- 發送重要通知 (Email + SMS) ---
-準備發送通知...
-正在透過多個渠道發送通知...
-發送電子郵件通知: 您的密碼已成功重設，請確認！
-發送簡訊通知: 您的密碼已成功重設，請確認！
-通知發送完成。
+編譯器從變數的靜態型別 `Notifier` 判斷「能不能呼叫 `send`」；JVM 在執行期依實際物件選擇 `EmailNotifier.send` 或 `SmsNotifier.send`。這是介面型別上的動態方法派送。
+
+::: tip 本篇與 OOP 進階篇的分工
+本文用多型作為「可替換依賴」的工具；[多型與抽象類別](/java/oop/polymorphism-abstract)則從型別階層、抽象類別與組合設計建立完整 OOP 心智模型。
+:::
+
+## 動手切換依賴方向
+
+選擇直接耦合或依賴介面，再組合 Email、SMS、Push。按下發送後，觀察 dispatch trace 與箭頭方向。
+
+<JavaInterfaceLab />
+
+## 建構子注入：把選擇移到組裝端
+
+```java
+public final class NotificationService {
+    private final Notifier notifier;
+
+    public NotificationService(Notifier notifier) {
+        this.notifier = notifier;
+    }
+
+    public void notifyUser(String message) {
+        notifier.send(message);
+    }
+}
 ```
 
-這個延伸方案完美地體現了 `interface` 的三大優點：
+```java
+public class Main {
+    public static void main(String[] args) {
+        Notifier productionNotifier = new EmailNotifier();
+        NotificationService service =
+            new NotificationService(productionNotifier);
 
-1. **擴展性**： 在不修改任何現有程式碼的情況下，新增了一個全新的通知行為（組合發送）。
-2. **多型性**： `CompositeNotifier` 可以被視為一個普通的 `Notifier` 來使用，這讓我們的程式碼更具彈性。
-3. **可讀性與可維護性**： 每個類別的職責都非常清晰，`CompositeNotifier` 負責組合，`EmailNotifier` 負責發送郵件，核心方法則只負責呼叫 `send`。
+        service.notifyUser("訂單已出貨");
+    }
+}
+```
 
-總結來說，`interface` 不僅僅是語法，它代表了一種設計思維：將「是什麼」（`is-a`）的繼承關係，轉變為「能做什麼」（`can-do`）的行為契約。這個思維讓你能夠用更優雅、更具擴展性的方式來應對軟體開發中不斷變化的需求。
+`NotificationService` 不再決定使用哪個管道；程式進入點（composition root）負責建立並接線物件。建構子參數也讓必要依賴明確，而且欄位可維持 `final`。
+
+### 這和 DIP 的關係，別說過頭
+
+依賴反轉原則（Dependency Inversion Principle）包含兩層意思：
+
+1. 高層政策不應依賴低層細節，兩者應依賴抽象。
+2. 抽象不應依賴細節，細節應依賴抽象。
+
+上例中，`Notifier` 由「通知流程需要能發送」這個高層需求定義，低層 `EmailNotifier` 反過來實作它，因此依賴方向有被反轉。可是：
+
+- 只把具體類別包成 `EmailNotifierInterface`，若抽象仍由供應商 API 形狀主導，不一定是良好的 DIP。
+- 每個類別都配一個介面，可能只是增加跳轉與樣板。
+- 若實作永遠不需替換、邊界也不需要隔離，具體依賴可能更簡單。
+
+所以準確說法是：**介面與注入能協助實現 DIP，但不是使用 `interface` 關鍵字就自動符合 DIP。**
+
+## 組合通知：一個契約，多個委派
+
+```java
+import java.util.List;
+
+public final class CompositeNotifier implements Notifier {
+    private final List<Notifier> delegates;
+
+    public CompositeNotifier(List<Notifier> delegates) {
+        this.delegates = List.copyOf(delegates);
+    }
+
+    @Override
+    public void send(String message) {
+        for (Notifier delegate : delegates) {
+            delegate.send(message);
+        }
+    }
+}
+```
+
+```java
+Notifier important = new CompositeNotifier(List.of(
+    new EmailNotifier(),
+    new SmsNotifier(),
+    new PushNotifier()
+));
+
+new NotificationService(important).notifyUser("密碼已變更");
+```
+
+`CompositeNotifier` 自己也是 `Notifier`，呼叫端不必知道它內部委派一次或三次。實務上還要明確決定失敗策略：某一管道失敗時停止、繼續，還是收集所有錯誤。
+
+## ISP：不要把所有能力塞進一個胖介面
+
+```java
+// 過大的契約：不是每種管道都能排程或撤回
+interface NotificationPlatform {
+    void send(String message);
+    void schedule(String message, Instant at);
+    void revoke(String id);
+}
+```
+
+依介面隔離原則（Interface Segregation Principle），呼叫端不該被迫依賴不需要的方法。可依使用情境拆分：
+
+```java
+interface Notifier {
+    void send(String message);
+}
+
+interface SchedulableNotifier {
+    void schedule(String message, Instant at);
+}
+
+interface RevocableNotification {
+    void revoke(String id);
+}
+```
+
+介面不是越小越好；應該小到能代表一個內聚能力，又大到讓呼叫端完成一個有意義的工作。
+
+## Interface vs abstract class
+
+| 問題 | Interface | Abstract class |
+| --- | --- | --- |
+| 主要意圖 | 跨類型定義能力／邊界 | 建立有共同狀態與骨架的家族 |
+| 實例欄位 | 不可 | 可以 |
+| 建構子 | 不可 | 可以 |
+| 類別可擁有數量 | 可實作多個介面 | 只能繼承一個類別 |
+| 共用實作 | `default` 方法有限支援 | 可用各種可見性與欄位完整支援 |
+| 適合情境 | 替換實作、邊界、能力組合 | 穩定的 is-a 關係、共同不變量 |
+
+不要套用「永遠優先介面」的口號。若子類別真的共享狀態、建構流程與受保護的模板步驟，抽象類別可能更直接；若重點是讓不相關類別共享契約或讓依賴可替換，介面通常更合適。
+
+## 測試替身：不用真的發 Email
+
+介面讓測試可注入可觀察的 fake：
+
+```java
+final class RecordingNotifier implements Notifier {
+    private final List<String> messages = new ArrayList<>();
+
+    @Override
+    public void send(String message) {
+        messages.add(message);
+    }
+
+    List<String> messages() {
+        return List.copyOf(messages);
+    }
+}
+```
+
+```java
+@Test
+void sendsShipmentMessage() {
+    RecordingNotifier fake = new RecordingNotifier();
+    NotificationService service = new NotificationService(fake);
+
+    service.notifyUser("訂單已出貨");
+
+    assertEquals(List.of("訂單已出貨"), fake.messages());
+}
+```
+
+這裡驗證的是服務與協作者的互動結果，不需網路、帳密或 mock framework。介面不是可測試性的唯一方法，但它提供很自然的替換接縫。
+
+## 介面也能有方法本體
+
+### `default` 與 `static`（Java 8+）
+
+```java
+public interface Notifier {
+    void send(String message);
+
+    default void sendUrgent(String message) {
+        send("[URGENT] " + normalize(message));
+    }
+
+    static Notifier silent() {
+        return message -> { };
+    }
+
+    private String normalize(String message) { // Java 9+
+        return message.strip();
+    }
+}
+```
+
+- `default`：為實作類別提供可覆寫的預設實作，常用於相容地演進既有介面。
+- `static`：屬於介面本身，以 `Notifier.silent()` 呼叫，不參與多型覆寫。
+- `private`（Java 9+）：只供介面內的 `default`／`static` 方法重用，實作類別看不到。
+
+新增 `default` 方法雖通常不會迫使既有實作立刻修改，仍可能產生語意不適用、同名衝突等設計問題，不能視為零成本演進。
+
+## `@FunctionalInterface` 與 lambda（Java 8+）
+
+只有一個抽象方法的介面是 functional interface；`default`、`static`、`private` 方法不計入該數量。
+
+```java
+@FunctionalInterface
+interface Notifier {
+    void send(String message);
+}
+
+Notifier console = message ->
+    System.out.println("CONSOLE > " + message);
+
+new NotificationService(console).notifyUser("本機測試");
+```
+
+`@FunctionalInterface` 不是必要語法，但可讓編譯器保護「單一抽象方法」意圖。lambda 是該介面的實例，不是執行期新增一個命名類別供你直接操作。
+
+## `sealed interface`（Java 17 正式版）
+
+當領域允許的變體應該是封閉集合，可限制誰能實作：
+
+```java
+public sealed interface DeliveryResult
+    permits Delivered, Rejected, Retrying {
+}
+
+public record Delivered(String id) implements DeliveryResult {}
+public record Rejected(String reason) implements DeliveryResult {}
+public record Retrying(int attempt) implements DeliveryResult {}
+```
+
+允許的直接實作必須明確是 `final`、`sealed` 或 `non-sealed`。Sealed classes/interfaces 曾在 Java 15、16 預覽，於 **Java 17** 正式定版。它適合封閉的領域代數資料型別，不適合預期第三方自由擴充的 plugin API。
+
+## 練習
+
+### 練習 1：加入 Push
+
+實作 `PushNotifier`，並在組裝端替換 Email。確認 `NotificationService` 不需修改。
+
+### 練習 2：設計失敗策略
+
+讓 `send` 回傳 `DeliveryResult`。比較：
+
+- 第一個失敗就停止；
+- 所有管道都嘗試後回傳結果清單。
+
+哪一種適合「帳號安全警報」？把原因寫在測試名稱中。
+
+### 練習 3：套用 ISP
+
+需求新增「排程發送」，但 SMS 供應商不支援排程。請避免在 `SmsNotifier` 中丟出 `UnsupportedOperationException`，改以角色介面建模。
+
+### 練習 4：測試替身
+
+建立 `FailingNotifier`，每次 `send` 都丟例外。替 `NotificationService` 補上錯誤處理測試；不要呼叫真實外部服務。
+
+## FAQ
+
+### Interface 可以 `new` 嗎？
+
+不能直接 `new Notifier()`，因為它沒有完整實作；可以建立實作類別、匿名類別，或在 functional interface 上使用 lambda。
+
+### 一個類別可以實作多個 interface 嗎？
+
+可以，例如 `class PushNotifier implements Notifier, SchedulableNotifier`。若兩個介面的 `default` 方法簽名衝突，類別必須明確覆寫。
+
+### Interface 方法一定都是 `public` 嗎？
+
+一般抽象方法隱含 `public abstract`；Java 9 起介面也可有僅供內部重用的 `private` 方法。介面不能宣告 `protected` 方法。
+
+### 什麼時候不需要介面？
+
+只有單一簡單實作、沒有邊界隔離或替換需求時，直接依賴具體類別可能更清楚。等抽象能表達呼叫端真正需要的角色，再抽取也不遲。
+
+### `default` 方法會破壞「介面只有契約」嗎？
+
+它讓介面能攜帶有限的共同行為，主要解決 API 演進與可組合行為；但不能保存實例狀態，也不應變成藏匿大量流程的工具。
+
+## 來源與延伸閱讀
+
+- [Oracle Java Tutorials: Interfaces](https://docs.oracle.com/javase/tutorial/java/IandI/createinterface.html)（教學以 JDK 8 為基準）
+- [Java Language Specification §9: Interfaces](https://docs.oracle.com/javase/specs/jls/se21/html/jls-9.html)
+- [JLS §9.4.3: Interface Method Body](https://docs.oracle.com/javase/specs/jls/se21/html/jls-9.html#jls-9.4.3)
+- [JLS §9.8: Functional Interfaces](https://docs.oracle.com/javase/specs/jls/se21/html/jls-9.html#jls-9.8)
+- [JLS §9.1.4: Permitted Direct Subclasses and Subinterfaces](https://docs.oracle.com/javase/specs/jls/se21/html/jls-9.html#jls-9.1.4)
+- [JEP 409: Sealed Classes](https://openjdk.org/jeps/409)
+- [多型與抽象類別：完整 OOP 定位](/java/oop/polymorphism-abstract)
+
+## 最後檢查
+
+看到新需求時，先問：
+
+1. 呼叫端真正需要哪個行為？
+2. 抽象名稱是否使用領域語言，而不是供應商名稱？
+3. 實作選擇是否留在組裝端？
+4. 介面是否迫使實作者提供不適用的方法？
+5. 測試能否換入簡單 fake？
+
+Interface 的價值不在「消除所有修改」，而在建立清楚的替換邊界，讓修改更集中、依賴更可見。
