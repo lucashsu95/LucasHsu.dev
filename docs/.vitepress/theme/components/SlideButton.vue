@@ -12,7 +12,7 @@ const props = defineProps({
 const basePath = "/LucasHsu.dev/";
 
 const slideUrl = computed(() => `${basePath}slides/${props.slug}/index.html`);
-const pdfUrl = computed(() => props.pdf || `${basePath}slides/${props.slug}.pdf`);
+const pdfUrl = computed(() => props.pdf);
 const thumbnailUrl = computed(() => props.thumbnail || `${basePath}slides/${props.slug}/thumbnail.png`);
 </script>
 
@@ -32,7 +32,7 @@ const thumbnailUrl = computed(() => props.thumbnail || `${basePath}slides/${prop
         <a :href="slideUrl" class="slide-btn slide-btn-primary" target="_self" rel="noopener">
           開啟投影片
         </a>
-        <a :href="pdfUrl" class="slide-btn slide-btn-secondary" download>
+        <a v-if="pdfUrl" :href="pdfUrl" class="slide-btn slide-btn-secondary" download>
           下載 PDF
         </a>
       </div>
