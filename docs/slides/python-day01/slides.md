@@ -105,10 +105,8 @@ exportFilename: python-day01
 -->
 
 ---
-
 layout: default
 hideInToc: true
-
 ---
 
 <div class="font-mono text-xs text-gray-500 mb-4">
@@ -136,12 +134,9 @@ hideInToc: true
 -->
 
 ---
-
 layout: section
 transition: fade
-
 ---
-
 <div class="font-mono text-[#FFD43B] text-sm mb-2">PART 01</div>
 
 # 資料型別
@@ -293,12 +288,9 @@ mindmap
 -->
 
 ---
-
 layout: section
 transition: fade
-
 ---
-
 <div class="font-mono text-[#FFD43B] text-sm mb-2">PART 02</div>
 
 # 變數
@@ -442,12 +434,9 @@ Python 一行搞定。
 -->
 
 ---
-
 layout: section
 transition: fade
-
 ---
-
 <div class="font-mono text-[#FFD43B] text-sm mb-2">PART 03</div>
 
 # Output
@@ -625,12 +614,9 @@ print(f'{42:05d}')
 -->
 
 ---
-
 layout: section
 transition: fade
-
 ---
-
 <div class="font-mono text-[#FFD43B] text-sm mb-2">PART 04</div>
 
 # Input
@@ -662,13 +648,10 @@ sequenceDiagram
 </div>
 
 ---
-
 layout: two-cols
 layoutClass: gap-8
 transition: slide-up
-
 ---
-
 # 單行輸入
 
 用 `input()` 接收使用者從鍵盤打的內容：
@@ -848,12 +831,9 @@ macOS 和 Linux 通常預設就是 UTF-8，但 Windows 可能會是 Big5 或其�
 -->
 
 ---
-
 layout: section
 transition: fade
-
 ---
-
 <div class="font-mono text-[#FFD43B] text-sm mb-2">PART 05</div>
 
 # 數學運算子
@@ -968,12 +948,9 @@ print(x)
 -->
 
 ---
-
 layout: section
 transition: fade
-
 ---
-
 <div class="font-mono text-[#FFD43B] text-sm mb-2">PART 06</div>
 
 # 比較與條件判斷
@@ -981,13 +958,10 @@ transition: fade
 <p class="text-gray-400 text-lg font-mono mt-2">讓程式自己做選擇</p>
 
 ---
-
 layout: two-cols
 layoutClass: gap-8
 transition: slide-up
-
 ---
-
 # 布林值與比較運算子
 
 布林是只有兩個值的型別：
