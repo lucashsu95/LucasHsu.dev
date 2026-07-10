@@ -1,973 +1,356 @@
 ---
-title: Security & Authentication | LucasHsu.dev
-description: Spring Security 完整攻略：從 DelegatingFilterProxy、SecurityFilterChain、JWT 實作、例外處理到方法層級安全，一次搞懂。
+title: Spring Security 實用入門 | LucasHsu.dev
+description: 用一條請求流程看懂 Spring Security，完成 SecurityFilterChain、JWT Resource Server、方法權限、密碼雜湊與測試。
+outline: deep
 head:
   - - meta
     - name: keywords
-      content: Spring Security, JWT, SecurityFilterChain, DelegatingFilterProxy, PasswordEncoder, BCrypt, CORS, CSRF, OncePerRequestFilter, AuthenticationEntryPoint, AccessDeniedHandler, EnableMethodSecurity, PreAuthorize, Spring Boot 3
+      content: Spring Security, SecurityFilterChain, JWT, OAuth2 Resource Server, PasswordEncoder, CORS, CSRF, PreAuthorize, Spring Boot 3
   - - meta
     - property: og:title
-      content: Security & Authentication | LucasHsu.dev
+      content: Spring Security 實用入門
   - - meta
     - property: og:description
-      content: Spring Security 完整攻略 — Filter Chain、JWT 驗證、例外處理、方法層級安全，從頭到尾一篇搞定。
+      content: 不手刻一整套 JWT Filter，用 Spring Security 官方能力完成現代 API 驗證與授權。
   - - meta
     - property: og:type
       content: article
 ---
 
-# Security & Authentication
+# Spring Security 實用入門
 
-> 沒有 token 就想進來？`SecurityFilterChain` 說：先過我這關。
+Spring Security 最容易學到失去方向：Filter、JWT、CORS、CSRF、401、403 全部一起出現。其實先掌握一條主線就夠了：
 
-這一篇會學到的
-
-1. `DelegatingFilterProxy` 跟 `SecurityFilterChain` 到底是什麼
-2. 新舊寫法差在哪、為什麼舊的被淘汰
-3. `PasswordEncoder`、CORS、CSRF 這些基礎配置怎麼設
-4. JWT 驗證從 `JwtTokenProvider` 到 `OncePerRequestFilter` 完整實作
-5. 401 / 403 例外處理怎麼統一格式
-6. `@PreAuthorize`、`@PostAuthorize` 方法層級安全
-7. `SecurityContextHolder` 怎麼在任何層拿到使用者
-8. 完整整合範例
-
-## 核心概念
-
-### Tomcat 跟 Spring 的隔閡
-
-Spring Boot 內嵌 Tomcat 處理 HTTP 請求，但 Tomcat 跟 Spring 容器是兩個世界。Tomcat 管理自己的 Filter，Spring 管理自己的 Bean。當 HTTP 請求進來想做驗證，Tomcat 的 Filter 沒辦法直接用 `@Autowired` 叫出 Spring 的 Service。
-
-> 就像你在大樓門口站崗，但門禁系統的資料庫在另一個樓層，你沒辦法直接查。
-
-### DelegatingFilterProxy：橋接兩個世界的空殼
-
-解決辦法是 `DelegatingFilterProxy`。在 Tomcat 註冊一個「空殼 Filter」，這個空殼的唯一工作就是：接到請求後，轉頭走進 Spring 容器，找到名叫 `springSecurityFilterChain` 的 Bean，把控制權交出去。
-
-```
+```text
 HTTP Request
-    │
-    ▼
-┌─────────────────────┐
-│  Tomcat Container    │
-│                     │
-│  DelegatingFilterProxy (空殼，註冊在 web.xml)
-│         │
-│         └──→ 轉頭走進 Spring 容器
-│                  │
-│                  ▼
-│         ┌──────────────────┐
-│         │ springSecurityFilterChain │
-│         │ (實際的 Security 邏輯)    │
-│         └──────────────────┘
-│
-    ▼
-實際的 Filter 鏈執行
+  → SecurityFilterChain
+  → Authentication（你是誰）
+  → SecurityContext
+  → Authorization（你能做什麼）
+  → Controller
 ```
 
-### SecurityFilterChain：新的 Bean 寫法
+> **本文目標：** 建立一套能維護的 API 安全設定，而不是手刻數百行 token parser 與 Filter。
 
-Spring Security 5 以後，官方推薦直接註冊 `SecurityFilterChain` 為 Bean。
+## 先選對驗證模式
+
+| 情境 | 常見選擇 | CSRF |
+| --- | --- | --- |
+| 同站後台、伺服器渲染頁面 | Session + Cookie + Form Login | 應保留 |
+| SPA / Mobile 呼叫 API | Bearer Token / OAuth2 Resource Server | 完全無 Cookie 時通常可停用 |
+| 公司 SSO、第三方登入 | OIDC / OAuth2 Client | 依登入與 session 設計 |
+
+JWT 只是 token 格式，不等於完整登入架構。正式系統通常由 IdP 或 Authorization Server 發 token，Spring Boot API 作為 Resource Server 驗證 token。
+
+## 請求如何進入 Spring Security？
+
+Servlet container 先接收請求，再由 Spring Security 的 Filter chain 處理。你平常真正需要設定的是 `SecurityFilterChain`：
+
+```mermaid
+flowchart LR
+    Request[HTTP Request] --> Proxy[DelegatingFilterProxy]
+    Proxy --> Chain[SecurityFilterChain]
+    Chain --> AuthN[Authentication]
+    AuthN --> Context[SecurityContext]
+    Context --> AuthZ[Authorization]
+    AuthZ --> Controller[Controller]
+```
+
+`DelegatingFilterProxy` 是 Servlet 與 Spring Bean 之間的橋樑。知道它的角色即可；一般 Spring Boot 專案不需要自己註冊它。
+
+Spring Security 6 / Spring Boot 3 使用 Bean 與 Lambda DSL；舊的 `WebSecurityConfigurerAdapter` 已移除，不值得再背一套舊寫法。
+
+## 最小可用的 API 設定
+
+依賴：
+
+```groovy
+implementation "org.springframework.boot:spring-boot-starter-security"
+implementation "org.springframework.boot:spring-boot-starter-oauth2-resource-server"
+
+testImplementation "org.springframework.security:spring-security-test"
+```
+
+設定 JWT issuer：
+
+```yaml
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://id.example.com/realms/shop
+```
+
+Security 設定：
 
 ```java
+import static org.springframework.security.config.Customizer.withDefaults;
+import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
+
 @Configuration
-@EnableWebSecurity
+@EnableMethodSecurity
 public class SecurityConfig {
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
+    SecurityFilterChain apiSecurity(HttpSecurity http) throws Exception {
+        return http
+            .cors(withDefaults())
+            .csrf(csrf -> csrf.disable())
+            .sessionManagement(session ->
+                session.sessionCreationPolicy(STATELESS)
+            )
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/public/**").permitAll()
+                .requestMatchers("/actuator/health", "/api/public/**").permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
             )
-            .formLogin(form -> form.permitAll());
-
-        return http.build();
+            .oauth2ResourceServer(oauth2 -> oauth2.jwt(withDefaults()))
+            .build();
     }
 }
 ```
 
-> `http.build()` 就是說：配置好了，幫我生出 Filter 鏈。
+這段設定只適用於「Authorization header 帶 Bearer token、完全不靠 Cookie 驗證」的 stateless API。
 
-### 新舊寫法對比
+::: danger 不要看到 API 就無腦關 CSRF
+若瀏覽器會自動帶上 Session Cookie 或認證 Cookie，攻擊網站就可能借用 Cookie 發請求，此時仍需要 CSRF 防護。停用前先確認認證資訊不會被瀏覽器自動附加。
+:::
 
-| 層面 | 舊寫法（extends `WebSecurityConfigurerAdapter`） | 新寫法（`SecurityFilterChain` Bean） |
-|------|--------------------------------------------------|--------------------------------------|
-| 宣告方式 | 繼承 + 覆寫 `configure()` | `@Bean` 方法回傳 |
-| 語法 | 方法鏈 + `.and()` | Lambda DSL |
-| 彈性 | 單一配置類別 | 多個 Bean，可條件組合 |
-| 可測試性 | 低（依賴繼承） | 高（純 Bean） |
-| Spring Boot 3 支援 | ❌ 已移除 | ✅ 唯一方式 |
+## 不要自己手刻 JWT Filter
 
-舊寫法：
+常見教學會要求自己寫：
+
+- `JwtTokenProvider`
+- `OncePerRequestFilter`
+- Authorization header parser
+- 簽章、過期時間與例外處理
+- `SecurityContextHolder` 寫入流程
+
+這些工作 Resource Server 已經處理，而且會依標準驗證 issuer、signature、expiration 等條件。除非協定真的不是標準 Bearer token，否則優先使用：
 
 ```java
-// ❌ Spring Boot 3.x 已移除 WebSecurityConfigurerAdapter
+.oauth2ResourceServer(oauth2 -> oauth2.jwt(withDefaults()))
+```
+
+若自行簽發 token，金鑰管理、輪替、refresh token 撤銷與 client 安全都必須另外設計；「能產出一串 JWT」不代表登入系統已安全。
+
+## Authentication 與 Authorization 不一樣
+
+- **Authentication**：確認使用者身分。
+- **Authorization**：確認這個身分是否有權限執行操作。
+
+URL 層權限適合保護大範圍路徑：
+
+```java
+.requestMatchers("/api/public/**").permitAll()
+.requestMatchers("/api/admin/**").hasRole("ADMIN")
+.anyRequest().authenticated()
+```
+
+規則由上往下匹配，應先寫具體規則，再寫 `anyRequest()`。
+
+### Role 與 Authority
+
+`hasRole("ADMIN")` 會尋找 `ROLE_ADMIN`；`hasAuthority("ADMIN")` 則尋找完全相同的字串。
+
+OAuth2 Resource Server 預設會將 `scope` claim 轉成 `SCOPE_` authority：
+
+```java
+@PreAuthorize("hasAuthority('SCOPE_orders.read')")
+List<OrderResponse> findOrders() {
+    return orderService.findAll();
+}
+```
+
+如果 token 使用自訂 `roles` claim，需要配置 `JwtAuthenticationConverter`；不要在每個 Controller 手動讀 claim 再判斷。
+
+## 方法層安全：規則貼近業務操作
+
+啟用：
+
+```java
+@EnableMethodSecurity
 @Configuration
-@EnableWebSecurity
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+class SecurityConfig {
+}
+```
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http
-            .authorizeRequests()
-                .antMatchers("/public/**").permitAll()
-                .anyRequest().authenticated()
-            .and()
-            .formLogin();
+使用：
+
+```java
+@Service
+public class OrderService {
+
+    @PreAuthorize("hasRole('ADMIN')")
+    public void cancelAnyOrder(Long orderId) {
+        // ...
+    }
+
+    @PreAuthorize("#userId == authentication.name or hasRole('ADMIN')")
+    public List<OrderResponse> findForUser(String userId) {
+        // ...
     }
 }
 ```
 
-新寫法：
+URL 規則是第一道門，方法權限則保護真正的業務操作。不要在兩處寫互相矛盾的規則。
+
+## 在 Controller 取得目前使用者
+
+優先使用參數注入，不必在每個地方直接呼叫 `SecurityContextHolder`。
 
 ```java
-// ✅ 純 Bean，Lambda DSL
-@Configuration
-@EnableWebSecurity
-public class SecurityConfig {
+public record CurrentUserResponse(
+    String subject,
+    String username,
+    List<String> authorities
+) {}
+```
 
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/public/**").permitAll()
-                .anyRequest().authenticated()
-            )
-            .formLogin(form -> form.permitAll());
+```java
+@GetMapping("/api/me")
+CurrentUserResponse me(
+    @AuthenticationPrincipal Jwt jwt,
+    Authentication authentication
+) {
+    List<String> authorities = authentication.getAuthorities().stream()
+        .map(GrantedAuthority::getAuthority)
+        .toList();
 
-        return http.build();
-    }
+    return new CurrentUserResponse(
+        jwt.getSubject(),
+        jwt.getClaimAsString("preferred_username"),
+        authorities
+    );
 }
 ```
 
-> Spring Boot 3.x 全面移除 `WebSecurityConfigurerAdapter`。還在用舊寫法的，該搬家了。
+這也是 Record DTO 很實用的地方：安全資訊只挑 API 需要的欄位，不把整個 principal 或 Entity 序列化出去。更多用法可參考 [Record DTO 與 Projection](./record-dto-projection)。
 
----
+## 密碼不要自己 Hash
 
-## 基礎配置
-
-### PasswordEncoder
-
-#### BCryptPasswordEncoder
-
-密碼不能存明文，這是常識。Spring Security 推薦 `BCryptPasswordEncoder`。
+只有系統自己保存帳號密碼時才需要 `PasswordEncoder`。不要用 MD5、SHA-256 或自行加 salt。
 
 ```java
 @Bean
-public PasswordEncoder passwordEncoder() {
-    return new BCryptPasswordEncoder();
-}
-
-// 註冊時加密
-String encoded = passwordEncoder.encode("userPlainPassword");
-user.setPassword(encoded);
-
-// 登入時比對
-boolean matches = passwordEncoder.matches("inputPassword", storedHash);
-```
-
-> BCrypt 的特色是每次 encode 同一組密碼都會產生不一樣的 hash（因為內建 salt），所以不要懷疑為什麼資料庫的 hash 跟你想的不一樣。
-
-為什麼是 BCrypt 不是 MD5 或 SHA？
-
-| 演算法 | 可逆？ | 抗彩虹表？ | 可調整強度？ | 結論 |
-|--------|--------|-----------|-------------|------|
-| MD5 | ❌（但極易碰撞） | ❌ | ❌ | 不要用 |
-| SHA-256 | ❌ | ❌（無 salt） | ❌ | 不適合存密碼 |
-| BCrypt | ❌ | ✅（內建 salt） | ✅（可調 cost） | ✅ 推薦 |
-
-> **💡** BCrypt 的 cost 參數（預設 10）控制運算強度。硬體越來越快就把 cost 調高，未來性比較好。
-
-#### DelegatingPasswordEncoder：多種編碼格式共存
-
-如果你從舊系統升級，資料庫裡同時有 MD5、SHA-256、BCrypt 的 hash，`DelegatingPasswordEncoder` 可以讓你無痛遷移。
-
-```java
-@Bean
-public PasswordEncoder passwordEncoder() {
-    Map<String, PasswordEncoder> encoders = new HashMap<>();
-    encoders.put("bcrypt", new BCryptPasswordEncoder());
-    encoders.put("sha256", new MessageDigestPasswordEncoder("SHA-256"));
-
-    return new DelegatingPasswordEncoder("bcrypt", encoders);
+PasswordEncoder passwordEncoder() {
+    return PasswordEncoderFactories.createDelegatingPasswordEncoder();
 }
 ```
 
-密碼存儲格式變成 `{bcrypt}$2a$10$...` 或 `{sha256}...`，編碼前綴告訴 Spring 用哪個 encoder 驗證。新密碼統一用 bcrypt。
+```java
+String encoded = passwordEncoder.encode(rawPassword);
+boolean valid = passwordEncoder.matches(rawPassword, encoded);
+```
 
-> 遷移步驟：DelegatingPasswordEncoder 能驗證舊編碼，新密碼存 bcrypt。等所有使用者都登過一次，舊編碼的 hash 就全部被 bcrypt 取代了。
+`DelegatingPasswordEncoder` 產生的格式帶有 `{bcrypt}` 等前綴，讓系統未來能遷移演算法。永遠使用 `matches()` 比對，不要再次 encode 後比較字串，因為帶 salt 的結果每次可能不同。
 
----
+## CORS 與 CSRF：名字很像，問題不同
 
-### CORS
+| 概念 | 解決什麼 | 發生在哪裡 |
+| --- | --- | --- |
+| CORS | 哪些 origin 能由瀏覽器讀取 API 回應 | 瀏覽器同源政策 |
+| CSRF | 防止其他網站借用使用者的自動認證資訊送請求 | Cookie / Session 型認證 |
 
-瀏覽器的同源政策（Same-Origin Policy）會阻擋跨域請求。前後端分離時，你的 React/Vue 跑在 `localhost:3000`，API 在 `localhost:8080`，沒設 CORS 就直接被瀏覽器擋掉。
-
-> 瀏覽器：你們兩個 origin 不一樣，不行。你：我們明明說好了⋯⋯
+明確列出可信任來源：
 
 ```java
 @Bean
-public CorsConfigurationSource corsConfigurationSource() {
+CorsConfigurationSource corsConfigurationSource() {
     CorsConfiguration config = new CorsConfiguration();
-
     config.setAllowedOrigins(List.of(
-        "http://localhost:3000",
-        "https://myapp.com"
+        "http://localhost:5173",
+        "https://app.example.com"
     ));
-    config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-    config.setAllowedHeaders(List.of("*"));
-    config.setAllowCredentials(true);
+    config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
+    config.setAllowedHeaders(List.of("Authorization", "Content-Type"));
 
-    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-    source.registerCorsConfiguration("/**", config);
+    UrlBasedCorsConfigurationSource source =
+        new UrlBasedCorsConfigurationSource();
+    source.registerCorsConfiguration("/api/**", config);
     return source;
 }
 ```
 
-然後在 `SecurityFilterChain` 啟用：
+若開啟 credentials，不能把 allowed origin 設成 `*`。
+
+## 401 與 403
+
+| 狀態 | 意思 | 常見原因 |
+| --- | --- | --- |
+| `401 Unauthorized` | 尚未成功認證 | 沒 token、token 無效或過期 |
+| `403 Forbidden` | 已認證但沒有權限 | 缺少 role / authority |
+
+前端遇到 401 可引導重新登入；遇到 403 應顯示「權限不足」，而不是無限刷新 token。
+
+Spring Security 已有預設處理。只有 API 需要統一 JSON 錯誤合約時，才實作 `AuthenticationEntryPoint` 與 `AccessDeniedHandler`；不要為了「看起來完整」先複製兩個大類別。
+
+## 測試比肉眼看設定更可靠
 
 ```java
-http.cors(cors -> cors.configurationSource(corsConfigurationSource()));
-```
+@WebMvcTest(OrderController.class)
+@Import(SecurityConfig.class)
+class OrderControllerSecurityTest {
 
-> **💡** `OPTIONS` 方法（preflight 請求）一定要在 allowedMethods 裡，不然瀏覽器會在正式請求前就先失敗了。
+    @Autowired MockMvc mockMvc;
+    @MockBean JwtDecoder jwtDecoder;
 
----
-
-### CSRF
-
-CSRF（Cross-Site Request Forgery）是攻擊者偽造使用者的請求。傳統解決方案是發送一個隨機 token 給前端，每次請求帶上，Server 驗證。
-
-但如果是 REST API + JWT 的情境：
-
-- JWT 本身就是 token，已經有驗證機制
-- 前端通常不是瀏覽器直接發送表單
-- CSRF protection 對 stateless API 沒有意義
-
-```java
-// REST API + JWT → 關閉 CSRF
-http.csrf(csrf -> csrf.disable());
-```
-
-何時關、何時開？
-
-| 情境 | CSRF | 原因 |
-|------|------|------|
-| REST API + JWT（前後端分離） | ❌ 關閉 | JWT 自帶驗證，CSRF token 多餘 |
-| 傳統 Form Login + Session | ✅ 開啟 | 瀏覽器自動帶 cookie，容易被偽造 |
-| OAuth2 Client（第三方登入） | ✅ 開啟 | 使用 session，需要 CSRF 保護 |
-| SPA + Cookie（BFF 模式） | ✅ 開啟 | cookie-based，有 CSRF 風險 |
-
-> CSRF 關閉不是偷懶，是你清楚知道自己在做什麼。REST API 用 JWT 本來就沒有 CSRF 的問題。
-
----
-
-## JWT 驗證實作
-
-這是整篇的核心。從 token 產生到 filter 攔截，一條龍。
-
-### JWT 結構
-
-JWT（JSON Web Token）由三段組成，用 `.` 連接：
-
-```
-header.payload.signature
-
-// 範例
-eyJhbGciOiJIUzI1NiJ9.
-eyJzdWIiOiJsdWNhcyIsInJvbGUiOiJBRE1JTiJ9.
-dGhpcyBpcyBhIHNpZ25hdHVyZQ
-```
-
-| 部分 | 內容 | 說明 |
-|------|------|------|
-| Header | `{"alg":"HS256","typ":"JWT"}` | 簽章演算法、類型 |
-| Payload | `{"sub":"lucas","role":"ADMIN","exp":...}` | 聲明（claims），放使用者資訊 |
-| Signature | 用 secret 對前兩段簽章 | 確保 token 沒被竄改 |
-
-> JWT 的 payload 是 Base64 編碼，不是加密。不要放密碼、信用卡號這類敏感資料。
-
-### Access Token vs Refresh Token
-
-| | Access Token | Refresh Token |
-|--|-------------|---------------|
-| 存活時間 | 短（15-30 分鐘） | 長（7-30 天） |
-| 用途 | 存取資源 | 換新的 access token |
-| 儲存方式 | 前端記憶體 / localStorage | HttpOnly Cookie |
-| 風險 | 外洩影響範圍小 | 外洩可以一直換 token |
-
-流程：
-
-```
-1. 使用者登入
-     │
-     ▼
-2. Server 驗證帳號密碼
-     │
-     ▼
-3. Server 產生 Access Token（15min）+ Refresh Token（7天）
-     │
-     ▼
-4. 前端存起來，每次請求帶 Access Token
-     │
-     ▼
-5. Access Token 過期 → 用 Refresh Token 換新的
-     │
-     ▼
-6. Refresh Token 也過期 → 重新登入
-```
-
-### JwtTokenProvider
-
-負責產生 token、驗證 token、從 token 取出使用者資訊。
-
-```java
-@Component
-public class JwtTokenProvider {
-
-    private final String secretKey;
-    private final long accessTokenValidity;
-
-    public JwtTokenProvider(
-        @Value("${jwt.secret}") String secretKey,
-        @Value("${jwt.access-token-validity}") long accessTokenValidity
-    ) {
-        this.secretKey = secretKey;
-        this.accessTokenValidity = accessTokenValidity;
+    @Test
+    void anonymousUserGets401() throws Exception {
+        mockMvc.perform(get("/api/orders"))
+            .andExpect(status().isUnauthorized());
     }
 
-    public String generateToken(Long userId, String role) {
-        Date now = new Date();
-        Date validity = new Date(now.getTime() + accessTokenValidity);
-
-        return Jwts.builder()
-            .claim("userId", userId)
-            .claim("role", role)
-            .setIssuedAt(now)
-            .setExpiration(validity)
-            .signWith(getSigningKey())
-            .compact();
-    }
-
-    public boolean validateToken(String token) {
-        try {
-            Jwts.parserBuilder()
-                .setSigningKey(getSigningKey())
-                .build()
-                .parseClaimsJws(token);
-            return true;
-        } catch (JwtException | IllegalArgumentException e) {
-            return false;
-        }
-    }
-
-    public Long getUserIdFromToken(String token) {
-        return parseClaims(token).get("userId", Long.class);
-    }
-
-    private Claims parseClaims(String token) {
-        return Jwts.parserBuilder()
-            .setSigningKey(getSigningKey())
-            .build()
-            .parseClaimsJws(token)
-            .getBody();
-    }
-
-    private Key getSigningKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
-        return Keys.hmacShaKeyFor(keyBytes);
+    @Test
+    void readerCanViewOrders() throws Exception {
+        mockMvc.perform(get("/api/orders")
+                .with(jwt().authorities(
+                    new SimpleGrantedAuthority("SCOPE_orders.read")
+                )))
+            .andExpect(status().isOk());
     }
 }
 ```
 
-> **💡** `jwt.secret` 要用足夠長的 Base64 字串（至少 256 bits），不要用 `"my-secret"` 這種隨便打的。
-
-### JwtAuthenticationFilter
-
-這個 Filter 繼承 `OncePerRequestFilter`，保證每個請求只被過濾一次。任務很單純：
-
-1. 從 `Authorization` header 取出 token
-2. 用 `JwtTokenProvider` 驗證
-3. 驗證通過 → 把 `UsernamePasswordAuthenticationToken` 設進 `SecurityContextHolder`
-
-```java
-@Component
-public class JwtAuthenticationFilter extends OncePerRequestFilter {
-
-    private final JwtTokenProvider jwtTokenProvider;
-
-    public JwtAuthenticationFilter(JwtTokenProvider jwtTokenProvider) {
-        this.jwtTokenProvider = jwtTokenProvider;
-    }
-
-    @Override
-    protected void doFilterInternal(
-        HttpServletRequest request,
-        HttpServletResponse response,
-        FilterChain filterChain
-    ) throws ServletException, IOException {
-
-        String token = resolveToken(request);
-
-        if (token != null && jwtTokenProvider.validateToken(token)) {
-            Long userId = jwtTokenProvider.getUserIdFromToken(token);
-            String role = jwtTokenProvider.getRoleFromToken(token);
-
-            List<SimpleGrantedAuthority> authorities =
-                List.of(new SimpleGrantedAuthority("ROLE_" + role));
-
-            UsernamePasswordAuthenticationToken authentication =
-                new UsernamePasswordAuthenticationToken(
-                    userId, null, authorities
-                );
-
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-        }
-
-        filterChain.doFilter(request, response);
-    }
-
-    private String resolveToken(HttpServletRequest request) {
-        String bearerToken = request.getHeader("Authorization");
-        if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
-            return bearerToken.substring(7);
-        }
-        return null;
-    }
-}
-```
-
-> 沒有 token 的請求不會被擋（filter 直接放行），擋人是在 `SecurityFilterChain` 的 `authorizeHttpRequests` 裡做的。Filter 只負責「有 token 就設 authentication，沒有就算了」。
-
-### 註冊 Filter 到 SecurityFilterChain
-
-```java
-@Configuration
-@EnableWebSecurity
-public class SecurityConfig {
-
-    private final JwtAuthenticationFilter jwtAuthFilter;
-
-    public SecurityConfig(JwtAuthenticationFilter jwtAuthFilter) {
-        this.jwtAuthFilter = jwtAuthFilter;
-    }
-
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-            .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-            .csrf(csrf -> csrf.disable())
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/auth/**").permitAll()
-                .requestMatchers("/api/admin/**").hasRole("ADMIN")
-                .anyRequest().authenticated()
-            )
-            .addFilterBefore(
-                jwtAuthFilter,
-                UsernamePasswordAuthenticationFilter.class
-            );
-
-        return http.build();
-    }
-
-    // corsConfigurationSource() 見上方 CORS 段落
-}
-```
-
-Filter 在鏈中的位置很重要：
-
-```
-SecurityFilterChain 內部（部分列表）
-    │
-    ▼
- SecurityContextPersistenceFilter   ← 建立 SecurityContext
-    │
-    ▼
- UsernamePasswordAuthenticationFilter ← 表單登入（預設）
-    │
-    ▼
- ★ JwtAuthenticationFilter             ← 我們加在這裡（addFilterBefore）
-    │
-    ▼
- FilterSecurityInterceptor           ← 最後決定允許/拒絕
-```
-
-> `addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)` 的意思是：在表單登入 filter 之前先檢查 JWT。有 JWT 就直接通過了，不會跑到表單登入那關。
-
-### 完整流程圖
-
-```
-┌──────────┐     POST /api/auth/login      ┌──────────────┐
-│  前端     │ ──────────────────────────→   │  AuthController │
-│ (React)   │                               └──────┬───────┘
-│           │                                     │
-│           │                               ┌──────▼───────┐
-│           │                               │ 驗證帳號密碼   │
-│           │                               │ ↓ 通過        │
-│           │                               │ JwtTokenProvider│
-│           │                               │ .generateToken()│
-│           │                               └──────┬───────┘
-│           │     { accessToken, refreshToken }     │
-│           │ ←─────────────────────────────────────┘
-│           │
-│           │     GET /api/orders
-│           │     Authorization: Bearer <token>
-│           │ ───────────────────────────────────────→
-│           │                                     │
-│           │                               ┌──────▼───────┐
-│           │                               │ JwtAuthentication│
-│           │                               │ Filter         │
-│           │                               │ ↓ validateToken│
-│           │                               │ ↓ 設 Security  │
-│           │                               │   ContextHolder│
-│           │                               └──────┬───────┘
-│           │                                     │
-│           │                               ┌──────▼───────┐
-│           │                               │ OrderController │
-│           │     [{ orderId: 1, ... }]     │ (已認證)      │
-│           │ ←─────────────────────────────┘               │
-│           │                               └───────────────┘
-```
-
----
-
-## 例外處理
-
-JWT 驗證失敗或權限不足時，Spring Security 會拋例外，但你會拿到 Spring 預設的 HTML 錯誤頁面（Whitelabel Error Page）。REST API 需要統一回傳 JSON。
-
-### AuthenticationEntryPoint：401 未認證
-
-當使用者沒有提供有效的 token 時觸發。
-
-```java
-@Component
-public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
-
-    @Override
-    public void commence(
-        HttpServletRequest request,
-        HttpServletResponse response,
-        AuthenticationException authException
-    ) throws IOException {
-
-        response.setContentType("application/json;charset=UTF-8");
-        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-
-        Map<String, Object> body = new LinkedHashMap<>();
-        body.put("status", 401);
-        body.put("error", "Unauthorized");
-        body.put("message", "請提供有效的存取令牌");
-        body.put("path", request.getRequestURI());
-
-        ObjectMapper mapper = new ObjectMapper();
-        response.getWriter().write(mapper.writeValueAsString(body));
-    }
-}
-```
-
-### AccessDeniedHandler：403 無權限
-
-使用者已認證但權限不足（例如一般使用者想打 ADMIN 端的 API）。
-
-```java
-@Component
-public class JwtAccessDeniedHandler implements AccessDeniedHandler {
-
-    @Override
-    public void handle(
-        HttpServletRequest request,
-        HttpServletResponse response,
-        AccessDeniedException accessDeniedException
-    ) throws IOException {
-
-        response.setContentType("application/json;charset=UTF-8");
-        response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-
-        Map<String, Object> body = new LinkedHashMap<>();
-        body.put("status", 403);
-        body.put("error", "Forbidden");
-        body.put("message", "您沒有權限執行此操作");
-        body.put("path", request.getRequestURI());
-
-        ObjectMapper mapper = new ObjectMapper();
-        response.getWriter().write(mapper.writeValueAsString(body));
-    }
-}
-```
-
-### 註冊到 SecurityConfig
-
-```java
-@Bean
-public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-    http
-        .exceptionHandling(ex -> ex
-            .authenticationEntryPoint(jwtAuthEntryPoint)
-            .accessDeniedHandler(jwtAccessDeniedHandler)
-        )
-        // ... 其他配置
-        ;
-    return http.build();
-}
-```
-
-統一回傳格式：
-
-```json
-{
-  "status": 401,
-  "error": "Unauthorized",
-  "message": "請提供有效的存取令牌",
-  "path": "/api/orders"
-}
-```
-
-> 前後端分離時，前端統一讀 `body.message` 顯示錯誤訊息，不用再猜狀態碼。
-
----
-
-## 方法層級安全
-
-不只可以擋 URL，還可以直接在方法上宣告誰能呼叫。
-
-### @EnableMethodSecurity
-
-Spring Security 6 以後，用 `@EnableMethodSecurity` 取代舊的 `@EnableGlobalMethodSecurity`。
-
-```java
-@Configuration
-@EnableMethodSecurity  // 啟用方法層級安全
-public class MethodSecurityConfig {
-    // 空的也可以，開啟功能就夠了
-}
-```
-
-> **💡** `@EnableMethodSecurity` 預設就啟用了 `@PreAuthorize`、`@PostAuthorize`、`@Secured`、`@RolesAllowed`，不用額外參數。
-
-### @PreAuthorize：執行前檢查
-
-最常用。在方法執行前用 SPEL（Spring Expression Language）判斷。
-
-```java
-@RestController
-@RequestMapping("/api/admin")
-public class AdminController {
-
-    @GetMapping("/dashboard")
-    @PreAuthorize("hasRole('ADMIN')")
-    public String dashboard() {
-        return "Admin 儀表板";
-    }
-
-    @DeleteMapping("/users/{id}")
-    @PreAuthorize("hasAuthority('USER_DELETE')")
-    public void deleteUser(@PathVariable Long id) {
-        userService.delete(id);
-    }
-
-    @GetMapping("/reports/{reportId}")
-    @PreAuthorize("hasRole('ADMIN') || @reportSecurity.canAccess(#reportId, authentication)")
-    public Report getReport(@PathVariable Long reportId) {
-        return reportService.findById(reportId);
-    }
-}
-```
-
-常見的 SPEL 表達式：
-
-| 表達式 | 說明 |
-|--------|------|
-| `hasRole('ADMIN')` | 是否有 ADMIN 角色（自動補 `ROLE_` 前綴） |
-| `hasAuthority('USER_DELETE')` | 是否有特定權限（不補前綴） |
-| `hasAnyRole('ADMIN', 'MANAGER')` | 多選一 |
-| `isAuthenticated()` | 是否已認證（不管角色） |
-| `permitAll()` | 任何人都能呼叫 |
-| `#參數名` | 引用方法參數 |
-| `@beanName.method()` | 呼叫 Spring Bean 的方法做判斷 |
-
-### @PostAuthorize：執行後檢查
-
-方法執行完後，根據回傳值決定是否允許。適合「只能看自己的資料」這類場景。
-
-```java
-@GetMapping("/profile")
-@PostAuthorize("returnObject.userId == authentication.principal")
-public UserProfile getProfile() {
-    return userProfileService.getCurrentUserProfile();
-}
-```
-
-> 方法的回傳值用 `returnObject` 引用。不滿足條件會拋 `AccessDeniedException`，但方法已經執行完了。
-
-### @Secured：更簡單的選擇
-
-不支援 SPEL，只能指定角色名稱，功能比較陽春但更單純。
-
-```java
-@Secured("ROLE_ADMIN")
-public void adminOnlyTask() {
-    // 只有 ADMIN 能執行
-}
-```
-
-何時用哪個？
-
-| 註解 | 支援 SPEL | 彈性 | 適合場景 |
-|------|-----------|------|---------|
-| `@PreAuthorize` | ✅ | 最高 | 複雜條件、參數判斷 |
-| `@PostAuthorize` | ✅ | 高 | 需要根據回傳值決定 |
-| `@Secured` | ❌ | 低 | 單純角色檢查 |
-| `@RolesAllowed` | ❌ | 低 | JSR-250 標準，跟 Java EE 相容 |
-
----
-
-## SecurityContextHolder
-
-### 在任何層取得當前使用者
-
-`SecurityContextHolder` 是 Spring Security 存放認證資訊的地方。在任何地方都能拿到：
-
-```java
-// Controller
-@GetMapping("/me")
-public ResponseEntity<?> me() {
-    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-    Long userId = (Long) auth.getPrincipal();
-    // userId 就是我們在 JwtAuthenticationFilter 設進去的值
-    return ResponseEntity.ok(userService.findById(userId));
-}
-
-// Service
-@Service
-public class NotificationService {
-
-    public void sendNotification() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        Long userId = (Long) auth.getPrincipal();
-        // 不需要從 Controller 層層傳進來
-    }
-}
-```
-
-> Controller 參數直接注入 `Authentication` 也可以，但 `SecurityContextHolder` 在 Service 層也能用，不需要為了拿使用者資訊修改方法簽名。
-
-### ThreadLocal 行為
-
-`SecurityContextHolder` 預設使用 `MODE_THREADLOCAL`，認證資訊只存在當前執行緒。這在大部分情況沒問題，但遇到非同步就要小心。
-
-```java
-@Service
-public class AsyncService {
-
-    @Async
-    public void doSomething() {
-        // ❌ 新執行緒拿不到原本的 SecurityContext！
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        // auth 是 null
-    }
-}
-```
-
-解法：設定 `MODE_INHERITABLETHREADLOCAL`，讓子執行緒繼承父執行緒的 context。
-
-```java
-// 在啟動類或配置中設定
-@Configuration
-public class SecurityConfig {
-
-    @PostConstruct
-    public void setSecurityContextStrategy() {
-        SecurityContextHolder.setStrategyName(
-            SecurityContextHolder.MODE_INHERITABLETHREADLOCAL
-        );
-    }
-}
-```
-
-或使用 `@Async` 搭配 `SecurityContextHolder` 的 DelegatingSecurityContextRunnable：
-
-```java
-// Spring Security 提供 DelegatingSecurityContextAsyncTaskExecutor
-// 或直接使用 @Async + task executor 設定
-```
-
----
-
-## 常見陷阱
-
-### ❌ 陷阱 1：Filter 被註冊兩次（OncePerRequestFilter 也沒救）
-
-如果你把 `JwtAuthenticationFilter` 同時註冊為 Bean 又在 `SecurityFilterChain` 手動 add，Spring Boot 的 Filter 自動註冊機制可能會讓它跑兩次。
-
-```java
-// ❌ JwtAuthenticationFilter 上有 @Component，又被 Spring Boot 自動註冊為 Tomcat Filter
-// 解決：在 SecurityConfig 排除自動註冊
-@Bean
-public FilterRegistrationBean<JwtAuthenticationFilter> registration(
-    JwtAuthenticationFilter filter
-) {
-    FilterRegistrationBean<JwtAuthenticationFilter> registration =
-        new FilterRegistrationBean<>(filter);
-    registration.setEnabled(false);  // 不自動註冊，讓 SecurityFilterChain 管理
-    return registration;
-}
-```
-
-### ❌ 陷阱 2：Secret Key 太弱
-
-```java
-// ❌ 太短，會被暴力破解
-@Value("${jwt.secret}")
-private String secretKey;  // "my-secret" → 太弱！
-
-// ✅ 至少 256 bits = 32 bytes = Base64 44 字元
-// 可以用 openssl rand -base64 64 產生
-```
-
-### ❌ 陷阱 3：@PreAuthorize 跟 URL 權限打架
-
-方法上寫 `@PreAuthorize("hasRole('ADMIN')")`，但 URL 配置 `permitAll()` → URL 先放行，方法上的檢查根本不會執行。
-
-```java
-// SecurityConfig
-.requestMatchers("/api/users/**").permitAll()   // ✅ URL 層先放行
-
-// Controller
-@PreAuthorize("hasRole('ADMIN')")              // ❌ 根本進不來這裡！
-@GetMapping("/api/users/{id}")
-```
-
-> 層級概念：URL filter chain → Controller → @PreAuthorize。URL 層就放行了，方法層的檢查不會執行。權限配置要統一在 filter chain 或方法層級，不要混用。
-
-### ❌ 陷阱 4：CSRF 沒關，POST 請求一直 403
-
-```java
-// 前後端分離 + JWT
-// ❌ 預設 CSRF 開啟 → 所有 POST/PUT/DELETE 回傳 403
-http.csrf(csrf -> csrf.disable());  // ✅ REST API 不需要
-```
-
-> 看到 POST 請求回 403 但 GET 正常，十之八九是 CSRF。
-
----
-
-## 完整範例整合
-
-所有元件組合起來的完整 `SecurityConfig.java`：
-
-```java
-@Configuration
-@EnableWebSecurity
-@EnableMethodSecurity
-public class SecurityConfig {
-
-    private final JwtAuthenticationFilter jwtAuthFilter;
-    private final JwtAuthenticationEntryPoint jwtAuthEntryPoint;
-    private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
-
-    public SecurityConfig(
-        JwtAuthenticationFilter jwtAuthFilter,
-        JwtAuthenticationEntryPoint jwtAuthEntryPoint,
-        JwtAccessDeniedHandler jwtAccessDeniedHandler
-    ) {
-        this.jwtAuthFilter = jwtAuthFilter;
-        this.jwtAuthEntryPoint = jwtAuthEntryPoint;
-        this.jwtAccessDeniedHandler = jwtAccessDeniedHandler;
-    }
-
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-            // CORS
-            .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-
-            // CSRF — REST API 關閉
-            .csrf(csrf -> csrf.disable())
-
-            // URL 權限
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/auth/**").permitAll()
-                .requestMatchers("/api/public/**").permitAll()
-                .requestMatchers("/api/admin/**").hasRole("ADMIN")
-                .anyRequest().authenticated()
-            )
-
-            // 例外處理
-            .exceptionHandling(ex -> ex
-                .authenticationEntryPoint(jwtAuthEntryPoint)
-                .accessDeniedHandler(jwtAccessDeniedHandler)
-            )
-
-            // JWT Filter（在 UsernamePasswordAuthenticationFilter 之前）
-            .addFilterBefore(
-                jwtAuthFilter,
-                UsernamePasswordAuthenticationFilter.class
-            )
-
-            // 不使用 session（stateless）
-            .sessionManagement(session ->
-                session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            );
-
-        return http.build();
-    }
-
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of(
-            "http://localhost:3000",
-            "https://myapp.com"
-        ));
-        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        config.setAllowedHeaders(List.of("*"));
-        config.setAllowCredentials(true);
-
-        UrlBasedCorsConfigurationSource source =
-            new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", config);
-        return source;
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-}
-```
-
-流程總結：
-
-```
-HTTP Request
-    │
-    ▼
-CORS Filter（處理跨域）
-    │
-    ▼
-JwtAuthenticationFilter（提取 token → 設 SecurityContext）
-    │
-    ▼
-Exception Translation Filter（捕獲例外 → 丟給 EntryPoint / Handler）
-    │
-    ▼
-FilterSecurityInterceptor（URL 權限檢查）
-    │
-    ▼
-Controller → @PreAuthorize（方法權限檢查）
-    │
-    ▼
-Service（SecurityContextHolder.getAuthentication()）
-```
-
----
+至少測三種身分：匿名、合法但權限不足、權限正確。這比只測「有 token 時成功」更接近真實風險。
+
+## 最常踩的坑
+
+1. **把密碼、JWT secret 寫進 Git**：改用環境變數或 secret manager。
+2. **為了方便把全部路徑 `permitAll()`**：公開端點應列得清楚。
+3. **混淆 401 / 403**：先判斷是否認證，再判斷是否授權。
+4. **Cookie 驗證卻停用 CSRF**：確認威脅模型後再決定。
+5. **同時讓 Filter 自動註冊又手動 `addFilterBefore()`**：可能執行兩次。
+6. **只驗 JWT 簽章，不驗 issuer / audience / expiration**：使用 Resource Server 與正確 decoder 設定。
+7. **在 Controller 到處讀 claim**：轉成 authority 或明確的 principal。
+8. **記錄完整 token 或密碼**：認證資訊不應進 log。
+
+## 上線前檢查表
+
+- [ ] 全站使用 HTTPS。
+- [ ] 公開路徑是 allowlist，不是靠遺漏保護。
+- [ ] Token 有短效期，issuer 與 audience 驗證正確。
+- [ ] 私鑰、密碼、client secret 不在原始碼。
+- [ ] CORS 只允許可信任 origin。
+- [ ] Cookie / Session 架構保留 CSRF 防護。
+- [ ] 敏感操作有方法層權限與 audit log。
+- [ ] 401、403、token 過期及權限不足都有測試。
+
+## 下一步
+
+學完這篇後，應該能回答：
+
+1. 請求在哪裡完成 Authentication？
+2. URL 與方法權限各自保護什麼？
+3. 為什麼標準 JWT API 不需要手刻 Filter？
+4. 你的架構到底需不需要停用 CSRF？
+
+需要加入資料庫設定、環境變數與完整專案分層時，再閱讀 [Spring Boot Configuration 與 Security 整合](./config-security-integration)。
 
 ## 參考資源
 
-- [Spring Security 官方 Reference](https://docs.spring.io/spring-security/reference/)
-- [Spring Security Architecture (Servlet)](https://docs.spring.io/spring-security/reference/servlet/architecture.html)
-- [JSON Web Tokens (jwt.io)](https://jwt.io/)
-- [Bcrypt 演算法說明](https://en.wikipedia.org/wiki/Bcrypt)
-- [Spring Security 6 Migration Guide](https://docs.spring.io/spring-security/reference/migration/index.html)
-- [jjwt 函式庫](https://github.com/jwtk/jjwt)
+- [Spring Security Reference](https://docs.spring.io/spring-security/reference/)
+- [OAuth2 Resource Server JWT](https://docs.spring.io/spring-security/reference/servlet/oauth2/resource-server/jwt.html)
+- [Password Storage](https://docs.spring.io/spring-security/reference/features/authentication/password-storage.html)
+- [Method Security](https://docs.spring.io/spring-security/reference/servlet/authorization/method-security.html)
