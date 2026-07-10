@@ -24,7 +24,13 @@
     "slidev:dev:python-day01": "slidev docs/slides/python-day01/slides.md --remote",
     "slidev:build:python-day01": "slidev build docs/slides/python-day01/slides.md --out ../../.vitepress/dist/slides/python-day01 --base /LucasHsu.dev/slides/python-day01/",
     "slidev:export:python-day01": "slidev export docs/slides/python-day01/slides.md --format pdf --output docs/public/slides/python-day01.pdf --with-clicks",
-    "slidev:build:all": "pnpm slidev:build:python-day01"
+    "slidev:dev:java-scanner": "slidev docs/slides/java-scanner/slides.md --remote",
+    "slidev:build:java-scanner": "slidev build docs/slides/java-scanner/slides.md --out ../../public/slides/java-scanner --base /LucasHsu.dev/slides/java-scanner/",
+    "slidev:export:java-scanner": "slidev export docs/slides/java-scanner/slides.md --format pdf --output docs/public/slides/java-scanner.pdf --with-clicks",
+    "slidev:dev:java-array-list": "slidev docs/slides/java-array-list/slides.md --remote",
+    "slidev:build:java-array-list": "slidev build docs/slides/java-array-list/slides.md --out ../../public/slides/java-array-list --base /LucasHsu.dev/slides/java-array-list/",
+    "slidev:export:java-array-list": "slidev export docs/slides/java-array-list/slides.md --format pdf --output docs/public/slides/java-array-list.pdf --with-clicks",
+    "slidev:build:all": "pnpm slidev:build:python-day01 && pnpm slidev:build:java-scanner && pnpm slidev:build:java-array-list"
   },
   "dependencies": {
     "busuanzi.pure.js": "^1.0.3",

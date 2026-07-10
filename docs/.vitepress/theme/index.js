@@ -45,6 +45,8 @@ import CarrySystem from "./components/CarrySystem.vue";
 import SecretPage from "./components/SecretPage.vue";
 import SlideButton from "./components/SlideButton.vue";
 import FileDownloadCard from "./components/FileDownloadCard.vue";
+import JavaInputCompare from "./components/JavaInputCompare.vue";
+import ArrayListCompare from "./components/ArrayListCompare.vue";
 
 function reloadBusuanzi() {
   const busuanziScriptId = "busuanzi-script";
@@ -91,6 +93,8 @@ export default {
     app.component('SecretPage',SecretPage);
     app.component('SlideButton',SlideButton);
     app.component('FileDownloadCard', FileDownloadCard);
+    app.component('JavaInputCompare', JavaInputCompare);
+    app.component('ArrayListCompare', ArrayListCompare);
   },
   setup() {
     vitepressLifeProgress();

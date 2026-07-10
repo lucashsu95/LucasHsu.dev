@@ -26,6 +26,22 @@ head:
 
 `Scanner` 和 `String[] args` 是兩種不同的輸入方式，用途完全不同：
 
+## 簡報版本
+
+如果你想直接看 HTML 投影片，點這裡：
+
+<SlideButton
+  slug="java-scanner"
+  title="Scanner 與 String[] args"
+  description="透過投影片快速理解命令列參數與動態輸入的差異"
+/>
+
+## 互動體驗
+
+切換下方分頁，親自感受兩種輸入方式的差異：
+
+<JavaInputCompare />
+
 ## String[] args 的用途
 - **命令行參數**：在程序啟動時就傳遞給程序的參數
 - **靜態輸入**：程序開始執行前就已經確定的值

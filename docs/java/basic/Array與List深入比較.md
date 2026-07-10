@@ -38,6 +38,22 @@ head:
 
 在 Java 程式設計中，Array（陣列）和 List（列表）是兩種最常用的資料結構。本篇文章將從基礎開始，帶你完整了解它們的使用方式、差異以及應用場景。
 
+## 簡報版本
+
+如果你想直接看 HTML 投影片，點這裡：
+
+<SlideButton
+  slug="java-array-list"
+  title="Array 與 List 完整比較"
+  description="透過投影片深入理解陣列與列表的差異、效能與選擇指南"
+/>
+
+## 互動體驗
+
+切換下方分頁，動手操作 Array 與 List 的差異：
+
+<ArrayListCompare />
+
 ## 什麼是 Array（陣列）？
 
 Array 是 Java 中最基本的資料結構之一，用來儲存相同類型的多個元素。它在記憶體中佔據連續的空間，每個元素都可以通過索引來存取。
