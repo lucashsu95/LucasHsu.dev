@@ -1,526 +1,400 @@
 ---
 theme: seriph
-title: Java — Array 與 List 完整比較
+title: Java — Array 與 ArrayList
 layout: cover
-ui:
-  nav: false
 transition: slide-left
 mdc: true
-comark: true
 download: true
 lineNumbers: true
 routerMode: hash
 colorSchema: dark
 fonts:
-  sans: "Inter"
-  mono: "JetBrains Mono"
-css: unocss
+  sans: Inter
+  mono: JetBrains Mono
 stylesheet: ./style.css
 drawings:
   persist: true
   enabled: true
-  presenterOnly: false
 selectable: true
-record: user
-seoMeta:
-  ogImage: https://lucashsu95.github.io/LucasHsu.dev/images/java-cover.webp
-  ogTitle: Java — Array 與 List 完整比較
-  description: 深入比較 Java Array 與 List 的差異、使用時機與效能分析
 exportFilename: java-array-list
 ---
 
-<div
-  v-motion
-  :initial="{ opacity: 0, scale: 0.9 }"
-  :enter="{ opacity: 1, scale: 1, transition: { duration: 600 } }"
-  class="absolute inset-0 bg-gradient-to-br from-[#0d1117] via-[#0d1117] to-[#1a2332]"
-></div>
-
+<div class="cover-glow"></div>
 <div class="relative z-10">
-  <div
-    v-motion
-    :initial="{ y: -20, opacity: 0 }"
-    :enter="{ y: 0, opacity: 1, transition: { delay: 200, duration: 500 } }"
-    class="font-mono text-sm text-[#7ee787] opacity-70 mb-6"
-  >
-    <span class="text-gray-500">$</span> javac ArrayVsList.java && java ArrayVsList
-  </div>
-
-  <h1
-    v-motion
-    :initial="{ y: 30, opacity: 0 }"
-    :enter="{ y: 0, opacity: 1, transition: { delay: 350, duration: 500 } }"
-    class="text-5xl font-bold"
-  >
-    <span class="text-[#5382A1]">Array</span> <span class="text-white">與</span> <span class="text-[#E76F00]">List</span>
+  <div v-motion :initial="{ y: -18, opacity: 0 }" :enter="{ y: 0, opacity: 1 }" class="kicker">DATA STRUCTURE LAB</div>
+  <h1 v-motion :initial="{ y: 24, opacity: 0 }" :enter="{ y: 0, opacity: 1, transition: { delay: 180 } }">
+    <span class="text-[#5382A1]">Array</span> 與 <span class="text-[#E76F00]">ArrayList</span>
   </h1>
-
-  <p
-    v-motion
-    :initial="{ y: 30, opacity: 0 }"
-    :enter="{ y: 0, opacity: 1, transition: { delay: 500, duration: 500 } }"
-    class="text-xl text-gray-300 mt-4 font-mono"
-  >
-    <span class="text-gray-500">//</span> 陣列 vs 列表 — 從基礎到進階
-  </p>
-
-  <div
-    v-motion
-    :initial="{ y: 30, opacity: 0 }"
-    :enter="{ y: 0, opacity: 1, transition: { delay: 700, duration: 500 } }"
-    class="mt-16 grid grid-cols-2 gap-6 font-mono text-sm"
-  >
-    <div class="p-4 border border-[#5382A1]/30 rounded-lg">
-      <span class="text-[#5382A1]">int[] arr</span> <span class="text-gray-600">→ 固定大小</span>
-    </div>
-    <div class="p-4 border border-[#E76F00]/30 rounded-lg">
-      <span class="text-[#E76F00]">List&lt;T&gt;</span> <span class="text-gray-600">→ 動態調整</span>
-    </div>
-  </div>
-
-  <div
-    v-motion
-    :initial="{ opacity: 0 }"
-    :enter="{ opacity: 1, transition: { delay: 1000, duration: 400 } }"
-    class="mt-8 flex items-center gap-3 font-mono text-xs text-gray-600"
-  >
-    <carbon-location class="text-[#5382A1]" />
-    <span>LucasHsu.dev — 2026</span>
-    <carbon-time class="ml-4 text-[#E76F00]" />
-    <span>約 40 分鐘</span>
+  <p class="text-xl text-gray-300 mt-4 font-mono">// 固定格子，還是會長大的格子？</p>
+  <div class="grid grid-cols-2 gap-5 mt-14">
+    <div v-click class="concept-card blue"><b>length</b><span>配置後固定</span></div>
+    <div v-click class="concept-card orange"><b>size ≠ capacity</b><span>看得見的元素 ≠ 底層空間</span></div>
   </div>
 </div>
+
+<!--
+開場先建立空間模型：Array 是固定格數；ArrayList 仍然使用陣列，只是會替你換成更大的陣列。
+今天重點不是背 API，而是預測每個操作背後的成本。
+-->
 
 ---
 layout: default
-hideInToc: true
 ---
 
-<div class="font-mono text-xs text-gray-500 mb-4">
-  <span class="text-[#7ee787]">$</span> cat agenda.md
-</div>
+# 先看表面 API
 
-# 今日大綱
+<div class="grid grid-cols-2 gap-6 mt-5">
+  <div>
 
-<Toc maxDepth="1" />
-
-<div v-click class="mt-6 p-4 bg-gradient-to-r from-[#5382A1]/10 to-transparent rounded-lg border border-[#5382A1]/30 text-sm">
-  <span class="font-bold text-[#5382A1]">💡 學習路線</span><br/>
-  先懂基本語法 → 比較差異 → 深入底層機制 → 學會選擇
-</div>
-
----
-layout: section
-transition: fade
----
-
-<div class="font-mono text-[#E76F00] text-sm mb-2">PART 01</div>
-
-# Array（陣列）
-
-<p class="text-gray-400 text-lg font-mono mt-2">最基本的資料結構</p>
-
----
-
-# Array 基本使用
-
-```java {1-3|5-8|10|all}
-// 宣告並初始化的幾種方式
-int[] numbers1 = new int[5];
-int[] numbers2 = {1, 2, 3, 4, 5};
-int[] numbers3 = new int[]{1, 2, 3, 4, 5};
-
-// 存取元素
-numbers1[0] = 10;
-numbers1[1] = 20;
-System.out.println(numbers1[0]); // 10
-
-// 取得長度
-System.out.println(numbers2.length); // 5
+```java
+int[] scores = {85, 92, 78};
+scores[1] = 95;
+int n = scores.length;
 ```
 
-<div v-click class="mt-4 grid grid-cols-4 gap-3">
+  <div v-click class="concept-card blue mt-4">索引語法 <code>[]</code> · 長度固定</div>
+  </div>
+  <div>
 
-<div class="p-3 rounded border border-[#5382A1]/40 text-center text-xs">
-  <div class="font-bold text-[#5382A1]">固定大小</div>
-  創建後不可變
-</div>
-<div class="p-3 rounded border border-[#5382A1]/40 text-center text-xs">
-  <div class="font-bold text-[#5382A1]">型別安全</div>
-  同型別元素
-</div>
-<div class="p-3 rounded border border-[#5382A1]/40 text-center text-xs">
-  <div class="font-bold text-[#5382A1]">索引存取</div>
-  array[index]
-</div>
-<div class="p-3 rounded border border-[#5382A1]/40 text-center text-xs">
-  <div class="font-bold text-[#5382A1]">高效能</div>
-  連續記憶體
-</div>
-
-</div>
-
----
-layout: section
-transition: fade
----
-
-<div class="font-mono text-[#E76F00] text-sm mb-2">PART 02</div>
-
-# List（列表）
-
-<p class="text-gray-400 text-lg font-mono mt-2">集合框架的動態陣列</p>
-
----
-
-# List 基本使用
-
-```java {1-4|6-10|12-16|all}
-import java.util.ArrayList;
-import java.util.List;
-
-List<Integer> numbers = new ArrayList<>();
-List<String> names = new ArrayList<>();
-
-numbers.add(10);
-numbers.add(20);
-names.add("Alice");
-
-System.out.println(numbers.get(0)); // 10
-numbers.set(0, 100);
-numbers.remove(1);
-System.out.println(numbers.size());
+```java
+List<Integer> scores = new ArrayList<>();
+scores.add(85);
+scores.set(0, 95);
+int n = scores.size();
 ```
 
-<div v-click class="mt-4 grid grid-cols-4 gap-3">
-
-<div class="p-3 rounded border border-[#E76F00]/40 text-center text-xs">
-  <div class="font-bold text-[#E76F00]">動態大小</div>
-  隨時增減
-</div>
-<div class="p-3 rounded border border-[#E76F00]/40 text-center text-xs">
-  <div class="font-bold text-[#E76F00]">豐富方法</div>
-  add/remove/contains
-</div>
-<div class="p-3 rounded border border-[#E76F00]/40 text-center text-xs">
-  <div class="font-bold text-[#E76F00]">泛型支援</div>
-  List&lt;T&gt;
-</div>
-<div class="p-3 rounded border border-[#E76F00]/40 text-center text-xs">
-  <div class="font-bold text-[#E76F00]">只存物件</div>
-  需包裝類別
+  <div v-click class="concept-card orange mt-4">方法 API · 元素數可變</div>
+  </div>
 </div>
 
-</div>
+<!--
+先比較使用者看得到的語法。ArrayList 通常以 List 介面宣告，但需要 ArrayList 實作。
+提醒 length 是欄位，size() 是方法。
+-->
 
 ---
-layout: section
-transition: fade
+layout: default
 ---
 
-<div class="font-mono text-[#E76F00] text-sm mb-2">PART 03</div>
+# size 與 capacity 不是同一件事
 
-# 基本差異對照
+<div class="capacity-row mt-10">
+  <div v-for="n in [10, 20, 30]" :key="n" v-click class="memory-cell filled">{{ n }}</div>
+  <div v-click class="memory-cell empty">空</div>
+</div>
 
-<p class="text-gray-400 text-lg font-mono mt-2">一張表看懂兩者</p>
+<div class="grid grid-cols-2 gap-5 mt-10 text-center">
+  <div v-click class="metric"><b>size = 3</b><span>使用者可存取的元素數</span></div>
+  <div v-click class="metric"><b>capacity = 4</b><span>底層陣列目前的格數</span></div>
+</div>
+
+<div v-click class="callout mt-6">capacity 是實作細節，標準 List API 不提供直接讀取。</div>
+
+<!--
+空格不屬於 List 的元素，因此 get(3) 仍會越界。
+capacity 用來理解成本；一般程式應依賴 size()，不要依賴內部容量。
+-->
 
 ---
+layout: default
+---
 
-# Array vs List
+# 容量滿了：建立新陣列再複製
 
-| 特性 | Array | List |
-| ---- | ----- | ---- |
-| 大小 | 固定不變 | 動態調整 |
-| 語法 | `array[index]` | `list.get(index)` |
-| 添加 | ❌ 不支援 | `list.add()` |
-| 刪除 | ❌ 不支援 | `list.remove()` |
-| 長度 | `array.length` | `list.size()` |
-| 基本型別 | ✅ 直接支援 | 需包裝類別 |
+```mermaid {theme: 'dark', scale: 0.68}
+flowchart LR
+    A["舊陣列<br/>capacity 4<br/>[10,20,30,40]"]
+    B{"add(50)"}
+    C["新陣列<br/>capacity 6<br/>[10,20,30,40,_,_]"]
+    D["放入 50<br/>size 5"]
+    A --> B --> C --> D
+```
 
-<div v-click class="mt-6">
+<div class="grid grid-cols-3 gap-4 mt-5 text-sm">
+  <div v-click class="metric"><b>4 → 6</b><span>4 + floor(4 / 2)</span></div>
+  <div v-click class="metric"><b>複製 4 次</b><span>這次 add 是 O(n)</span></div>
+  <div v-click class="metric"><b>攤銷 O(1)</b><span>不是每次都擴容</span></div>
+</div>
+
+<div v-click class="callout mt-4">OpenJDK 常見成長約 1.5×；精確策略不是 List 規格保證。</div>
+
+<!--
+「1.5 倍」是常見 ArrayList 實作策略，不應說成所有 JVM 或 List 的契約。
+單次擴容昂貴，但分攤到許多尾端 add 後，平均成本仍為常數。
+-->
+
+---
+layout: default
+---
+
+# 看程式碼演進：預先給容量
+
+````md magic-move {lines: true}
+```java
+List<Order> orders = new ArrayList<>();
+for (Order order : incoming) {
+    orders.add(order);
+}
+```
+
+```java
+int expected = incoming.size();
+List<Order> orders = new ArrayList<>(expected);
+for (Order order : incoming) {
+    orders.add(order);
+}
+```
+
+```java
+List<Order> orders = new ArrayList<>(incoming);
+```
+````
+
+<div v-click class="callout mt-4">已知資料量時，合理預估容量可減少重複配置與複製。</div>
+
+<!--
+第一版完全合理；只有量大或效能敏感時才需要預估。
+第二版預先配置，第三版若目的只是複製集合則最直接。
+-->
+
+---
+layout: default
+---
+
+# 中間插入：成本來自「搬家」
+
+<div class="shift-demo mt-10">
+  <div class="memory-cell filled">A</div>
+  <div class="insert-cell" v-click>B</div>
+  <div class="memory-cell filled" v-click>C <small>→</small></div>
+  <div class="memory-cell filled" v-click>D <small>→</small></div>
+  <div class="memory-cell filled" v-click>E <small>→</small></div>
+</div>
+
+<div class="grid grid-cols-2 gap-5 mt-10">
+  <div v-click class="metric"><b>尾端 add</b><span>通常不搬既有元素</span></div>
+  <div v-click class="metric"><b>index 1 插入</b><span>後方元素右移：O(n)</span></div>
+</div>
+
+<!--
+逐格揭示右移。即使容量足夠，中間插入仍要移動元素。
+ArrayList 適合隨機讀取與尾端增長，不代表所有插入刪除都便宜。
+-->
+
+---
+layout: default
+---
+
+# 操作底層模型
 
 <ArrayListPlayground />
 
+<div v-click class="callout mt-3">
+先填滿 capacity 再 add；接著 insert、remove，最後拖曳元素觀察搬移計數。
 </div>
 
----
-layout: section
-transition: fade
----
-
-<div class="font-mono text-[#E76F00] text-sm mb-2">PART 04</div>
-
-# 深入比較
-
-<p class="text-gray-400 text-lg font-mono mt-2">固定尺寸 vs 動態尺寸</p>
+<!--
+互動順序：加入 40、再加入 50觸發 4→6；於 index 1 插入；刪除中間元素。
+拖曳採瀏覽器受控拖放，狀態由元件更新；PDF 只保留靜態模型。
+-->
 
 ---
 layout: two-cols
-layoutClass: gap-8
+layoutClass: gap-7
 ---
 
-# Array 記憶體管理
-
-宣告時就指定大小，記憶體連續分配：
+# primitive 與 wrapper
 
 ```java
-String[] array = new String[3];
-array[0] = "A";
-array[1] = "B";
-array[2] = "C";
-// array[3] = "D"; ← 越界！
+int[] raw = {1, 2, 3};
+// 直接存 int 值
 ```
 
-<div v-click class="mt-4 p-3 bg-red-500/10 border border-red-500/30 rounded text-sm">
-⚠️ <code>ArrayIndexOutOfBoundsException</code>
+<div v-click class="concept-card blue mt-5">
+Array 可直接存 primitive：<code>int</code>、<code>double</code>、<code>char</code>
 </div>
 
 ::right::
 
-# List 動態擴展
-
-空間不足時自動建立更大的陣列並複製：
-
 ```java
-List<String> list = new ArrayList<>();
-list.add("A");
-list.add("B");
-list.add("C");
-list.add("D"); // ✅ 沒問題
+List<Integer> boxed = new ArrayList<>();
+boxed.add(1);          // int → Integer
+int n = boxed.get(0);  // Integer → int
 ```
 
-<div v-click class="mt-4 p-3 bg-amber-500/10 border border-amber-500/30 rounded text-sm">
-⚡ 擴展時有複製開銷，但使用上很方便
+<div v-click class="concept-card orange mt-5">
+泛型不能使用 <code>List&lt;int&gt;</code>；需要 wrapper 與 autoboxing。
 </div>
 
----
-
-# 效能比較
-
-| 特性 | Array | List (ArrayList) |
-| ---- | ----- | ---------------- |
-| 尺寸 | 固定 | 動態 |
-| 隨機存取 | O(1) 極快 | O(1) 快 |
-| 記憶體 | 靜態分配 | 動態分配（有複製） |
-| 插入/刪除 | 不支援 | 中間操作 O(n) |
-
-<div v-click class="mt-4 p-3 bg-[#5382A1]/10 border border-[#5382A1]/30 rounded text-sm">
-💡 隨機存取兩者都快；List 的代價在於動態擴展與中間插入/刪除
-</div>
+<!--
+Autoboxing 讓語法方便，但值會包成物件參考，可能增加配置、記憶體與拆箱成本。
+大多數業務程式優先可讀性；大量數值運算才特別評估 primitive array。
+-->
 
 ---
-layout: section
-transition: fade
+layout: default
 ---
 
-<div class="font-mono text-[#E76F00] text-sm mb-2">PART 05</div>
+# 拆箱的隱藏風險
 
-# 元素型別
+```java {1-2|4-5|7-11|all}
+List<Integer> values = new ArrayList<>();
+values.add(null);
 
-<p class="text-gray-400 text-lg font-mono mt-2">基本型別 vs 物件</p>
+Integer boxed = values.get(0); // 合法：boxed == null
+int raw = values.get(0);       // NullPointerException
 
----
-layout: two-cols
-layoutClass: gap-8
----
-
-# Array — 直接支援基本型別
-
-```java
-int[] intArray = new int[3];
-intArray[0] = 10;  // 直接存 int
-
-String[] strArray = new String[3];
-strArray[0] = "Hello";
-```
-
-<div v-click class="mt-4 p-3 bg-[#5382A1]/10 border border-[#5382A1]/30 rounded text-sm">
-✅ 記憶體中直接存數值，非常高效
-</div>
-
-::right::
-
-# List — 只能存放物件
-
-```java
-List<Integer> intList = new ArrayList<>();
-intList.add(10);  // Autoboxing: int → Integer
-
-int value = intList.get(0); // Unboxing
-```
-
-<div v-click class="mt-4 p-3 bg-[#E76F00]/10 border border-[#E76F00]/30 rounded text-sm">
-📦 自動裝箱/拆箱有微小開銷，但程式碼更簡潔
-</div>
-
----
-layout: section
-transition: fade
----
-
-<div class="font-mono text-[#E76F00] text-sm mb-2">PART 06</div>
-
-# 泛型與型別擦除
-
-<p class="text-gray-400 text-lg font-mono mt-2">進階型別系統概念</p>
-
----
-layout: two-cols
-layoutClass: gap-8
----
-
-# List 的泛型
-
-```java
-List<String> strList = new ArrayList<>();
-List<Integer> intList = new ArrayList<>();
-
-// 執行時期型別擦除
-strList.getClass() == intList.getClass(); // true
-```
-
-<div v-click class="mt-4 p-3 bg-amber-500/10 border border-amber-500/30 rounded text-sm">
-泛型只在<b>編譯時期</b>有效，執行時被擦除
-</div>
-
-::right::
-
-# Array 保留型別
-
-```java
-String[] strArray = new String[5];
-Integer[] intArray = new Integer[5];
-
-strArray.getClass() == intArray.getClass(); // false
-```
-
-<div v-click class="mt-4 p-3 bg-[#5382A1]/10 border border-[#5382A1]/30 rounded text-sm">
-Array 在<b>執行時期</b>保留元素型別資訊
-</div>
-
----
-layout: section
-transition: fade
----
-
-<div class="font-mono text-[#E76F00] text-sm mb-2">PART 07</div>
-
-# 如何選擇？
-
-<p class="text-gray-400 text-lg font-mono mt-2">實際應用場景</p>
-
----
-layout: two-cols
-layoutClass: gap-8
----
-
-# 使用 Array 的時機
-
-<div v-click="1" class="space-y-2 text-sm">
-  <div class="p-2 rounded border border-[#5382A1]/30">✅ 資料大小固定且已知</div>
-  <div class="p-2 rounded border border-[#5382A1]/30">✅ 需要最高存取效能</div>
-  <div class="p-2 rounded border border-[#5382A1]/30">✅ 使用基本型別節省記憶體</div>
-  <div class="p-2 rounded border border-[#5382A1]/30">✅ 多維陣列數學計算</div>
-</div>
-
-```java
-// 3x3 棋盤
-char[][] board = new char[3][3];
-board[1][1] = 'X';
-```
-
-::right::
-
-# 使用 List 的時機
-
-<div v-click="1" class="space-y-2 text-sm">
-  <div class="p-2 rounded border border-[#E76F00]/30">✅ 資料大小會動態變化</div>
-  <div class="p-2 rounded border border-[#E76F00]/30">✅ 經常插入或刪除元素</div>
-  <div class="p-2 rounded border border-[#E76F00]/30">✅ 需要集合框架方法</div>
-  <div class="p-2 rounded border border-[#E76F00]/30">✅ 可讀性與維護性優先</div>
-</div>
-
-```java
-List<String> users = new ArrayList<>();
-users.add("user1");
-users.remove("user1");
-```
-
----
-
-# 實際範例
-
-::code-group
-
-```java [Array — 固定考試成績]
-int[] examScores = new int[4];
-examScores[0] = 85;
-examScores[1] = 92;
-examScores[2] = 78;
-examScores[3] = 96;
-
-int total = 0;
-for (int score : examScores) {
-    total += score;
-}
-double avg = (double) total / examScores.length;
-```
-
-```java [List — 動態購物清單]
-List<String> items = new ArrayList<>();
-items.add("牛奶");
-items.add("麵包");
-items.remove("麵包");
-items.add("雞蛋");
-
-for (String item : items) {
-    System.out.println("- " + item);
+Integer maybe = values.get(0);
+if (maybe != null) {
+    int safe = maybe;
+    System.out.println(safe);
 }
 ```
 
-::
+<div v-click class="callout mt-5">例外不是 get() 本身造成，而是 <code>Integer → int</code> 拆箱時發生。</div>
+
+<!--
+這頁用來修正「泛型就一定安全」的誤解。型別安全不等於沒有 null。
+請學員指出哪一行觸發自動拆箱。
+-->
 
 ---
+layout: default
+---
 
-# 今日重點回顧
+# Arrays.asList 的固定大小陷阱
 
-<div class="grid grid-cols-2 gap-4 mt-4">
+````md magic-move {lines: true}
+```java
+List<String> names = Arrays.asList("Ada", "Linus");
+names.set(0, "Grace"); // 可以：替換元素
+names.add("James");    // UnsupportedOperationException
+```
 
-<div class="p-4 rounded-lg border border-[#5382A1]/40">
-  <div class="font-bold text-[#5382A1] mb-2">Array</div>
-  <ul class="text-sm text-gray-400 space-y-1">
-    <li>固定大小、連續記憶體</li>
-    <li>支援基本型別</li>
-    <li>array[index]、.length</li>
-    <li>效能極佳的隨機存取</li>
-  </ul>
+```java
+List<String> names =
+    new ArrayList<>(Arrays.asList("Ada", "Linus"));
+names.set(0, "Grace");
+names.add("James");    // 可以改變大小
+```
+
+```java
+List<String> readOnly = List.of("Ada", "Linus");
+// set / add 都不允許
+```
+````
+
+<div v-click class="callout mt-3"><code>Arrays.asList</code> 是陣列的固定大小 view，不是一般 ArrayList。</div>
+
+<!--
+Arrays.asList 支援 set，因為不改變大小；add/remove 會失敗。
+List.of 則不可修改且不接受 null。需要可變集合時，以 new ArrayList 包裝。
+-->
+
+---
+layout: two-cols
+layoutClass: gap-7
+---
+
+# 可編輯：選擇正確結構
+
+```java {monaco}
+import java.util.*;
+
+class Roster {
+  public static void main(String[] args) {
+    List<String> names =
+        new ArrayList<>(List.of("Ada", "Linus"));
+    names.add("Grace");
+    System.out.println(names);
+  }
+}
+```
+
+::right::
+
+<div class="concept-card orange mt-12">
+  <b>練習</b>
+  <ol class="text-sm text-gray-300 mt-3">
+    <li>改成固定長度 String[]</li>
+    <li>比較加入第三人的寫法</li>
+    <li class="text-[#fca5a5]">此 Monaco 僅編輯，不執行 Java</li>
+  </ol>
 </div>
 
-<div class="p-4 rounded-lg border border-[#E76F00]/40">
-  <div class="font-bold text-[#E76F00] mb-2">List</div>
-  <ul class="text-sm text-gray-400 space-y-1">
-    <li>動態大小、自動擴展</li>
-    <li>只能存物件（Autoboxing）</li>
-    <li>get/set/add/remove、.size()</li>
-    <li>集合框架豐富 API</li>
-  </ul>
+<!--
+讓學員直接修改左側程式碼。這個 deck 沒有 JVM 或執行服務，因此不宣稱可 Run。
+目標是藉由改寫感受固定長度與動態 API 的差異。
+-->
+
+---
+layout: default
+---
+
+# 成本速查
+
+| 操作 | Array | ArrayList |
+|---|---:|---:|
+| `get(index)` | O(1) | O(1) |
+| `set(index)` | O(1) | O(1) |
+| 尾端 `add` | 不支援 | 攤銷 O(1) |
+| 中間插入/刪除 | 手動重建 O(n) | O(n) |
+| 擴容 | 不會 | 單次 O(n) |
+
+<div v-click class="callout mt-5">Big-O 描述成長趨勢；boxing、快取與配置仍會影響實際常數。</div>
+
+<!--
+避免把 O(1) 解讀為「完全沒有成本」。ArrayList get 還有邊界檢查與拆箱可能性。
+選結構時先看操作模式，再看實測，而不是只看一格表格。
+-->
+
+---
+layout: default
+---
+
+# 選擇題：哪一個更自然？
+
+<div class="grid grid-cols-2 gap-4 mt-6">
+  <div v-click class="scenario"><b>一週七天溫度</b><span>固定 7 格、primitive 數值</span><strong>double[]</strong></div>
+  <div v-click class="scenario"><b>待辦清單</b><span>持續新增與刪除</span><strong>ArrayList</strong></div>
+  <div v-click class="scenario"><b>棋盤 8 × 8</b><span>尺寸固定、索引明確</span><strong>char[][]</strong></div>
+  <div v-click class="scenario"><b>搜尋結果</b><span>數量事前未知</span><strong>ArrayList</strong></div>
 </div>
 
+<div v-click class="callout mt-5">固定尺寸與 primitive 密集資料偏 Array；動態集合操作偏 ArrayList。</div>
+
+<!--
+逐題先請學員選擇，再揭示。答案是「自然的預設」，不是不可違反的規則。
+例如搜尋結果若 API 要求陣列，最後仍可轉換。
+-->
+
+---
+layout: center
+class: text-center
+---
+
+# 三句話帶走
+
+<div class="takeaways mt-10">
+  <div v-click><b>size</b> 是元素數，<b>capacity</b> 是底層空間。</div>
+  <div v-click>擴容約 1.5×，偶爾複製；中間操作需要搬移。</div>
+  <div v-click>primitive 與可變性，決定許多 API 陷阱。</div>
 </div>
 
-<div v-click class="mt-6 p-4 bg-gradient-to-r from-[#5382A1]/10 to-[#E76F00]/10 rounded-lg border border-gray-700 text-sm text-center">
-沒有絕對的「比較好」— 根據<b>資料特性</b>和<b>使用場景</b>選擇
-</div>
+<!--
+請學員依序重述三點。若能解釋 Arrays.asList 為何 set 可以而 add 不行，代表已掌握固定大小 view。
+-->
 
 ---
 layout: end
 class: text-center
 ---
 
-# 謝謝！
+# 謝謝
 
-<p class="text-gray-400 mt-4">延伸閱讀：Java Stream、HashSet/TreeSet</p>
+<p class="text-gray-400 mt-5">下一步：LinkedList、Set、Map 與效能量測</p>
+<div class="kicker mt-10">choose by behavior, measure by evidence</div>
 
-<div class="mt-8 font-mono text-sm text-gray-600">
-  <span class="text-[#7ee787]">$</span> java --collections-framework
-</div>
+<!--
+收尾並邀請提問。PDF 匯出會顯示靜態容量示意；互動、拖放與 Monaco 編輯需在瀏覽器版使用。
+-->

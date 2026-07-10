@@ -73,3 +73,80 @@ html { scroll-behavior: smooth; }
   font-weight: 800;
   letter-spacing: -0.03em;
 }
+
+.slidev-layout { overflow: hidden; }
+
+.cover-glow {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 18% 18%, rgba(83, 130, 161, 0.22), transparent 38%),
+    radial-gradient(circle at 84% 80%, rgba(231, 111, 0, 0.16), transparent 34%),
+    #0d1117;
+}
+
+.kicker {
+  color: #7ee787;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.82rem;
+}
+
+.concept-card,
+.callout,
+.metric,
+.scenario {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  background: rgba(13, 17, 23, 0.72);
+}
+.concept-card { padding: 1rem; }
+.concept-card span { display: block; margin-top: 0.35rem; color: #9ca3af; font-size: 0.78rem; }
+.concept-card.blue { border-color: rgba(83, 130, 161, 0.5); }
+.concept-card.orange { border-color: rgba(231, 111, 0, 0.5); }
+.callout { padding: 0.7rem 1rem; border-color: rgba(126, 231, 135, 0.32); font-size: 0.84rem; }
+
+.capacity-row,
+.shift-demo {
+  display: flex;
+  justify-content: center;
+  gap: 0.65rem;
+}
+.memory-cell,
+.insert-cell {
+  display: grid;
+  width: 88px;
+  height: 68px;
+  place-items: center;
+  border: 2px solid #5382a1;
+  border-radius: 10px;
+  background: rgba(83, 130, 161, 0.1);
+  color: #7ee787;
+  font-family: "JetBrains Mono", monospace;
+}
+.memory-cell.empty { border-style: dashed; border-color: rgba(255, 255, 255, 0.18); color: #6b7280; background: transparent; }
+.insert-cell { border-color: #e76f00; background: rgba(231, 111, 0, 0.14); color: #ffa657; }
+.memory-cell small { color: #ffa657; }
+.metric { padding: 0.8rem; text-align: center; }
+.metric b { display: block; color: #79c0ff; font-family: "JetBrains Mono", monospace; }
+.metric span { display: block; margin-top: 0.35rem; color: #9ca3af; font-size: 0.72rem; }
+
+.scenario { position: relative; min-height: 100px; padding: 0.9rem; }
+.scenario span { display: block; margin-top: 0.4rem; color: #9ca3af; font-size: 0.75rem; }
+.scenario strong { position: absolute; right: 0.8rem; bottom: 0.65rem; color: #7ee787; font-family: "JetBrains Mono", monospace; }
+.takeaways { display: grid; gap: 0.8rem; }
+.takeaways > div { padding: 0.8rem 1.2rem; border-left: 3px solid #5382a1; background: rgba(83, 130, 161, 0.08); text-align: left; }
+
+@media print {
+  .slidev-layout { overflow: hidden !important; }
+  [v-click] { opacity: 1 !important; visibility: visible !important; }
+  .cover-glow { background: #0d1117 !important; }
+  .memory-cell, .insert-cell, .metric { break-inside: avoid; }
+  .monaco-editor { border: 1px solid rgba(255, 255, 255, 0.18); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
