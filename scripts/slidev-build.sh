@@ -16,8 +16,9 @@ generate_thumbnail() {
   local output_dir="$OUTPUT_DIR/$slug"
   local thumb_file="$output_dir/thumbnail.png"
   local temp_thumb_dir="$PROJECT_DIR/docs/.vitepress/dist/slides/temp_$slug"
+  local slides_file="$SLIDES_DIR/$slug/slides.md"
 
-  if [ ! -f "$thumb_file" ]; then
+  if [ ! -f "$thumb_file" ] || [ "$slides_file" -nt "$thumb_file" ]; then
     echo "Generating thumbnail for: $slug"
     cd "$PROJECT_DIR"
     # Export all slides to a temp dir
@@ -39,27 +40,34 @@ generate_thumbnail() {
 
 build_deck() {
   local slug="$1"
-  local base_flag=""
+  local base_args=()
   if [ "$2" != "--dev" ]; then
-    base_flag="--base $BASE_PATH/$slug/"
+    base_args=(--base "$BASE_PATH/$slug/")
   fi
   echo "Building slide deck: $slug"
   cd "$PROJECT_DIR"
-  npx slidev build "$SLIDES_DIR/$slug/slides.md" --out "$OUTPUT_DIR/$slug" $base_flag
+  rm -rf "$OUTPUT_DIR/$slug"
+  npx slidev build "$SLIDES_DIR/$slug/slides.md" \
+    --out "$OUTPUT_DIR/$slug" \
+    "${base_args[@]}"
   generate_thumbnail "$slug"
 }
 
-if [ -n "$2" ] && [ "$1" != "--dev" ]; then
+if [ "$1" = "--dev" ]; then
+  if [ -n "$2" ]; then
+    build_deck "$2" "--dev"
+  else
+    for deck in "$SLIDES_DIR"/*/; do
+      [ -f "$deck/slides.md" ] || continue
+      slug=$(basename "$deck")
+      build_deck "$slug" "--dev"
+    done
+  fi
+elif [ -n "$1" ]; then
   build_deck "$1"
-elif [ "$1" = "--dev" ] && [ -n "$2" ]; then
-  build_deck "$2" "--dev"
-elif [ "$1" = "--dev" ]; then
-  for deck in "$SLIDES_DIR"/*/; do
-    slug=$(basename "$deck")
-    build_deck "$slug" "--dev"
-  done
 else
   for deck in "$SLIDES_DIR"/*/; do
+    [ -f "$deck/slides.md" ] || continue
     slug=$(basename "$deck")
     build_deck "$slug"
   done

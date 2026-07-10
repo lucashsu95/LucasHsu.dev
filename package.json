@@ -22,7 +22,7 @@
     "preview": "vitepress preview docs",
     "generate-sidebar": "node generateSidebar.js",
     "slidev:dev:python-day01": "slidev docs/slides/python-day01/slides.md --remote",
-    "slidev:build:python-day01": "slidev build docs/slides/python-day01/slides.md --out ../../.vitepress/dist/slides/python-day01 --base /LucasHsu.dev/slides/python-day01/",
+    "slidev:build:python-day01": "slidev build docs/slides/python-day01/slides.md --out ../../public/slides/python-day01 --base /LucasHsu.dev/slides/python-day01/",
     "slidev:export:python-day01": "slidev export docs/slides/python-day01/slides.md --format pdf --output docs/public/slides/python-day01.pdf --with-clicks",
     "slidev:dev:java-scanner": "slidev docs/slides/java-scanner/slides.md --remote",
     "slidev:build:java-scanner": "slidev build docs/slides/java-scanner/slides.md --out ../../public/slides/java-scanner --base /LucasHsu.dev/slides/java-scanner/",
@@ -30,11 +30,27 @@
     "slidev:dev:java-array-list": "slidev docs/slides/java-array-list/slides.md --remote",
     "slidev:build:java-array-list": "slidev build docs/slides/java-array-list/slides.md --out ../../public/slides/java-array-list --base /LucasHsu.dev/slides/java-array-list/",
     "slidev:export:java-array-list": "slidev export docs/slides/java-array-list/slides.md --format pdf --output docs/public/slides/java-array-list.pdf --with-clicks",
-    "slidev:build:all": "pnpm slidev:build:python-day01 && pnpm slidev:build:java-scanner && pnpm slidev:build:java-array-list"
+    "slidev:dev:java-interface": "slidev docs/slides/java-interface/slides.md --remote",
+    "slidev:build:java-interface": "slidev build docs/slides/java-interface/slides.md --out ../../public/slides/java-interface --base /LucasHsu.dev/slides/java-interface/",
+    "slidev:export:java-interface": "bash scripts/slidev-export-pdf.sh java-interface",
+    "slidev:dev:css-position": "slidev docs/slides/css-position/slides.md --remote",
+    "slidev:build:css-position": "slidev build docs/slides/css-position/slides.md --out ../../public/slides/css-position --base /LucasHsu.dev/slides/css-position/",
+    "slidev:export:css-position": "bash scripts/slidev-export-pdf.sh css-position",
+    "slidev:dev:css-display": "slidev docs/slides/css-display/slides.md --remote",
+    "slidev:build:css-display": "slidev build docs/slides/css-display/slides.md --out ../../public/slides/css-display --base /LucasHsu.dev/slides/css-display/",
+    "slidev:export:css-display": "bash scripts/slidev-export-pdf.sh css-display",
+    "slidev:dev:css-grid": "slidev docs/slides/css-grid/slides.md --remote",
+    "slidev:build:css-grid": "slidev build docs/slides/css-grid/slides.md --out ../../public/slides/css-grid --base /LucasHsu.dev/slides/css-grid/",
+    "slidev:export:css-grid": "bash scripts/slidev-export-pdf.sh css-grid",
+    "slidev:dev:css-rwd": "slidev docs/slides/css-rwd/slides.md --remote",
+    "slidev:build:css-rwd": "slidev build docs/slides/css-rwd/slides.md --out ../../public/slides/css-rwd --base /LucasHsu.dev/slides/css-rwd/",
+    "slidev:export:css-rwd": "bash scripts/slidev-export-pdf.sh css-rwd",
+    "slidev:build:all": "bash scripts/slidev-build.sh"
   },
   "dependencies": {
     "busuanzi.pure.js": "^1.0.3",
     "viewerjs": "^1.11.6",
-    "vitepress-plugin-back-to-top": "^1.0.1"
+    "vitepress-plugin-back-to-top": "^1.0.1",
+    "vue": "^3.5.39"
   }
 }
