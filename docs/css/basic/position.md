@@ -1,162 +1,172 @@
 ---
+outline: deep
 head:
   - - meta
     - name: keywords
-      content: css,css position,position,css定位
+      content: CSS, position, containing block, sticky, z-index, inset
   - - meta
     - name: author
       content: 許恩綸
   - - meta
-    - property: og:title
-      content: Css Position 定位
+    - name: description
+      content: 從文流、containing block 到 sticky、fixed、z-index 與 inset，完整理解 CSS 定位。
   - - meta
-    - property: og:description
-      content: position屬性用於控制HTML元素在網頁上的位置和布局方式。這個屬性有幾個不同的值，每個值都控制元素的定位方式。以下是position的主要值
+    - property: og:title
+      content: CSS Position 定位完整教學
   - - meta
     - property: og:type
       content: article
 ---
 
-# Css Position 定位
+<script setup>
+import CssPositionLab from '../../.vitepress/theme/components/CssPositionLab.vue'
+</script>
 
-> 📝 TL;DR
-- `static`：預設，不可移動。
-- `relative`：保留原位，視覺位移。
-- `absolute`：脫離文流，相對最近定位祖先。
-- `fixed`：相對視窗固定。
-- `sticky`：滾到臨界點後改為固定。
+# CSS Position 定位
 
-## 視覺化：何時用哪種定位
-```mermaid
-flowchart TD
-  A[需要跟文流互動?] -->|是| B[relative / sticky]
-  A -->|否| C[absolute / fixed]
-  B --> D[滾動到閾值固定? -> sticky]
-  C --> E[釘在視窗 -> fixed]
-  C --> F[釘在容器 -> absolute]
-```
+`position` 決定元素如何參與文流，以及 `inset` 系列屬性要以哪個矩形為參考。
 
-position屬性用於控制HTML元素在網頁上的位置和布局方式。這個屬性有幾個不同的值，每個值都控制元素的定位方式。以下是position的主要值：
+> **快速判斷**
+> - 留在文流：`static`、`relative`、`sticky`
+> - 脫離文流：`absolute`、`fixed`
+> - `left: 30px` 是「左邊緣離參考邊 30px」，所以元素通常向右移，不是向左
 
-## static
+## 簡報版本
 
-這是position屬性的默認值。
-元素按照它們在文檔中的正常順序佈局，不會受到其他定位屬性的影響。
-`top`、`right`、`bottom`和`left`屬性對`static`定位的元素無效。
+<SlideButton
+  slug="css-position"
+  title="CSS Position 定位"
+  description="用圖解理解文流、定位參考、sticky 與堆疊順序"
+/>
 
-## relative 相對定位
+## 互動實驗室
 
-使用`relative`屬性，您可以相對於元素在正常文檔流中的位置移動元素。
-使用`top`、`right`、`bottom`和`left`屬性，您可以指定相對位移的距離。
-元素仍然占據原始文檔流中的空間，但在視覺上移動。
+切換定位模式並調整 inset；sticky 模式可直接捲動預覽區。
+
+<CssPositionLab />
+
+## 五種定位模式
+
+### `static`
+
+預設值。元素照正常文流排列，`top`、`right`、`bottom`、`left` 與 `z-index` 通常不生效。
+
+### `relative`
+
+元素保留原本佔位，再從原位置視覺位移。其他元素不會補上空間。
+
 ```css
 .box {
   position: relative;
-  top: 20px;
-  left: 30px;
+  top: 20px;  /* 向下移 20px */
+  left: 30px; /* 向右移 30px */
 }
 ```
-這個範例將具有box類的元素相對於其正常位置向下移動20像素，向左移動30像素。
 
-## absolute 絕對定位
+若要向左移，可用 `left: -30px` 或 `right: 30px`。同時指定互相衝突的兩側時，結果還受書寫方向影響，因此通常只指定一側。
 
-absolute屬性使元素脫離正常文檔流，相對於最近的具有相對或絕對定位的祖先元素定位。
-`使用top`、`right`、`bottom`和`left`屬性，您可以指定元素相對於其祖先元素的位置。
-當元素使用absolute時，它不再影響其他元素的佈局，因此其他元素可能會佔據它原來的空間。
+### `absolute`
 
-```css
-.container {
-  position: relative;
-}
-.box {
-  position: absolute;
-  top: 50px;
-  left: 100px;
-}
-```
-在這個範例中，`.box`元素相對於具有`container`類的父元素定位，位於其父元素的上方50像素，左側100像素的位置。
+元素脫離正常文流，其 containing block 通常是最近一個 `position` 非 `static` 的祖先；若找不到，會回到 initial containing block，而不能簡化成「永遠相對 viewport」。
 
-## fixed 固定定位
-
-使用fixed屬性，元素相對於視窗定位，而不是相對於文檔。
-這意味著元素會固定在瀏覽器視口中的位置，當用戶滾動頁面時也不會移動。
-常用於創建固定的導航欄或工具欄。
-```css
-.navbar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  background-color: #333;
-  color: #fff;
-}
-```
-這個範例創建了一個固定在頁面頂部的導航欄。
-
-## sticky 黏性定位
-
-sticky屬性是一種混合定位，當元素在可見區域內時，它的行為就像`relative`，但當元素滾出視口時，它的行為就像`fixed`，固定在指定位置。
-常用於創建在網頁滾動時跟隨的元素，例如頁面上方的導航欄。
-
-## 牛刀小試
-
-試著使用position把下圖做出來吧!
-
-![](https://hackmd.io/_uploads/HJ_P2I4A3.webp)
-
-## 實戰練習
-
-### 練習 1：Badge 角落標籤（簡單）⭐
-> 在卡片右上角放一個絕對定位 badge。
-
-:::details 💡 參考答案
 ```css
 .card { position: relative; }
 .badge {
   position: absolute;
-  top: 8px; right: 8px;
-  background: #e11; color: #fff;
-  padding: 4px 8px; border-radius: 12px;
+  inset-block-start: 0.5rem;
+  inset-inline-end: 0.5rem;
 }
 ```
-:::
 
-### 練習 2：Sticky 導航（簡單）⭐
-> 建立頂部黏性導覽列，滾動時吸附頂部。
+邏輯屬性會配合書寫方向；`inset: 8px 12px` 等同上下 `8px`、左右 `12px`。
 
-:::details 💡 參考答案
+### `fixed`
+
+通常相對 viewport 固定，不隨頁面捲動。但祖先若有 `transform`、`perspective`、`filter`（依規範與瀏覽器條件）等，可能為 fixed 元素建立 containing block，使它改為固定在該祖先內。
+
 ```css
-.nav {
+.help {
+  position: fixed;
+  inset-inline-end: 1rem;
+  inset-block-end: 1rem;
+}
+```
+
+這是 fixed 元素「沒有固定在視窗」時最先要檢查的原因。
+
+### `sticky`
+
+sticky 先照文流排列，達到指定 inset 閾值後，黏在**最近的 scrolling ancestor** 範圍內；它不是切換成 `fixed`。
+
+```css
+.section-title {
   position: sticky;
   top: 0;
-  background: #fff;
-  z-index: 10;
+  z-index: 1;
+  background: Canvas;
 }
 ```
-:::
 
-### 練習 3：兩欄重疊卡片（中等）⭐⭐
-> 左欄文字，右側浮出小卡片，卡片需相對左欄容器定位。
+sticky 至少需要一個非 `auto` inset、可捲動距離與足夠容器空間。祖先的 `overflow: hidden/auto/scroll` 可能改變捲動容器；若項目 stretch 到與容器同高，也沒有可黏動距離。
 
-:::details 💡 參考答案與提示
+## Containing block 不等於父元素
+
+定位百分比與 inset 都依 containing block 計算：
+
+- `relative`、`static`：通常依格式化上下文中的 content box。
+- `absolute`：最近建立 absolute positioning containing block 的祖先，常見做法是 `position: relative`。
+- `fixed`：通常是 viewport，但 transform 等祖先可能改寫。
+- `sticky`：排版位置與 containing block 有關，黏附則受最近 scrolling ancestor 限制。
+
+開發者工具可協助檢查 offset parent、overflow 與 transform。
+
+## `z-index` 與 stacking context
+
+`z-index: 999999` 不保證在全頁最上方。元素只能在自己的 stacking context 中排序；父層若位於另一層之下，子元素數字再大也無法跨出去。
+
+常見建立 stacking context 的條件：
+
+- 已定位元素搭配非 `auto` 的 `z-index`
+- `position: fixed` 或 `sticky`
+- `opacity < 1`
+- `transform`、`filter`
+- `isolation: isolate`
+
+建議以少量語意層級管理，例如 content、dropdown、modal、toast。
+
+## 常見模式
+
 ```css
-.wrap { position: relative; }
-.floating {
+.overlay {
+  position: fixed;
+  inset: 0;
+}
+
+.card { position: relative; }
+.card__badge {
   position: absolute;
-  top: 20px;
-  right: -40px;
-  width: 180px;
-  box-shadow: 0 10px 30px rgba(0,0,0,.15);
+  inset: 0.5rem 0.5rem auto auto;
 }
 ```
-**提示**：父層設 `position: relative;` 以建立定位參考。
+
+::: warning 可用性
+固定與黏性內容不要遮住鍵盤焦點、頁面標題或縮放後文字。錨點被 sticky header 遮住時，可對標題設定 `scroll-margin-top`。
 :::
+
+## 練習
+
+1. 做一個不影響卡片文流的右上角 badge。
+2. 在 `overflow: auto` 的區塊中建立 sticky 標題。
+3. 建立兩個 stacking context，驗證子元素的巨大 `z-index` 仍無法跨越父層。
 
 ## FAQ
-- Q: 絕對定位找不到參考點？
-  - A: 檢查父層是否有 `position: relative/absolute/fixed/sticky`，沒有就會以 viewport 為準。
-- Q: sticky 失效？
-  - A: 父層 overflow 設定會影響；需要有滾動空間，並設 `top`。
-- Q: fixed 元素被覆蓋？
-  - A: 調整 `z-index` 並確保 position 已設定。
 
+- **absolute 為何不是相對父元素？** 父元素未必建立 containing block；先檢查最近的定位或 transform 祖先。
+- **sticky 為何失效？** 檢查 inset、捲動空間、stretch 尺寸與每層祖先的 overflow。
+- **fixed 為何跟著容器？** 檢查祖先的 transform、perspective 或 filter。
+
+## 延伸閱讀
+
+- [MDN：position](https://developer.mozilla.org/docs/Web/CSS/position)
+- [MDN：Layout and the containing block](https://developer.mozilla.org/docs/Web/CSS/CSS_display/Containing_block)
+- [MDN：Stacking context](https://developer.mozilla.org/docs/Web/CSS/CSS_positioned_layout/Stacking_context)

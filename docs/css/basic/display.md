@@ -1,218 +1,173 @@
 ---
+outline: deep
 head:
   - - meta
     - name: keywords
-      content: css,css diaply,css flex
+      content: CSS, display, box tree, flow-root, display contents, flex, grid
   - - meta
     - name: author
       content: 許恩綸
   - - meta
     - name: description
-      content: display 屬性總覽：block/inline/inline-block/none/flex/grid 差異、實例對照、練習題與 FAQ。
+      content: 理解 CSS display 的 outer/inner 顯示類型、box tree、隱藏方式與無障礙影響。
   - - meta
     - property: og:title
-      content: Css Display 顯示
-  - - meta
-    - property: og:description
-      content: display屬性用於控制HTML元素在網頁上的顯示方式。這個屬性有多個不同的值，每個值都決定了元素的顯示方式。以下是display屬性的一些常見值
+      content: CSS Display 顯示模式完整教學
   - - meta
     - property: og:type
       content: article
-  - - meta
-    - property: og:image
-      content: https://lucashsu95.github.io/LucasHsu.dev/css/basic/grid
 ---
 
-# Css Display 顯示
+<script setup>
+import CssDisplayLab from '../../.vitepress/theme/components/CssDisplayLab.vue'
+</script>
 
-display屬性用於控制HTML元素在網頁上的顯示方式。這個屬性有多個不同的值，每個值都決定了元素的顯示方式。以下是display屬性的一些常見值：
+# CSS Display 顯示模式
 
-> 📝 TL;DR
+`display` 不只決定「是否換行」，還決定元素產生什麼 box、對外如何參與排版，以及子元素在內部使用哪種 layout mode。
 
-- `block` 佔滿一行；`inline` 不換行且無法設定寬高；`inline-block` 可並排又能設寬高。
-- `flex` 擅長一維（橫/縱）排列；`grid` 擅長二維（列+欄）版面。
-- `none` 隱藏且不占空間；需顯示/隱藏可考慮 `visibility` 或 `opacity` 差異。
+> **快速判斷**
+> - 對外排列：`block` 或 `inline`
+> - 對內排列：`flow`、`flow-root`、`flex`、`grid`
+> - 不產生 box：`none`；只移除主體 box：`contents`
 
-## 前置知識
+## 簡報版本
 
-- 盒模型（margin/padding/border）對佔位的影響。
-- 基礎排版：行內元素、區塊元素的預設行為。
-- Flexbox / Grid 的核心概念與支援度。
+<SlideButton
+  slug="css-display"
+  title="CSS Display 顯示模式"
+  description="從 box tree 理解 block、inline、flex、grid 與隱藏策略"
+/>
 
-## block
+## 互動實驗室
 
-block是一個**區塊級元素**。
-元素將在新的行上開始，佔據父元素的整個寬度，並總是在上下文中顯示為獨立的塊。
-常見的block元素包括`<div>`、`<p>`、`<h1>`等。
+切換值並觀察容器邊框、子項排列、佔位和鍵盤焦點。
 
-### 區塊級元素
+<CssDisplayLab />
 
-先介紹什麼是區塊級元素，下方是區塊級元素的特性
+## DOM tree 與 box tree
 
-1. **佔據整行**：區塊元素會自動擴展至父元素的整個寬度，並在其上下會有空隙。
-2. **可包含其他區塊或行內元素**：區塊元素可以包含其他區塊元素和行內元素。
-3. **適用於大多數結構性內容**：例如，標題、段落、區段和其他內容整組。
-4. **可以設置寬度和高度**：通過 CSS，可以精確控制區塊元素的尺寸。
-5. **可以設置外邊距（margin）和內邊距（padding）**：這允許更靈活的佈局控制。
+瀏覽器先解析 DOM，再依 CSS 產生用於排版的 box tree。兩者並非一對一：
+
+- `display: none`：元素及後代不產生 box。
+- `display: contents`：元素本身不產生 principal box，但子元素仍產生 box，像被提升到上一層。
+- `::before`、`::after` 等生成內容可產生 DOM 中不存在的 box。
+
+因此 display 改的是排版表現，不會改變 HTML 語意或 DOM 親子關係。
+
+## Outer 與 inner display type
+
+現代語法可明確寫兩個關鍵字：
 
 ```css
-a.button {
-  display: block;
-  width: 120px;
-  height: 40px;
-  background-color: #007bff;
-  color: #fff;
-  text-align: center;
-  line-height: 40px;
-  text-decoration: none;
+.card  { display: block flow; }
+.pill  { display: inline flow-root; }
+.tools { display: inline flex; }
+.tiles { display: block grid; }
+```
+
+第一個值是 **outer**：元素本身如何參與父層排版；第二個是 **inner**：子元素怎麼排。
+
+常見單一關鍵字是相容簡寫：
+
+- `block` 約等於 `block flow`
+- `inline-block` 約等於 `inline flow-root`
+- `flex` 約等於 `block flex`
+- `inline-flex` 約等於 `inline flex`
+- `grid` 約等於 `block grid`
+- `inline-grid` 約等於 `inline grid`
+
+多關鍵字語法已獲現代瀏覽器支援；較舊環境可先寫傳統值，再寫多關鍵字值作漸進增強。
+
+## Normal flow
+
+### `block`
+
+在一般 flow 中建立 block box，通常從新行開始，`width: auto` 時填滿可用 inline size；「永遠佔滿整行」並非所有 formatting context 都成立。
+
+### `inline`
+
+參與文字行排版，不強制換行。非 replaced inline 元素的 `width`、`height` 不控制尺寸；水平 padding/margin 有效，垂直方向雖可繪製，通常不會像 block 一樣推開相鄰行。
+
+### `inline-block`
+
+外部像 inline 並排，內部是獨立 formatting context，可設定寬高。元素間空隙通常來自 HTML 文字空白；現代版面優先考慮 Flex/Grid 的 `gap`，不要用父層 `font-size: 0` 修補。
+
+## `flow-root`：建立新的 BFC
+
+`display: flow-root` 產生 block box 並建立新的 block formatting context（BFC），可包住內部 float、隔離外部 float，並避免部分 margin collapsing。
+
+```css
+.media { display: flow-root; }
+.media img {
+  float: inline-start;
+  margin-inline-end: 1rem;
 }
 ```
-`<a>`不是一個區塊級元素(預設的`display`是`inline`)，所以可以手動用CSS來改變狀態
 
-這個範例將`<a>`元素轉換為區塊級元素，以創建一個具有特定寬度和高度的按鈕。
-    
-## inline
+這比用 `overflow: hidden` 清 float 更能表達意圖，也不會意外裁切內容。
 
-inline使元素以**行內元素**的方式顯示。
-元素不會強制斷行，並只佔據其內容所需的寬度。
-常見的inline元素包括`<span>`、`<a>`、`<strong>`等。
+## Flex 與 Grid
 
-## inline-block
+- `flex` / `inline-flex`：以主軸為核心的一維排列；項目仍可換行。
+- `grid` / `inline-grid`：同時控制列與欄的二維排列。
 
-inline-block使元素以**行內元素**的方式顯示。
-元素不會強制斷行，但可以佔據其內容所需的寬度，同時可以應用塊級元素的樣式，如width和height。
-這對於創建水平導航菜單等元素很有用。
-
-1. **不佔據整行**：與行內元素類似，`inline-block` 元素不會強制換行，可以與其他行內或行內塊元素並排顯示。
-2. **可包含行內元素**：雖然 `inline-block` 元素可以包含行內元素，但它本身不會佔據整行。
-3. **適用於需要行內排列但控制尺寸的情況**：例如導航欄、按鈕或圖文並排顯示。
-4. **可以設置寬度和高度**：與塊級元素類似，`inline-block` 元素可以設定寬度和高度。
-5. **可以設置外邊距（margin）和內邊距（padding）**：這使得佈局更加靈活。
-
-## none
-
-使用none值，元素將完全不可見，且不佔據空間。
-這可用於在不刪除元素的情況下將其隱藏，或根據需要動態顯示/隱藏元素。
-
-## flex
-
-flex使元素成為一個靈活的容器，其子元素將按照一定的比例分佈在容器中。
-這可用於創建自適應佈局，並使子元素根據可用空間動態調整位置和大小。
+`inline-flex` 和 `inline-grid` 的「inline」描述容器對外行為，不代表裡面的項目變成 inline。
 
 ```css
-.flex-container {
-  display: flex;
-  justify-content: space-between;
-}
-```
-這個範例創建一個水平排列的彈性容器，其中子元素之間具有均勻的間距。
-
-## grid 網格布局
-
-- [了解更多](./grid)
-
-`grid`允許創建多行和多列的網格布局，以更精確地控制元素的位置。
-這對於複雜的網頁佈局非常有用。
-
-```css
-.grid-container {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-}
-```
-這個範例創建一個網格容器，其中有3列且列之間有10像素的間距
-
-## Flex vs Grid 快速對照
-
-| 場景       | Flex                            | Grid                          |
-| ---------- | ------------------------------- | ----------------------------- |
-| 一維排列   | ✅ 最適（水平或垂直）            | 可用但非專長                  |
-| 二維佈局   | 需巢狀、多容器                  | ✅ 單容器即可控列與欄          |
-| 等比例撐開 | `flex: 1`                       | `1fr` 更直覺                  |
-| 控制間距   | `gap`（現代瀏覽器支援）         | `gap`（原生支援）             |
-| 置中       | `align-items`/`justify-content` | `place-items`/`place-content` |
-
-選擇策略：
-- 列表、導覽列、按鈕群 → Flex。
-- 卡片瀑布流、儀表板、表格式版面 → Grid。
-
-## 選擇決策圖
-
-```mermaid
-flowchart TD
-  A[要排版的維度?] -->|一維| B[Flex]
-  A -->|二維| C[Grid]
-  B --> D{需要等分?}
-  D -->|是| E[flex:1]
-  D -->|否| F[調整 margin/gap]
-  C --> G[使用 grid-template-columns/rows]
-```
-
-## 小遊戲
-
-1. ![](https://hackmd.io/_uploads/Sy-11PNRn.webp)
-    [flex小青蛙](https://flexboxfroggy.com/#zh-tw)
-2. ![](https://hackmd.io/_uploads/SJB6CLNCn.webp)
-    [grid花園](https://cssgridgarden.com/#zh-tw)
-
-## 實戰練習
-
-### 練習 1：inline-block 排列（簡單）⭐
-> 將三個 `.tag` 水平排列並保留可設定寬高。
-
-:::details 💡 參考答案
-```css
-.tag { display: inline-block; padding: 4px 8px; }
-```
-:::
-
-### 練習 2：Flex 置中（簡單）⭐
-> 讓 `.hero` 裡的文字水平垂直置中。
-
-:::details 💡 參考答案
-```css
-.hero {
-  display: flex;
+.toolbar {
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
+  gap: 0.5rem;
 }
-```
-:::
 
-### 練習 3：Grid 卡片（中等）⭐⭐
-> 三欄卡片在寬度 < 768px 變兩欄，< 480px 變單欄。
-
-:::details 💡 參考答案與提示
-**提示：** `grid-template-columns` 搭配媒體查詢。
-
-**參考答案：**
-```css
 .cards {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-}
-@media (max-width: 768px) {
-  .cards { grid-template-columns: repeat(2, 1fr); }
-}
-@media (max-width: 480px) {
-  .cards { grid-template-columns: 1fr; }
+  grid-template-columns: repeat(auto-fit, minmax(min(14rem, 100%), 1fr));
+  gap: 1rem;
 }
 ```
+
+## `display: contents`
+
+正確名稱是 **contents**。它讓 wrapper 不參與 box tree，子項可直接加入外層 Grid/Flex，但要謹慎：
+
+- wrapper 的 background、border、padding 不會畫出來。
+- 定位與偽元素行為可能不符合直覺。
+- 歷史上部分瀏覽器曾錯誤移除其 accessibility tree 語意；應測試目標瀏覽器與輔助科技。
+- 不要為了排版犧牲 `<button>`、表格、表單等重要語意。
+
+## 隱藏方式與互動
+
+| 寫法 | 佔位 | 可見 | 可點擊 | 一般無障礙樹 |
+| --- | --- | --- | --- | --- |
+| `display: none` | 否 | 否 | 否 | 移除 |
+| `visibility: hidden` | 是 | 否 | 否 | 通常移除 |
+| `opacity: 0` | 是 | 否 | **仍可能** | **仍保留** |
+
+::: danger 焦點陷阱
+不要只用 `opacity: 0` 隱藏可互動內容：透明按鈕仍可能被點擊或用 Tab 聚焦。應同步管理 `visibility`、`inert` 或真正卸載內容。若焦點在即將 `display: none` 的區域內，先移到合理的觸發按鈕。
 :::
+
+`aria-hidden="true"` 只影響無障礙樹，不會隱藏畫面，也不應套在仍可聚焦的元素或其祖先。
+
+## 選擇指南
+
+- 文件段落：normal flow。
+- 一列工具或導覽：Flex。
+- 有列欄關係的卡片、版面：Grid。
+- inline 排列但需完整盒模型：`inline-block` 或 `inline-flex`。
+- 建立 BFC：`flow-root`。
+- wrapper 只為框架限制而存在：評估 `contents`，並測試語意與 a11y。
+
+## 練習
+
+1. 將一組標籤改成 `inline-flex` 並用 `gap` 排列。
+2. 用 `flow-root` 讓容器包住 float 圖片。
+3. 比較三種隱藏方式，確認 Tab 鍵是否停在不可見控制項。
 
 ## 延伸閱讀
 
-- [MDN: display](https://developer.mozilla.org/en-US/docs/Web/CSS/display)
-- [Flexbox Froggy](https://flexboxfroggy.com/#zh-tw)
-- [Grid Garden](https://cssgridgarden.com/#zh-tw)
-
-## FAQ
-
-- 為什麼 `inline-block` 之間有空白？
-  - HTML 換行會產生字元空白，可移除空白或使用 `font-size:0` 技巧。
-- Flex 與 Grid 何時混用？
-  - 外層用 Grid 做大版面，內層用 Flex 排列項目是常見組合。
-- `display: none` 與 `visibility: hidden` 差異？
-  - `none` 不佔空間、無法互動；`visibility: hidden` 佔位但不可見。
+- [MDN：display](https://developer.mozilla.org/docs/Web/CSS/display)
+- [MDN：Visual formatting model](https://developer.mozilla.org/docs/Web/CSS/CSS_display/Visual_formatting_model)
+- [Grid 完整教學](./grid)

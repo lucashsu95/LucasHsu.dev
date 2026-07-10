@@ -1,195 +1,257 @@
 ---
+outline: deep
 head:
   - - meta
     - name: author
       content: 許恩綸
   - - meta
     - name: keywords
-      content: CSS, 網格,gird,Grid
+      content: CSS Grid, explicit grid, implicit grid, subgrid, auto-fit, minmax
+  - - meta
+    - name: description
+      content: 從軌道、格線與自動放置到響應式網格及 subgrid，完整學習 CSS Grid。
   - - meta
     - property: og:title
-      content: CSS - Grid 教學
-  - - meta
-    - property: og:description
-      content: 學習CSS - Grid使用方法，有範例和教學影片
+      content: CSS Grid 完整教學
   - - meta
     - property: og:type
       content: article
 ---
 
-# Grid 使用教學
+<script setup>
+import CssGridLab from '../../.vitepress/theme/components/CssGridLab.vue'
+</script>
 
-> 📝 TL;DR
-- 宣告容器：`display: grid` + `grid-template-columns/rows` 或 `grid-auto-flow`。
-- 快速排版：`grid-template-areas` 命名區塊，或用 `grid-column` / `grid-row` 指定跨度。
-- 間距：`gap` 一次設定 row/column 間距。
+# CSS Grid 完整教學
 
-## 速查表
-| 想做什麼 | 屬性                    | 範例                          |
-| -------- | ----------------------- | ----------------------------- |
-| 定寬列   | `grid-template-columns` | `200px 1fr 1fr`               |
-| 均分列   | `grid-template-columns` | `repeat(3, 1fr)`              |
-| 命名區塊 | `grid-template-areas`   | `'header header' 'side main'` |
-| 跨列     | `grid-column`           | `1 / 3` (跨 2 欄)             |
-| 跨行     | `grid-row`              | `2 / 4` (跨 2 行)             |
+Grid 是二維排版系統：容器定義列（row）、欄（column）與格線（line），項目可由自動放置演算法排列，也可指定位置。
 
-::: tip 題目
-試著用`grid`製作下方的表格
-:::
-![alt text](../assets/basic/grid/image.webp)
+> **核心心法**
+> - template 建立 explicit grid；超出 template 的軌道屬於 implicit grid
+> - `grid-column: 1 / 3` 指的是格線 1 到 3，所以跨 2 欄
+> - 響應式卡片常用 `repeat(auto-fit, minmax(...))`
 
-## 影片教學連結
-- [css grid 教學 - Youtube](https://www.youtube.com/watch?v=jV2maiP0Z7s)
+## 簡報版本
 
-## 方法一
-- [程式碼範例](https://github.com/ntub-dp/css-training/tree/main/grid-css)
-- 使用`grid-area`寫法
+<SlideButton
+  slug="css-grid"
+  title="CSS Grid 網格排版"
+  description="掌握格線、自動放置、對齊、areas 與 subgrid"
+/>
 
-```css
-.container {
-    width: 550px;
-    height: 550px;
+## 互動實驗室
 
-    background: #101d47;
-    border: 10px solid #101d47;
+調整欄數、最小軌道、auto-fit/auto-fill 與 dense，自行觀察空軌道和補洞效果。
 
-    display: grid;
-    grid-auto-columns: 1fr; /* 指定隱式創建列的大小。每列將佔用可用空間的一部分。 */
-    grid-auto-rows: 1fr; /* 指定隱式創建行的大小。每行將佔用可用空間的一部分。 */
-    gap: 10px; /* 定義網格項目之間的間隙，包括行和列。 */
-    grid-template-areas: /* 定義命名的網格區域佈局。每個字符串代表一行，每個空格分隔的值代表一個區域。 */
-        'A3 cat cat'
-        'B1 cat cat'
-        'B1 cat cat'
-        'E123 E123 E123'
-        'E123 E123 E123'
-        'B2 C1 C2'
-        'D1 D2 D3'
-        'F1 ZZ ZZ';
-}
+<CssGridLab />
 
-.container>:not(.ZZ) {
-    color: #fff;
-    outline: 2px solid #fff;
+## 基本名詞
 
-    display: grid; /* 設置為網格佈局。 */
-    place-items: center; /* 將網格項目置於中心位置。 */
-}
-```
+- **grid container**：設定 `display: grid` 的元素。
+- **grid item**：容器的直接子元素。
+- **track**：兩條相鄰格線之間的列或欄。
+- **cell**：一列與一欄交會的單格。
+- **area**：由一或多個 cell 組成的矩形。
+- **gap**：軌道之間的間距，不是額外軌道。
 
-## 方法二
-
-- 使用`grid-column`和`grid-row`
-
-```css
-.container {
-    width: 550px;
-    height: 550px;
-
-    background: #101d47;
-    border: 10px solid #101d47;
-
-    display: grid;
-    grid-auto-columns: 1fr;
-    /* 指定隱式創建列的大小。每列將佔用可用空間的一部分。 */
-    grid-auto-rows: 1fr;
-    /* 指定隱式創建行的大小。每行將佔用可用空間的一部分。 */
-    gap: 10px;
-    /* 定義網格項目之間的間隙，包括行和列。 */
-}
-
-.container>:not(.ZZ) {
-    color: #fff;
-    outline: 2px solid #fff;
-}
-
-.A1 {
-    grid-column: 1 / 3; /* 從第1列跨到第3列 */
-    grid-row: 1 / 3; /* 從第1行跨到第3行 */
-}
-
-.A2 {
-    grid-column: 3 / 4; /* 從第3列跨到第4列 */
-    grid-row: 1 / 3; /* 從第1行跨到第3行 */
-}
-
-.A3 {
-    grid-column: 1 / 2; /* 從第1列跨到第2列 */
-    grid-row: 3 / 4; /* 從第3行跨到第4行 */
-}
-
-.cat {
-    grid-row: 3 / 7; /* 從第3行跨到第7行 */
-    grid-column: 2 / 4; /* 從第2列跨到第4列 */
-}
-
-.B1 {
-    grid-row: 4 / 7; /* 從第4行跨到第7行 */
-    grid-column: 1 / 2; /* 從第1列跨到第2列 */
-}
-
-.E123 {
-    grid-column: 1 / 4; /* 從第1列跨到第4列 */
-    grid-row: 7 / 9; /* 從第7行跨到第9行 */
-}
-
-## 實戰練習
-
-### 練習 1：三欄等高卡片（簡單）⭐
-> 建立 3 欄卡片，欄寬平均，行距 16px。
-
-:::details 💡 參考答案
 ```css
 .cards {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
 }
 ```
-:::
 
-### 練習 2：header / main / side / footer 版型（簡單）⭐
-> 用 `grid-template-areas` 完成上方題目圖片版型。
+`minmax(0, 1fr)` 允許軌道縮到 `0`，可避免長內容把 `1fr` 欄撐破；實務上也可對 item 設 `min-width: 0`。
 
-:::details 💡 參考答案
+## Explicit 與 implicit grid
+
+template 明確宣告的是 explicit tracks：
+
+```css
+.grid {
+  display: grid;
+  grid-template-columns: 10rem 1fr;
+  grid-template-rows: auto 1fr;
+}
+```
+
+若多出的項目或指定位置落在 template 外，瀏覽器會建立 implicit tracks。用 `grid-auto-rows`、`grid-auto-columns` 控制其尺寸：
+
+```css
+.grid {
+  grid-auto-rows: minmax(5rem, auto);
+}
+```
+
+不要混淆 `grid-template-*`（explicit）與 `grid-auto-*`（implicit）。
+
+## 格線、跨度與命名
+
+格線從 `1` 起算，`-1` 代表 explicit grid 最後一條線。
+
+```css
+.hero {
+  grid-column: 1 / -1;
+}
+
+.feature {
+  grid-column: span 2;
+}
+```
+
+也可命名格線，提高可讀性：
+
 ```css
 .layout {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows: auto 1fr auto;
-    grid-template-areas:
-        "A3 cat cat"
-        "B1 cat cat"
-        "B1 cat cat"
-        "E123 E123 E123"
-        "E123 E123 E123"
-        "B2 C1 C2"
-        "D1 D2 D3"
-        "F1 ZZ ZZ";
-    gap: 10px;
+  display: grid;
+  grid-template-columns:
+    [full-start] 1fr
+    [content-start] minmax(0, 60rem)
+    [content-end] 1fr
+    [full-end];
+}
+
+.article {
+  grid-column: content;
 }
 ```
-:::
 
-### 練習 3：自適應卡片（中等）⭐⭐
-> 用 `grid-template-columns: repeat(auto-fit, minmax(200px, 1fr))` 做響應式卡片牆。
+## 自動放置與 `grid-auto-flow`
 
-:::details 💡 參考答案與提示
+預設 `grid-auto-flow: row`：依 DOM 順序逐列放置。`column` 改為逐欄；加上 `dense` 會嘗試用後面的較小項目補洞。
+
 ```css
 .gallery {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 20px;
+  grid-auto-flow: row dense;
 }
 ```
-**提示**：`auto-fit` 會自動填滿可用空間，minmax 控制最小寬度。
+
+::: warning 閱讀順序
+`dense` 可能讓視覺順序不同於 DOM、Tab 與螢幕閱讀器順序。只適合順序不重要的卡片，不要拿它重排表單或文章。
 :::
 
-## FAQ
-- Q: 要讓項目置中？
-    - A: 容器用 `place-items: center;`，單一項目用 `place-self: center;`。
-- Q: 舊版瀏覽器不支援 Grid？
-    - A: 可用 `@supports (display: grid)` 切換，或 fallback 至 flex。
-- Q: gap 支援哪裡？
-    - A: Grid/Flex 都支援現代瀏覽器，IE 不支援。
+## 尺寸：`fr`、`minmax()` 與 `repeat()`
+
+`fr` 分配扣除固定尺寸與 gap 後的可用空間：
+
+```css
+grid-template-columns: 12rem minmax(0, 2fr) minmax(0, 1fr);
 ```
+
+`minmax(min, max)` 設上下限。自適應卡片可寫：
+
+```css
+.gallery {
+  display: grid;
+  grid-template-columns:
+    repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+  gap: 1rem;
+}
+```
+
+- `auto-fill`：盡量建立可容納的軌道，沒有項目時空軌道仍保留。
+- `auto-fit`：建立方式相近，但空軌道會折疊，既有項目可伸展。
+
+## 對齊
+
+Grid 有兩個層次：
+
+- **軌道整體在容器中**：`justify-content`、`align-content`、`place-content`
+- **item 在 cell 中**：`justify-items`、`align-items`、`place-items`
+- **單一 item**：`justify-self`、`align-self`、`place-self`
+
+```css
+.grid {
+  place-content: center;
+  place-items: stretch start;
+}
+.featured {
+  place-self: center;
+}
+```
+
+只有容器有多餘空間時，content 對齊的差異才看得出來。
+
+## Named areas
+
+areas 很適合描述頁面骨架，每個同名區域必須形成矩形：
+
+```css
+.page {
+  display: grid;
+  grid-template:
+    "header header" auto
+    "main   aside" 1fr
+    "footer footer" auto
+    / minmax(0, 1fr) 16rem;
+  gap: 1rem;
+}
+
+header { grid-area: header; }
+main   { grid-area: main; }
+aside  { grid-area: aside; }
+footer { grid-area: footer; }
+```
+
+mobile-first 可先宣告單欄 areas，再於較寬斷點覆寫 template；DOM 順序仍應符合閱讀順序。
+
+## `subgrid`
+
+巢狀 grid 預設擁有自己的軌道，卡片內標題、內容和按鈕不會跨卡片對齊。`subgrid` 可沿用父 grid 的列或欄：
+
+```css
+.cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.card {
+  display: grid;
+  grid-template-rows: subgrid;
+  grid-row: span 3;
+}
+```
+
+subgrid 會沿用該軸的父層軌道與 gap；另一軸仍可自行定義。使用前依專案瀏覽器支援範圍確認相容性，並提供不需精準跨卡對齊的合理 fallback。
+
+## 完整案例
+
+```css
+.products {
+  display: grid;
+  grid-template-columns:
+    repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+  grid-auto-rows: minmax(8rem, auto);
+  gap: clamp(0.75rem, 2vw, 1.5rem);
+}
+
+.products > :first-child {
+  grid-column: span 2;
+}
+
+@media (width < 35rem) {
+  .products > :first-child {
+    grid-column: auto;
+  }
+}
+```
+
+## 練習
+
+1. 建立三欄 explicit grid，再放入第七個項目觀察 implicit row。
+2. 用 `grid-column: 1 / -1` 建立滿版標題。
+3. 比較 `auto-fill` 與 `auto-fit` 在只有兩張卡片時的差異。
+4. 用 named areas 做 mobile-first 的 article/aside/footer。
+
+## FAQ
+
+- **為何 `1fr` 還是溢出？** Grid item 預設最小尺寸可能由內容決定；試 `minmax(0, 1fr)` 與 `min-width: 0`。
+- **為何 `align-content` 沒效果？** 容器需有比軌道總和更多的空間。
+- **Grid 可和 Flex 混用嗎？** 可以；外層 Grid 管二維骨架，item 內用 Flex 排一列控制項很常見。
+
+## 延伸閱讀
+
+- [MDN：CSS grid layout](https://developer.mozilla.org/docs/Web/CSS/CSS_grid_layout)
+- [MDN：Auto-placement](https://developer.mozilla.org/docs/Web/CSS/CSS_grid_layout/Auto-placement_in_grid_layout)
+- [MDN：Subgrid](https://developer.mozilla.org/docs/Web/CSS/CSS_grid_layout/Subgrid)

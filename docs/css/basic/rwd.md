@@ -1,199 +1,259 @@
 ---
+outline: deep
 head:
   - - meta
     - name: keywords
-      content: css,media,rwd,響應式
+      content: CSS, RWD, mobile-first, container queries, responsive images, clamp
   - - meta
     - name: author
       content: 許恩綸
   - - meta
     - name: description
-      content: RWD 基礎：媒體查詢語法、常用斷點、實際版面案例、練習題與 FAQ。
+      content: 以 mobile-first 建立 RWD，涵蓋 viewport、range syntax、容器查詢、偏好設定與響應式圖片。
   - - meta
     - property: og:title
-      content: CSS 響應式網頁設計(RWD)
-  - - meta
-    - property: og:description
-      content: 媒體查詢是一種CSS技術，允許開發者根據設備的特徵（如螢幕寬度、高度、解析度等）來應用不同的樣式。這使得網站能夠在各種設備上提供良好的使用者體驗，無論是桌面電腦、平板還是手機。
+      content: CSS 響應式網頁設計 RWD 完整教學
   - - meta
     - property: og:type
       content: article
-  - - meta
-    - property: og:image
-      content: https://lucashsu95.github.io/LucasHsu.dev/css/basic/grid
 ---
 
-# CSS 響應式網頁設計(RWD)
+<script setup>
+import CssRwdLab from '../../.vitepress/theme/components/CssRwdLab.vue'
+</script>
 
-> 📝 TL;DR
+# CSS 響應式網頁設計（RWD）
 
-- RWD 透過媒體查詢在不同螢幕寬度套用不同樣式。
-- 常見策略：桌機優先（desktop-first）或手機優先（mobile-first）；推薦 mobile-first 搭配 `min-width` 斷點。
-- 先規劃版面與斷點，再寫樣式；善用彈性單位（%, vw, rem）、`flex`/`grid`、`clamp()` 控制尺寸。
+RWD 不是替幾種裝置各做一版，而是讓內容在一段連續尺寸中都能閱讀與操作。本篇統一採 **mobile-first**：先寫窄版基礎，再用 `min-width` 或 range syntax 逐步增強。
 
-## 前置知識
+> **實作順序**
+> 1. 正確 viewport
+> 2. 流動尺寸與可換行版面
+> 3. 內容真的撐不住時才加斷點
+> 4. 圖片、偏好設定與互動一起測試
 
-- display/Flex/Grid 基礎。
-- 盒模型與圖片等比例縮放 (`max-width: 100%`).
-- 單位：`rem`、`%`、`vw`、`clamp()`。
+## 簡報版本
 
-## 媒體查詢的基本概念
+<SlideButton
+  slug="css-rwd"
+  title="CSS 響應式網頁設計"
+  description="用 mobile-first、容器查詢與流動尺寸建立韌性版面"
+/>
 
-媒體查詢是一種CSS技術，允許開發者根據設備的特徵（如螢幕寬度、高度、解析度等）來應用不同的樣式。這使得網站能夠在各種設備上提供良好的使用者體驗，無論是桌面電腦、平板還是手機。
+## 互動實驗室
 
-### 媒體類型 media-type
+拖曳預覽寬度，觀察 container query、`clamp()` 與偏好模擬如何改變卡片。
 
-媒體查詢可以針對不同的媒體類型進行設置，常見的類型包括：
-- **all**：適用於所有設備。
-- **screen**：針對螢幕顯示設備。
-- **print**：針對列印輸出。
-- **speech**：針對語音合成設備。
+<CssRwdLab />
 
-## 使用方法
+## Viewport 設定
 
-### 基本語法
-
-媒體查詢的基本語法如下：
-
-```css
-@media media-type and (condition) {
-    /* CSS rules */
-}
-```
-
-#### 範例
-
-1. **針對螢幕寬度小於600px的樣式：**
-
-```css
-@media screen and (max-width: 600px) {
-    body {
-        background-color: lightblue;
-    }
-}
-```
-
-2. **針對螢幕寬度在321px到768px之間的樣式：**
-
-```css
-@media only screen and (min-width: 321px) and (max-width: 768px) {
-    .class {
-        background: #666;
-    }
-}
-```
-
-### 寫在HTML中
-
-媒體查詢也可以直接寫在HTML文件中：
+行動瀏覽器若缺少 viewport meta，可能先用較寬的虛擬版面再縮小，導致 media query 與文字尺寸不如預期：
 
 ```html
-<link rel="stylesheet" media="screen and (min-width: 400px) and (max-width: 700px)" href="style.css" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
 ```
 
-## 常見斷點參考（mobile-first）
+不要加入 `user-scalable=no` 或過度限制 maximum-scale；使用者需要放大內容。VitePress 通常已提供這項設定，獨立 HTML 頁面則應自行確認。
 
-- 480px：超小手機
-- 768px：平板直向
-- 1024px：平板橫向 / 小桌機
-- 1280px：桌機常見寬度
+## Mobile-first 基礎
 
-請依設計實際需要調整，避免盲目套用固定數字。
-
-## 實際案例 1：三欄卡片 → 單欄
+先讓窄版可用，再於內容需要時增加欄位：
 
 ```css
 .cards {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
+  grid-template-columns: 1fr;
+  gap: 1rem;
 }
-@media (max-width: 1024px) {
-  .cards { grid-template-columns: repeat(2, 1fr); }
+
+@media (min-width: 40rem) {
+  .cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
-@media (max-width: 640px) {
-  .cards { grid-template-columns: 1fr; }
+
+@media (min-width: 64rem) {
+  .cards {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 }
 ```
 
-## 實際案例 2：導覽列收合
+斷點應來自內容：逐步縮放畫面，當行長過長、控制項擠壓或版面失衡時才記錄斷點，不要把裝置名稱當規格。
+
+## Media query range syntax
+
+Media Queries Level 4 可用比較運算子，讀法更接近數學：
 
 ```css
-.nav {
+@media (width >= 40rem) {
+  /* 40rem 以上 */
+}
+
+@media (40rem <= width < 64rem) {
+  /* 40rem（含）到 64rem（不含） */
+}
+```
+
+傳統 `(min-width: 40rem)` 仍有效。避免同時寫相鄰的 `max-width: 64rem` 與 `min-width: 64rem`，因為邊界可能重疊；range syntax 可清楚表達包含關係。
+
+## 流動尺寸與 `clamp()`
+
+不是每個尺寸變化都需要斷點。`clamp(min, preferred, max)` 可讓值在上下限間連續調整：
+
+```css
+:root {
+  --space-page: clamp(1rem, 4vw, 4rem);
+}
+
+h1 {
+  font-size: clamp(2rem, 1.4rem + 3vw, 4.5rem);
+}
+
+main {
+  width: min(100% - 2 * var(--space-page), 70rem);
+  margin-inline: auto;
+}
+```
+
+字級 preferred 值最好包含 `rem` 與 viewport 單位，而非只用 `vw`，以保留縮放行為。
+
+## Container queries
+
+Media query 看 viewport；可重用元件更常需要看**自己的容器**：
+
+```css
+.card-region {
+  container: card / inline-size;
+}
+
+.card {
+  display: grid;
+  gap: 1rem;
+}
+
+@container card (width >= 30rem) {
+  .card {
+    grid-template-columns: 10rem 1fr;
+  }
+}
+```
+
+可搭配 container query units：
+
+```css
+.card__title {
+  font-size: clamp(1.25rem, 1rem + 2cqi, 2rem);
+}
+```
+
+`cqi` 是 query container inline size 的 1%。沒有合適容器時會依 small viewport 尺寸回退，因此仍要設定合理上下限。
+
+## 使用者偏好與輸入能力
+
+RWD 也包含環境與偏好，不只是寬度：
+
+```css
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto;
+    animation-duration: 0.01ms;
+    animation-iteration-count: 1;
+    transition-duration: 0.01ms;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  :root { color-scheme: dark; }
+}
+
+@media (prefers-contrast: more) {
+  .button { border-width: 2px; }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .card:hover { transform: translateY(-2px); }
+}
+```
+
+hover 效果不能是取得資訊或操作的唯一方式；觸控裝置可能沒有 hover，鍵盤則需要 `:focus-visible`。
+
+## 響應式圖片
+
+只寫 `max-width: 100%` 能避免溢出，但不會避免手機下載過大的圖片。
+
+### 同一構圖，不同解析度
+
+```html
+<img
+  src="photo-800.webp"
+  srcset="
+    photo-480.webp 480w,
+    photo-800.webp 800w,
+    photo-1600.webp 1600w"
+  sizes="(min-width: 64rem) 50vw, 100vw"
+  width="1600"
+  height="900"
+  alt="講者在台上示範 CSS Grid"
+>
+```
+
+瀏覽器根據 `srcset`、`sizes`、viewport 與像素密度選檔。提供 `width`、`height` 可預留比例，降低 layout shift。
+
+### 不同構圖或格式
+
+```html
+<picture>
+  <source media="(min-width: 48rem)" srcset="wide.webp">
+  <source type="image/avif" srcset="portrait.avif">
+  <img src="portrait.webp" alt="產品外觀正面照">
+</picture>
+```
+
+`picture` 適合 art direction 或格式選擇；alt 放在 `img` 上並描述內容，不描述「圖片」本身。
+
+## 韌性細節
+
+```css
+img, video {
+  max-width: 100%;
+  height: auto;
+}
+
+.row {
   display: flex;
-  gap: 12px;
+  flex-wrap: wrap;
+  gap: 0.75rem;
 }
-@media (max-width: 768px) {
-  .nav { flex-direction: column; }
-  .nav__toggle { display: block; }
-}
-```
 
-## 圖片等比例縮放
-
-```css
-img { max-width: 100%; height: auto; display: block; }
-```
-
-## 斷點決策圖
-
-```mermaid
-flowchart TD
-    A[設計稿寬度?] --> B{優先順序}
-    B -->|手機優先| C[min-width 斷點]
-    B -->|桌機優先| D[max-width 斷點]
-    C --> E[規劃 1-2 個主要斷點]
-    D --> E
-```
-
-## 實戰練習
-
-### 練習 1：背景色切換（簡單）⭐
-> 寬度 < 640px 時 body 背景變淺灰。
-
-:::details 💡 參考答案
-```css
-@media (max-width: 640px) {
-  body { background: #f5f5f5; }
+.text {
+  overflow-wrap: anywhere;
 }
 ```
-:::
 
-### 練習 2：兩欄變單欄（簡單）⭐
-> `.layout` 內兩欄並排，在 768px 以下堆疊。
+- 避免固定高度包住可換行文字。
+- 測試 200% 文字縮放、320 CSS px 寬度與橫向模式。
+- 觸控目標要有足夠尺寸與間距。
+- 不要依 CSS 視覺重排破壞 DOM、Tab 與閱讀順序。
 
-:::details 💡 參考答案
-```css
-.layout { display: grid; grid-template-columns: 2fr 1fr; gap: 16px; }
-@media (max-width: 768px) {
-  .layout { grid-template-columns: 1fr; }
-}
-```
-:::
+## 練習
 
-### 練習 3：字級自適應（中等）⭐⭐
-> 使用 `clamp()` 讓標題字級在 480px~1280px 間自動調整。
-
-:::details 💡 參考答案與提示
-**提示：** `clamp(min, preferred, max)`
-
-**參考答案：**
-```css
-h1 { font-size: clamp(24px, 3vw, 36px); }
-```
-:::
-
-## 延伸閱讀
-
-- [MDN: Media Queries](https://developer.mozilla.org/en-US/docs/Web/CSS/Media_Queries)
-- [Using clamp()](https://developer.mozilla.org/en-US/docs/Web/CSS/clamp)
-- [Flex vs Grid](./display)
+1. 將單欄卡片在內容需要時增強為兩欄，全程只用 mobile-first。
+2. 用 range syntax 寫出 `40rem ≤ width < 64rem`。
+3. 讓 card 依容器而非 viewport 切換圖文排列。
+4. 為 hero 圖加入 `srcset`、`sizes`、固有寬高與有意義 alt。
 
 ## FAQ
 
-- mobile-first 與 desktop-first 差別？
-  - mobile-first 用 `min-width` 逐步增強；desktop-first 用 `max-width` 逐步縮減。行為較好預測者建議 mobile-first。
-- 斷點一定要跟裝置尺寸一致嗎？
-  - 不必，以內容「折行」或版面崩壞點為準。
-- 圖片要怎麼在 RWD 下保持比例？
-  - 設 `max-width:100%`、`height:auto`，必要時 `object-fit: cover`。
+- **斷點要用 px 還是 rem？** 兩者皆可；`rem` 常能更貼近使用者字級設定。重點是由內容決定並一致使用。
+- **Container query 可取代 media query 嗎？** 不完全。頁面級環境用 media query；元件局部版面用 container query。
+- **mobile-first 是否一定較快？** 不保證效能，但 cascade 通常較清楚；網路效能仍要處理圖片、字型與 JavaScript。
+
+## 延伸閱讀
+
+- [MDN：Responsive design](https://developer.mozilla.org/docs/Learn_web_development/Core/CSS_layout/Responsive_Design)
+- [MDN：Container queries](https://developer.mozilla.org/docs/Web/CSS/CSS_containment/Container_queries)
+- [MDN：Responsive images](https://developer.mozilla.org/docs/Web/HTML/Guides/Responsive_images)
