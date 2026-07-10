@@ -144,8 +144,8 @@ transition: fade
 <p class="text-gray-400 text-lg font-mono mt-2">程式眼中的世界，只有幾種「形狀」</p>
 
 ---
-
-## transition: slide-up
+transition: slide-up
+---
 
 # 一個容器，五種形狀
 
@@ -196,8 +196,8 @@ Python 把資料分成幾種基本「形狀」(type)，每種形狀能做的事�
 -->
 
 ---
-
-## transition: slide-up
+transition: slide-up
+---
 
 # 型別的層級關係
 
@@ -237,8 +237,8 @@ mindmap
 -->
 
 ---
-
-## transition: slide-up
+transition: slide-up
+---
 
 # 看起來像，但不是同一種
 
@@ -444,8 +444,8 @@ transition: fade
 <p class="text-gray-400 text-lg font-mono mt-2">用 print() 把資料說出來</p>
 
 ---
-
-## transition: slide-up
+transition: slide-up
+---
 
 # 從「印出」到「組合」
 
@@ -624,8 +624,8 @@ transition: fade
 <p class="text-gray-400 text-lg font-mono mt-2">讓程式可以「聽」使用者說話</p>
 
 ---
-
-## transition: slide-up
+transition: slide-up
+---
 
 # 資料的流向
 
@@ -742,8 +742,8 @@ for _ in range(n):
 </div>
 
 ---
-
-## transition: slide-up
+transition: slide-up
+---
 
 # 檔案輸入：用 < 餵資料給程式
 
@@ -841,8 +841,8 @@ transition: fade
 <p class="text-gray-400 text-lg font-mono mt-2">讓數字動起來</p>
 
 ---
-
-## transition: slide-up
+transition: slide-up
+---
 
 # 運算子總覽
 
