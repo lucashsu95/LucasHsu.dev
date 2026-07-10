@@ -47,6 +47,13 @@ import SlideButton from "./components/SlideButton.vue";
 import FileDownloadCard from "./components/FileDownloadCard.vue";
 import JavaInputCompare from "./components/JavaInputCompare.vue";
 import ArrayListCompare from "./components/ArrayListCompare.vue";
+import JavaInterfaceLab from "./components/JavaInterfaceLab.vue";
+import CssPositionLab from "./components/CssPositionLab.vue";
+import CssDisplayLab from "./components/CssDisplayLab.vue";
+import CssGridLab from "./components/CssGridLab.vue";
+import CssRwdLab from "./components/CssRwdLab.vue";
+import SpringFpLab from "./components/SpringFpLab.vue";
+import SpringDddLab from "./components/SpringDddLab.vue";
 
 function reloadBusuanzi() {
   const busuanziScriptId = "busuanzi-script";
@@ -95,6 +102,13 @@ export default {
     app.component('FileDownloadCard', FileDownloadCard);
     app.component('JavaInputCompare', JavaInputCompare);
     app.component('ArrayListCompare', ArrayListCompare);
+    app.component('JavaInterfaceLab', JavaInterfaceLab);
+    app.component('CssPositionLab', CssPositionLab);
+    app.component('CssDisplayLab', CssDisplayLab);
+    app.component('CssGridLab', CssGridLab);
+    app.component('CssRwdLab', CssRwdLab);
+    app.component('SpringFpLab', SpringFpLab);
+    app.component('SpringDddLab', SpringDddLab);
   },
   setup() {
     vitepressLifeProgress();
