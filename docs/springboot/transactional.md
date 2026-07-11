@@ -23,6 +23,12 @@ head:
 
 > 📝 TL;DR：`@Transactional` 就像是資料庫界的「婚禮主持人」——它宣布開始、見證過程、確保雙方（程式與資料庫）要嘛一起幸福，要嘛一起回到單身狀態。記住：**方法命名決定你的命運**！
 
+<SlideButton
+  slug="spring-transactional"
+  title="@Transactional 事務管理：命名即命運"
+  description="用互動投影片拆解事務三大職責、攔截器的兩套合約、AOP 代理與自我呼叫陷阱。"
+/>
+
 ## 前置知識
 
 - **JPA 基礎** - 了解 Entity 與 EntityManager

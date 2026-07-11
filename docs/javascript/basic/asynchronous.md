@@ -31,6 +31,12 @@ head:
 - Promise 是「未來值」的容器，`then/catch` 或 `async/await` 都在等它 resolve/reject。
 - 實務要處理：錯誤傳遞、執行順序（串行/並行）、取消與逾時（例如 `AbortController`）。
 
+<SlideButton
+  slug="js-async"
+  title="JavaScript 非同步：用一頓早餐搞懂 async"
+  description="用互動投影片比較同步與非同步、Promise、串行並行與事件迴圈的執行順序。"
+/>
+
 ## 前置知識
 
 - JavaScript 單執行緒、事件迴圈、工作佇列（task queue、microtask queue）。

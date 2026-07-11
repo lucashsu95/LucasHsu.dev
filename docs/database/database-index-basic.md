@@ -25,6 +25,12 @@ head:
 
 > 📝 **TL;DR：** 本文將帶你從零開始理解資料庫索引，學會如何透過建立適當的索引將查詢效能從 `O(n)` 提升到 `O(log n)`，涵蓋 MySQL、PostgreSQL 等主流資料庫的索引設計原則與最佳實踐。
 
+<SlideButton
+  slug="db-index"
+  title="資料庫索引：從 O(n) 到 O(log n)"
+  description="用互動投影片拆解 B-Tree 原理、EXPLAIN 判讀、複合索引順序與六種失效陷阱。"
+/>
+
 ## 文章目錄
 
 1. [為什麼需要資料庫索引？](#為什麼需要資料庫索引)

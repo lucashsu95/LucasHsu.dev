@@ -25,6 +25,12 @@ head:
 
 >  📝 TL;DR：`git revert` 生成反向提交，保留歷史，適合已推送的提交（溫柔模式）；`git reset` 重寫歷史，適合本地未推送的提交（狠心模式）。批量回退用 `revert <old>..<new>`。回退後記得 `push`。要反悔時，先找溫柔的 revert，真的沒辦法再考慮狠心的 reset！
 
+<SlideButton
+  slug="git-reset-revert"
+  title="Git Revert vs Reset：時光機的兩種開法"
+  description="用互動投影片對比反向提交與重寫歷史、三種 reset 模式、決策樹與 reflog 救援。"
+/>
+
 ##  前置知識
 - 了解 Git 提交歷史的概念
 - 會使用 git log 查看提交記錄

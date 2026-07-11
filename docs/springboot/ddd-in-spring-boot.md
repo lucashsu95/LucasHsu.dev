@@ -30,6 +30,12 @@ import SpringDddLab from "../.vitepress/theme/components/SpringDddLab.vue"
 
 > 📝 TL;DR：DDD 不是先畫一堆架構圖，而是一道一道補上「領域防線」：**0% 的貧血模型裡，Entity 只是資料袋，商業規則散落在各個 Service，非法狀態隨時出現**；每往上採用一階 DDD 戰術模式，就多一道防線——Value Object 讓非法值建不出來、充血實體讓非法狀態不可能存在、Aggregate 讓一致性有邊界；**走到 100%，Domain Event 與 Bounded Context 讓模組徹底解耦**，這就是完美狀態。
 
+<SlideButton
+  slug="spring-ddd"
+  title="Spring Boot × DDD：從貧血模型到完整領域防線"
+  description="用互動投影片補上五道防線：Value Object、充血實體、Aggregate 到 Domain Event。"
+/>
+
 ## 先玩再讀：DDD 採用度實驗室
 
 同一個「訂單」模型，把拉桿從 0% 拉到 100%，觀察程式碼、領域防線與健康指標怎麼變化：

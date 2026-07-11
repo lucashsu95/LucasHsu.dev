@@ -16,6 +16,12 @@ head:
     - content: article
 ---
 
+<SlideButton
+  slug="clean-architecture"
+  title="Clean Architecture：分層，但不互相認識"
+  description="用互動投影片走完餐廳比喻、四層職責、TypeScript 實作與「各改哪一層」驗收題。"
+/>
+
 ## 什麼是 Clean Architecture？
 
 你有沒有看過那張超經典的圓圈圖？外圈是 UI，中間是 Use Case，最裡面是 Entity，然後箭頭都往內指？

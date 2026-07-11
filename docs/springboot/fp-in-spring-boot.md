@@ -30,6 +30,12 @@ import SpringFpLab from "../.vitepress/theme/components/SpringFpLab.vue"
 
 > 📝 TL;DR：FP 不是要你把 Spring Boot 改寫成 Haskell，而是一套「消滅缺點」的漸進式改造：**0% 的程式碼每一行都是地雷**（NPE、共享狀態、隱藏副作用），每往上採用一階 FP 概念，就拆掉一種地雷；**走到 100% 時，核心邏輯是純函數、副作用全部集中在邊界**——零 mock、毫秒級測試、絕對可預測，這就是完美狀態。
 
+<SlideButton
+  slug="spring-fp"
+  title="Spring Boot × FP：從 0% 到 100%"
+  description="用互動投影片走完五個階段：Stream、純函數、Result 到 Functional Core, Imperative Shell。"
+/>
+
 ## 先玩再讀：FP 採用度實驗室
 
 同一段「訂單結帳」邏輯，把拉桿從 0% 拉到 100%，觀察程式碼、體質檢查與健康指標怎麼變化：

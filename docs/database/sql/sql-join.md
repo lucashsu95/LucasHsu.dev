@@ -27,6 +27,12 @@ head:
 > 📝 **TL;DR（太長不看版）**  
 > SQL JOIN 是關聯式資料庫中組合多個資料表的關鍵技術。本文將帶你理解 INNER JOIN（交集）、LEFT JOIN（保留左表）、RIGHT JOIN（保留右表）、FULL OUTER JOIN（聯集）的差異，並透過視覺化圖表和實戰案例，讓你輕鬆掌握資料表關聯查詢的技巧。
 
+<SlideButton
+  slug="sql-join"
+  title="SQL JOIN 完全指南：把兩張表拼起來"
+  description="用互動投影片走過五種 JOIN、決策樹、ON vs WHERE 經典陷阱與效能排查。"
+/>
+
 ## 前置知識
 
 在開始之前，建議你先了解以下概念：
