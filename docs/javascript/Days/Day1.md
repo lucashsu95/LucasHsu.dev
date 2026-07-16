@@ -26,6 +26,8 @@ head:
 
 # Javascript Day1 先講好規則
 
+> 📝 TL;DR：JavaScript 基礎入門。學會宣告變數（`let` 用到底）、輸入輸出（`prompt`/`console.log`/`alert`）、四則運算、型態轉換、邏輯判斷式。新手第一篇，30 分鐘搞定。
+
 ## 宣告變數
 
 | 方法  | 解釋         |

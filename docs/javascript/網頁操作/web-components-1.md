@@ -34,7 +34,7 @@ Web Components 是 W3C 制定的瀏覽器原生元件模型，核心目標為「
 | :------- | :------------- | :-------- |
 | 依賴     | 瀏覽器原生     | 需要框架  |
 | 體積     | 極小           | 相對較大  |
-| 學習成本 | 低             | 中等      |
+| 學習成本 | 中等           | 中等      |
 | 生態系統 | 發展中         | 成熟      |
 
 ## 2. 三大核心技術
@@ -339,6 +339,10 @@ class CardBox extends HTMLElement {
 customElements.define('card-box', CardBox)
 ```
 :::
+
+## 互動體驗
+
+<WebComponentDemo />
 
 ## 延伸閱讀
 - MDN: Custom Elements / Shadow DOM / HTML Templates
