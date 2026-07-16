@@ -59,6 +59,7 @@ import UltimatePassword from "./components/UltimatePassword.vue";
 import BouncingModal from "./components/BouncingModal.vue";
 import ShoppingCart from "./components/ShoppingCart.vue";
 import ChatBot from "./components/ChatBot.vue";
+import WebComponentDemo from "./components/WebComponentDemo.vue";
 
 function reloadBusuanzi() {
   const busuanziScriptId = "busuanzi-script";
@@ -119,6 +120,7 @@ export default {
     app.component('BouncingModal', BouncingModal);
     app.component('ShoppingCart', ShoppingCart);
     app.component('ChatBot', ChatBot);
+    app.component('WebComponentDemo', WebComponentDemo);
   },
   setup() {
     vitepressLifeProgress();
