@@ -57,6 +57,8 @@ import SpringDddLab from "./components/SpringDddLab.vue";
 import SimpleCounter from "./components/SimpleCounter.vue";
 import UltimatePassword from "./components/UltimatePassword.vue";
 import BouncingModal from "./components/BouncingModal.vue";
+import ShoppingCart from "./components/ShoppingCart.vue";
+import ChatBot from "./components/ChatBot.vue";
 
 function reloadBusuanzi() {
   const busuanziScriptId = "busuanzi-script";
@@ -115,6 +117,8 @@ export default {
     app.component('SimpleCounter', SimpleCounter);
     app.component('UltimatePassword', UltimatePassword);
     app.component('BouncingModal', BouncingModal);
+    app.component('ShoppingCart', ShoppingCart);
+    app.component('ChatBot', ChatBot);
   },
   setup() {
     vitepressLifeProgress();
