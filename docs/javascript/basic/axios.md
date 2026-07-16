@@ -8,7 +8,7 @@ head:
       content: axios,javascript,next.js,react
   - - meta
     - property: og:title
-      content: next.js - axios
+      content: Axios 非同步 HTTP 客戶端 (Next.js 實戰)
   - - meta
     - property: og:description
       content: 使用axios實作 User CURD by Next.js - react
@@ -23,7 +23,7 @@ head:
       content: Axios 基礎到進階：安裝、GET/POST、攔截器、錯誤處理、實戰範例與練習題。
 ---
 
-# Axios - next.js
+# Axios 非同步 HTTP 客戶端 (Next.js 實戰)
 
 > 📝 TL;DR
 
