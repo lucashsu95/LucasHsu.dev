@@ -54,6 +54,9 @@ import CssGridLab from "./components/CssGridLab.vue";
 import CssRwdLab from "./components/CssRwdLab.vue";
 import SpringFpLab from "./components/SpringFpLab.vue";
 import SpringDddLab from "./components/SpringDddLab.vue";
+import SimpleCounter from "./components/SimpleCounter.vue";
+import UltimatePassword from "./components/UltimatePassword.vue";
+import BouncingModal from "./components/BouncingModal.vue";
 
 function reloadBusuanzi() {
   const busuanziScriptId = "busuanzi-script";
@@ -109,6 +112,9 @@ export default {
     app.component('CssRwdLab', CssRwdLab);
     app.component('SpringFpLab', SpringFpLab);
     app.component('SpringDddLab', SpringDddLab);
+    app.component('SimpleCounter', SimpleCounter);
+    app.component('UltimatePassword', UltimatePassword);
+    app.component('BouncingModal', BouncingModal);
   },
   setup() {
     vitepressLifeProgress();
