@@ -30,7 +30,7 @@ export function sidebarJavascript() {
         { text: '彈跳視窗', link: '/javascript/網頁操作/彈跳視窗', activeMatch: '/javascript/網頁操作/彈跳視窗' },
         { text: '待辦事項清單 (TodoList)', link: '/javascript/網頁操作/TodoList', activeMatch: '/javascript/網頁操作/TodoList' },
         { text: '購物車範例', link: '/javascript/網頁操作/購物車', activeMatch: '/javascript/網頁操作/購物車' },
-        { text: '聊天機器人', link: '/javascript/網頁操作/聯天機器人', activeMatch: '/javascript/網頁操作/聯天機器人' },
+        { text: '聊天機器人', link: '/javascript/網頁操作/chat', activeMatch: '/javascript/網頁操作/chat' },
         { text: '傳統時鐘製作指南', link: '/javascript/網頁操作/傳統時鐘製作指南', activeMatch: '/javascript/網頁操作/傳統時鐘製作指南' },
         { text: 'Service Worker', link: '/javascript/網頁操作/service-worker-basic', activeMatch: '/javascript/網頁操作/service-worker-basic' },
         { text: 'Web Components - 基礎篇', link: '/javascript/網頁操作/web-components-1', activeMatch: '/javascript/網頁操作/web-components-1' },
