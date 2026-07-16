@@ -43,6 +43,11 @@ export function sidebarConcepts() {
           link: "/concepts/fp/fp-project-architecture",
           activeMatch: '/concepts/fp/fp-project-architecture',
         },
+        {
+          text: "FP 專案架構進階：前後端差異與框架實戰",
+          link: "/concepts/fp/fp-architecture-advanced",
+          activeMatch: '/concepts/fp/fp-architecture-advanced',
+        },
       ],
     },
   ];
