@@ -60,6 +60,11 @@ import BouncingModal from "./components/BouncingModal.vue";
 import ShoppingCart from "./components/ShoppingCart.vue";
 import ChatBot from "./components/ChatBot.vue";
 import WebComponentDemo from "./components/WebComponentDemo.vue";
+import HeroIntro from "./components/HeroIntro.vue";
+import StatBoard from "./components/StatBoard.vue";
+import FeaturedWork from "./components/FeaturedWork.vue";
+import AwardList from "./components/AwardList.vue";
+import WorkGrid from "./components/WorkGrid.vue";
 
 function reloadBusuanzi() {
   const busuanziScriptId = "busuanzi-script";
@@ -88,6 +93,12 @@ export default {
       "nav-screen-content-after": () =>
         h(NolebaseEnhancedReadabilitiesScreenMenu),
       "aside-bottom": () => h(MyLayout),
+      "home-hero-before": () => h(HeroIntro),
+      "home-features-after": () =>
+        h("div", { class: "lh-home-extras" }, [
+          h(StatBoard),
+          h(FeaturedWork),
+        ]),
     });
   },
   enhanceApp(ctx) {
@@ -121,6 +132,8 @@ export default {
     app.component('ShoppingCart', ShoppingCart);
     app.component('ChatBot', ChatBot);
     app.component('WebComponentDemo', WebComponentDemo);
+    app.component("AwardList", AwardList);
+    app.component("WorkGrid", WorkGrid);
   },
   setup() {
     vitepressLifeProgress();

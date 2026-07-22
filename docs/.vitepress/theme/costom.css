@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600;700&family=Noto+Sans+TC:wght@100..900&display=swap");
 
 .vp-code-group .tabs label {
   background: transparent;
@@ -8,67 +8,173 @@
   height: 1.5px;
 }
 
-/* Code End */
-
-/* Font family Start */
+/* Font family */
 :root {
-  --vp-font-family-base: "Noto Sans TC", "Chinese Quotes", "Inter var", "Inter",
-    ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-    Roboto, "Helvetica Neue", Helvetica, Arial, "Noto Sans", sans-serif,
+  --vp-font-family-base: "Noto Sans TC", "Chinese Quotes", ui-sans-serif,
+    system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif,
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-  --vp-font-family-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Monaco,
-    Consolas, "Liberation Mono", "Courier New", monospace;
+  --vp-font-family-display: "Sora", "Noto Sans TC", ui-sans-serif, sans-serif;
+  --vp-font-family-mono: "JetBrains Mono", ui-monospace, SFMono-Regular,
+    "SF Mono", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New",
+    monospace;
 }
 
-/* Font family End */
-
-/**
- * Component: Heading
- * -------------------------------------------------------------------------- */
 .vp-doc h1,
 .vp-doc h2 {
   font-weight: 700;
+  font-family: var(--vp-font-family-display);
 }
 
 .content-container img {
-  border-radius: 5px;
-  box-shadow: 2px 3px 10px #666d;
+  border-radius: var(--lh-radius);
+  box-shadow: var(--lh-shadow);
 }
 
 .image-src {
   border-radius: 50%;
 }
 
-.title-img {
-  box-shadow: none !important;
-}
-
+.title-img,
 .icon-img {
   box-shadow: none !important;
 }
 
 .go-to-top {
-  background: #aaa !important;
+  background: var(--vp-c-brand-3) !important;
 }
 
-/* 整體滾動條樣式 */
 ::-webkit-scrollbar {
-  width: 5px; /* 垂直滾動條寬度 */
-  height: 8px; /* 水平滾動條高度 */
+  width: 5px;
+  height: 8px;
 }
 
-/* 滾動條滑塊 */
 ::-webkit-scrollbar-thumb {
-  background-color: rgba(150, 150, 150, 0.8); /* 軌道顏色 */
-  border-radius: 4px; /* 滑塊圓角 */
+  background-color: rgba(200, 80, 192, 0.45);
+  border-radius: 4px;
 }
 
-/* 滾動條軌道 */
 ::-webkit-scrollbar-track {
-  background-color: rgba(0, 0, 0, 0.2); /* 滑塊顏色 */
-  border-radius: 4px; /* 軌道圓角 */
+  background-color: rgba(0, 0, 0, 0.08);
+  border-radius: 4px;
 }
 
-/* Dark mode styles */
-/* @media (prefers-color-scheme: dark) { */
-/* } */
+/* Hide default VitePress home blocks when custom components render */
+.VPHome .VPHomeHero,
+.VPHome .VPFeatures {
+  display: none;
+}
+
+/* Shared LucasHsu component utilities */
+.lh-section-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0 0 1rem;
+  font-family: var(--vp-font-family-mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--lh-accent-bright);
+}
+
+.lh-section-label::before {
+  content: "";
+  display: block;
+  width: 1.5rem;
+  height: 2px;
+  background: linear-gradient(90deg, var(--lh-accent-bright), var(--lh-gold));
+}
+
+.lh-section-title {
+  margin: 0 0 1.5rem;
+  font-family: var(--vp-font-family-display);
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--vp-c-text-1);
+}
+
+.lh-tag {
+  display: inline-block;
+  padding: 0.2rem 0.55rem;
+  font-family: var(--vp-font-family-mono);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--lh-accent-bright);
+  background: var(--lh-accent-soft);
+  border: 1px solid var(--lh-surface-border);
+  border-radius: 4px;
+}
+
+.lh-medal {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.15rem 0.55rem;
+  font-family: var(--vp-font-family-mono);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.lh-medal--gold {
+  color: #7a5c00;
+  background: linear-gradient(135deg, #fff3c4, #ffd700);
+  border: 1px solid #e6b800;
+}
+
+.lh-medal--silver {
+  color: #4a5568;
+  background: linear-gradient(135deg, #edf2f7, #b8c4ce);
+  border: 1px solid #a0aec0;
+}
+
+.lh-medal--bronze {
+  color: #7b341e;
+  background: linear-gradient(135deg, #fed7aa, #cd7f32);
+  border: 1px solid #c05621;
+}
+
+.lh-medal--honor {
+  color: var(--lh-accent);
+  background: var(--lh-accent-soft);
+  border: 1px solid var(--lh-surface-border);
+}
+
+.dark .lh-medal--gold {
+  color: #ffd700;
+  background: rgba(255, 215, 0, 0.15);
+  border-color: rgba(255, 215, 0, 0.4);
+}
+
+.dark .lh-medal--silver {
+  color: #b8c4ce;
+  background: rgba(184, 196, 206, 0.12);
+  border-color: rgba(184, 196, 206, 0.35);
+}
+
+.dark .lh-medal--bronze {
+  color: #f6ad55;
+  background: rgba(205, 127, 50, 0.15);
+  border-color: rgba(205, 127, 50, 0.4);
+}
+
+.lh-featured-badge {
+  display: inline-block;
+  margin-left: 0.4rem;
+  font-size: 0.85em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
