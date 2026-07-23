@@ -54,6 +54,7 @@ export const skillTags = [
 // Unified timeline — sorted newest first. `date` drives ordering & display.
 export const awardTimeline = [
   { date: "2026/07/15", year: "2026", category: "程式競賽", title: "第十一屆全國科技大專校院程式競賽（TUPC 2026）", rank: "銅牌", medal: "bronze", featured: true, photosDir: "tupc-2026" },
+  { date: "2026/07", year: "2026", category: "程式競賽", title: "2026 十校技職聯盟程式設計競賽研習營", rank: "研習結業", medal: "honor", featured: true, photosDir: "ten-school-xunlian-2026" },
   { date: "2026/06/06", year: "2026", category: "程式競賽", title: "跨校聯盟程式設計競賽（進階組）", rank: "優選", medal: "silver", featured: true, photosDir: "inter-school-programming-2026" },
   { date: "2026/05/23", year: "2026", category: "程式競賽", title: "全國大專 Python 數據精英挑戰賽", rank: "優勝", medal: "honor" },
   { date: "2026/05/09", year: "2026", category: "榮譽", title: "穀保家商 傑出校友受獎", rank: "傑出校友", medal: "gold", featured: true, photosDir: "kpvs-outstanding-alumni-2026" },
@@ -62,7 +63,7 @@ export const awardTimeline = [
   { date: "2025", year: "2025", category: "程式競賽", title: "九校聯盟程式設計競賽（初階組）", rank: "第二名", medal: "silver", featured: true, photosDir: "nine-school-programming-2025" },
   { date: "2025", year: "2025", category: "程式競賽", title: "第 54 屆全國技能競賽（全國賽）", rank: "第三名", medal: "bronze", featured: true, photosDir: "54-national-skills-3rd" },
   { date: "2024", year: "2024", category: "程式競賽", title: "第 54 屆全國技能競賽（北區賽）", rank: "第一名", medal: "gold" },
-  { date: "2024", year: "2024", category: "專題競賽", title: "112 年度全國高級中等學校專業群科專題及創意製作競賽", rank: "複賽優勝 / 決賽入選", medal: "gold", featured: true, photosDir: "112-project-competition" },
+  { date: "2024", year: "2024", category: "專題競賽", title: "112 年度全國高級中等學校專業群科專題及創意製作競賽", rank: "複賽優勝 / 決賽入選", medal: "gold", featured: true },
   { date: "2024", year: "2024", category: "專題競賽", title: "2024 景文科技大學全國高中職專題競賽", rank: "第三名", medal: "bronze" },
   { date: "2024", year: "2024", category: "專題競賽", title: "2024 COOL 酷酷比城市盃全國大專校", rank: "第二名", medal: "silver" },
   { date: "2024", year: "2024", category: "榮譽", title: "教育部人文社會永續行動創新應用競賽", rank: "優選", medal: "honor", featured: true, photosDir: "moe-humanities-innovation-2024" },
