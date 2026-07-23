@@ -22,6 +22,7 @@ import { InlineLinkPreviewElementTransform } from "@nolebase/vitepress-plugin-in
 //   GitChangelogMarkdownSection,
 // } from '@nolebase/vitepress-plugin-git-changelog/vite'
 import { MermaidMarkdown, MermaidPlugin } from "vitepress-plugin-mermaid";
+import { awardsPhotosPlugin } from "../../scripts/awards-scan.mjs";
 
 const env = loadEnv("", process.cwd());
 
@@ -68,6 +69,7 @@ export default defineConfig({
       //   repoURL: () => 'https://github.com/lucashsu95/LucasHsu.dev',
       // }),
       // GitChangelogMarkdownSection(),
+      awardsPhotosPlugin(),
       MermaidPlugin()
     ],
   },

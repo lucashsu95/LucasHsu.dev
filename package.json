@@ -21,6 +21,7 @@
     "build": "NODE_OPTIONS=\"--max-old-space-size=4096\" vitepress build docs",
     "preview": "vitepress preview docs",
     "generate-sidebar": "node generateSidebar.js",
+    "awards:scan": "node scripts/awards-scan.mjs",
     "slidev:dev:python-day01": "slidev docs/slides/python-day01/slides.md --remote",
     "slidev:build:python-day01": "slidev build docs/slides/python-day01/slides.md --out ../../public/slides/python-day01 --base /LucasHsu.dev/slides/python-day01/",
     "slidev:export:python-day01": "slidev export docs/slides/python-day01/slides.md --format pdf --output docs/public/slides/python-day01.pdf --with-clicks",

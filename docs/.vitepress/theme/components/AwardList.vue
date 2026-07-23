@@ -5,6 +5,8 @@ import {
   certifications,
   liveSystems,
 } from "../data/siteData.js";
+import awardPhotos from "../data/awardPhotos.generated.js";
+import AwardLightbox from "./AwardLightbox.vue";
 
 const medalClass = {
   gold: "lh-medal--gold",
@@ -26,6 +28,35 @@ const counts = computed(() => ({
   total: awardTimeline.length,
   gold: awardTimeline.filter((a) => a.medal === "gold").length,
 }));
+
+function photosFor(award) {
+  const slug = award?.photosDir;
+  if (!slug) return [];
+  const list = awardPhotos?.[slug];
+  return Array.isArray(list) && list.length > 0 ? list : [];
+}
+
+function hasPhotos(award) {
+  return photosFor(award).length > 0;
+}
+
+const lightboxOpen = ref(false);
+const activeAward = ref(null);
+
+const lightboxPhotos = computed(() =>
+  activeAward.value ? photosFor(activeAward.value) : []
+);
+
+function openLightbox(award) {
+  if (!hasPhotos(award)) return;
+  activeAward.value = award;
+  lightboxOpen.value = true;
+}
+
+function closeLightbox() {
+  lightboxOpen.value = false;
+  activeAward.value = null;
+}
 
 const timelineRef = ref(null);
 let observer = null;
@@ -75,7 +106,6 @@ onUnmounted(() => observer?.disconnect());
 
 <template>
   <div class="lh-awards">
-    <!-- Timeline -->
     <section class="lh-awards__block">
       <div class="lh-tl__header">
         <div>
@@ -111,29 +141,76 @@ onUnmounted(() => observer?.disconnect());
           v-for="(award, i) in filtered"
           :key="`${award.date}-${award.title}`"
           class="lh-tl__item"
-          :class="[`lh-tl__item--${award.medal}`, { 'lh-tl__item--featured': award.featured }]"
+          :class="[
+            `lh-tl__item--${award.medal}`,
+            {
+              'lh-tl__item--featured': award.featured,
+              'lh-tl__item--photos': hasPhotos(award),
+            },
+          ]"
           :style="{ '--lh-i': i }"
         >
           <div class="lh-tl__marker" aria-hidden="true">
             <span class="lh-tl__dot"></span>
           </div>
 
-          <div class="lh-tl__card">
-            <div class="lh-tl__meta">
-              <time class="lh-tl__date">{{ award.date }}</time>
-              <span class="lh-tl__cat">{{ award.category }}</span>
-              <span class="lh-medal" :class="medalClass[award.medal]">{{
-                award.rank
-              }}</span>
-              <span v-if="award.featured" class="lh-tl__flame" title="精選">🔥</span>
+          <div
+            class="lh-tl__card"
+            :role="hasPhotos(award) ? 'button' : undefined"
+            :tabindex="hasPhotos(award) ? 0 : undefined"
+            :aria-label="
+              hasPhotos(award) ? `查看「${award.title}」得獎照片` : undefined
+            "
+            @click="openLightbox(award)"
+            @keydown.enter.prevent="openLightbox(award)"
+            @keydown.space.prevent="openLightbox(award)"
+          >
+            <div class="lh-tl__card-top">
+              <div class="lh-tl__meta">
+                <time class="lh-tl__date">{{ award.date }}</time>
+                <span class="lh-tl__cat">{{ award.category }}</span>
+                <span class="lh-medal" :class="medalClass[award.medal]">{{
+                  award.rank
+                }}</span>
+                <span
+                  v-if="award.featured"
+                  class="lh-tl__flame"
+                  title="精選"
+                  >🔥</span
+                >
+              </div>
+
+              <span
+                v-if="hasPhotos(award)"
+                class="lh-tl__photo-badge"
+                title="查看照片"
+                aria-hidden="true"
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  width="14"
+                  height="14"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path
+                    d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"
+                  />
+                  <circle cx="12" cy="13" r="4" />
+                </svg>
+                <span>查看照片</span>
+              </span>
             </div>
+
             <p class="lh-tl__name">{{ award.title }}</p>
           </div>
         </li>
       </ol>
     </section>
 
-    <!-- Certifications -->
     <section class="lh-awards__block">
       <h2 class="lh-awards__heading">烤證照</h2>
       <ul class="lh-awards__certs">
@@ -148,7 +225,6 @@ onUnmounted(() => observer?.disconnect());
       </ul>
     </section>
 
-    <!-- Live systems -->
     <section class="lh-awards__block">
       <h2 class="lh-awards__heading">系統（上線中）</h2>
       <div class="lh-awards__systems">
@@ -166,6 +242,16 @@ onUnmounted(() => observer?.disconnect());
         </a>
       </div>
     </section>
+
+    <AwardLightbox
+      :open="lightboxOpen"
+      :photos="lightboxPhotos"
+      :title="activeAward?.title || ''"
+      :rank="activeAward?.rank || ''"
+      :date="activeAward?.date || ''"
+      :medal="activeAward?.medal || 'honor'"
+      @close="closeLightbox"
+    />
   </div>
 </template>
 
@@ -178,7 +264,6 @@ onUnmounted(() => observer?.disconnect());
   margin-bottom: 3rem;
 }
 
-/* Header */
 .lh-tl__header {
   display: flex;
   flex-wrap: wrap;
@@ -223,7 +308,6 @@ onUnmounted(() => observer?.disconnect());
   color: var(--lh-gold);
 }
 
-/* Filters */
 .lh-tl__filters {
   display: flex;
   flex-wrap: wrap;
@@ -254,7 +338,6 @@ onUnmounted(() => observer?.disconnect());
   border-color: transparent;
 }
 
-/* Timeline */
 .lh-tl {
   position: relative;
   list-style: none;
@@ -330,7 +413,17 @@ onUnmounted(() => observer?.disconnect());
   background: var(--vp-c-bg-soft);
   border: 1px solid var(--vp-c-divider);
   border-radius: var(--lh-radius-lg);
+  cursor: default;
   transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.lh-tl__item--photos .lh-tl__card {
+  cursor: pointer;
+}
+
+.lh-tl__item--photos .lh-tl__card:focus-visible {
+  outline: 2px solid var(--lh-accent-bright);
+  outline-offset: 2px;
 }
 
 .lh-tl__item:hover .lh-tl__card {
@@ -347,12 +440,20 @@ onUnmounted(() => observer?.disconnect());
   border-left: 3px solid var(--lh-gold);
 }
 
+.lh-tl__card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.4rem;
+}
+
 .lh-tl__meta {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 0.5rem;
-  margin-bottom: 0.4rem;
+  min-width: 0;
 }
 
 .lh-tl__date {
@@ -372,6 +473,21 @@ onUnmounted(() => observer?.disconnect());
   font-size: 0.85rem;
 }
 
+.lh-tl__photo-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  flex-shrink: 0;
+  padding: 0.2rem 0.5rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--lh-accent);
+  background: var(--lh-accent-soft);
+  border: 1px solid var(--lh-surface-border);
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
 .lh-tl__name {
   margin: 0;
   font-size: 0.98rem;
@@ -380,7 +496,6 @@ onUnmounted(() => observer?.disconnect());
   color: var(--vp-c-text-1);
 }
 
-/* Certifications */
 .lh-awards__certs {
   list-style: none;
   margin: 0;
@@ -403,7 +518,6 @@ onUnmounted(() => observer?.disconnect());
   border-radius: var(--lh-radius);
 }
 
-/* Live systems */
 .lh-awards__systems {
   display: grid;
   gap: 0.75rem;
