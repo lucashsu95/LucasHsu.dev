@@ -2,10 +2,10 @@
 const basePath = "/LucasHsu.dev";
 
 const pills = [
-  "國手選拔備取",
-  "全國技能競賽第三名",
-  "112 金手獎",
-  "乙級網頁設計",
+  "48 屆國手選拔備取",
+  "54 屆全國技能競賽第三名",
+  "112 年度程式設計金手獎",
+  "網頁設計乙級",
 ];
 </script>
 
@@ -59,11 +59,6 @@ const pills = [
             height="280"
             loading="eager"
           />
-        </div>
-        <div class="lh-hero__rank-card">
-          <span class="lh-hero__rank-label">Latest Rank</span>
-          <span class="lh-hero__rank-value">#3</span>
-          <span class="lh-hero__rank-detail">54 屆全國技能競賽</span>
         </div>
       </div>
     </div>
@@ -245,42 +240,6 @@ const pills = [
   border: 3px solid var(--lh-surface);
 }
 
-.lh-hero__rank-card {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  display: flex;
-  flex-direction: column;
-  padding: 0.75rem 1rem;
-  background: var(--lh-surface-elevated);
-  border: 1px solid var(--lh-surface-border);
-  border-radius: var(--lh-radius);
-  box-shadow: var(--lh-shadow-lg);
-}
-
-.lh-hero__rank-label {
-  font-family: var(--vp-font-family-mono);
-  font-size: 0.65rem;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--lh-gold-bright);
-}
-
-.lh-hero__rank-value {
-  font-family: var(--vp-font-family-mono);
-  font-size: 2rem;
-  font-weight: 700;
-  line-height: 1;
-  color: #fff;
-}
-
-.lh-hero__rank-detail {
-  margin-top: 0.15rem;
-  font-size: 0.75rem;
-  color: rgba(255, 255, 255, 0.6);
-}
-
 .lh-animate {
   animation: lh-fade-up 0.7s ease both;
   animation-delay: var(--lh-delay, 0ms);
@@ -294,14 +253,6 @@ const pills = [
   to {
     opacity: 1;
     transform: translateY(0);
-  }
-}
-
-@media (max-width: 959px) {
-  .lh-hero__rank-card {
-    right: 50%;
-    transform: translateX(50%);
-    bottom: -1rem;
   }
 }
 </style>

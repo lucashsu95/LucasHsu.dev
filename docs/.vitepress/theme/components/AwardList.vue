@@ -26,7 +26,7 @@ const filtered = computed(() =>
 
 const counts = computed(() => ({
   total: awardTimeline.length,
-  gold: awardTimeline.filter((a) => a.medal === "gold").length,
+  featured: awardTimeline.filter((a) => a.featured).length,
 }));
 
 function photosFor(award) {
@@ -85,7 +85,7 @@ function observeItems() {
         }
       });
     },
-    { threshold: 0.15, rootMargin: "0px 0px -10% 0px" }
+    { threshold: 0.05, rootMargin: "48px 0px 48px 0px" }
   );
 
   items.forEach((el) => observer.observe(el));
@@ -117,7 +117,7 @@ onUnmounted(() => observer?.disconnect());
             <b>{{ counts.total }}</b> 項紀錄
           </span>
           <span class="lh-tl__stat lh-tl__stat--gold">
-            <b>{{ counts.gold }}</b> 金獎/國手
+            <b>{{ counts.featured }}</b> 精選
           </span>
         </div>
       </div>
@@ -311,46 +311,79 @@ onUnmounted(() => observer?.disconnect());
 .lh-tl__filters {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: 0.55rem;
   margin-bottom: 1.75rem;
 }
 
 .lh-tl__chip {
-  padding: 0.35rem 0.85rem;
-  font-size: 0.82rem;
+  appearance: none;
+  position: relative;
+  padding: 0.42rem 1rem;
+  font-family: var(--vp-font-family-display);
+  font-size: 0.8rem;
   font-weight: 600;
+  letter-spacing: 0.02em;
+  line-height: 1.2;
   color: var(--vp-c-text-2);
-  background: var(--vp-c-bg-soft);
+  background: var(--vp-c-bg);
   border: 1px solid var(--vp-c-divider);
   border-radius: 999px;
   cursor: pointer;
-  transition: color 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+  transition:
+    color 0.2s ease,
+    border-color 0.2s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
 }
 
 .lh-tl__chip:hover {
   color: var(--vp-c-text-1);
-  border-color: var(--lh-accent);
+  border-color: color-mix(in srgb, var(--lh-accent) 55%, var(--vp-c-divider));
+  background: var(--lh-accent-soft);
+  transform: translateY(-1px);
 }
 
-.lh-tl__chip.is-active {
+.lh-tl__chip.is-active,
+.lh-tl__chip.is-active:hover {
   color: #fff;
   background: var(--lh-brand-gradient);
+  background-size: 140% 100%;
   border-color: transparent;
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--lh-pink) 35%, transparent),
+    0 6px 18px rgba(200, 80, 192, 0.28);
+  transform: translateY(-1px);
+  text-shadow: 0 1px 1px rgba(23, 23, 43, 0.2);
+}
+
+.lh-tl__chip:focus {
+  outline: none;
+}
+
+.lh-tl__chip:focus-visible {
+  outline: 2px solid var(--lh-accent-bright);
+  outline-offset: 3px;
+}
+
+.lh-tl__chip:active {
+  transform: translateY(0);
 }
 
 .lh-tl {
+  --lh-tl-rail: 1.5rem;
   position: relative;
   list-style: none;
   margin: 0;
-  padding: 0 0 0 0.5rem;
+  padding: 0;
 }
 
 .lh-tl::before {
   content: "";
   position: absolute;
-  top: 0.5rem;
-  bottom: 0.5rem;
-  left: 7px;
+  top: 0.85rem;
+  bottom: 0.85rem;
+  left: calc(var(--lh-tl-rail) / 2 - 1px);
   width: 2px;
   background: linear-gradient(
     to bottom,
@@ -359,18 +392,18 @@ onUnmounted(() => observer?.disconnect());
     var(--lh-gold-bright)
   );
   opacity: 0.4;
+  pointer-events: none;
 }
 
 .lh-tl__item {
   position: relative;
   display: grid;
-  grid-template-columns: 1.5rem 1fr;
-  gap: 1rem;
+  grid-template-columns: var(--lh-tl-rail) minmax(0, 1fr);
+  column-gap: 0.85rem;
   padding-bottom: 1.25rem;
   opacity: 0;
-  transform: translateY(18px);
-  transition: opacity 0.5s ease, transform 0.5s ease;
-  transition-delay: calc(var(--lh-i, 0) * 45ms);
+  transform: translateY(12px);
+  transition: opacity 0.35s ease, transform 0.35s ease;
 }
 
 .lh-tl__item.is-visible {
@@ -379,14 +412,18 @@ onUnmounted(() => observer?.disconnect());
 }
 
 .lh-tl__marker {
+  position: relative;
+  z-index: 1;
   display: flex;
   justify-content: center;
-  padding-top: 0.35rem;
+  align-items: flex-start;
+  padding-top: 0.95rem;
 }
 
 .lh-tl__dot {
-  width: 16px;
-  height: 16px;
+  box-sizing: border-box;
+  width: 14px;
+  height: 14px;
   border-radius: 50%;
   background: var(--vp-c-bg);
   border: 3px solid var(--lh-accent);
