@@ -1,0 +1,195 @@
+:root {
+  --cb-blue: #3B82F6;
+  --cb-green: #10B981;
+  --cb-amber: #F59E0B;
+  --cb-red: #EF4444;
+  --cb-purple: #8B5CF6;
+  --term-bg: #0d1117;
+  --term-green: #7ee787;
+  --code-bg: #0d1117;
+}
+
+#slidev-goto-dialog .autocomplete-list {
+  display: none;
+}
+
+#slidev-goto-dialog:not(.-top-20) .autocomplete-list {
+  display: block;
+}
+
+.slidev-layout {
+  font-family: "Inter", sans-serif;
+  letter-spacing: 0.01em;
+  overflow: hidden;
+}
+
+.slidev-layout.scroll-y {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.slidev-layout.scroll-y::-webkit-scrollbar {
+  width: 6px;
+}
+.slidev-layout.scroll-y::-webkit-scrollbar-track {
+  background: transparent;
+}
+.slidev-layout.scroll-y::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+}
+.slidev-layout.scroll-y::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.text-3xl { font-size: 2.5rem !important; line-height: 3rem !important; }
+.text-xl { font-size: 1.75rem !important; line-height: 2.25rem !important; }
+.text-lg { font-size: 1.5rem !important; line-height: 2rem !important; }
+.text-base { font-size: 1.25rem !important; line-height: 1.75rem !important; }
+.text-sm { font-size: 1.125rem !important; line-height: 1.5rem !important; }
+.text-xs { font-size: 1rem !important; line-height: 1.25rem !important; }
+
+.font-mono,
+code,
+pre {
+  font-family: "JetBrains Mono", monospace !important;
+}
+
+/* ── Syntax token overrides ── */
+.token.comment { color: #8b949e; }
+.token.string { color: #7ee787; }
+.token.number { color: #79c0ff; }
+.token.keyword { color: #ff7b72; }
+.token.function { color: #d2a8ff; }
+.token.operator { color: #ffa657; }
+.token.builtin { color: #ffa657; }
+
+/* ── Transitions ── */
+.slidev-slide { transition: opacity 0.2s ease; }
+.slidev-layout .rounded-lg { transition: all 0.2s ease; }
+
+/* ── H1 accent underline ── */
+.slidev-layout h1::after {
+  content: "";
+  display: block;
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--cb-blue), var(--cb-green));
+  margin-top: 8px;
+  border-radius: 2px;
+}
+.slidev-layout.section h1::after,
+.slidev-layout.cover h1::after {
+  display: none;
+}
+
+/* ── Code block ── */
+.slidev-code {
+  border: 1px solid rgba(37, 99, 235, 0.15) !important;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+/* ── Tables ── */
+.slidev-layout table { border-collapse: collapse; width: 100%; }
+.slidev-layout th { background: rgba(37, 99, 235, 0.1); border-color: rgba(37, 99, 235, 0.3); }
+.slidev-layout td,
+.slidev-layout th { padding: 8px 12px; border: 1px solid rgba(255, 255, 255, 0.1); }
+
+/* ── H1 weight ── */
+.slidev-layout h1 { font-weight: 800; letter-spacing: -0.03em; color: #F8FAFC; }
+html:not(.dark) .slidev-layout h1 { color: #0F172A; }
+
+/* ── Cover glow ── */
+.cover-glow {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(37, 99, 235, 0.2), transparent 38%),
+    radial-gradient(circle at 85% 80%, rgba(16, 185, 129, 0.15), transparent 34%),
+    #0d1117;
+}
+
+/* ── Kicker (terminal prompt) ── */
+.kicker {
+  color: #7ee787;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.85rem;
+}
+
+/* ── Concept cards ── */
+.concept-card {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 20px;
+  background: rgba(13, 17, 23, 0.72);
+  padding: 1rem;
+}
+.concept-card span { color: #9ca3af; }
+.concept-card.blue { border-color: rgba(37, 99, 235, 0.5); }
+.concept-card.green { border-color: rgba(16, 185, 129, 0.5); }
+.concept-card.amber { border-color: rgba(245, 158, 11, 0.5); }
+
+/* ── Callout ── */
+.callout {
+  border: 1px solid rgba(16, 185, 129, 0.32);
+  border-radius: 20px;
+  background: rgba(13, 17, 23, 0.72);
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+}
+
+/* ── Timeline ── */
+.timeline {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr;
+  align-items: center;
+  gap: 0.45rem;
+}
+.time-node {
+  min-height: 92px;
+  padding: 0.8rem 0.55rem;
+  border: 1px solid rgba(37, 99, 235, 0.5);
+  border-radius: 16px;
+  text-align: center;
+}
+.time-node span { display: block; margin-top: 0.5rem; color: #9ca3af; font-size: 0.875rem; }
+.time-node.green { border-color: rgba(16, 185, 129, 0.6); }
+.time-node.amber { border-color: rgba(245, 158, 11, 0.6); }
+.time-arrow { color: #6b7280; font-size: 1.35rem; }
+
+/* ── Stage badge ── */
+.stage-badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--cb-blue), var(--cb-green));
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+/* ── Card hover ── */
+.card-hover {
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.card-hover:hover {
+  transform: translateY(-4px);
+}
+
+/* ── Scroll ── */
+html { scroll-behavior: smooth; }
+
+/* ── Print ── */
+@media print {
+  .slidev-layout { overflow: hidden !important; }
+  [v-click] { opacity: 1 !important; visibility: visible !important; }
+  .cover-glow { background: #0d1117 !important; }
+  .timeline { gap: 0.25rem; }
+  .time-node { break-inside: avoid; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

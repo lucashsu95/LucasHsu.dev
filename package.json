@@ -73,6 +73,12 @@
     "slidev:dev:clean-architecture": "slidev docs/slides/clean-architecture/slides.md --remote",
     "slidev:build:clean-architecture": "slidev build docs/slides/clean-architecture/slides.md --out ../../public/slides/clean-architecture --base /LucasHsu.dev/slides/clean-architecture/",
     "slidev:export:clean-architecture": "bash scripts/slidev-export-pdf.sh clean-architecture",
+    "slidev:dev:cb-day1": "slidev docs/slides/cb-day1-guess-number/slides.md --remote",
+    "slidev:build:cb-day1": "slidev build docs/slides/cb-day1-guess-number/slides.md --out ../../public/slides/cb-day1 --base /LucasHsu.dev/slides/cb-day1/",
+    "slidev:export:cb-day1": "bash scripts/slidev-export-pdf.sh cb-day1-guess-number",
+    "slidev:dev:cb-day2": "slidev docs/slides/cb-day2-order-system/slides.md --remote",
+    "slidev:build:cb-day2": "slidev build docs/slides/cb-day2-order-system/slides.md --out ../../public/slides/cb-day2 --base /LucasHsu.dev/slides/cb-day2/",
+    "slidev:export:cb-day2": "bash scripts/slidev-export-pdf.sh cb-day2-order-system",
     "slidev:build:all": "bash scripts/slidev-build.sh"
   },
   "dependencies": {
