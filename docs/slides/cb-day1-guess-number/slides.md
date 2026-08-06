@@ -86,6 +86,16 @@ layout: default
   </div>
 </div>
 
+<div class="mt-8">
+  <p class="text-center text-gray-400 text-sm mb-4">✨ 競賽實錄與亮點</p>
+  <div class="grid grid-cols-4 gap-3">
+    <img v-click src="./contest (1).jpg" class="rounded-lg h-24 w-full object-cover border border-white/10" />
+    <img v-click src="./contest (2).jpg" class="rounded-lg h-24 w-full object-cover border border-white/10" />
+    <img v-click src="./contest (3).jpg" class="rounded-lg h-24 w-full object-cover border border-white/10" />
+    <img v-click src="./contest (4).jpg" class="rounded-lg h-24 w-full object-cover border border-white/10" />
+  </div>
+</div>
+
 ---
 layout: default
 ---
