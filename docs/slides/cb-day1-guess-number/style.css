@@ -18,7 +18,7 @@
 }
 
 .slidev-layout {
-  font-family: "Inter", sans-serif;
+  font-family: "Inter", "PingFang TC", "Microsoft JhengHei", "Noto Sans TC", sans-serif;
   letter-spacing: 0.01em;
   overflow: hidden;
 }
