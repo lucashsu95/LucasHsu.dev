@@ -7,6 +7,14 @@
   --term-bg: #0d1117;
   --term-green: #7ee787;
   --code-bg: #0d1117;
+  --slidea-font-sans: "Inter", "PingFang TC", "Microsoft JhengHei", "Noto Sans TC", sans-serif !important;
+}
+
+/* ── Forced Global Font Override ── */
+html, body, .slidev-layout, .slidev-layout *, 
+.slidev-layout h1, .slidev-layout h2, .slidev-layout h3, 
+.slidev-layout p, .slidev-layout span, .slidev-layout div {
+  font-family: var(--slidea-font-sans) !important;
 }
 
 #slidev-goto-dialog .autocomplete-list {
@@ -18,7 +26,7 @@
 }
 
 .slidev-layout {
-  font-family: "Inter", "PingFang TC", "Microsoft JhengHei", "Noto Sans TC", sans-serif;
+  font-family: var(--slidea-font-sans) !important;
   letter-spacing: 0.01em;
   overflow: hidden;
 }
