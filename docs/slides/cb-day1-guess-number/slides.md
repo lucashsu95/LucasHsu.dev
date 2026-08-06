@@ -471,8 +471,8 @@ layout: default
   <div v-click class="p-4 rounded-lg bg-[#1E293B] border border-[#10B981]/30">
     <h3 class="text-[#10B981] font-bold mb-3">🤝 社群文化</h3>
     <div class="text-sm text-gray-300 space-y-2">
-      <p>⛰️ 主任帶隊爬象山</p>
-      <p>🚴 腳踏車環島</p>
+      <p>⛰️ 與明貴主任一起爬象山</p>
+      <p>🚴 與明貴主任騎車環島</p>
       <p>✨ 團隊建立活動</p>
     </div>
   </div>
@@ -481,7 +481,8 @@ layout: default
     <div class="text-sm text-gray-300 space-y-2">
       <p>🎯 北商聯盟競賽指導</p>
       <p>🤖 AI 算力資源支援</p>
-      <p>📚 專業知識共享</p>
+      <p>🤝 產學合作經驗</p>
+      <p>📜 明貴主任推薦信 (針對優秀成員)</p>
     </div>
   </div>
 </div>
