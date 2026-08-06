@@ -12,7 +12,7 @@ lineNumbers: true
 routerMode: hash
 colorSchema: dark
 fonts:
-  sans: 'Inter, PingFang TC, Microsoft JhengHei, Noto Sans TC, sans-serif'
+  sans: 'Inter, PingFang TC, Noto Sans TC, sans-serif'
   mono: JetBrains Mono
 css: unocss
 stylesheet: ./style.css
