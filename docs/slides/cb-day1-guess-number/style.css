@@ -20,7 +20,7 @@ html, body, .slidev-layout, .slidev-layout *,
 code,
 pre,
 .kicker {
-  font-family: "JetBrains Mono", monospace !important;
+  font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", "Source Code Pro", "Monaco", "Consolas", monospace !important;
 }
 
 /* ── Syntax token overrides ── */

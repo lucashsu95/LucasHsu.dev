@@ -13,7 +13,7 @@ routerMode: hash
 colorSchema: dark
 fonts:
   sans: 'Inter, PingFang TC, Noto Sans TC, sans-serif'
-  mono: JetBrains Mono
+  mono: 'JetBrains Mono, Fira Code, Cascadia Code, Source Code Pro, Monaco, Consolas, monospace'
 css: unocss
 stylesheet: ./style.css
 drawings:
