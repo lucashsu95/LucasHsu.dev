@@ -73,7 +73,50 @@ transition: slide-left
 layout: default
 ---
 
+# 🚀 為什麼加入商智中心？
+
+<div class="grid grid-cols-3 gap-4 mt-4">
+  <div v-click class="p-4 rounded-lg bg-[#1E293B] border border-[#5382A1]/30">
+    <h3 class="text-[#5382A1] font-bold mb-3">🏆 競賽成就</h3>
+    <div class="grid grid-cols-2 gap-2">
+      <img src="./award-1.jpg" class="rounded-lg w-full h-20 object-cover" />
+      <img src="./award-2.jpg" class="rounded-lg w-full h-20 object-cover" />
+    </div>
+  </div>
+  <div v-click class="p-4 rounded-lg bg-[#1E293B] border border-[#10B981]/30">
+    <h3 class="text-[#10B981] font-bold mb-3">🤝 社群文化</h3>
+    <div class="text-sm text-gray-300 space-y-2">
+      <p>⛰️ 與明貴主任一起爬象山</p>
+      <p>🚴 與明貴主任騎車環島</p>
+      <p>✨ 團隊建立活動</p>
+    </div>
+  </div>
+  <div v-click class="p-4 rounded-lg bg-[#1E293B] border border-[#F59E0B]/30">
+    <h3 class="text-[#F59E0B] font-bold mb-3">⚡ 成長資源</h3>
+    <div class="text-sm text-gray-300 space-y-2">
+      <p>🎯 北商聯盟競賽指導</p>
+      <p>🤖 AI 算力資源支援</p>
+      <p>🤝 產學合作經驗</p>
+      <p>📜 明貴主任推薦信 (針對優秀成員)</p>
+    </div>
+  </div>
+</div>
+
+<div v-click class="mt-4 p-4 rounded-lg bg-[#1E293B] border border-[#F59E0B]/30 text-center">
+  <p class="text-[#F59E0B] font-bold mb-2">📱 追蹤我們的 IG</p>
+  <div class="flex items-center justify-center gap-4">
+<div class="bg-white p-2 rounded-3">
+    <img src="./ig-qr.png" class="h-24 rounded-lg" />
+</div>
+  </div>
+</div>
+
+---
+layout: default
+---
+
 # 🎯 今日目標
+
 
 <div class="mt-6 space-y-3">
   <div v-click class="flex items-center gap-4 p-4 rounded-lg bg-[#1E293B]">
@@ -453,48 +496,6 @@ layout: default
       <b class="text-[#F59E0B]">📌 重點</b>
       <p class="text-gray-400 text-xs mt-1">這些就是後端的基礎工具！</p>
     </div>
-  </div>
-</div>
-
----
-layout: default
----
-
-# 🚀 為什麼加入商智中心？
-
-<div class="grid grid-cols-3 gap-4 mt-4">
-  <div v-click class="p-4 rounded-lg bg-[#1E293B] border border-[#5382A1]/30">
-    <h3 class="text-[#5382A1] font-bold mb-3">🏆 競賽成就</h3>
-    <div class="grid grid-cols-2 gap-2">
-      <img src="./award-1.jpg" class="rounded-lg w-full h-20 object-cover" />
-      <img src="./award-2.jpg" class="rounded-lg w-full h-20 object-cover" />
-    </div>
-  </div>
-  <div v-click class="p-4 rounded-lg bg-[#1E293B] border border-[#10B981]/30">
-    <h3 class="text-[#10B981] font-bold mb-3">🤝 社群文化</h3>
-    <div class="text-sm text-gray-300 space-y-2">
-      <p>⛰️ 與明貴主任一起爬象山</p>
-      <p>🚴 與明貴主任騎車環島</p>
-      <p>✨ 團隊建立活動</p>
-    </div>
-  </div>
-  <div v-click class="p-4 rounded-lg bg-[#1E293B] border border-[#F59E0B]/30">
-    <h3 class="text-[#F59E0B] font-bold mb-3">⚡ 成長資源</h3>
-    <div class="text-sm text-gray-300 space-y-2">
-      <p>🎯 北商聯盟競賽指導</p>
-      <p>🤖 AI 算力資源支援</p>
-      <p>🤝 產學合作經驗</p>
-      <p>📜 明貴主任推薦信 (針對優秀成員)</p>
-    </div>
-  </div>
-</div>
-
-<div v-click class="mt-4 p-4 rounded-lg bg-[#1E293B] border border-[#F59E0B]/30 text-center">
-  <p class="text-[#F59E0B] font-bold mb-2">📱 追蹤我們的 IG</p>
-  <div class="flex items-center justify-center gap-4">
-<div class="bg-white p-2 rounded-3">
-    <img src="./ig-qr.png" class="h-24 rounded-lg" />
-</div>
   </div>
 </div>
 
