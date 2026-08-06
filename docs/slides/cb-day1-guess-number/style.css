@@ -10,7 +10,8 @@
   --slidea-font-sans: "Inter", "PingFang TC", "Noto Sans TC", sans-serif !important;
 }
 
-html, body, .slidev-layout, .slidev-layout *, 
+html, body, .slidev-layout, 
+.slidev-layout *:not(code):not(pre):not(.font-mono), 
 .slidev-layout h1, .slidev-layout h2, .slidev-layout h3, 
 .slidev-layout p, .slidev-layout span, .slidev-layout div {
   font-family: var(--slidea-font-sans) !important;
