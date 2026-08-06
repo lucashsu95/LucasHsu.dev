@@ -75,24 +75,25 @@ layout: default
 
 # 🏆 競賽成就
 
-<div class="grid grid-cols-2 gap-6 mt-8">
-  <div v-click class="p-6 rounded-lg bg-[#1E293B] border border-[#5382A1]/30 text-center">
-    <h3 class="text-[#5382A1] font-bold mb-4">2025 十校技職聯盟資安與程式設計</h3>
-    <img src="./award-1.jpg" class="rounded-lg w-full h-48 object-cover" />
+<div class="grid grid-cols-2 gap-8 mt-8">
+  <!-- 2025 Section -->
+  <div v-click class="p-6 rounded-lg bg-[#1E293B] border border-[#5382A1]/30">
+    <h3 class="text-[#5382A1] font-bold mb-4 text-center">2025 十校技職聯盟資安與程式設計</h3>
+    <img src="./award-1.jpg" class="rounded-lg w-full h-48 object-cover mb-4" />
+    <div class="grid grid-cols-2 gap-2">
+      <img src="./contest (1).jpg" class="rounded-md h-20 w-full object-cover border border-white/10" />
+      <img src="./contest (2).png" class="rounded-md h-20 w-full object-cover border border-white/10" />
+    </div>
   </div>
-  <div v-click class="p-6 rounded-lg bg-[#1E293B] border border-[#5382A1]/30 text-center">
-    <h3 class="text-[#5382A1] font-bold mb-4">2026 跨校聯盟程式設計競賽</h3>
-    <img src="./award-2.jpg" class="rounded-lg w-full h-48 object-cover" />
-  </div>
-</div>
 
-<div class="mt-8">
-  <p class="text-center text-gray-400 text-sm mb-4">✨ 競賽實錄與亮點</p>
-  <div class="grid grid-cols-4 gap-3">
-    <img v-click src="./contest (1).jpg" class="rounded-lg h-24 w-full object-cover border border-white/10" />
-    <img v-click src="./contest (2).jpg" class="rounded-lg h-24 w-full object-cover border border-white/10" />
-    <img v-click src="./contest (3).jpg" class="rounded-lg h-24 w-full object-cover border border-white/10" />
-    <img v-click src="./contest (4).jpg" class="rounded-lg h-24 w-full object-cover border border-white/10" />
+  <!-- 2026 Section -->
+  <div v-click class="p-6 rounded-lg bg-[#1E293B] border border-[#5382A1]/30">
+    <h3 class="text-[#5382A1] font-bold mb-4 text-center">2026 跨校聯盟程式設計競賽</h3>
+    <img src="./award-2.jpg" class="rounded-lg w-full h-48 object-cover mb-4" />
+    <div class="grid grid-cols-2 gap-2">
+      <img src="./contest (3).jpg" class="rounded-md h-20 w-full object-cover border border-white/10" />
+      <img src="./contest (4).jpg" class="rounded-md h-20 w-full object-cover border border-white/10" />
+    </div>
   </div>
 </div>
 
