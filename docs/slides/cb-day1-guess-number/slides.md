@@ -458,22 +458,30 @@ layout: default
 layout: default
 ---
 
-# 🏆 商智中心
+# 🚀 為什麼加入商智中心？
 
-<div class="grid grid-cols-2 gap-4 mt-4">
+<div class="grid grid-cols-3 gap-4 mt-4">
   <div v-click class="p-4 rounded-lg bg-[#1E293B] border border-[#5382A1]/30">
-    <h3 class="text-[#5382A1] font-bold mb-3">🎯 程式競賽成績</h3>
+    <h3 class="text-[#5382A1] font-bold mb-3">🏆 競賽成就</h3>
     <div class="grid grid-cols-2 gap-2">
-      <img src="./award-1.jpg" class="rounded-lg w-full h-32 object-cover" />
-      <img src="./award-2.jpg" class="rounded-lg w-full h-32 object-cover" />
+      <img src="./award-1.jpg" class="rounded-lg w-full h-20 object-cover" />
+      <img src="./award-2.jpg" class="rounded-lg w-full h-20 object-cover" />
     </div>
   </div>
   <div v-click class="p-4 rounded-lg bg-[#1E293B] border border-[#10B981]/30">
-    <h3 class="text-[#10B981] font-bold mb-3">🗓 中心活動</h3>
+    <h3 class="text-[#10B981] font-bold mb-3">🤝 社群文化</h3>
     <div class="text-sm text-gray-300 space-y-2">
       <p>⛰️ 主任帶隊爬象山</p>
-      <p>🚴 一起騎腳踏車環島</p>
-      <p>🤝 團隊建立活動</p>
+      <p>🚴 腳踏車環島</p>
+      <p>✨ 團隊建立活動</p>
+    </div>
+  </div>
+  <div v-click class="p-4 rounded-lg bg-[#1E293B] border border-[#F59E0B]/30">
+    <h3 class="text-[#F59E0B] font-bold mb-3">⚡ 成長資源</h3>
+    <div class="text-sm text-gray-300 space-y-2">
+      <p>🎯 北商聯盟競賽指導</p>
+      <p>🤖 AI 算力資源支援</p>
+      <p>📚 專業知識共享</p>
     </div>
   </div>
 </div>
