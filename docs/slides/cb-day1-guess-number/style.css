@@ -10,55 +10,16 @@
   --slidea-font-sans: "Inter", "PingFang TC", "Microsoft JhengHei", "Noto Sans TC", sans-serif !important;
 }
 
-/* ── Forced Global Font Override ── */
 html, body, .slidev-layout, .slidev-layout *, 
 .slidev-layout h1, .slidev-layout h2, .slidev-layout h3, 
 .slidev-layout p, .slidev-layout span, .slidev-layout div {
   font-family: var(--slidea-font-sans) !important;
 }
 
-#slidev-goto-dialog .autocomplete-list {
-  display: none;
-}
-
-#slidev-goto-dialog:not(.-top-20) .autocomplete-list {
-  display: block;
-}
-
-.slidev-layout {
-  font-family: var(--slidea-font-sans) !important;
-  letter-spacing: 0.01em;
-  overflow: hidden;
-}
-
-.slidev-layout.scroll-y {
-  overflow-y: auto;
-  overflow-x: hidden;
-}
-.slidev-layout.scroll-y::-webkit-scrollbar {
-  width: 6px;
-}
-.slidev-layout.scroll-y::-webkit-scrollbar-track {
-  background: transparent;
-}
-.slidev-layout.scroll-y::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 3px;
-}
-.slidev-layout.scroll-y::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.3);
-}
-
-.text-3xl { font-size: 2.5rem !important; line-height: 3rem !important; }
-.text-xl { font-size: 1.75rem !important; line-height: 2.25rem !important; }
-.text-lg { font-size: 1.5rem !important; line-height: 2rem !important; }
-.text-base { font-size: 1.25rem !important; line-height: 1.75rem !important; }
-.text-sm { font-size: 1.125rem !important; line-height: 1.5rem !important; }
-.text-xs { font-size: 1rem !important; line-height: 1.25rem !important; }
-
 .font-mono,
 code,
-pre {
+pre,
+.kicker {
   font-family: "JetBrains Mono", monospace !important;
 }
 
