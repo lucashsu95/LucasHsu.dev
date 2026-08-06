@@ -366,7 +366,9 @@ class: scroll-y
 
 <div v-click class="mt-4 p-4 rounded-lg bg-[#1E293B] border border-[#F59E0B]/30">
   <h3 class="text-[#F59E0B] font-bold mb-2">📺 <a href="https://drive.google.com/file/d/1vbWbfIXkI7CaOsQ5kttSEkyms1muvbIv/preview" target="_blank">操作說明影片</a></h3>
-  <iframe src="https://drive.google.com/file/d/1vbWbfIXkI7CaOsQ5kttSEkyms1muvbIv/preview" width="100%" height="300" allow="autoplay" class="rounded-lg"></iframe>
+  <div class="bg-gray-800 rounded-lg h-[300px] flex items-center justify-center text-gray-500 italic">
+    (影片請點擊上方連結觀看)
+  </div>
 </div>
 
 <div v-click class="callout mt-4">🎯 <b>小提示</b>：先完成遊戲再來挑戰，題目不會很難！</div>
