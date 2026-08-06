@@ -73,46 +73,6 @@ transition: slide-left
 layout: default
 ---
 
-# 🏆 2025 十校技職聯盟資安與程式設計
-
-<div class="grid grid-cols-1 gap-6 mt-8">
-  <div v-click class="p-6 rounded-lg bg-[#1E293B] border border-[#5382A1]/30 text-center">
-    <img src="./award-2.jpg" class="rounded-lg w-full max-h-64 object-contain mx-auto mb-4" />
-    <p class="text-gray-400 text-sm italic">榮獲優秀成績</p>
-  </div>
-  <div class="grid grid-cols-2 gap-4">
-    <img v-click src="./contest (3).jpg" class="rounded-lg h-32 w-full object-cover border border-white/10" />
-    <img v-click src="./contest (4).jpg" class="rounded-lg h-32 w-full object-cover border border-white/10" />
-  </div>
-</div>
-
----
-layout: default
----
-
-# 🏆 跨校聯盟程式設計競賽
-
-<div class="grid grid-cols-2 gap-8 mt-8">
-  <!-- 2026 Section -->
-  <div v-click class="p-6 rounded-lg bg-[#1E293B] border border-[#5382A1]/30">
-    <h3 class="text-[#5382A1] font-bold mb-4 text-center">2026 年度</h3>
-    <img src="./award-1.jpg" class="rounded-lg w-full h-48 object-cover" />
-  </div>
-
-  <!-- 2025 Section -->
-  <div v-click class="p-6 rounded-lg bg-[#1E293B] border border-[#5382A1]/30">
-    <h3 class="text-[#5382A1] font-bold mb-4 text-center">2025 年度</h3>
-    <div class="grid grid-cols-2 gap-2">
-      <img src="./contest (2).jpg" class="rounded-lg h-48 w-full object-cover border border-white/10" />
-      <img src="./contest (1).png" class="rounded-lg h-48 w-full object-cover border border-white/10" />
-    </div>
-  </div>
-</div>
-
----
-layout: default
----
-
 # 🚀 為什麼加入商智中心？
 
 <div class="grid grid-cols-2 gap-6 mt-6">
@@ -141,6 +101,66 @@ layout: default
     <div class="bg-white p-2 rounded-lg">
       <img src="./ig-qr.png" class="h-32 rounded-lg" />
     </div>
+  </div>
+</div>
+
+---
+layout: default
+---
+
+# 🏆 2025 十校技職聯盟資安與程式設計
+
+<div class="grid grid-cols-2 gap-6 mt-12">
+  <div v-click class="p-6 rounded-lg bg-[#1E293B] border border-[#5382A1]/30 text-center">
+    <img src="./contest (1).jpg" class="rounded-lg w-full h-64 object-cover mb-4" />
+    <p class="text-gray-400 text-sm italic">競賽實錄 01</p>
+  </div>
+  <div v-click class="p-6 rounded-lg bg-[#1E293B] border border-[#5382A1]/30 text-center">
+    <img src="./contest (2).png" class="rounded-lg w-full h-64 object-cover mb-4" />
+    <p class="text-gray-400 text-sm italic">競賽實錄 02</p>
+  </div>
+</div>
+
+---
+layout: default
+---
+
+# 🏆 跨校聯盟程式設計競賽
+
+<div class="grid grid-cols-2 gap-8 mt-8">
+  <div v-click class="p-6 rounded-lg bg-[#1E293B] border border-[#5382A1]/30">
+    <h3 class="text-[#5382A1] font-bold mb-4 text-center">主獎盃與榮譽</h3>
+    <div class="grid grid-cols-1 gap-4">
+      <img src="./award-2.jpg" class="rounded-lg w-full h-40 object-cover border border-white/10" />
+    </div>
+  </div>
+
+  <div v-click class="p-6 rounded-lg bg-[#1E293B] border border-[#5382A1]/30">
+    <h3 class="text-[#5382A1] font-bold mb-4 text-center">競賽實錄</h3>
+    <div class="grid grid-cols-2 gap-2">
+      <img src="./contest (3).jpg" class="rounded-md h-24 w-full object-cover border border-white/10" />
+      <img src="./contest (4).jpg" class="rounded-md h-24 w-full object-cover border border-white/10" />
+      <img src="./contest (1).png" class="rounded-md h-24 w-full object-cover border border-white/10" />
+      <img src="./contest (6).jpg" class="rounded-md h-24 w-full object-cover border border-white/10" />
+    </div>
+  </div>
+</div>
+
+---
+layout: default
+---
+
+# 🏆 2026 ICPC Asia Taiwan Technology University Programming Contest
+## 第十一屆全國科技大專院校程式競賽
+
+<div class="grid grid-cols-2 gap-6 mt-12">
+  <div v-click class="p-6 rounded-lg bg-[#1E293B] border border-[#5382A1]/30 text-center">
+    <img src="./contest (5).jpg" class="rounded-lg w-full h-64 object-cover mb-4" />
+    <p class="text-gray-400 text-sm italic">競賽實錄 01</p>
+  </div>
+  <div v-click class="p-6 rounded-lg bg-[#1E293B] border border-[#5382A1]/30 text-center">
+    <img src="./contest (7).jpg" class="rounded-lg w-full h-64 object-cover mb-4" />
+    <p class="text-gray-400 text-sm italic">競賽實錄 02</p>
   </div>
 </div>
 
