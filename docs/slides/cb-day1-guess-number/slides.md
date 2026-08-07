@@ -112,11 +112,11 @@ layout: default
 
 <div class="grid grid-cols-2 gap-6 mt-12">
   <div v-click class="p-6 rounded-lg bg-[#1E293B] border border-[#5382A1]/30 text-center">
-    <img src="./contest (1).jpg" class="rounded-lg w-full h-64 object-cover mb-4" />
+    <img src="./contest-1.jpg" class="rounded-lg w-full h-64 object-cover mb-4" />
     <p class="text-gray-400 text-sm italic">競賽實錄 01</p>
   </div>
   <div v-click class="p-6 rounded-lg bg-[#1E293B] border border-[#5382A1]/30 text-center">
-    <img src="./contest (2).png" class="rounded-lg w-full h-64 object-cover mb-4" />
+    <img src="./contest-2.png" class="rounded-lg w-full h-64 object-cover mb-4" />
     <p class="text-gray-400 text-sm italic">競賽實錄 02</p>
   </div>
 </div>
@@ -138,10 +138,10 @@ layout: default
   <div v-click class="p-6 rounded-lg bg-[#1E293B] border border-[#5382A1]/30">
     <h3 class="text-[#5382A1] font-bold mb-4 text-center">競賽實錄</h3>
     <div class="grid grid-cols-2 gap-2">
-      <img src="./contest (3).jpg" class="rounded-md h-24 w-full object-cover border border-white/10" />
-      <img src="./contest (4).jpg" class="rounded-md h-24 w-full object-cover border border-white/10" />
-      <img src="./contest (1).png" class="rounded-md h-24 w-full object-cover border border-white/10" />
-      <img src="./contest (6).jpg" class="rounded-md h-24 w-full object-cover border border-white/10" />
+      <img src="./contest-3.jpg" class="rounded-md h-24 w-full object-cover border border-white/10" />
+      <img src="./contest-4.jpg" class="rounded-md h-24 w-full object-cover border border-white/10" />
+      <img src="./contest-1.png" class="rounded-md h-24 w-full object-cover border border-white/10" />
+      <img src="./contest-6.jpg" class="rounded-md h-24 w-full object-cover border border-white/10" />
     </div>
   </div>
 </div>
@@ -155,11 +155,11 @@ layout: default
 
 <div class="grid grid-cols-2 gap-6 mt-12">
   <div v-click class="p-6 rounded-lg bg-[#1E293B] border border-[#5382A1]/30 text-center">
-    <img src="./contest (5).jpg" class="rounded-lg w-full h-64 object-cover mb-4" />
+    <img src="./contest-5.jpg" class="rounded-lg w-full h-64 object-cover mb-4" />
     <p class="text-gray-400 text-sm italic">競賽實錄 01</p>
   </div>
   <div v-click class="p-6 rounded-lg bg-[#1E293B] border border-[#5382A1]/30 text-center">
-    <img src="./contest (7).jpg" class="rounded-lg w-full h-64 object-cover mb-4" />
+    <img src="./contest-7.jpg" class="rounded-lg w-full h-64 object-cover mb-4" />
     <p class="text-gray-400 text-sm italic">競賽實錄 02</p>
   </div>
 </div>
