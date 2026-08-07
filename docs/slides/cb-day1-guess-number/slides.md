@@ -12,8 +12,8 @@ lineNumbers: true
 routerMode: hash
 colorSchema: dark
 fonts:
-  sans: 'Inter, PingFang TC, Noto Sans TC, sans-serif'
-  mono: 'JetBrains Mono, Fira Code, Cascadia Code, Source Code Pro, PingFang TC, Noto Sans TC, monospace'
+  sans: "Inter, PingFang TC, Noto Sans TC, sans-serif"
+  mono: "JetBrains Mono, Fira Code, Cascadia Code, Source Code Pro, PingFang TC, Noto Sans TC, monospace"
 css: unocss
 stylesheet: ./style.css
 drawings:
@@ -51,8 +51,10 @@ exportFilename: cb-day1-guess-number
 </div>
 
 ---
+
 layout: cover
 transition: slide-left
+
 ---
 
 <div class="cover-glow"></div>
@@ -70,8 +72,8 @@ transition: slide-left
 </div>
 
 ---
-layout: default
----
+
+## layout: default
 
 # 🚀 為什麼加入商智中心？
 
@@ -105,8 +107,8 @@ layout: default
 </div>
 
 ---
-layout: default
----
+
+## layout: default
 
 # 🏆 2025 十校技職聯盟資安與程式設計
 
@@ -122,21 +124,19 @@ layout: default
 </div>
 
 ---
-layout: default
----
 
-# 🏆 跨校聯盟程式設計競賽
+## layout: default
+
+# 🏆 2026 跨校聯盟程式設計競賽
 
 <div class="grid grid-cols-2 gap-8 mt-8">
   <div v-click class="p-6 rounded-lg bg-[#1E293B] border border-[#5382A1]/30">
-    <h3 class="text-[#5382A1] font-bold mb-4 text-center">主獎盃與榮譽</h3>
     <div class="grid grid-cols-1 gap-4">
       <img src="./award-2.jpg" class="rounded-lg w-full h-40 object-cover border border-white/10" />
     </div>
   </div>
 
   <div v-click class="p-6 rounded-lg bg-[#1E293B] border border-[#5382A1]/30">
-    <h3 class="text-[#5382A1] font-bold mb-4 text-center">競賽實錄</h3>
     <div class="grid grid-cols-2 gap-2">
       <img src="./contest-3.jpg" class="rounded-md h-24 w-full object-cover border border-white/10" />
       <img src="./contest-4.jpg" class="rounded-md h-24 w-full object-cover border border-white/10" />
@@ -147,10 +147,11 @@ layout: default
 </div>
 
 ---
-layout: default
----
+
+## layout: default
 
 # 🏆 2026 ICPC Asia Taiwan Technology University Programming Contest
+
 ## 第十一屆全國科技大專院校程式競賽
 
 <div class="grid grid-cols-2 gap-6 mt-12">
@@ -165,12 +166,10 @@ layout: default
 </div>
 
 ---
-layout: default
----
+
+## layout: default
 
 # 🎯 今日目標
-
-
 
 <div class="mt-6 space-y-3">
   <div v-click class="flex items-center gap-4 p-4 rounded-lg bg-[#1E293B]">
@@ -197,8 +196,8 @@ layout: default
 </div>
 
 ---
-layout: default
----
+
+## layout: default
 
 # 🍳 後端是什麼？
 
@@ -220,8 +219,8 @@ layout: default
 <div v-click class="callout mt-6">💡 <b>一句話</b>：前端負責「好看」，後端負責「能用」</div>
 
 ---
-layout: default
----
+
+## layout: default
 
 # 📱 舉個例子
 
@@ -240,8 +239,8 @@ layout: default
 <div v-click class="callout mt-8">🎯 <b>這些都是後端</b> — 你看不到，但它一直在運作</div>
 
 ---
-layout: default
----
+
+## layout: default
 
 # 🛠️ 環境設定
 
@@ -289,8 +288,8 @@ layout: default
 </div>
 
 ---
-layout: default
----
+
+## layout: default
 
 # ✅ 環境確認
 
@@ -312,8 +311,8 @@ public class Hello {
 </div>
 
 ---
-layout: default
----
+
+## layout: default
 
 # 🎮 階段一：基本版猜數字
 
@@ -342,8 +341,8 @@ while (true) {
 ```
 
 ---
-layout: default
----
+
+## layout: default
 
 # 🧠 你剛剛用了什麼？
 
@@ -371,8 +370,8 @@ layout: default
 <div v-click class="callout mt-6">💡 <b>重點</b>：你剛剛用的這些工具，就是後端的基礎！</div>
 
 ---
-layout: default
----
+
+## layout: default
 
 # 🎯 階段二：加入計數器
 
@@ -400,8 +399,8 @@ while (true) {
 </div>
 
 ---
-layout: default
----
+
+## layout: default
 
 # 🎨 階段三：客製化你的遊戲
 
@@ -433,8 +432,10 @@ System.out.println(msgs[i]);</pre>
 <div v-click class="callout mt-3" style="border-color: rgba(245, 158, 11, 0.32);">🎯 <b>現在換你了！</b>改一行 code，看看有什麼不同</div>
 
 ---
+
 layout: default
 class: scroll-y
+
 ---
 
 # 🏅 DomJudge 題庫
@@ -471,8 +472,8 @@ class: scroll-y
 <div v-click class="callout mt-4">🎯 <b>小提示</b>：先完成遊戲再來挑戰，題目不會很難！</div>
 
 ---
-layout: default
----
+
+## layout: default
 
 # ⏱ 自由發揮時間
 
@@ -492,8 +493,8 @@ layout: default
 </div>
 
 ---
-layout: default
----
+
+## layout: default
 
 # 🏆 階段四：排行榜（展示）
 
@@ -516,8 +517,8 @@ if (count < leaderboard[0]) {
 <div v-click class="callout mt-4">💡 <b>觀摩就好</b>：這個版本不用自己寫，看看陣列怎麼「推擠」就好</div>
 
 ---
-layout: default
----
+
+## layout: default
 
 # 🎉 秀出你的成果
 
@@ -554,8 +555,8 @@ layout: default
 </div>
 
 ---
-layout: default
----
+
+## layout: default
 
 # 🚀 預告：明天
 
@@ -574,8 +575,10 @@ layout: default
 <div v-click class="callout mt-4">「昨天你們寫的排行榜，其實就是<span class="text-[#10B981] font-bold">資料庫</span>在做的事的縮小版」</div>
 
 ---
+
 layout: center
 class: text-center
+
 ---
 
 <div v-motion :initial="{ scale: 0.8, opacity: 0 }" :enter="{ scale: 1, opacity: 1, transition: { duration: 500 } }" class="text-6xl mb-6">🎉</div>
