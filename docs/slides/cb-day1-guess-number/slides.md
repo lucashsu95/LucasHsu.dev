@@ -51,10 +51,8 @@ exportFilename: cb-day1-guess-number
 </div>
 
 ---
-
 layout: cover
 transition: slide-left
-
 ---
 
 <div class="cover-glow"></div>
@@ -72,45 +70,43 @@ transition: slide-left
 </div>
 
 ---
-
 ## layout: default
+---
 
 # 🚀 為什麼加入商智中心？
 
 <div class="grid grid-cols-2 gap-6 mt-6">
   <div v-click class="p-6 rounded-lg bg-[#1E293B] border border-[#10B981]/30">
-    <h3 class="text-[#10B981] font-bold text-xl mb-4">🤝 社群文化</h3>
+    <h3 class="text-[#10B981] font-bold text-xl mb-4">社群文化</h3>
     <div class="text-base text-gray-300 space-y-3">
-      <p>⛰️ 與明貴主任一起爬象山</p>
-      <p>🚴 與明貴主任騎車環島</p>
-      <p>✨ 團隊建立活動</p>
+      <p>與明貴主任一起爬象山</p>
+      <p>與明貴主任騎車環島</p>
+      <p>團隊建立活動</p>
     </div>
   </div>
   <div v-click class="p-6 rounded-lg bg-[#1E293B] border border-[#F59E0B]/30">
-    <h3 class="text-[#F59E0B] font-bold text-xl mb-4">⚡ 成長資源</h3>
+    <h3 class="text-[#F59E0B] font-bold text-xl mb-4">成長資源</h3>
     <div class="text-base text-gray-300 space-y-3">
-      <p>🎯 北商聯盟競賽指導</p>
-      <p>🤖 AI 算力資源支援</p>
-      <p>🤝 產學合作經驗</p>
-      <p>📜 明貴主任推薦信 (針對優秀成員)</p>
+      <p>北商聯盟競賽指導</p>
+      <p>AI 算力資源支援</p>
+      <p>產學合作經驗</p>
+      <p>明貴主任推薦信（針對優秀成員）</p>
     </div>
   </div>
 </div>
 
-<div v-click class="mt-8 p-6 rounded-lg bg-[#1E293B] border border-[#F59E0B]/30 text-center">
-  <p class="text-[#F59E0B] font-bold mb-4 text-lg">📱 追蹤我們的 IG</p>
-  <div class="flex items-center justify-center gap-4">
-    <div class="bg-white p-2 rounded-lg">
-      <img src="./ig-qr.png" class="h-32 rounded-lg" />
-    </div>
+<div v-click class="mt-6 p-4 rounded-lg bg-[#1E293B] border border-[#F59E0B]/30 flex items-center justify-between gap-6">
+  <p class="text-[#F59E0B] font-bold text-lg whitespace-nowrap">追蹤我們的 IG</p>
+  <div class="bg-white p-2 rounded-lg shrink-0">
+    <img src="./ig-qr.png" class="h-24 w-24 rounded-lg block" />
   </div>
 </div>
 
 ---
-
 ## layout: default
+---
 
-# 🏆 2025 十校技職聯盟資安與程式設計
+# 🏆 2025/10 <a href="https://imd.ntub.edu.tw/p/412-1043-6729.php?Lang=zh-tw" target="_blank">十校技職聯盟資安與程式設計</a>
 
 <div class="grid grid-cols-2 gap-6 mt-12">
   <div v-click class="p-6 rounded-lg bg-[#1E293B] border border-[#5382A1]/30 text-center">
@@ -124,35 +120,39 @@ transition: slide-left
 </div>
 
 ---
-
 ## layout: default
+---
 
-# 🏆 2026 跨校聯盟程式設計競賽
+# 🏆 2026/6/6 <a href="https://imd.ntub.edu.tw/p/404-1043-117488.php?Lang=zh-tw" target="_blank">跨校聯盟程式設計競賽</a>
 
-<div class="grid grid-cols-2 gap-8 mt-8">
+<div class="grid grid-cols-[2fr_1fr] gap-8 mt-8">
+
   <div v-click class="p-6 rounded-lg bg-[#1E293B] border border-[#5382A1]/30">
-    <div class="grid grid-cols-1 gap-4">
-      <img src="./award-2.jpg" class="rounded-lg w-full h-40 object-cover border border-white/10" />
+    <p class="text-gray-400 text-sm italic mb-3">競賽實錄</p>
+    <div class="grid grid-cols-2 gap-2">
+      <img src="./contest-3.jpg" class="rounded-md h-32 w-full object-cover border border-white/10" />
+      <img src="./contest-4.jpg" class="rounded-md h-32 w-full object-cover border border-white/10" />
+      <img src="./contest-1.png" class="rounded-md h-32 w-full object-cover border border-white/10" />
+      <img src="./contest-6.jpg" class="rounded-md h-32 w-full object-cover border border-white/10" />
     </div>
   </div>
 
-  <div v-click class="p-6 rounded-lg bg-[#1E293B] border border-[#5382A1]/30">
-    <div class="grid grid-cols-2 gap-2">
-      <img src="./contest-3.jpg" class="rounded-md h-24 w-full object-cover border border-white/10" />
-      <img src="./contest-4.jpg" class="rounded-md h-24 w-full object-cover border border-white/10" />
-      <img src="./contest-1.png" class="rounded-md h-24 w-full object-cover border border-white/10" />
-      <img src="./contest-6.jpg" class="rounded-md h-24 w-full object-cover border border-white/10" />
-    </div>
+  <div v-click class="p-6 rounded-lg bg-[#1E293B] border border-[#F59E0B]/30 flex flex-col">
+    <p class="text-sm text-gray-300 leading-relaxed mb-4">
+      分為<b class="text-[#F59E0B]">進階組</b>與<b class="text-[#F59E0B]">初階組</b>，
+      初階組限<b>大學部一年級</b>及<b>五專部一～四年級</b>報名。
+      前三名各取一名，優選錄取數名。
+    </p>
   </div>
 </div>
 
 ---
-
 ## layout: default
+---
 
-# 🏆 2026 ICPC Asia Taiwan Technology University Programming Contest
+# 🏆 2026/7/15 ICPC Asia Taiwan Technology University Programming Contest
 
-## 第十一屆全國科技大專院校程式競賽
+## <a href="https://rdo.tpcu.edu.tw/p/405-1019-87694,c615.php?Lang=zh-tw" target="_blank">第十一屆全國科技大專院校程式競賽</a> <a href="./20260719171546.pdf" target="_blank" download="第十一屆全國科技大專院校程式競賽-題目">題目</a> <a href="https://sec.ntub.edu.tw/p/405-1003-118760,c1872.php?Lang=zh-tw" target="_blank">1</a> <a href="https://imd.ntub.edu.tw/p/406-1043-119105,r2.php?Lang=zh-tw" target="_blank">2</a>
 
 <div class="grid grid-cols-2 gap-6 mt-12">
   <div v-click class="p-6 rounded-lg bg-[#1E293B] border border-[#5382A1]/30 text-center">
@@ -166,8 +166,8 @@ transition: slide-left
 </div>
 
 ---
-
 ## layout: default
+---
 
 # 🎯 今日目標
 
@@ -196,8 +196,8 @@ transition: slide-left
 </div>
 
 ---
-
 ## layout: default
+---
 
 # 🍳 後端是什麼？
 
@@ -219,8 +219,8 @@ transition: slide-left
 <div v-click class="callout mt-6">💡 <b>一句話</b>：前端負責「好看」，後端負責「能用」</div>
 
 ---
-
 ## layout: default
+---
 
 # 📱 舉個例子
 
@@ -239,7 +239,6 @@ transition: slide-left
 <div v-click class="callout mt-8">🎯 <b>這些都是後端</b> — 你看不到，但它一直在運作</div>
 
 ---
-
 ## layout: default
 
 # 🛠️ 環境設定
@@ -288,8 +287,7 @@ transition: slide-left
 </div>
 
 ---
-
-## layout: default
+## layout: default---
 
 # ✅ 環境確認
 
@@ -311,8 +309,8 @@ public class Hello {
 </div>
 
 ---
-
 ## layout: default
+---
 
 # 🎮 階段一：基本版猜數字
 
@@ -341,8 +339,8 @@ while (true) {
 ```
 
 ---
-
 ## layout: default
+---
 
 # 🧠 你剛剛用了什麼？
 
@@ -370,8 +368,8 @@ while (true) {
 <div v-click class="callout mt-6">💡 <b>重點</b>：你剛剛用的這些工具，就是後端的基礎！</div>
 
 ---
-
 ## layout: default
+---
 
 # 🎯 階段二：加入計數器
 
@@ -399,8 +397,8 @@ while (true) {
 </div>
 
 ---
-
 ## layout: default
+---
 
 # 🎨 階段三：客製化你的遊戲
 
@@ -432,10 +430,8 @@ System.out.println(msgs[i]);</pre>
 <div v-click class="callout mt-3" style="border-color: rgba(245, 158, 11, 0.32);">🎯 <b>現在換你了！</b>改一行 code，看看有什麼不同</div>
 
 ---
-
 layout: default
 class: scroll-y
-
 ---
 
 # 🏅 DomJudge 題庫
@@ -448,7 +444,7 @@ class: scroll-y
     <div class="text-sm text-gray-300 space-y-2">
       <p>網址：<a href="https://domjudge.ntubimdbirc.tw/login" target="_blank" class="text-[#3B82F6] underline">domjudge.ntubimdbirc.tw</a></p>
       <p>帳號：學號</p>
-      <p>密碼：預設密碼（助教會給）</p>
+      <p>密碼：預設密碼（已發Email，如找不到請找助教）</p>
     </div>
   </div>
   <div v-click class="p-5 rounded-lg bg-[#1E293B] border border-[#10B981]/30">
@@ -457,106 +453,20 @@ class: scroll-y
       <p>✅ 題目從簡單到困難</p>
       <p>✅ 用 Java 作答</p>
       <p>✅ 提交後系統自動批改</p>
-      <p>✅ 餘時間可以挑戰看看！</p>
+      <p>✅ WA 是答案錯誤 RE是程式執行編輯錯誤 </p>
     </div>
   </div>
 </div>
 
 <div v-click class="mt-4 p-4 rounded-lg bg-[#1E293B] border border-[#F59E0B]/30">
   <h3 class="text-[#F59E0B] font-bold mb-2">📺 <a href="https://drive.google.com/file/d/1vbWbfIXkI7CaOsQ5kttSEkyms1muvbIv/preview" target="_blank">操作說明影片</a></h3>
-  <div class="bg-gray-800 rounded-lg h-[300px] flex items-center justify-center text-gray-500 italic">
-    (影片請點擊上方連結觀看)
-  </div>
 </div>
 
 <div v-click class="callout mt-4">🎯 <b>小提示</b>：先完成遊戲再來挑戰，題目不會很難！</div>
 
 ---
-
 ## layout: default
-
-# ⏱ 自由發揮時間
-
-<div v-click class="p-5 rounded-lg bg-gradient-to-r from-[#3B82F6]/10 to-[#10B981]/10 border border-[#3B82F6]/20">
-  <h3 class="text-2xl font-bold mb-4 text-center">你有 30 分鐘</h3>
-  <div class="grid grid-cols-2 gap-3 text-gray-300 text-sm">
-    <div>✅ 把遊戲跑起來</div>
-    <div>✅ 改成你喜歡的吐槽訊息</div>
-    <div>✅ 加上評級系統</div>
-    <div>✅ 嘗試加新功能（例如：只能猜 10 次）</div>
-  </div>
-</div>
-
-<div v-click class="callout mt-4" style="border-color: rgba(245, 158, 11, 0.32);">
-  <b class="text-[#F59E0B]">💡 提示</b>
-  <span class="text-sm text-gray-400 ml-2">不知道怎麼開始？看看 stage3-custom.java 的成品</span>
-</div>
-
 ---
-
-## layout: default
-
-# 🏆 階段四：排行榜（展示）
-
-<div class="stage-badge mb-4">Phase 4 — 觀摩用</div>
-
-用陣列存前三名的次數
-
-```java {1-2|4-12|all}
-int[] leaderboard = {999, 999, 999};
-String[] names = {"???", "???", "???"};
-
-if (count < leaderboard[0]) {
-    leaderboard[2] = leaderboard[1];
-    leaderboard[1] = leaderboard[0];
-    leaderboard[0] = count;
-    names[0] = playerName;
-}
-```
-
-<div v-click class="callout mt-4">💡 <b>觀摩就好</b>：這個版本不用自己寫，看看陣列怎麼「推擠」就好</div>
-
----
-
-## layout: default
-
-# 🎉 秀出你的成果
-
-<div class="grid grid-cols-2 gap-6 mt-4">
-  <div>
-    <div v-click class="p-4 rounded-lg bg-[#1E293B] mb-3">
-      <p class="text-gray-300 mb-2">每個人用 1-2 句話介紹：</p>
-      <p class="text-[#10B981] font-mono">「我加了 _____，所以 _____」</p>
-    </div>
-    <div v-click class="p-4 rounded-lg bg-[#1E293B] mb-3">
-      <p class="text-gray-400 text-sm">例如：</p>
-      <p class="text-gray-300 text-sm mt-1">「我加了打嗝特效，所以猜錯會說 🫧」</p>
-    </div>
-    <div v-click class="p-4 rounded-lg bg-[#1E293B]">
-      <p class="text-gray-300 text-sm">互相看看別人的版本！</p>
-    </div>
-  </div>
-  <div>
-    <div v-click class="concept-card green">
-      <h3 class="text-[#10B981] font-bold mb-3">🎯 你剛剛完成了</h3>
-      <ul class="space-y-2 text-sm text-gray-300">
-        <li>✓ 變數 — 存隨機數、計數器</li>
-        <li>✓ 條件判斷 — if/else</li>
-        <li>✓ 迴圈 — while</li>
-        <li>✓ 陣列 — 存排行榜</li>
-        <li>✓ Scanner — 讀取輸入</li>
-      </ul>
-    </div>
-    <div v-click class="callout mt-3" style="border-color: rgba(245, 158, 11, 0.32);">
-      <b class="text-[#F59E0B]">📌 重點</b>
-      <p class="text-gray-400 text-xs mt-1">這些就是後端的基礎工具！</p>
-    </div>
-  </div>
-</div>
-
----
-
-## layout: default
 
 # 🚀 預告：明天
 
@@ -575,10 +485,8 @@ if (count < leaderboard[0]) {
 <div v-click class="callout mt-4">「昨天你們寫的排行榜，其實就是<span class="text-[#10B981] font-bold">資料庫</span>在做的事的縮小版」</div>
 
 ---
-
 layout: center
 class: text-center
-
 ---
 
 <div v-motion :initial="{ scale: 0.8, opacity: 0 }" :enter="{ scale: 1, opacity: 1, transition: { duration: 500 } }" class="text-6xl mb-6">🎉</div>
