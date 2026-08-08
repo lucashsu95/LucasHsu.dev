@@ -227,19 +227,20 @@ transition: slide-left
 你點外送 App 按下「送出訂單」後，後端發生了什麼？
 
 <div class="timeline mt-8">
-  <div v-click class="time-node"><b>1. 驗證訂單</b><br><span>資料完整？庫存夠？</span></div>
-  <div v-click class="time-arrow">→</div>
-  <div v-click class="time-node green"><b>2. 扣庫存</b><br><span>把商品從架上拿掉</span></div>
-  <div v-click class="time-arrow">→</div>
-  <div v-click class="time-node amber"><b>3. 寫進資料庫</b><br><span>記錄這筆訂單</span></div>
-  <div v-click class="time-arrow">→</div>
-  <div v-click class="time-node"><b>4. 通知店家</b><br><span>接單了！</span></div>
+  <div class="time-node"><b>1. 驗證訂單</b><br><span>資料完整？庫存夠？</span></div>
+  <div class="time-arrow">→</div>
+  <div class="time-node green"><b>2. 扣庫存</b><br><span>把商品從架上拿掉</span></div>
+  <div class="time-arrow">→</div>
+  <div class="time-node amber"><b>3. 寫進資料庫</b><br><span>記錄這筆訂單</span></div>
+  <div class="time-arrow">→</div>
+  <div class="time-node"><b>4. 通知店家</b><br><span>接單了！</span></div>
 </div>
 
 <div v-click class="callout mt-8">🎯 <b>這些都是後端</b> — 你看不到，但它一直在運作</div>
 
 ---
 ## layout: default
+---
 
 # 🛠️ 環境設定
 
@@ -287,7 +288,8 @@ transition: slide-left
 </div>
 
 ---
-## layout: default---
+## layout: default
+---
 
 # ✅ 環境確認
 
@@ -301,9 +303,9 @@ public class Hello {
 }
 ```
 
-<div v-click class="callout mt-3">💡 <b>看到 "Hello, 我的名字!" 就成功了！</b> 在下面打上你自己的名字，舉手讓助教確認</div>
+<div class="callout mt-3">💡 <b>看到 "Hello, 我的名字!" 就成功了！</b> 在下面打上你自己的名字，舉手讓助教確認</div>
 
-<div v-click class="mt-2 p-2 bg-[#F59E0B]/10 rounded-lg border border-[#F59E0B]/30 text-center text-sm">
+<div class="mt-2 p-2 bg-[#F59E0B]/10 rounded-lg border border-[#F59E0B]/30 text-center text-sm">
   <b class="text-[#F59E0B]">⏱ 3 分鐘</b>
   <span class="text-gray-400 ml-2">卡住的人，旁邊同學或助教會來幫你</span>
 </div>
@@ -316,7 +318,7 @@ public class Hello {
 
 <div class="stage-badge mb-4">Phase 1 - 電腦隨機出 1-100 的數字，你來猜！</div>
 
-```java {1-3|4-5|all}
+```java {1-3|4-5|8,19|10|11,14,16,18|11-13|14-15|16-17|all}
 // 1. 產生隨機數
 int answer = (int)(Math.random() * 100) + 1;
 
@@ -326,7 +328,7 @@ Scanner scanner = new Scanner(System.in);
 // 3. 迴圈：一直猜到對為止
 while (true) {
     System.out.print("猜一個數字：");
-    int guess = scanner.nextInt();
+    int guess = scanner.nextInt();    // 讓使用者輸入輸字
     if (guess == answer) {
         System.out.println("答對了！");
         break;
@@ -345,19 +347,19 @@ while (true) {
 # 🧠 你剛剛用了什麼？
 
 <div class="grid grid-cols-3 gap-4 mt-6">
-  <div v-click class="concept-card blue text-center">
+  <div class="concept-card blue text-center">
     <div class="text-3xl mb-2">📦</div>
     <b class="text-[#3B82F6]">變數</b>
     <p class="text-gray-400 text-xs mt-1">answer, guess</p>
     <span>存東西的盒子</span>
   </div>
-  <div v-click class="concept-card green text-center">
+  <div class="concept-card green text-center">
     <div class="text-3xl mb-2">🔀</div>
     <b class="text-[#10B981]">條件判斷</b>
     <p class="text-gray-400 text-xs mt-1">if / else if / else</p>
     <span>根據情況做不同事</span>
   </div>
-  <div v-click class="concept-card amber text-center">
+  <div class="concept-card amber text-center">
     <div class="text-3xl mb-2">🔄</div>
     <b class="text-[#F59E0B]">迴圈</b>
     <p class="text-gray-400 text-xs mt-1">while (true)</p>
@@ -365,7 +367,7 @@ while (true) {
   </div>
 </div>
 
-<div v-click class="callout mt-6">💡 <b>重點</b>：你剛剛用的這些工具，就是後端的基礎！</div>
+<div class="callout mt-6">💡 <b>重點</b>：你剛剛用的這些工具，就是後端的基礎！</div>
 
 ---
 ## layout: default
@@ -390,7 +392,7 @@ while (true) {
 }
 ```
 
-<div v-click class="callout mt-4" style="border-color: rgba(245, 158, 11, 0.32);">
+<div class="callout mt-4" style="border-color: rgba(245, 158, 11, 0.32);">
   <b class="text-[#F59E0B]">💡 思考</b>
   <p class="text-gray-300 text-sm mt-2">為什麼 count 要放在 while 迴圈「外面」？</p>
   <p v-click class="text-[#10B981] text-sm mt-1">→ 因為要跨迴圈保留值，不能每次重來都歸零</p>
@@ -405,7 +407,7 @@ while (true) {
 <div class="stage-badge mb-3">Phase 3 — 重點體驗</div>
 
 <div class="grid grid-cols-2 gap-4">
-  <div v-click class="concept-card blue">
+  <div class="concept-card blue">
     <h3 class="text-[#3B82F6] font-bold text-sm mb-2">💬 改吐槽訊息</h3>
     <pre class="text-[11px] text-gray-300 leading-tight">String[] msgs = {
   "太大！猜到明年嗎？",
@@ -415,7 +417,7 @@ while (true) {
 int i = (int)(Math.random()*msgs.length);
 System.out.println(msgs[i]);</pre>
   </div>
-  <div v-click class="concept-card green">
+  <div class="concept-card green">
     <h3 class="text-[#10B981] font-bold text-sm mb-2">🏆 加評級系統</h3>
     <pre class="text-[11px] text-gray-300 leading-tight">if (count <= 5) {
   System.out.println("天才！");
@@ -427,7 +429,7 @@ System.out.println(msgs[i]);</pre>
   </div>
 </div>
 
-<div v-click class="callout mt-3" style="border-color: rgba(245, 158, 11, 0.32);">🎯 <b>現在換你了！</b>改一行 code，看看有什麼不同</div>
+<div class="callout mt-3" style="border-color: rgba(245, 158, 11, 0.32);">🎯 <b>現在換你了！</b>改一行 code，看看有什麼不同</div>
 
 ---
 layout: default
@@ -496,10 +498,6 @@ class: text-center
 </h1>
 
 <p v-motion :initial="{ y: 20, opacity: 0 }" :enter="{ y: 0, opacity: 1, transition: { delay: 400, duration: 500 } }" class="text-lg text-gray-300 mb-6">
-  你今天從零開始，寫出了一個會動的 Java 程式
-</p>
-
-<p v-motion :initial="{ y: 20, opacity: 0 }" :enter="{ y: 0, opacity: 1, transition: { delay: 600, duration: 500 } }" class="text-xl text-gray-400 mb-8">
   這就是後端的起點
 </p>
 
