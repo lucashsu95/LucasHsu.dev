@@ -150,6 +150,132 @@ transition: slide-left
 ## layout: default
 ---
 
+# 📅 課程時程規劃
+
+<div class="flex items-center gap-4 mt-4 mb-6 text-sm text-gray-400">
+  <span class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-[#94918A]"></span>暖身</span>
+  <span class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-[#3B82F6]"></span>Java 基礎</span>
+  <span class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-[#10B981]"></span>OOP</span>
+  <span class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-[#F97316]"></span>停課</span>
+  <span class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-[#F59E0B]"></span>MySQL</span>
+  <span class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-[#8B5CF6]"></span>Spring Boot</span>
+</div>
+
+<div class="timeline-scroll flex gap-5 overflow-x-auto pb-6">
+
+  <div v-motion :initial="{ x: 20, opacity: 0 }" :enter="{ x: 0, opacity: 1, transition: { delay: 0, duration: 400 } }" class="timeline-item">
+    <div class="timeline-card border-l-[#94918A]">
+      <p class="text-xs text-gray-500 mb-1">9/16–9/17</p>
+      <p class="text-base font-bold text-white">後端體驗營</p>
+      <p class="text-xs text-gray-400 mt-1">暖身課，不算正式單元</p>
+    </div>
+    <div class="timeline-dot bg-[#94918A]"></div>
+  </div>
+
+  <div v-motion :initial="{ x: 20, opacity: 0 }" :enter="{ x: 0, opacity: 1, transition: { delay: 80, duration: 400 } }" class="timeline-item">
+    <div class="timeline-card border-l-[#3B82F6]">
+      <p class="text-xs text-gray-500 mb-1">9/21–10/9</p>
+      <p class="text-base font-bold text-[#3B82f6]">Java 基礎語法</p>
+      <p class="text-xs text-gray-400 mt-1">3 週</p>
+    </div>
+    <div class="timeline-dot bg-[#3B82F6]"></div>
+  </div>
+
+  <div v-motion :initial="{ x: 20, opacity: 0 }" :enter="{ x: 0, opacity: 1, transition: { delay: 160, duration: 400 } }" class="timeline-item">
+    <div class="timeline-card border-l-[#10B981]">
+      <p class="text-xs text-gray-500 mb-1">10/12–10/23</p>
+      <p class="text-base font-bold text-[#10B981]">OOP 物件導向</p>
+      <p class="text-xs text-gray-400 mt-1">2 週</p>
+    </div>
+    <div class="timeline-dot bg-[#10B981]"></div>
+  </div>
+
+  <div v-motion :initial="{ x: 20, opacity: 0 }" :enter="{ x: 0, opacity: 1, transition: { delay: 240, duration: 400 } }" class="timeline-item">
+    <div class="timeline-card border-l-[#F97316]">
+      <p class="text-xs text-gray-500 mb-1">10/26–11/6</p>
+      <p class="text-base font-bold text-white">停課</p>
+      <p class="text-xs text-gray-400 mt-1">期中考試</p>
+    </div>
+    <div class="timeline-dot bg-[#F97316]"></div>
+  </div>
+
+  <div v-motion :initial="{ x: 20, opacity: 0 }" :enter="{ x: 0, opacity: 1, transition: { delay: 400, duration: 400 } }" class="timeline-item">
+    <div class="timeline-card border-l-[#F59E0B]">
+      <p class="text-xs text-gray-500 mb-1">11/9–11/20</p>
+      <p class="text-base font-bold text-[#F59E0B]">MySQL</p>
+      <p class="text-xs text-gray-400 mt-1">2 週</p>
+    </div>
+    <div class="timeline-dot bg-[#F59E0B]"></div>
+  </div>
+
+  <div v-motion :initial="{ x: 20, opacity: 0 }" :enter="{ x: 0, opacity: 1, transition: { delay: 480, duration: 400 } }" class="timeline-item">
+    <div class="timeline-card border-l-[#8B5CF6]">
+      <p class="text-xs text-gray-500 mb-1">11/23–12/18</p>
+      <p class="text-base font-bold text-[#8B5CF6]">Spring Boot</p>
+      <p class="text-xs text-gray-400 mt-1">3.5 週</p>
+    </div>
+    <div class="timeline-dot bg-[#8B5CF6]"></div>
+  </div>
+
+  <div v-motion :initial="{ x: 20, opacity: 0 }" :enter="{ x: 0, opacity: 1, transition: { delay: 480, duration: 400 } }" class="timeline-item">
+    <div class="timeline-card border-l-[#8B5CF6]">
+      <p class="text-xs text-gray-500 mb-1">12/21–12/25</p>
+      <p class="text-base font-bold text-white">面試</p>
+      <p class="text-xs text-gray-400 mt-1">1 週</p>
+    </div>
+  </div>
+
+</div>
+
+<style>
+.timeline-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: #3B82F6 transparent;
+}
+.timeline-scroll::-webkit-scrollbar {
+  height: 6px;
+}
+.timeline-scroll::-webkit-scrollbar-thumb {
+  background: #3B82F6;
+  border-radius: 3px;
+}
+.timeline-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 160px;
+  flex-shrink: 0;
+  position: relative;
+}
+.timeline-item:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  top: 44px;
+  left: calc(100% + 4px);
+  width: 12px;
+  height: 1px;
+  background: rgba(255,255,255,0.15);
+}
+.timeline-card {
+  background: #1E293B;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-left-width: 3px;
+  border-radius: 8px;
+  padding: 12px 14px;
+  width: 100%;
+}
+.timeline-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-top: 12px;
+}
+</style>
+
+---
+## layout: default
+---
+
 # 🏆 2026/7/15 ICPC Asia Taiwan Technology University Programming Contest
 
 ## <a href="https://rdo.tpcu.edu.tw/p/405-1019-87694,c615.php?Lang=zh-tw" target="_blank">第十一屆全國科技大專院校程式競賽</a> <a href="./20260719171546.pdf" target="_blank" download="第十一屆全國科技大專院校程式競賽-題目">題目</a> <a href="https://sec.ntub.edu.tw/p/405-1003-118760,c1872.php?Lang=zh-tw" target="_blank">1</a> <a href="https://imd.ntub.edu.tw/p/406-1043-119105,r2.php?Lang=zh-tw" target="_blank">2</a>
