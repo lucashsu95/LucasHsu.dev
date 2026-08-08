@@ -82,7 +82,6 @@ layout: default
       <li>✓ 變數 — 存東西的盒子</li>
       <li>✓ 條件判斷 — if/else 分支</li>
       <li>✓ 迴圈 — while 重複執行</li>
-      <li>✓ 陣列 — 存排行榜</li>
       <li>✓ Scanner — 讀取輸入</li>
     </ul>
   </div>
@@ -92,7 +91,6 @@ layout: default
       <li>📦 用平行陣列存商品資料</li>
       <li>🛒 做一個超簡化的購物車</li>
       <li>📊 加入庫存判斷（避免超賣）</li>
-      <li>🧠 看見「陣列 → 資料庫」的關聯</li>
     </ul>
   </div>
 </div>
@@ -124,7 +122,7 @@ layout: default
     <span class="text-3xl">🧠</span>
     <div>
       <b class="text-[#F59E0B] text-lg">看見「陣列 → 資料庫」的關聯</b>
-      <p class="text-gray-400 mt-1">昨天的排行榜，今天變購物車</p>
+      <p class="text-gray-400 mt-1">購物車</p>
     </div>
   </div>
 </div>
@@ -157,7 +155,7 @@ layout: default
 
 <div class="stage-badge mb-4">Phase 1 — 用平行陣列存商品資料</div>
 
-```java {1-2|4-10|all}
+```java {1-3|5-8|10-12|all}
 // 平行陣列：同 index 對應同一個商品
 String[] products = {"cola", "sandwich", "chips", "cookie", "juice"};
 int[] prices = {30, 65, 45, 35, 40};
@@ -173,6 +171,42 @@ int choice = scanner.nextInt();
 ```
 
 <div v-click class="callout mt-4">💡 <b>平行陣列</b>：兩個陣列長度相同，同一個 index 對應同一個商品</div>
+
+---
+layout: default
+---
+
+# 🔢 陣列索引 Index 是什麼？
+
+<div class="stage-badge mb-4">Step 1.5 — 陣列的「門牌號碼」</div>
+
+```java {1-2|4-8|9-13|all}
+// 陣列的 index 從 0 開始！
+String[] products = {"cola", "sandwich", "chips", "cookie", "juice"};
+
+//                      ↑        ↑          ↑        ↑        ↑
+//    index:            0        1          2        3        4
+//  products[0] = "cola"
+//  products[1] = "sandwich"
+//  products[4] = "juice"     ← 最後一個是 length - 1
+```
+
+<div v-click class="grid grid-cols-2 gap-4 mt-4">
+  <div class="p-4 rounded-lg bg-[#1E293B] border border-[#F59E0B]/30">
+    <b class="text-[#F59E0B]">⚠️ 常見錯誤</b>
+    <p class="text-gray-300 text-sm mt-2">
+      products[5] → <b class="text-red-400">ArrayIndexOutOfBoundsException</b><br>
+      <span class="text-gray-400 text-xs">index 最大只能是 length - 1</span>
+    </p>
+  </div>
+  <div class="p-4 rounded-lg bg-[#1E293B] border border-[#10B981]/30">
+    <b class="text-[#10B981]">💡 為什麼從 0 開始？</b>
+    <p class="text-gray-300 text-sm mt-2">
+      index 代表「距離起點幾個位置」<br>
+      <span class="text-gray-400 text-xs">第 1 個元素 = 距離起點 0 個位置</span>
+    </p>
+  </div>
+</div>
 
 ---
 layout: default
@@ -292,87 +326,6 @@ if (quantity > stock[index]) {
 stock[index] -= quantity;
 ```
 
-<div v-click class="callout mt-4" style="border-color: rgba(245, 158, 11, 0.32);">
-  <b class="text-[#F59E0B]">⚠️ 這就是真實世界的後端！</b>
-  <p class="text-gray-300 text-sm mt-1">庫存判斷寫錯 = 超賣 = 真實 bug</p>
-</div>
-
----
-layout: default
----
-
-# 🎭 角色扮演時間
-
-<div v-click class="p-6 rounded-lg bg-gradient-to-r from-[#3B82F6]/10 to-[#10B981]/10 border border-[#3B82F6]/20">
-  <h3 class="text-2xl font-bold mb-4 text-center">我們來模擬一次訂單流程！</h3>
-  <div class="grid grid-cols-2 gap-4 text-gray-300 text-sm">
-    <div v-click class="p-3 rounded-lg bg-[#1E293B]">
-      <b class="text-[#3B82F6]">🧑‍💼 顧客</b>
-      <p class="mt-1">「我要買 2 個 cola」</p>
-    </div>
-    <div v-click class="p-3 rounded-lg bg-[#1E293B]">
-      <b class="text-[#10B981]">📦 倉庫管理員</b>
-      <p class="mt-1">「col a 庫存還有 10 個，可以賣」</p>
-    </div>
-    <div v-click class="p-3 rounded-lg bg-[#1E293B]">
-      <b class="text-[#F59E0B]">💻 後端系統</b>
-      <p class="mt-1">「扣庫存：10 - 2 = 8」</p>
-    </div>
-    <div v-click class="p-3 rounded-lg bg-[#1E293B]">
-      <b class="text-[#8B5CF6]">🧮 會計</b>
-      <p class="mt-1">「cola 30 元 x 2 = 60 元」</p>
-    </div>
-  </div>
-</div>
-
-<div v-click class="callout mt-4">💡 <b>模擬完再看 code</b>，你會有「啊原來就是這個」的感覺！</div>
-
----
-layout: default
----
-
-# 🏪 完整版展示
-
-<div class="stage-badge mb-4">Bonus — 含折扣碼 + 訂單記錄</div>
-
-```java {1-3|5-8|all}
-// 折扣碼功能
-if (code.equals("STUDENT")) {
-    totalAmount = (int)(totalAmount * 0.8);  // 打 8 折
-} else if (code.equals("VIP")) {
-    totalAmount = (int)(totalAmount * 0.7);  // 打 7 折
-}
-
-// 訂單記錄（最多 100 筆）
-String[] orderNames = new String[100];
-int[] orderQuantity = new int[100];
-int[] orderSubtotal = new int[100];
-int orderIndex = 0;
-```
-
-<div v-click class="callout mt-4">💡 <b>觀摩就好</b>：這個版本不用自己寫，看看「平行陣列」怎麼存訂單記錄</div>
-
----
-layout: default
----
-
-# 🎨 自由發揮時間
-
-<div v-click class="p-5 rounded-lg bg-gradient-to-r from-[#3B82F6]/10 to-[#10B981]/10 border border-[#3B82F6]/20">
-  <h3 class="text-2xl font-bold mb-4 text-center">你有 25 分鐘</h3>
-  <div class="grid grid-cols-2 gap-3 text-gray-300 text-sm">
-    <div>✅ 把訂單系統跑起來</div>
-    <div>✅ 加入庫存判斷</div>
-    <div>✅ 嘗試加新功能（例如：折扣碼）</div>
-    <div>✅ 改成你喜歡的商品</div>
-  </div>
-</div>
-
-<div v-click class="callout mt-4" style="border-color: rgba(245, 158, 11, 0.32);">
-  <b class="text-[#F59E0B]">💡 提示</b>
-  <span class="text-sm text-gray-400 ml-2">不知道怎麼開始？看看 step3-inventory.java 的成品</span>
-</div>
-
 ---
 layout: default
 ---
@@ -400,41 +353,38 @@ ORDER BY price;</pre>
 
 ---
 layout: default
+class: scroll-y
 ---
 
-# 🎉 秀出你的成果
+# 🏅 DomJudge 題庫
+
+<div class="stage-badge mb-4">線上練習 — 挑戰自我</div>
 
 <div class="grid grid-cols-2 gap-6 mt-4">
-  <div>
-    <div v-click class="p-4 rounded-lg bg-[#1E293B] mb-3">
-      <p class="text-gray-300 mb-2">每個人用 1-2 句話介紹：</p>
-      <p class="text-[#10B981] font-mono">「我加了 _____，所以 _____」</p>
-    </div>
-    <div v-click class="p-4 rounded-lg bg-[#1E293B] mb-3">
-      <p class="text-gray-400 text-sm">例如：</p>
-      <p class="text-gray-300 text-sm mt-1">「我加了折扣碼功能，所以輸入 STUDENT 會打 8 折」</p>
-    </div>
-    <div v-click class="p-4 rounded-lg bg-[#1E293B]">
-      <p class="text-gray-300 text-sm">互相看看別人的版本！</p>
+  <div v-click class="p-5 rounded-lg bg-[#1E293B] border border-[#5382A1]/30">
+    <h3 class="text-[#5382A1] font-bold text-lg mb-3">🔗 登入系統</h3>
+    <div class="text-sm text-gray-300 space-y-2">
+      <p>網址：<a href="https://domjudge.ntubimdbirc.tw/login" target="_blank" class="text-[#3B82F6] underline">domjudge.ntubimdbirc.tw</a></p>
+      <p>帳號：學號</p>
+      <p>密碼：預設密碼（已發Email，如找不到請找助教）</p>
     </div>
   </div>
-  <div>
-    <div v-click class="concept-card green">
-      <h3 class="text-[#10B981] font-bold mb-3">🎯 你剛剛完成了</h3>
-      <ul class="space-y-2 text-sm text-gray-300">
-        <li>✓ 平行陣列 — 組織多筆資料</li>
-        <li>✓ For 迴圈 — 印出商品選單</li>
-        <li>✓ While 迴圈 — 購物車邏輯</li>
-        <li>✓ 條件判斷 — 庫存檢查</li>
-        <li>✓ 累加計算 — 總金額</li>
-      </ul>
-    </div>
-    <div v-click class="callout mt-3" style="border-color: rgba(245, 158, 11, 0.32);">
-      <b class="text-[#F59E0B]">📌 重點</b>
-      <p class="text-gray-400 text-xs mt-1">這些就是真實後端的基礎！</p>
+  <div v-click class="p-5 rounded-lg bg-[#1E293B] border border-[#10B981]/30">
+    <h3 class="text-[#10B981] font-bold text-lg mb-3">💡 題目說明</h3>
+    <div class="text-sm text-gray-300 space-y-2">
+      <p>✅ 題目從簡單到困難</p>
+      <p>✅ 用 Java 作答</p>
+      <p>✅ 提交後系統自動批改</p>
+      <p>✅ WA 是答案錯誤 RE是程式執行編輯錯誤 </p>
     </div>
   </div>
 </div>
+
+<div v-click class="mt-4 p-4 rounded-lg bg-[#1E293B] border border-[#F59E0B]/30">
+  <h3 class="text-[#F59E0B] font-bold mb-2">📺 <a href="https://drive.google.com/file/d/1vbWbfIXkI7CaOsQ5kttSEkyms1muvbIv/preview" target="_blank">操作說明影片</a></h3>
+</div>
+
+<div v-click class="callout mt-4">🎯 <b>小提示</b>：先完成遊戲再來挑戰，題目不會很難！</div>
 
 ---
 layout: center
