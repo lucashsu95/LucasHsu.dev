@@ -24,16 +24,6 @@ head:
 - 常見順序：色 > 圖 > repeat > position / size > attachment。
 - 視差感：`background-attachment: fixed;`；滿版：`background-size: cover;`。
 
-## 視覺化：縮寫拆解
-```mermaid
-flowchart LR
-  A[background] --> B[url(img)]
-  A --> C[no-repeat]
-  A --> D[center center]
-  D --> E[/ cover]
-  A --> F[fixed]
-```
-
 主要是想講background可以寫成一行
 
 `background: url('') no-repeat center center / cover fixed;`是一個CSS縮寫屬性，用於設置元素的背景樣式。以下是各個屬性值的解釋：

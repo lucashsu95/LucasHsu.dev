@@ -15,8 +15,6 @@ head:
 3. 系統會說 太大 或是 太小
 4. 猜到對的答案才停
 
-<video controls="controls" src="../assets/網頁操作/終極密碼/終極密碼-demo.mp4"></video>
-
 ::: details 看答案
 ::: code-group
 

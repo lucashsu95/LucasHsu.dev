@@ -56,15 +56,9 @@ width: clamp(350px, 50%, 600px);
 ```mermaid
 xychart-beta
     title "clamp(32px, 4vw, 48px) 隨視口寬度變化"
-    xAxis title "viewport(px)" min 320 max 1440
-    yAxis title "font-size(px)" min 24 max 56
-    line
-      320:32
-      480:32
-      768:32
-      1024:41
-      1280:48
-      1440:48
+    x-axis "viewport(px)" [320, 480, 768, 800, 1024, 1200, 1280, 1440]
+    y-axis "font-size(px)" 24 --> 56
+    line [32, 32, 32, 32, 41, 48, 48, 48]
 ```
 
 * 320-768px: 卡在最小 32px

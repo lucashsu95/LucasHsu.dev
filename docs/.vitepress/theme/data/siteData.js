@@ -18,14 +18,14 @@ export const featuredWorks = [
     title: "自定題目練習系統",
     description: "可自建題庫的線上練習系統 — Vue 打造的教學工具",
     image: "/portfolio/網站Web/assets/自定題目練習系統/img/image.webp",
-    tags: ["Vue", "Education"],
+    tags: ["React", "Education"],
     demo: "https://custom-training.vercel.app/",
     link: "/portfolio/網站Web/自定題目練習系統",
   },
   {
     title: "碳棄 — 減碳行銷網站",
     description: "專題競賽 — Vue + Bootstrap + Chart.js + PHP",
-    image: "/portfolio/web-global/53_Module_C_Design/image.webp",
+    image: "https://lucashsu95.github.io/My_web/",
     tags: ["Vue", "PHP", "Chart.js"],
     demo: "https://github.com/lucashsu95/My_web",
     link: "/portfolio/專題/網站",
@@ -33,10 +33,10 @@ export const featuredWorks = [
   {
     title: "校網設備報修系統",
     description: "穀保家商上線系統 — 校務數位化",
-    image: "/portfolio/web-global/54_Module_A_Design/image.webp",
+    image: "https://repair.kpvs.ntpc.edu.tw/booking-system-frontend/",
     tags: ["Web App", "Production"],
     demo: "https://repair.kpvs.ntpc.edu.tw/repair-system/",
-    link: "/about/",
+    link: "https://repair.kpvs.ntpc.edu.tw/booking-system-frontend/",
   },
 ];
 

@@ -32,9 +32,6 @@ export function sidebarJavascript() {
         { text: '購物車範例', link: '/javascript/網頁操作/購物車', activeMatch: '/javascript/網頁操作/購物車' },
         { text: '聊天機器人', link: '/javascript/網頁操作/chat', activeMatch: '/javascript/網頁操作/chat' },
         { text: '傳統時鐘製作指南', link: '/javascript/網頁操作/傳統時鐘製作指南', activeMatch: '/javascript/網頁操作/傳統時鐘製作指南' },
-        { text: 'Service Worker', link: '/javascript/網頁操作/service-worker-basic', activeMatch: '/javascript/網頁操作/service-worker-basic' },
-        { text: 'Web Components - 基礎篇', link: '/javascript/網頁操作/web-components-1', activeMatch: '/javascript/網頁操作/web-components-1' },
-        { text: 'Web Components - 實戰篇', link: '/javascript/網頁操作/web-components-2', activeMatch: '/javascript/網頁操作/web-components-2' },
       ],
     },
     {
@@ -44,6 +41,9 @@ export function sidebarJavascript() {
         { text: '物件導向程式設計 (OOP)', link: '/javascript/advanced/OOP', activeMatch: '/javascript/advanced/OOP' },
         { text: '正規表達式 (Regex)', link: '/javascript/advanced/regex', activeMatch: '/javascript/advanced/regex' },
         { text: 'Node.js 文件系統 (fs) 基本操作', link: '/javascript/advanced/node-fs', activeMatch: '/javascript/advanced/node-fs' },
+        { text: 'Service Worker', link: '/javascript/網頁操作/service-worker-basic', activeMatch: '/javascript/網頁操作/service-worker-basic' },
+        { text: 'Web Components - 基礎篇', link: '/javascript/網頁操作/web-components-1', activeMatch: '/javascript/網頁操作/web-components-1' },
+        { text: 'Web Components - 實戰篇', link: '/javascript/網頁操作/web-components-2', activeMatch: '/javascript/網頁操作/web-components-2' },
       ]
     },
     {

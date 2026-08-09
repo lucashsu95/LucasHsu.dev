@@ -40,41 +40,27 @@ head:
 2. 可編輯、刪除
 3. 新增後清空輸入框
 
-<video controls="controls" src="../assets/網頁操作/todolist/todolist-demo.mp4"></video>
+## 互動體驗：購物車
 
-## React 版範例 (含防呆)
+<ShoppingCart />
 
-```jsx
-import { useState, useRef, useEffect } from "react";
+
+## 實做
+
+:::code-group
+
+```jsx [React]
+import { useState, useRef } from "react";
 
 export default function TodoList() {
-  const [todos, setTodos] = useState(() => {
-    return JSON.parse(localStorage.getItem("todos") || "[]");
-  });
-  const [filter, setFilter] = useState("all");
+  const [todos, setTodos] = useState([]);
   const inp = useRef(null);
-
-  useEffect(() => {
-    localStorage.setItem("todos", JSON.stringify(todos));
-  }, [todos]);
 
   const add = () => {
     const text = inp.current.value.trim();
     if (!text) return;
-    if (todos.some((t) => t.text === text)) return; // 避免重複
-    setTodos((prev) => [
-      ...prev,
-      { id: crypto.randomUUID(), text, done: false },
-    ]);
+    setTodos((prev) => [...prev, { id: Date.now(), text, done: false }]);
     inp.current.value = "";
-  };
-
-  const update = (id) => {
-    const next = prompt("請輸入新的內容", todos.find((t) => t.id === id)?.text);
-    if (next == null || !next.trim()) return;
-    setTodos((prev) =>
-      prev.map((t) => (t.id === id ? { ...t, text: next.trim() } : t)),
-    );
   };
 
   const toggle = (id) => {
@@ -85,56 +71,27 @@ export default function TodoList() {
 
   const remove = (id) => setTodos((prev) => prev.filter((t) => t.id !== id));
 
-  const filters = {
-    all: () => true,
-    active: (t) => !t.done,
-    done: (t) => t.done,
-  };
-
-  const view = todos.filter(filters[filter]);
-
   return (
     <section>
-      <header className="flex gap-2">
-        <input
-          ref={inp}
-          className="input"
-          onKeyDown={(e) => e.key === "Enter" && add()}
-        />
+      <div className="flex gap-2">
+        <input ref={inp} onKeyDown={(e) => e.key === "Enter" && add()} />
         <button onClick={add}>新增</button>
-      </header>
+      </div>
 
-      <nav className="space-x-2 my-2">
-        {["all", "active", "done"].map((key) => (
-          <button
-            key={key}
-            onClick={() => setFilter(key)}
-            disabled={filter === key}
-          >
-            {key}
-          </button>
-        ))}
-      </nav>
-
-      <ul className="space-y-2">
-        {view.map((t) => (
-          <li
-            key={t.id}
-            className="flex justify-between items-center"
-            role="listitem"
-          >
-            <label className="flex items-center gap-2">
+      <ul>
+        {todos.map((t) => (
+          <li key={t.id}>
+            <label>
               <input
                 type="checkbox"
                 checked={t.done}
                 onChange={() => toggle(t.id)}
               />
-              <span>{t.text}</span>
+              <span style={{ textDecoration: t.done ? "line-through" : "none" }}>
+                {t.text}
+              </span>
             </label>
-            <div className="space-x-2">
-              <button onClick={() => update(t.id)}>編輯</button>
-              <button onClick={() => remove(t.id)}>刪除</button>
-            </div>
+            <button onClick={() => remove(t.id)}>刪除</button>
           </li>
         ))}
       </ul>
@@ -143,91 +100,64 @@ export default function TodoList() {
 }
 ```
 
-## 原生 JS 版 (含 LocalStorage)
-
-```html
-<form id="todo-form">
-  <input id="todo-input" aria-label="新增待辦" />
-  <button type="submit">新增</button>
-</form>
-<nav>
-  <button data-filter="all">全部</button>
-  <button data-filter="active">未完成</button>
-  <button data-filter="done">已完成</button>
-</nav>
+```html [原生 JS]
+<div>
+  <input id="todo-input" />
+  <button id="add-btn">新增</button>
+</div>
 <ul id="todo-list"></ul>
 
 <script>
   const $ = (s) => document.querySelector(s);
-  let state = JSON.parse(localStorage.getItem("todos") || "[]");
-  let filter = "all";
-  const filters = {
-    all: () => true,
-    active: (i) => !i.done,
-    done: (i) => i.done,
-  };
-
-  const persist = () => localStorage.setItem("todos", JSON.stringify(state));
+  let todos = [];
 
   function render() {
-    $("#todo-list").innerHTML = state
-      .filter(filters[filter])
+    $("#todo-list").innerHTML = todos
       .map(
-        (i) => `
-      <li data-id="${i.id}">
+        (t, i) => `
+      <li>
         <label>
-          <input type="checkbox" ${i.done ? "checked" : ""} />
-          <span>${i.text}</span>
+          <input type="checkbox" data-i="${i}" class="toggle" ${t.done ? "checked" : ""} />
+          <span style="${t.done ? "text-decoration:line-through" : ""}">${t.text}</span>
         </label>
-        <div>
-          <button data-action="edit">編輯</button>
-          <button data-action="delete">刪除</button>
-        </div>
+        <button data-i="${i}" class="del">刪除</button>
       </li>`,
       )
       .join("");
   }
 
-  $("#todo-form").addEventListener("submit", (e) => {
-    e.preventDefault();
+  function addTodo() {
     const text = $("#todo-input").value.trim();
     if (!text) return;
-    if (state.some((i) => i.text === text)) return;
-    state = [...state, { id: crypto.randomUUID(), text, done: false }];
+    todos.push({ text, done: false });
     $("#todo-input").value = "";
-    persist();
     render();
+  }
+
+  $("#add-btn").addEventListener("click", addTodo);
+  $("#todo-input").addEventListener("keydown", (e) => {
+    if (e.key === "Enter") addTodo();
   });
 
   $("#todo-list").addEventListener("click", (e) => {
-    const li = e.target.closest("li");
-    if (!li) return;
-    const id = li.dataset.id;
-    const action = e.target.dataset.action;
-    if (action === "delete") state = state.filter((i) => i.id !== id);
-    if (action === "edit") {
-      const target = state.find((i) => i.id === id);
-      const next = prompt("更新內容", target.text);
-      if (next && next.trim()) target.text = next.trim();
+    if (e.target.classList.contains("del")) {
+      todos.splice(Number(e.target.dataset.i), 1);
+      render();
     }
-    if (e.target.type === "checkbox") {
-      const target = state.find((i) => i.id === id);
-      target.done = e.target.checked;
-    }
-    persist();
-    render();
   });
 
-  document.querySelectorAll("button[data-filter]").forEach((btn) =>
-    btn.addEventListener("click", () => {
-      filter = btn.dataset.filter;
+  $("#todo-list").addEventListener("change", (e) => {
+    if (e.target.classList.contains("toggle")) {
+      todos[Number(e.target.dataset.i)].done = e.target.checked;
       render();
-    }),
-  );
+    }
+  });
 
   render();
 </script>
 ```
+
+:::
 
 ## 進階功能建議
 
@@ -235,10 +165,6 @@ export default function TodoList() {
 - 鍵盤體驗：Enter 新增、Esc 取消編輯。
 - UX 細節：空白阻擋、重複阻擋、loading/錯誤提示（若串 API）。
 - 測試點：新增/刪除/切換完成後，LocalStorage 內容應一致。
-
-## 互動體驗：購物車
-
-<ShoppingCart />
 
 ## 實戰練習
 
