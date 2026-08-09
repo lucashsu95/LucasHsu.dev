@@ -294,6 +294,114 @@ transition: slide-left
 ---
 ## layout: default
 ---
+# 🚀 從「證明能力」到「實戰應用」
+
+<div class="grid grid-cols-[1fr_1fr] gap-6 mt-6">
+  <div v-click class="p-6 rounded-lg bg-[#1E293B] border border-[#3B82F6]/30">
+    <div class="flex items-center gap-3 mb-4">
+      <div class="text-3xl">🏆</div>
+      <div>
+        <h3 class="text-[#3B82F6] font-bold text-lg">競賽路徑</h3>
+        <p class="text-gray-400 text-sm">證明你能做</p>
+      </div>
+    </div>
+    <div class="text-gray-300 text-sm space-y-2">
+      <p>▸ 十校技職聯盟資安與程式設計</p>
+      <p>▸ 跨校聯盟程式設計競賽</p>
+      <p>▸ ICPC 全國科技大專院校程式競賽</p>
+    </div>
+  </div>
+  <div v-click class="p-6 rounded-lg bg-[#1E293B] border border-[#10B981]/30">
+    <div class="flex items-center gap-3 mb-4">
+      <div class="text-3xl">💻</div>
+      <div>
+        <h3 class="text-[#10B981] font-bold text-lg">專案路徑</h3>
+        <p class="text-gray-400 text-sm">展示你做了什麼</p>
+      </div>
+    </div>
+    <div class="text-gray-300 text-sm space-y-2">
+      <p>▸ 產學合作 — 與大型廠商共同開發</p>
+      <p>▸ 智慧校園 — 為學校打造系統</p>
+      <p>▸ 實戰交付 — 從需求到上線的完整經驗</p>
+    </div>
+  </div>
+</div>
+
+<div v-click class="callout mt-6">
+  💡 <b>一句話</b>：競賽是「我會寫程式」，專案是「我能交付產品」
+</div>
+
+---
+## layout: default
+---
+# 💼 實戰專案：校園活動管理系統
+
+<div class="grid grid-cols-[1fr_1.5fr] gap-8 mt-6">
+  <div v-click class="flex flex-col gap-4">
+    <img src="./project-screenshot.png" class="rounded-lg border border-white/10 w-full h-64 object-cover" />
+    <a href="https://activity.ntubimdbirc.tw/" target="_blank" class="px-4 py-2 rounded bg-[#3B82F6] text-white text-center font-bold text-sm hover:bg-[#1d4ed8] transition">
+      🌐 查看線上系統
+    </a>
+    <div class="p-4 rounded-lg bg-[#1E293B] border border-[#F59E0B]/30 text-xs text-gray-400">
+      <b class="text-[#F59E0B]">Tech Stack:</b><br>
+      Next.js / Spring Boot / MySQL / Redis
+    </div>
+  </div>
+  <div v-click class="space-y-4">
+    <div class="p-4 rounded-lg bg-[#1E293B] border border-[#10B981]/30">
+      <h4 class="text-[#10B981] font-bold mb-2">⚙️ 模組化核心引擎</h4>
+      <div class="grid grid-cols-1 gap-2 text-sm text-gray-300">
+        <div class="flex gap-2"><b class="text-white shrink-0">WorkflowEngine:</b> <span>處理活動生命週期狀態轉換（草稿 $\rightarrow$ 審核 $\rightarrow$ 報名）</span></div>
+        <div class="flex gap-2"><b class="text-white shrink-0">QueryEngine:</b> <span>負責高效查詢與資料補齊</span></div>
+        <div class="flex gap-2"><b class="text-white shrink-0">CrudEngine:</b> <span>底層資料持久化管理</span></div>
+      </div>
+    </div>
+    <div class="p-4 rounded-lg bg-[#1E293B] border border-[#8B5CF6]/30">
+      <h4 class="text-[#8B5CF6] font-bold mb-2">🛠️ 高擴展性設計</h4>
+      <p class="text-sm text-gray-300">
+        將 <b class="text-white">AuthAdapter</b> 等驗證授權模組抽取為獨立的<span class="text-[#8B5CF6]">接縫 (Seam)</span>，
+        支援多角色（管理員、教師、學生）切換，大幅提升系統擴展性。
+      </p>
+    </div>
+  </div>
+</div>
+
+---
+## layout: default
+---
+# 📈 你的成長路徑
+
+<div class="mt-8 space-y-4">
+  <div v-click class="flex items-center gap-4">
+    <div class="w-12 h-12 rounded-full bg-[#3B82F6]/20 border border-[#3B82F6] flex items-center justify-center text-xl shrink-0">1</div>
+    <div class="flex-1 p-4 rounded-lg bg-[#1E293B] border border-[#3B82F6]/30">
+      <h4 class="text-[#3B82F6] font-bold">體驗營 $\rightarrow$ 基礎扎根</h4>
+      <p class="text-gray-400 text-sm mt-1">Java 基礎、OOP、資料庫、Spring Boot</p>
+    </div>
+  </div>
+  <div v-click class="flex items-center gap-4">
+    <div class="w-12 h-12 rounded-full bg-[#10B981]/20 border border-[#10B981] flex items-center justify-center text-xl shrink-0">2</div>
+    <div class="flex-1 p-4 rounded-lg bg-[#1E293B] border border-[#10B981]/30">
+      <h4 class="text-[#10B981] font-bold">競賽 $\rightarrow$ 證明能力</h4>
+      <p class="text-gray-400 text-sm mt-1">十校聯盟、跨校聯盟、ICPC — 與全國高手較量</p>
+    </div>
+  </div>
+  <div v-click class="flex items-center gap-4">
+    <div class="w-12 h-12 rounded-full bg-[#F59E0B]/20 border border-[#F59E0B] flex items-center justify-center text-xl shrink-0">3</div>
+    <div class="flex-1 p-4 rounded-lg bg-[#1E293B] border border-[#F59E0B]/30">
+      <h4 class="text-[#F59E0B] font-bold">專案 $\rightarrow$ 實戰應用</h4>
+      <p class="text-gray-400 text-sm mt-1">主任引進真實專案，4 人團隊交付產品</p>
+    </div>
+  </div>
+</div>
+
+<div v-click class="mt-8 p-4 rounded-lg bg-gradient-to-r from-[#3B82F6]/10 to-[#F59E0B]/10 border border-white/10 text-center">
+  <p class="text-gray-300">從「我會寫程式」$\rightarrow$「我能交付產品」$\rightarrow$「我有實戰經驗」</p>
+</div>
+
+---
+## layout: default
+---
 
 # 🎯 今日目標
 
