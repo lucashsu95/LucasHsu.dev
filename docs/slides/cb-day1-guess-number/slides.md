@@ -70,7 +70,7 @@ transition: slide-left
 </div>
 
 ---
-## layout: default
+layout: default
 ---
 
 # 🚀 為什麼加入商智中心？
@@ -103,7 +103,7 @@ transition: slide-left
 </div>
 
 ---
-## layout: default
+layout: default
 ---
 
 # 🏆 2025/10 <a href="https://imd.ntub.edu.tw/p/412-1043-6729.php?Lang=zh-tw" target="_blank">十校技職聯盟資安與程式設計</a>
@@ -120,7 +120,7 @@ transition: slide-left
 </div>
 
 ---
-## layout: default
+layout: default
 ---
 
 # 🏆 2026/6/6 <a href="https://imd.ntub.edu.tw/p/404-1043-117488.php?Lang=zh-tw" target="_blank">跨校聯盟程式設計競賽</a>
@@ -147,7 +147,130 @@ transition: slide-left
 </div>
 
 ---
-## layout: default
+layout: default
+---
+
+# 🏆 2026/7/15 ICPC Asia Taiwan Technology University Programming Contest
+
+## <a href="https://rdo.tpcu.edu.tw/p/405-1019-87694,c615.php?Lang=zh-tw" target="_blank">第十一屆全國科技大專院校程式競賽</a> <a href="./20260719171546.pdf" target="_blank" download="第十一屆全國科技大專院校程式競賽-題目">題目</a> <a href="https://sec.ntub.edu.tw/p/405-1003-118760,c1872.php?Lang=zh-tw" target="_blank">1</a> <a href="https://imd.ntub.edu.tw/p/406-1043-119105,r2.php?Lang=zh-tw" target="_blank">2</a>
+
+<div class="grid grid-cols-2 gap-6 mt-12">
+  <div v-click class="p-6 rounded-lg bg-[#1E293B] border border-[#5382A1]/30 text-center">
+    <img src="./contest-5.jpg" class="rounded-lg w-full h-64 object-cover mb-4" />
+    <p class="text-gray-400 text-sm italic">競賽實錄 01</p>
+  </div>
+  <div v-click class="p-6 rounded-lg bg-[#1E293B] border border-[#5382A1]/30 text-center">
+    <img src="./contest-7.jpg" class="rounded-lg w-full h-64 object-cover mb-4" />
+    <p class="text-gray-400 text-sm italic">競賽實錄 02</p>
+  </div>
+</div>
+
+---
+layout: default
+---
+# 🚀 從「證明能力」到「實戰應用」
+
+<div class="grid grid-cols-[1fr_1fr] gap-6 mt-6">
+  <div v-click class="p-6 rounded-lg bg-[#1E293B] border border-[#3B82F6]/30">
+    <div class="flex items-center gap-3 mb-4">
+      <div class="text-3xl">🏆</div>
+      <div>
+        <h3 class="text-[#3B82F6] font-bold text-lg">競賽路徑</h3>
+        <p class="text-gray-400 text-sm">證明你能做</p>
+      </div>
+    </div>
+    <div class="text-gray-300 text-sm space-y-2">
+      <p>▸ 十校技職聯盟資安與程式設計</p>
+      <p>▸ 跨校聯盟程式設計競賽</p>
+      <p>▸ ICPC 全國科技大專院校程式競賽</p>
+    </div>
+  </div>
+  <div v-click class="p-6 rounded-lg bg-[#1E293B] border border-[#10B981]/30">
+    <div class="flex items-center gap-3 mb-4">
+      <div class="text-3xl">💻</div>
+      <div>
+        <h3 class="text-[#10B981] font-bold text-lg">專案路徑</h3>
+        <p class="text-gray-400 text-sm">展示你做了什麼</p>
+      </div>
+    </div>
+    <div class="text-gray-300 text-sm space-y-2">
+      <p>▸ 產學合作 — 與大型廠商共同開發</p>
+      <p>▸ 智慧校園 — 為學校打造系統</p>
+      <p>▸ 實戰交付 — 從需求到上線的完整經驗</p>
+    </div>
+  </div>
+</div>
+
+<div v-click class="callout mt-6">
+  💡 <b>一句話</b>：競賽是「我會寫程式」，專案是「我能交付產品」
+</div>
+
+---
+layout: default
+---
+# 💼 實戰專案：校園活動管理系統
+
+<div class="grid grid-cols-[1fr_1.5fr] gap-8 mt-6">
+  <div v-click class="flex flex-col gap-4">
+    <img src="./project-screenshot.png" class="rounded-lg border border-white/10 w-full h-64 object-cover" />
+    <a href="https://activity.ntubimdbirc.tw/" target="_blank" class="px-4 py-2 rounded bg-[#3B82F6] text-white text-center font-bold text-sm hover:bg-[#1d4ed8] transition">
+      🌐 查看線上系統
+    </a>
+    <div class="p-4 rounded-lg bg-[#1E293B] border border-[#F59E0B]/30 text-xs text-gray-400">
+      <b class="text-[#F59E0B]">Tech Stack:</b><br>
+      Next.js / Spring Boot / MySQL / Redis
+    </div>
+  </div>
+  <div v-click class="space-y-4">
+    <div class="p-4 rounded-lg bg-[#1E293B] border border-[#10B981]/30">
+      <h4 class="text-[#10B981] font-bold mb-2">⚙️ 模組化核心引擎</h4>
+      <div class="grid grid-cols-1 gap-2 text-sm text-gray-300">
+        <div class="flex gap-2"><b class="text-white shrink-0">WorkflowEngine:</b> <span>處理活動生命週期狀態轉換（草稿 ➡️ 審核 ➡️ 報名）</span></div>
+        <div class="flex gap-2"><b class="text-white shrink-0">QueryEngine:</b> <span>負責高效查詢與資料補齊</span></div>
+        <div class="flex gap-2"><b class="text-white shrink-0">CrudEngine:</b> <span>底層資料持久化管理</span></div>
+      </div>
+    </div>
+    <div class="p-4 rounded-lg bg-[#1E293B] border border-[#8B5CF6]/30">
+      <h4 class="text-[#8B5CF6] font-bold mb-2">🛠️ 高擴展性設計</h4>
+      <p class="text-sm text-gray-300">
+        將 <b class="text-white">AuthAdapter</b> 等驗證授權模組抽取為獨立的<span class="text-[#8B5CF6]">接縫 (Seam)</span>，
+        支援多角色（管理員、教師、學生）切換，大幅提升系統擴展性。
+      </p>
+    </div>
+  </div>
+</div>
+
+---
+layout: default
+---
+# 📈 你的成長路徑
+
+<div class="mt-8 space-y-4">
+  <div v-click class="flex items-center gap-4">
+    <div class="w-12 h-12 rounded-full bg-[#3B82F6]/20 border border-[#3B82F6] flex items-center justify-center text-xl shrink-0">1</div>
+    <div class="flex-1 p-4 rounded-lg bg-[#1E293B] border border-[#3B82F6]/30">
+      <h4 class="text-[#3B82F6] font-bold">集訓 ➡️ 基礎扎根</h4>
+      <p class="text-gray-400 text-sm mt-1">Java 基礎、OOP、資料庫、Spring Boot</p>
+    </div>
+  </div>
+  <div v-click class="flex items-center gap-4">
+    <div class="w-12 h-12 rounded-full bg-[#10B981]/20 border border-[#10B981] flex items-center justify-center text-xl shrink-0">2</div>
+    <div class="flex-1 p-4 rounded-lg bg-[#1E293B] border border-[#10B981]/30">
+      <h4 class="text-[#10B981] font-bold">競賽 ➡️ 證明能力</h4>
+      <p class="text-gray-400 text-sm mt-1">十校聯盟、跨校聯盟、ICPC — 與全國高手較量</p>
+    </div>
+  </div>
+  <div v-click class="flex items-center gap-4">
+    <div class="w-12 h-12 rounded-full bg-[#F59E0B]/20 border border-[#F59E0B] flex items-center justify-center text-xl shrink-0">3</div>
+    <div class="flex-1 p-4 rounded-lg bg-[#1E293B] border border-[#F59E0B]/30">
+      <h4 class="text-[#F59E0B] font-bold">專案 ➡️ 實戰應用</h4>
+      <p class="text-gray-400 text-sm mt-1">主任引進真實專案，4 人團隊交付產品</p>
+    </div>
+  </div>
+</div>
+
+---
+layout: default
 ---
 
 # 📅 課程時程規劃
@@ -273,134 +396,7 @@ transition: slide-left
 </style>
 
 ---
-## layout: default
----
-
-# 🏆 2026/7/15 ICPC Asia Taiwan Technology University Programming Contest
-
-## <a href="https://rdo.tpcu.edu.tw/p/405-1019-87694,c615.php?Lang=zh-tw" target="_blank">第十一屆全國科技大專院校程式競賽</a> <a href="./20260719171546.pdf" target="_blank" download="第十一屆全國科技大專院校程式競賽-題目">題目</a> <a href="https://sec.ntub.edu.tw/p/405-1003-118760,c1872.php?Lang=zh-tw" target="_blank">1</a> <a href="https://imd.ntub.edu.tw/p/406-1043-119105,r2.php?Lang=zh-tw" target="_blank">2</a>
-
-<div class="grid grid-cols-2 gap-6 mt-12">
-  <div v-click class="p-6 rounded-lg bg-[#1E293B] border border-[#5382A1]/30 text-center">
-    <img src="./contest-5.jpg" class="rounded-lg w-full h-64 object-cover mb-4" />
-    <p class="text-gray-400 text-sm italic">競賽實錄 01</p>
-  </div>
-  <div v-click class="p-6 rounded-lg bg-[#1E293B] border border-[#5382A1]/30 text-center">
-    <img src="./contest-7.jpg" class="rounded-lg w-full h-64 object-cover mb-4" />
-    <p class="text-gray-400 text-sm italic">競賽實錄 02</p>
-  </div>
-</div>
-
----
-## layout: default
----
-# 🚀 從「證明能力」到「實戰應用」
-
-<div class="grid grid-cols-[1fr_1fr] gap-6 mt-6">
-  <div v-click class="p-6 rounded-lg bg-[#1E293B] border border-[#3B82F6]/30">
-    <div class="flex items-center gap-3 mb-4">
-      <div class="text-3xl">🏆</div>
-      <div>
-        <h3 class="text-[#3B82F6] font-bold text-lg">競賽路徑</h3>
-        <p class="text-gray-400 text-sm">證明你能做</p>
-      </div>
-    </div>
-    <div class="text-gray-300 text-sm space-y-2">
-      <p>▸ 十校技職聯盟資安與程式設計</p>
-      <p>▸ 跨校聯盟程式設計競賽</p>
-      <p>▸ ICPC 全國科技大專院校程式競賽</p>
-    </div>
-  </div>
-  <div v-click class="p-6 rounded-lg bg-[#1E293B] border border-[#10B981]/30">
-    <div class="flex items-center gap-3 mb-4">
-      <div class="text-3xl">💻</div>
-      <div>
-        <h3 class="text-[#10B981] font-bold text-lg">專案路徑</h3>
-        <p class="text-gray-400 text-sm">展示你做了什麼</p>
-      </div>
-    </div>
-    <div class="text-gray-300 text-sm space-y-2">
-      <p>▸ 產學合作 — 與大型廠商共同開發</p>
-      <p>▸ 智慧校園 — 為學校打造系統</p>
-      <p>▸ 實戰交付 — 從需求到上線的完整經驗</p>
-    </div>
-  </div>
-</div>
-
-<div v-click class="callout mt-6">
-  💡 <b>一句話</b>：競賽是「我會寫程式」，專案是「我能交付產品」
-</div>
-
----
-## layout: default
----
-# 💼 實戰專案：校園活動管理系統
-
-<div class="grid grid-cols-[1fr_1.5fr] gap-8 mt-6">
-  <div v-click class="flex flex-col gap-4">
-    <img src="./project-screenshot.png" class="rounded-lg border border-white/10 w-full h-64 object-cover" />
-    <a href="https://activity.ntubimdbirc.tw/" target="_blank" class="px-4 py-2 rounded bg-[#3B82F6] text-white text-center font-bold text-sm hover:bg-[#1d4ed8] transition">
-      🌐 查看線上系統
-    </a>
-    <div class="p-4 rounded-lg bg-[#1E293B] border border-[#F59E0B]/30 text-xs text-gray-400">
-      <b class="text-[#F59E0B]">Tech Stack:</b><br>
-      Next.js / Spring Boot / MySQL / Redis
-    </div>
-  </div>
-  <div v-click class="space-y-4">
-    <div class="p-4 rounded-lg bg-[#1E293B] border border-[#10B981]/30">
-      <h4 class="text-[#10B981] font-bold mb-2">⚙️ 模組化核心引擎</h4>
-      <div class="grid grid-cols-1 gap-2 text-sm text-gray-300">
-        <div class="flex gap-2"><b class="text-white shrink-0">WorkflowEngine:</b> <span>處理活動生命週期狀態轉換（草稿 $\rightarrow$ 審核 $\rightarrow$ 報名）</span></div>
-        <div class="flex gap-2"><b class="text-white shrink-0">QueryEngine:</b> <span>負責高效查詢與資料補齊</span></div>
-        <div class="flex gap-2"><b class="text-white shrink-0">CrudEngine:</b> <span>底層資料持久化管理</span></div>
-      </div>
-    </div>
-    <div class="p-4 rounded-lg bg-[#1E293B] border border-[#8B5CF6]/30">
-      <h4 class="text-[#8B5CF6] font-bold mb-2">🛠️ 高擴展性設計</h4>
-      <p class="text-sm text-gray-300">
-        將 <b class="text-white">AuthAdapter</b> 等驗證授權模組抽取為獨立的<span class="text-[#8B5CF6]">接縫 (Seam)</span>，
-        支援多角色（管理員、教師、學生）切換，大幅提升系統擴展性。
-      </p>
-    </div>
-  </div>
-</div>
-
----
-## layout: default
----
-# 📈 你的成長路徑
-
-<div class="mt-8 space-y-4">
-  <div v-click class="flex items-center gap-4">
-    <div class="w-12 h-12 rounded-full bg-[#3B82F6]/20 border border-[#3B82F6] flex items-center justify-center text-xl shrink-0">1</div>
-    <div class="flex-1 p-4 rounded-lg bg-[#1E293B] border border-[#3B82F6]/30">
-      <h4 class="text-[#3B82F6] font-bold">體驗營 $\rightarrow$ 基礎扎根</h4>
-      <p class="text-gray-400 text-sm mt-1">Java 基礎、OOP、資料庫、Spring Boot</p>
-    </div>
-  </div>
-  <div v-click class="flex items-center gap-4">
-    <div class="w-12 h-12 rounded-full bg-[#10B981]/20 border border-[#10B981] flex items-center justify-center text-xl shrink-0">2</div>
-    <div class="flex-1 p-4 rounded-lg bg-[#1E293B] border border-[#10B981]/30">
-      <h4 class="text-[#10B981] font-bold">競賽 $\rightarrow$ 證明能力</h4>
-      <p class="text-gray-400 text-sm mt-1">十校聯盟、跨校聯盟、ICPC — 與全國高手較量</p>
-    </div>
-  </div>
-  <div v-click class="flex items-center gap-4">
-    <div class="w-12 h-12 rounded-full bg-[#F59E0B]/20 border border-[#F59E0B] flex items-center justify-center text-xl shrink-0">3</div>
-    <div class="flex-1 p-4 rounded-lg bg-[#1E293B] border border-[#F59E0B]/30">
-      <h4 class="text-[#F59E0B] font-bold">專案 $\rightarrow$ 實戰應用</h4>
-      <p class="text-gray-400 text-sm mt-1">主任引進真實專案，4 人團隊交付產品</p>
-    </div>
-  </div>
-</div>
-
-<div v-click class="mt-8 p-4 rounded-lg bg-gradient-to-r from-[#3B82F6]/10 to-[#F59E0B]/10 border border-white/10 text-center">
-  <p class="text-gray-300">從「我會寫程式」$\rightarrow$「我能交付產品」$\rightarrow$「我有實戰經驗」</p>
-</div>
-
----
-## layout: default
+layout: default
 ---
 
 # 🎯 今日目標
@@ -430,7 +426,7 @@ transition: slide-left
 </div>
 
 ---
-## layout: default
+layout: default
 ---
 
 # 🍳 後端是什麼？
@@ -439,6 +435,133 @@ transition: slide-left
   <div v-click class="p-6 rounded-lg bg-[#1E293B] border border-[#3B82F6]/30 text-center">
     <div class="text-4xl mb-3">🍽️</div>
     <h3 class="text-[#3B82F6] font-bold text-lg mb-2">前端 = 外場</h3>
+    
+---
+layout: default
+---
+
+# 📅 課程時程規劃
+
+<div class="flex items-center gap-4 mt-4 mb-6 text-sm text-gray-400">
+  <span class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-[#94918A]"></span>暖身</span>
+  <span class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-[#3B82F6]"></span>Java 基礎</span>
+  <span class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-[#10B981]"></span>OOP</span>
+  <span class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-[#F97316]"></span>停課</span>
+  <span class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-[#F59E0B]"></span>MySQL</span>
+  <span class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-[#8B5CF6]"></span>Spring Boot</span>
+</div>
+
+<div class="timeline-scroll flex gap-5 overflow-x-auto pb-6">
+
+  <div v-motion :initial="{ x: 20, opacity: 0 }" :enter="{ x: 0, opacity: 1, transition: { delay: 0, duration: 400 } }" class="timeline-item">
+    <div class="timeline-card border-l-[#94918A]">
+      <p class="text-xs text-gray-500 mb-1">9/16–9/17</p>
+      <p class="text-base font-bold text-white">後端體驗營</p>
+      <p class="text-xs text-gray-400 mt-1">暖身課，不算正式單元</p>
+    </div>
+    <div class="timeline-dot bg-[#94918A]"></div>
+  </div>
+
+  <div v-motion :initial="{ x: 20, opacity: 0 }" :enter="{ x: 0, opacity: 1, transition: { delay: 80, duration: 400 } }" class="timeline-item">
+    <div class="timeline-card border-l-[#3B82F6]">
+      <p class="text-xs text-gray-500 mb-1">9/21–10/9</p>
+      <p class="text-base font-bold text-[#3B82f6]">Java 基礎語法</p>
+      <p class="text-xs text-gray-400 mt-1">3 週</p>
+    </div>
+    <div class="timeline-dot bg-[#3B82F6]"></div>
+  </div>
+
+  <div v-motion :initial="{ x: 20, opacity: 0 }" :enter="{ x: 0, opacity: 1, transition: { delay: 160, duration: 400 } }" class="timeline-item">
+    <div class="timeline-card border-l-[#10B981]">
+      <p class="text-xs text-gray-500 mb-1">10/12–10/23</p>
+      <p class="text-base font-bold text-[#10B981]">OOP 物件導向</p>
+      <p class="text-xs text-gray-400 mt-1">2 週</p>
+    </div>
+    <div class="timeline-dot bg-[#10B981]"></div>
+  </div>
+
+  <div v-motion :initial="{ x: 20, opacity: 0 }" :enter="{ x: 0, opacity: 1, transition: { delay: 240, duration: 400 } }" class="timeline-item">
+    <div class="timeline-card border-l-[#F97316]">
+      <p class="text-xs text-gray-500 mb-1">10/26–11/6</p>
+      <p class="text-base font-bold text-white">停課</p>
+      <p class="text-xs text-gray-400 mt-1">期中考試</p>
+    </div>
+    <div class="timeline-dot bg-[#F97316]"></div>
+  </div>
+
+  <div v-motion :initial="{ x: 20, opacity: 0 }" :enter="{ x: 0, opacity: 1, transition: { delay: 400, duration: 400 } }" class="timeline-item">
+    <div class="timeline-card border-l-[#F59E0B]">
+      <p class="text-xs text-gray-500 mb-1">11/9–11/20</p>
+      <p class="text-base font-bold text-[#F59E0B]">MySQL</p>
+      <p class="text-xs text-gray-400 mt-1">2 週</p>
+    </div>
+    <div class="timeline-dot bg-[#F59E0B]"></div>
+  </div>
+
+  <div v-motion :initial="{ x: 20, opacity: 0 }" :enter="{ x: 0, opacity: 1, transition: { delay: 480, duration: 400 } }" class="timeline-item">
+    <div class="timeline-card border-l-[#8B5CF6]">
+      <p class="text-xs text-gray-500 mb-1">11/23–12/18</p>
+      <p class="text-base font-bold text-[#8B5CF6]">Spring Boot</p>
+      <p class="text-xs text-gray-400 mt-1">3.5 週</p>
+    </div>
+    <div class="timeline-dot bg-[#8B5CF6]"></div>
+  </div>
+
+  <div v-motion :initial="{ x: 20, opacity: 0 }" :enter="{ x: 0, opacity: 1, transition: { delay: 480, duration: 400 } }" class="timeline-item">
+    <div class="timeline-card border-l-[#8B5CF6]">
+      <p class="text-xs text-gray-500 mb-1">12/21–12/25</p>
+      <p class="text-base font-bold text-white">面試</p>
+      <p class="text-xs text-gray-400 mt-1">1 週</p>
+    </div>
+  </div>
+
+</div>
+
+<style>
+.timeline-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: #3B82F6 transparent;
+}
+.timeline-scroll::-webkit-scrollbar {
+  height: 6px;
+}
+.timeline-scroll::-webkit-scrollbar-thumb {
+  background: #3B82F6;
+  border-radius: 3px;
+}
+.timeline-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 160px;
+  flex-shrink: 0;
+  position: relative;
+}
+.timeline-item:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  top: 44px;
+  left: calc(100% + 4px);
+  width: 12px;
+  height: 1px;
+  background: rgba(255,255,255,0.15);
+}
+.timeline-card {
+  background: #1E293B;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-left-width: 3px;
+  border-radius: 8px;
+  padding: 12px 14px;
+  width: 100%;
+}
+.timeline-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-top: 12px;
+}
+</style>
+
     <p class="text-gray-300 text-sm">你看得到的畫面</p>
     <p class="text-gray-500 text-xs mt-1">選單、按鈕、動畫、排版</p>
   </div>
@@ -453,7 +576,7 @@ transition: slide-left
 <div v-click class="callout mt-6">💡 <b>一句話</b>：前端負責「好看」，後端負責「能用」</div>
 
 ---
-## layout: default
+layout: default
 ---
 
 # 📱 舉個例子
@@ -473,7 +596,7 @@ transition: slide-left
 <div v-click class="callout mt-8">🎯 <b>這些都是後端</b> — 你看不到，但它一直在運作</div>
 
 ---
-## layout: default
+layout: default
 ---
 
 # 🛠️ 環境設定
@@ -522,7 +645,7 @@ transition: slide-left
 </div>
 
 ---
-## layout: default
+layout: default
 ---
 
 # ✅ 環境確認
@@ -545,7 +668,7 @@ public class Hello {
 </div>
 
 ---
-## layout: default
+layout: default
 ---
 
 # 🎮 階段一：基本版猜數字
@@ -575,7 +698,7 @@ while (true) {
 ```
 
 ---
-## layout: default
+layout: default
 ---
 
 # 🧠 你剛剛用了什麼？
@@ -604,7 +727,7 @@ while (true) {
 <div class="callout mt-6">💡 <b>重點</b>：你剛剛用的這些工具，就是後端的基礎！</div>
 
 ---
-## layout: default
+layout: default
 ---
 
 # 🎯 階段二：加入計數器
@@ -633,7 +756,7 @@ while (true) {
 </div>
 
 ---
-## layout: default
+layout: default
 ---
 
 # 🎨 階段三：客製化你的遊戲
@@ -701,7 +824,7 @@ class: scroll-y
 <div v-click class="callout mt-4">🎯 <b>小提示</b>：先完成遊戲再來挑戰，題目不會很難！</div>
 
 ---
-## layout: default
+layout: default
 ---
 
 # 🚀 預告：明天
