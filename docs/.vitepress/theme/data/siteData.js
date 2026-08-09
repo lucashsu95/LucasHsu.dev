@@ -19,6 +19,7 @@ export const featuredWorks = [
     description: "可自建題庫的線上練習系統 — Vue 打造的教學工具",
     image: "/portfolio/網站Web/assets/自定題目練習系統/img/image.webp",
     tags: ["Vue", "Education"],
+    demo: "https://custom-training.vercel.app/",
     link: "/portfolio/網站Web/自定題目練習系統",
   },
   {
