@@ -79,20 +79,18 @@ layout: default
   <div v-click class="p-6 rounded-lg bg-[#1E293B] border border-[#10B981]/30">
     <h3 class="text-[#10B981] font-bold text-xl mb-4">社群文化</h3>
     <div class="text-base text-gray-300 space-y-3">
-      <p>與明貴主任一起爬象山</p>
-      <p>與明貴主任騎車環島</p>
-      <p>團隊建立活動</p>
+      <li>與明貴主任一起爬象山</li>
+      <li>與明貴主任騎車環島</li>
+      <li>團隊建立活動</li>
     </div>
   </div>
   <div v-click class="p-6 rounded-lg bg-[#1E293B] border border-[#F59E0B]/30">
     <h3 class="text-[#F59E0B] font-bold text-xl mb-4">成長資源</h3>
     <div class="text-base text-gray-300 space-y-3">
-      <p>北商聯盟競賽指導</p>
-      <p>AI 算力資源支援</p>
-      <p>產學合作經驗</p>
-      <p>考相關證照補助。</p>
-      <p>出去比賽餐費車馬費補助</p>
-      <p>明貴主任推薦信（針對優秀成員）</p>
+      <li>北商聯盟競賽指導</li>
+      <li>產學合作經驗、AI 算力資源支援</li>
+      <li>考相關證照補助</li>
+      <li>出去比賽餐費車馬費補助</li>
     </div>
   </div>
 </div>
@@ -164,6 +162,43 @@ layout: default
   <div v-click class="p-6 rounded-lg bg-[#1E293B] border border-[#5382A1]/30 text-center">
     <img src="./contest-7.jpg" class="rounded-lg w-full h-64 object-cover mb-4" />
     <p class="text-gray-400 text-sm italic">競賽實錄 02</p>
+  </div>
+</div>
+
+---
+layout: default
+---
+
+# 🏆 2026/7/15 ICPC Asia Taiwan Technology University Programming Contest
+
+## 115年度全國程式力競賽
+
+<div class="grid grid-cols-2 gap-6 mt-12">
+  <div v-click class="p-6 rounded-lg bg-[#1E293B] border border-[#5382A1]/30 text-center">
+    <img src="./contest-9.jpg" class="rounded-lg w-full h-64 object-cover mb-4" />
+    <p class="text-gray-400 text-sm italic">競賽實錄 01</p>
+  </div>
+  <div v-click class="p-6 rounded-lg bg-[#1E293B] border border-[#5382A1]/30 text-center">
+    <img src="./contest-10.jpg" class="rounded-lg w-full h-64 object-cover mb-4" />
+    <p class="text-gray-400 text-sm italic">競賽實錄 02</p>
+  </div>
+</div>
+
+---
+layout: default
+---
+
+# 結果：被印在海報上、被放在系網上
+
+<div class="grid grid-cols-3 gap-2">
+  <div v-click class="p-3 j-1 rounded-lg bg-[#1E293B] border border-[#5382A1]/30 text-center">
+    <img src="./contest-8.jpg" class="h-100 rounded-lg object-cover" />
+  </div>
+  <div v-click class="p-3 j-1 rounded-lg bg-[#1E293B] border border-[#5382A1]/30 text-center">
+    <img src="./contest-11.jpg" class="h-100 rounded-lg object-cover" />
+  </div>
+  <div v-click class="p-3 j-1 rounded-lg bg-[#1E293B] border border-[#5382A1]/30 text-center">
+    <img src="./contest-12.jpg" class="h-100 rounded-lg object-cover" />
   </div>
 </div>
 
@@ -259,7 +294,7 @@ layout: default
     <div class="w-12 h-12 rounded-full bg-[#10B981]/20 border border-[#10B981] flex items-center justify-center text-xl shrink-0">2</div>
     <div class="flex-1 p-4 rounded-lg bg-[#1E293B] border border-[#10B981]/30">
       <h4 class="text-[#10B981] font-bold">競賽 ➡️ 證明能力</h4>
-      <p class="text-gray-400 text-sm mt-1">十校聯盟、跨校聯盟、ICPC — 與全國高手較量</p>
+      <p class="text-gray-400 text-sm mt-1">十校聯盟、跨校聯盟 — 與全國高手較量</p>
     </div>
   </div>
   <div v-click class="flex items-center gap-4">
