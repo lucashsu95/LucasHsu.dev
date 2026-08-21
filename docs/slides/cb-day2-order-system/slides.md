@@ -26,7 +26,7 @@ exportFilename: cb-day2-order-system
 <div class="cover-glow"></div>
 <div class="relative z-10 flex flex-col items-center justify-center h-full">
   <div v-motion :initial="{ y: -20, opacity: 0 }" :enter="{ y: 0, opacity: 1, transition: { delay: 200, duration: 500 } }" class="text-center">
-    <img src="./birc.png" class="h-16 mx-auto mb-3" alt="BIRC Logo" />
+    <img src="./birc.webp" class="h-16 mx-auto mb-3" alt="BIRC Logo" />
   </div>
   <h1 v-motion :initial="{ y: 30, opacity: 0 }" :enter="{ y: 0, opacity: 1, transition: { delay: 350, duration: 500 } }" class="text-5xl font-bold text-center">
     <span class="text-[#3B82F6]">BIRC 商智中心</span>

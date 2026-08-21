@@ -26,7 +26,7 @@ exportFilename: cb-day1-guess-number
 <div class="cover-glow"></div>
 <div class="relative z-10 flex flex-col items-center justify-center h-full">
   <div v-motion :initial="{ y: -20, opacity: 0 }" :enter="{ y: 0, opacity: 1, transition: { delay: 200, duration: 500 } }" class="text-center">
-    <img src="./birc.png" class="h-16 mx-auto mb-3" alt="BIRC Logo" />
+    <img src="./birc.webp" class="h-16 mx-auto mb-3" alt="BIRC Logo" />
   </div>
   <h1 v-motion :initial="{ y: 30, opacity: 0 }" :enter="{ y: 0, opacity: 1, transition: { delay: 350, duration: 500 } }" class="text-5xl font-bold text-center">
     <span class="text-[#3B82F6]">BIRC 商智中心</span>
@@ -98,7 +98,7 @@ layout: default
 <div v-click class="mt-6 p-4 rounded-lg bg-[#1E293B] border border-[#F59E0B]/30 flex items-center justify-between gap-6">
   <p class="text-[#F59E0B] font-bold text-lg whitespace-nowrap">追蹤我們的 IG</p>
   <div class="bg-white p-2 rounded-lg shrink-0">
-    <img src="./ig-qr.png" class="h-24 w-24 rounded-lg block" />
+    <img src="./ig-qr.webp" class="h-24 w-24 rounded-lg block" />
   </div>
 </div>
 
@@ -110,11 +110,11 @@ layout: default
 
 <div class="grid grid-cols-2 gap-6 mt-12">
   <div v-click class="p-6 rounded-lg bg-[#1E293B] border border-[#5382A1]/30 text-center">
-    <img src="./contest-1.jpg" class="rounded-lg w-full h-64 object-cover mb-4" />
+    <img src="./contest-1.webp" class="rounded-lg w-full h-64 object-cover mb-4" />
     <p class="text-gray-400 text-sm italic">競賽實錄 01</p>
   </div>
   <div v-click class="p-6 rounded-lg bg-[#1E293B] border border-[#5382A1]/30 text-center">
-    <img src="./contest-2.png" class="rounded-lg w-full h-64 object-cover mb-4" />
+    <img src="./contest-2.webp" class="rounded-lg w-full h-64 object-cover mb-4" />
     <p class="text-gray-400 text-sm italic">競賽實錄 02</p>
   </div>
 </div>
@@ -130,10 +130,10 @@ layout: default
   <div v-click class="p-6 rounded-lg bg-[#1E293B] border border-[#5382A1]/30">
     <p class="text-gray-400 text-sm italic mb-3">競賽實錄</p>
     <div class="grid grid-cols-2 gap-2">
-      <img src="./contest-3.jpg" class="rounded-md h-32 w-full object-cover border border-white/10" />
-      <img src="./contest-4.jpg" class="rounded-md h-32 w-full object-cover border border-white/10" />
-      <img src="./contest-1.png" class="rounded-md h-32 w-full object-cover border border-white/10" />
-      <img src="./contest-6.jpg" class="rounded-md h-32 w-full object-cover border border-white/10" />
+      <img src="./contest-3.webp" class="rounded-md h-32 w-full object-cover border border-white/10" />
+      <img src="./contest-4.webp" class="rounded-md h-32 w-full object-cover border border-white/10" />
+      <img src="./contest-1.webp" class="rounded-md h-32 w-full object-cover border border-white/10" />
+      <img src="./contest-6.webp" class="rounded-md h-32 w-full object-cover border border-white/10" />
     </div>
   </div>
 
@@ -156,11 +156,11 @@ layout: default
 
 <div class="grid grid-cols-2 gap-6 mt-12">
   <div v-click class="p-6 rounded-lg bg-[#1E293B] border border-[#5382A1]/30 text-center">
-    <img src="./contest-5.jpg" class="rounded-lg w-full h-64 object-cover mb-4" />
+    <img src="./contest-5.webp" class="rounded-lg w-full h-64 object-cover mb-4" />
     <p class="text-gray-400 text-sm italic">競賽實錄 01</p>
   </div>
   <div v-click class="p-6 rounded-lg bg-[#1E293B] border border-[#5382A1]/30 text-center">
-    <img src="./contest-7.jpg" class="rounded-lg w-full h-64 object-cover mb-4" />
+    <img src="./contest-7.webp" class="rounded-lg w-full h-64 object-cover mb-4" />
     <p class="text-gray-400 text-sm italic">競賽實錄 02</p>
   </div>
 </div>
@@ -175,11 +175,11 @@ layout: default
 
 <div class="grid grid-cols-2 gap-6 mt-12">
   <div v-click class="p-6 rounded-lg bg-[#1E293B] border border-[#5382A1]/30 text-center">
-    <img src="./contest-9.jpg" class="rounded-lg w-full h-64 object-cover mb-4" />
+    <img src="./contest-9.webp" class="rounded-lg w-full h-64 object-cover mb-4" />
     <p class="text-gray-400 text-sm italic">競賽實錄 01</p>
   </div>
   <div v-click class="p-6 rounded-lg bg-[#1E293B] border border-[#5382A1]/30 text-center">
-    <img src="./contest-10.jpg" class="rounded-lg w-full h-64 object-cover mb-4" />
+    <img src="./contest-10.webp" class="rounded-lg w-full h-64 object-cover mb-4" />
     <p class="text-gray-400 text-sm italic">競賽實錄 02</p>
   </div>
 </div>
@@ -192,13 +192,13 @@ layout: default
 
 <div class="grid grid-cols-3 gap-2">
   <div v-click class="p-3 j-1 rounded-lg bg-[#1E293B] border border-[#5382A1]/30 text-center">
-    <img src="./contest-8.jpg" class="h-100 rounded-lg object-cover" />
+    <img src="./contest-8.webp" class="h-100 rounded-lg object-cover" />
   </div>
   <div v-click class="p-3 j-1 rounded-lg bg-[#1E293B] border border-[#5382A1]/30 text-center">
-    <img src="./contest-11.jpg" class="h-100 rounded-lg object-cover" />
+    <img src="./contest-11.webp" class="h-100 rounded-lg object-cover" />
   </div>
   <div v-click class="p-3 j-1 rounded-lg bg-[#1E293B] border border-[#5382A1]/30 text-center">
-    <img src="./contest-12.jpg" class="h-100 rounded-lg object-cover" />
+    <img src="./contest-12.webp" class="h-100 rounded-lg object-cover" />
   </div>
 </div>
 
@@ -249,7 +249,7 @@ layout: default
 
 <div class="grid grid-cols-[1fr_1.5fr] gap-8 mt-6">
   <div v-click class="flex flex-col gap-4">
-    <img src="./project-screenshot.png" class="rounded-lg border border-white/10 w-full h-64 object-cover" />
+    <img src="./project-screenshot.webp" class="rounded-lg border border-white/10 w-full h-64 object-cover" />
     <a href="https://activity.ntubimdbirc.tw/" target="_blank" class="px-4 py-2 rounded bg-[#3B82F6] text-white text-center font-bold text-sm hover:bg-[#1d4ed8] transition">
       🌐 查看線上系統
     </a>
