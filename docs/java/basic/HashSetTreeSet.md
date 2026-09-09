@@ -254,10 +254,10 @@ A: 可以，用 `subSet()`、`headSet()`、`tailSet()` 等方法。
 
 ```mermaid
 graph LR
-    A[需要排序?] -->|是| B[TreeSet<br/>O(log n)]
-    A -->|否| C[只要去重?]
-    C -->|是| D[HashSet<br/>O(1)]
-    C -->|否| E[考慮LinkedHashSet<br/>O(1)且保插入順序]
+    A["需要排序?"] -->|是| B["TreeSet<br/>O(log n)"]
+    A -->|否| C["只要去重?"]
+    C -->|是| D["HashSet<br/>O(1)"]
+    C -->|否| E["考慮LinkedHashSet<br/>O(1)且保插入順序"]
 ```
 
 ## 延伸閱讀

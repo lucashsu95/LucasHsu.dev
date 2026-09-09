@@ -25,7 +25,7 @@ export const featuredWorks = [
   {
     title: "碳棄 — 減碳行銷網站",
     description: "專題競賽 — Vue + Bootstrap + Chart.js + PHP",
-    image: "https://lucashsu95.github.io/My_web/",
+    image: "/portfolio/專題/assets/碳棄/image.webp",
     tags: ["Vue", "PHP", "Chart.js"],
     demo: "https://github.com/lucashsu95/My_web",
     link: "/portfolio/專題/網站",
@@ -33,7 +33,7 @@ export const featuredWorks = [
   {
     title: "校網設備報修系統",
     description: "穀保家商上線系統 — 校務數位化",
-    image: "https://repair.kpvs.ntpc.edu.tw/booking-system-frontend/",
+    image: "/portfolio/專題/assets/校網設備報修系統/image.webp",
     tags: ["Web App", "Production"],
     demo: "https://repair.kpvs.ntpc.edu.tw/repair-system/",
     link: "https://repair.kpvs.ntpc.edu.tw/booking-system-frontend/",
@@ -122,7 +122,7 @@ export const workGridSections = [
   {
     title: "專題競賽 — 碳棄",
     items: [
-      { title: "網站 — 碳棄", link: "/portfolio/專題/網站", image: "/portfolio/web-global/53_Module_C_Design/image.webp", tags: ["Vue", "PHP"] },
+      { title: "網站 — 碳棄", link: "/portfolio/專題/網站", image: "/portfolio/專題/assets/碳棄/image.webp", tags: ["Vue", "PHP"] },
       { title: "遊戲 — 減碳大作戰", link: "/portfolio/專題/減碳大作戰", tags: ["Game", "Unity"] },
       { title: "AI — 減碳相機", link: "/portfolio/專題/AI減碳相機", tags: ["AI", "Python"] },
     ],
