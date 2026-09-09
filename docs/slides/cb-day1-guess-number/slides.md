@@ -751,7 +751,7 @@ layout: default
   </div>
 </div>
 
-<div v-click class="callout mt-4">「昨天你們寫的排行榜，其實就是<span class="text-[#10B981] font-bold">資料庫</span>在做的事的縮小版」</div>
+<img src="./qrcode-generator.webp" class="h-24 w-24 rounded-lg block" />
 
 ---
 layout: center
