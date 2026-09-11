@@ -734,6 +734,250 @@ class: scroll-y
 <div v-click class="callout mt-4">🎯 <b>小提示</b>：先完成遊戲再來挑戰，題目不會很難！</div>
 
 ---
+layout: two-cols
+class: scroll-y
+---
+
+# 🧩 P01–P02 解答
+
+### P01｜Hello
+
+```java
+import java.util.Scanner;
+
+public class Main {
+  public static void main(String[] args) {
+    Scanner scanner = new Scanner(System.in);
+    String input = scanner.nextLine();
+    System.out.println("Hello " + input);
+  }
+}
+```
+
+::right::
+
+### P02｜0 與 1
+
+```java
+import java.util.Scanner;
+
+public class Main {
+  public static void main(String[] args) {
+    Scanner scanner = new Scanner(System.in);
+    int input = scanner.nextInt();
+    System.out.println(1 - input);
+  }
+}
+```
+
+---
+layout: two-cols
+class: scroll-y
+---
+
+# 🧩 P03–P04 解答
+
+### P03｜成績等級
+
+```java
+import java.util.Scanner;
+
+public class Main {
+  public static void main(String[] args) {
+    Scanner scanner = new Scanner(System.in);
+    for (int i = 0; i != 5; i++) {
+      int input = scanner.nextInt();
+      if (input == 100) {
+        System.out.println("A+");
+      } else {
+        switch (input / 10) {
+          case 9 -> System.out.println("A");
+          case 8 -> System.out.println("B");
+          case 7 -> System.out.println("C");
+          case 6 -> System.out.println("D");
+          default -> System.out.println("E");
+        }
+      }
+    }
+  }
+}
+```
+
+::right::
+
+### P04｜三數取大
+
+```java
+import java.util.Scanner;
+
+public class Main {
+  public static void main(String[] args) {
+    Scanner sc = new Scanner(System.in);
+    int a = Integer.parseInt(sc.nextLine());
+    int b = Integer.parseInt(sc.nextLine());
+    int c = Integer.parseInt(sc.nextLine());
+    System.out.print(Math.max(c, Math.max(a, b)));
+  }
+}
+```
+
+---
+layout: two-cols
+class: scroll-y
+---
+
+# 🧩 P05–P06 解答
+
+### P05｜數字三角形
+
+```java
+import java.util.Scanner;
+
+public class Main {
+  public static void main(String[] args) {
+    Scanner scanner = new Scanner(System.in);
+    int count = scanner.nextInt();
+    for (int i = 1; i != count + 1; i++) {
+      for (int j = 1; j != i + 1; j++) {
+        System.out.print(j);
+      }
+      System.out.println();
+    }
+  }
+}
+```
+
+::right::
+
+### P06｜FizzBuzz
+
+```java
+import java.util.Scanner;
+
+public class Main {
+  public static void main(String[] args) {
+    Scanner sc = new Scanner(System.in);
+    int count = sc.nextInt();
+    for (int i = 1; i != count + 1; i++) {
+      if (i % 3 == 0 && i % 5 == 0) {
+        System.out.println("FizzBuzz");
+      } else if (i % 3 == 0) {
+        System.out.println("Fizz");
+      } else if (i % 5 == 0) {
+        System.out.println("Buzz");
+      } else {
+        System.out.println(i);
+      }
+    }
+  }
+}
+```
+
+---
+layout: two-cols
+class: scroll-y
+---
+
+# 🧩 P07–P08 解答
+
+### P07｜反向數字三角形
+
+```java
+import java.util.Scanner;
+
+public class Main {
+  public static void main(String[] args) {
+    Scanner sc = new Scanner(System.in);
+    int n = sc.nextInt();
+    for (int i = n; i != 0; i--) {
+      for (int j = i; j != 0; j--) {
+        System.out.print(j);
+      }
+      System.out.println();
+    }
+  }
+}
+```
+
+::right::
+
+### P08｜找出最大值與最小值
+
+```java
+import java.util.Scanner;
+
+public class Main {
+  public static void main(String[] args) {
+    Scanner sc = new Scanner(System.in);
+    int n = sc.nextInt();
+    int max = n;
+    int min = n;
+    while (n != -9999) {
+      max = Math.max(max, n);
+      min = Math.min(min, n);
+      n = sc.nextInt();
+    }
+    System.out.println(max);
+    System.out.print(min);
+  }
+}
+```
+
+---
+layout: two-cols
+class: scroll-y
+---
+
+# 🧩 P09–P10 解答
+
+### P09｜判斷閏年
+
+```java
+import java.util.Scanner;
+
+public class Main {
+  public static void main(String[] args) {
+    Scanner scanner = new Scanner(System.in);
+    int year = scanner.nextInt();
+    if (year % 4 == 0 && year % 100 != 0 || year % 400 == 0) {
+      System.out.println("a leap year");
+    } else {
+      System.out.println("a normal year");
+    }
+  }
+}
+```
+
+::right::
+
+### P10｜大小寫轉換
+
+```java
+import java.util.Scanner;
+
+public class Main {
+  public static void main(String[] args) {
+    Scanner scanner = new Scanner(System.in);
+    while (true) {
+      String word = scanner.nextLine();
+      if (word.equals("0")) {
+        break;
+      }
+      StringBuilder result = new StringBuilder();
+      for (char ch : word.toCharArray()) {
+        if (Character.isUpperCase(ch)) {
+          result.append(Character.toLowerCase(ch));
+        } else {
+          result.append(Character.toUpperCase(ch));
+        }
+      }
+      System.out.println(result);
+    }
+  }
+}
+```
+
+---
 layout: default
 ---
 
@@ -749,9 +993,12 @@ layout: default
     <div>📊 加入庫存判斷</div>
     <div>💡 看見「陣列 → 資料庫」的關聯</div>
   </div>
+  <h3 class="text-2xl font-bold mt-8 mb-4">
+    <span class="text-[#3B82F6]">回饋表單</span>
+  </h3>
+  <img src="./qrcode-generator.webp" class="h-24 w-24 rounded-lg block" />
 </div>
 
-<img src="./qrcode-generator.webp" class="h-24 w-24 rounded-lg block" />
 
 ---
 layout: center
