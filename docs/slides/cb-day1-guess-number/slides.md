@@ -521,7 +521,7 @@ layout: default
       </div>
       <div class="p-2 rounded bg-[#0d1117] font-mono text-xs">
         <span class="text-gray-500"># Windows</span><br>
-        <span class="text-[#10B981]">winget install EclipseAdoptium.Temurin.25.JDK</span>
+        <span class="text-[#10B981]">winget install EclipseAdoptium.Temurin.25.JDK -y</span>
       </div>
       <div class="p-2 rounded bg-[#0d1117] font-mono text-xs">
         <span class="text-gray-500"># Linux</span><br>
@@ -543,7 +543,7 @@ layout: default
       </div>
       <div class="p-2 rounded bg-[#0d1117] font-mono text-xs">
         <span class="text-gray-500"># Windows</span><br>
-        <span class="text-[#10B981]">winget install Microsoft.VisualStudioCode</span>
+        <span class="text-[#10B981]">winget install Microsoft.VisualStudioCode -y</span>
       </div>
       <div class="p-2 rounded bg-[#0d1117] font-mono text-xs">
         <span class="text-gray-500"># Linux</span><br>
