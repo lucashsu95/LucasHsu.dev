@@ -34,17 +34,6 @@ exportFilename: cb-day2-order-system
   <p v-motion :initial="{ y: 20, opacity: 0 }" :enter="{ y: 0, opacity: 1, transition: { delay: 500, duration: 500 } }" class="text-lg text-gray-400 mt-2 text-center">
     Business Intelligence Center — 推動校園數位人才培育
   </p>
-  <div v-motion :initial="{ y: 30, opacity: 0 }" :enter="{ y: 0, opacity: 1, transition: { delay: 700, duration: 500 } }" class="mt-8 flex gap-4 text-center text-sm">
-    <div class="px-4 py-3 rounded-lg bg-[#1E293B] border border-[#3B82F6]/30">
-      <b class="text-[#3B82F6]">🏆 全國競賽獲獎</b>
-    </div>
-    <div class="px-4 py-3 rounded-lg bg-[#1E293B] border border-[#10B981]/30">
-      <b class="text-[#10B981]">🤝 業師輔導</b>
-    </div>
-    <div class="px-4 py-3 rounded-lg bg-[#1E293B] border border-[#F59E0B]/30">
-      <b class="text-[#F59E0B]">🚀 專案實作</b>
-    </div>
-  </div>
   <p v-motion :initial="{ opacity: 0 }" :enter="{ opacity: 1, transition: { delay: 1000, duration: 400 } }" class="mt-6 text-xs text-gray-600">
     2026 後端群體驗營
   </p>
@@ -121,8 +110,8 @@ layout: default
   <div v-click class="flex items-center gap-4 p-4 rounded-lg bg-[#1E293B]">
     <span class="text-3xl">🧠</span>
     <div>
-      <b class="text-[#F59E0B] text-lg">看見「陣列 → 資料庫」的關聯</b>
-      <p class="text-gray-400 mt-1">購物車</p>
+      <b class="text-[#F59E0B] text-lg">把資料放進真正的資料庫</b>
+      <p class="text-gray-400 mt-1">建立資料表 + 新增資料 + 查詢資料</p>
     </div>
   </div>
 </div>
@@ -151,12 +140,12 @@ layout: default
 layout: default
 ---
 
-# 📦 步驟一：商品清單
+# 📦 步驟一：陣列就是資料的容器
 
-<div class="stage-badge mb-4">Phase 1 — 用平行陣列存商品資料</div>
+<div class="stage-badge mb-4">第一部 — 先用陣列保存商品資料</div>
 
 ```java {1-3|5-8|10-12|all}
-// 平行陣列：同 index 對應同一個商品
+// 陣列：把多筆商品資料暫時放在程式記憶體裡
 String[] products = {"cola", "sandwich", "chips", "cookie", "juice"};
 int[] prices = {30, 65, 45, 35, 40};
 
@@ -170,7 +159,16 @@ System.out.print("請輸入想買的商品編號 (1-" + products.length + ")："
 int choice = scanner.nextInt();
 ```
 
-<div v-click class="callout mt-4">💡 <b>平行陣列</b>：兩個陣列長度相同，同一個 index 對應同一個商品</div>
+<div v-click class="grid grid-cols-2 gap-4 mt-4">
+  <div class="p-4 rounded-lg bg-[#1E293B] border border-[#3B82F6]/30">
+    <b class="text-[#3B82F6]">陣列在做什麼？</b>
+    <p class="text-gray-300 text-sm mt-2">它就是目前存放商品資料的地方：名稱放在 `products`，價格放在 `prices`。</p>
+  </div>
+  <div class="p-4 rounded-lg bg-[#1E293B] border border-[#F59E0B]/30">
+    <b class="text-[#F59E0B]">它的限制是什麼？</b>
+    <p class="text-gray-300 text-sm mt-2">程式結束後資料就消失，而且資料筆數與查詢能力都有限。</p>
+  </div>
+</div>
 
 ---
 layout: default
@@ -244,14 +242,14 @@ class: scroll-y
 
 ## 🛒 步驟二：多商品訂單
 
-<div class="stage-badge mb-4">Phase 2 — 可以買多個商品，計算總金額</div>
+<div class="stage-badge mb-4">第一部 — 用陣列完成訂單邏輯</div>
 
 ```java {1-2|4-5|7-20|all}
 int totalAmount = 0;  // 總金額
 int orderCount = 0;   // 買了幾個
 while (true) {
     System.out.println("商品列表：");
-    for (int i = 0; i < products.length; i++) {
+    for (int i = 0; i &lt; products.length; i++) {
         System.out.println((i + 1) + ". " + products[i] + " → " + prices[i] + " 元");
     }
     System.out.println("0. 結帳");
@@ -262,7 +260,7 @@ while (true) {
         break;  // 結帳跳出迴圈
     }
 
-    if (choice >= 1 && choice <= products.length) {
+    if (choice >= 1 && choice &lt;= products.length) {
         System.out.print("買幾個？");
         int quantity = scanner.nextInt();
         int subtotal = prices[choice - 1] * quantity;
@@ -307,7 +305,7 @@ layout: default
 
 # 📦 步驟三：庫存判斷（重點）
 
-<div class="stage-badge mb-4">Phase 3 — 買到剩 0 件就不能再買</div>
+<div class="stage-badge mb-4">第一部 — 陣列裡也可以保存庫存</div>
 
 ```java {1|3-8|10-14|all}
 int[] stock = {10, 5, 8, 12, 7};  // 庫存數量
@@ -330,7 +328,31 @@ stock[index] -= quantity;
 layout: default
 ---
 
-# 🧠 陣列 → 資料庫
+# 🚀 第二部：把資料換成資料庫
+
+<div class="stage-badge mb-4">第二部 — 不換購物車邏輯，只換資料的來源</div>
+
+<div class="grid grid-cols-3 gap-4 mt-6 text-center">
+  <div v-click class="concept-card blue">
+    <div class="text-3xl mb-2">📦</div>
+    <b class="text-[#3B82F6]">原本</b>
+    <p class="text-gray-300 text-sm mt-2">資料放在 Java 陣列</p>
+  </div>
+  <div v-click class="flex items-center justify-center text-3xl text-[#F59E0B]">→</div>
+  <div v-click class="concept-card green">
+    <div class="text-3xl mb-2">🗄️</div>
+    <b class="text-[#10B981]">現在</b>
+    <p class="text-gray-300 text-sm mt-2">資料放在資料庫表格</p>
+  </div>
+</div>
+
+<div v-click class="callout mt-6">🎯 商品名稱、價格、庫存這些「資料」不變；改變的是它們被保存、查詢的位置。</div>
+
+---
+layout: default
+---
+
+# 🧩 同一份資料，換一個家
 
 <div class="grid grid-cols-2 gap-6 mt-6">
   <div v-click class="p-5 rounded-lg bg-[#1E293B] border border-[#3B82F6]/30">
@@ -349,7 +371,226 @@ ORDER BY price;</pre>
   </div>
 </div>
 
-<div v-click class="callout mt-6">💡 <b>重點</b>：你今天做的，就是資料庫在做的事的縮小版！</div>
+<div v-click class="callout mt-6">💡 <b>關鍵操作</b>：不是重新做一個系統，而是把 `products`、`prices`、`stock` 的資料來源換成 `products` 資料表。</div>
+
+---
+layout: default
+---
+
+# 🗄️ 第二部：真的操作資料庫
+
+<div class="stage-badge mb-4">Step 2.1 — 準備 Java 的 SQLite 驅動</div>
+
+<div class="grid grid-cols-2 gap-6 mt-5">
+  <div v-click class="p-5 rounded-lg bg-[#1E293B] border border-[#3B82F6]/30">
+    <h3 class="text-[#3B82F6] font-bold text-lg mb-3">下載 SQLite JDBC Driver</h3>
+    <ol class="space-y-2 text-gray-300 text-sm">
+      <li>1. 下載 <a href="https://github.com/xerial/sqlite-jdbc/releases/download/3.53.4.0/sqlite-jdbc-3.53.4.0.jar" target="_blank" class="text-[#3B82F6] underline">sqlite-jdbc-3.53.4.0.jar</a></li>
+      <li>2. 放到 Java 專案的 `lib/` 資料夾</li>
+      <li>3. Java 透過這個 JAR 連線 SQLite</li>
+    </ol>
+    <p class="text-gray-400 text-xs mt-4">這個 JAR 讓 Java 能使用 SQLite，不需要另外啟動資料庫伺服器。</p>
+  </div>
+  <div v-click class="p-5 rounded-lg bg-[#1E293B] border border-[#10B981]/30">
+    <h3 class="text-[#10B981] font-bold text-lg mb-3">SQLite 是單一檔案</h3>
+    <ul class="space-y-2 text-gray-300 text-sm">
+      <li>✓ 不用安裝 MySQL Server</li>
+      <li>✓ 不用設定帳號和密碼</li>
+      <li>✓ `products.db` 就是完整資料庫</li>
+      <li>✓ Java 透過 JAR 讀取和修改它</li>
+    </ul>
+  </div>
+</div>
+
+<div v-click class="callout mt-6">🎯 SQLite 官網提供資料庫引擎；Java 課堂使用的 JDBC JAR 通常下載自 Xerial 的 `sqlite-jdbc` Releases。</div>
+
+---
+layout: default
+---
+
+# 🧰 用 VS Code 看資料庫
+
+<div class="stage-badge mb-4">Step 2.2 — 安裝 SQLite Viewer，直接看資料</div>
+
+<div class="grid grid-cols-2 gap-6 mt-5">
+  <div v-click class="p-5 rounded-lg bg-[#1E293B] border border-[#3B82F6]/30">
+    <h3 class="text-[#3B82F6] font-bold text-lg mb-3">安裝套件</h3>
+    <ol class="space-y-2 text-gray-300 text-sm">
+      <li>1. 開啟 VS Code 的 Extensions</li>
+      <li>2. 搜尋 <b>SQLite Viewer</b></li>
+      <li>3. 安裝作者為 <b>qwtel</b> 的套件</li>
+    </ol>
+    <p class="text-gray-400 text-xs mt-4">也可以在終端機執行：</p>
+    <pre style="font-size: 12px" class="text-gray-300 mt-2">code --install-extension qwtel.sqlite-viewer</pre>
+  </div>
+  <div v-click class="p-5 rounded-lg bg-[#1E293B] border border-[#10B981]/30">
+    <h3 class="text-[#10B981] font-bold text-lg mb-3">打開資料</h3>
+    <ol class="space-y-2 text-gray-300 text-sm">
+      <li>1. 在 VS Code 開啟 `products.db`</li>
+      <li>2. 點選資料表 `products`</li>
+      <li>3. 直接看到欄位和每一筆資料</li>
+    </ol>
+    <p class="text-[#10B981] text-xs mt-4">這就是資料庫裡真正保存的資料。</p>
+  </div>
+</div>
+
+<div v-click class="callout mt-6">💡 Java JDBC 負責連線並執行 SQL；SQLite Viewer 負責讓我們用表格畫面觀察資料。</div>
+
+---
+layout: default
+---
+
+# 🧱 建立商品資料表
+
+<div class="stage-badge mb-4">Step 2.3 — CREATE TABLE</div>
+
+```sql {1-7|9-13|all}
+CREATE TABLE products (
+    id INTEGER PRIMARY KEY,
+    name TEXT NOT NULL,
+    price INTEGER NOT NULL,
+    stock INTEGER NOT NULL
+);
+
+INSERT INTO products (name, price, stock) VALUES
+    ('cola', 30, 10),
+    ('sandwich', 65, 5),
+    ('chips', 45, 8),
+    ('cookie', 35, 12),
+    ('juice', 40, 7);
+```
+
+<div v-click class="grid grid-cols-3 gap-4 mt-4 text-center text-sm">
+  <div class="concept-card blue"><b class="text-[#3B82F6]">欄位 column</b><br><span>id、name、price、stock</span></div>
+  <div class="concept-card green"><b class="text-[#10B981]">資料列 row</b><br><span>一筆商品資料</span></div>
+  <div class="concept-card amber"><b class="text-[#F59E0B]">資料表 table</b><br><span>所有商品的集合</span></div>
+</div>
+
+---
+layout: default
+---
+
+# 👀 讓資料庫把資料印出來
+
+<div class="stage-badge mb-4">Step 2.4 — SELECT</div>
+
+```sql {1|3-7|9-10|all}
+-- 看全部商品
+SELECT * FROM products;
+
+-- 只看還有庫存的商品
+SELECT name, price, stock
+FROM products
+WHERE stock > 0
+ORDER BY price;
+
+-- 找出 cola，準備檢查庫存
+SELECT * FROM products WHERE name = 'cola';
+```
+
+<div v-click class="callout mt-5">💡 在終端機執行查詢，或用 SQLite Viewer 打開資料表，都能看到後端程式平常讀取的資料。</div>
+
+<div v-click class="mt-5 p-4 rounded-lg bg-[#1E293B] border border-[#10B981]/30 text-sm">
+  <b class="text-[#10B981]">你現在看見的是：</b>
+  <span class="text-gray-300">一張有 id、name、price、stock 欄位的 products 表。</span>
+</div>
+
+---
+layout: default
+class: code-small
+---
+
+# ☕ Java 連線 SQLite 完成購買
+
+```java {1-3|5-8|10-17|all}
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+
+public class BuyProduct {
+  public static void main(String[] args) throws Exception {
+    int productId = 1;
+    int quantity = 2;
+
+    String sql = "UPDATE products "
+        + "SET stock = stock - ? "
+        + "WHERE id = ? AND stock >= ?";
+
+    try (Connection connection = DriverManager.getConnection("jdbc:sqlite:products.db");
+         PreparedStatement statement = connection.prepareStatement(sql)) {
+      statement.setInt(1, quantity);
+      statement.setInt(2, productId);
+      statement.setInt(3, quantity);
+
+      if (statement.executeUpdate() == 1) {
+        System.out.println("購買成功！");
+      } else {
+        System.out.println("購買失敗：庫存不足");
+      }
+    }
+  }
+}
+```
+
+<div v-click class="grid grid-cols-2 gap-5 mt-4">
+  <div class="p-4 rounded-lg bg-[#1E293B] border border-[#3B82F6]/30 text-sm">
+    <b class="text-[#3B82F6]">Java 負責</b>
+    <p class="text-gray-300 mt-2">建立連線、傳入數量、執行 SQL、讀取結果。</p>
+  </div>
+  <div class="p-4 rounded-lg bg-[#1E293B] border border-[#10B981]/30 text-sm">
+    <b class="text-[#10B981]">資料庫負責</b>
+    <p class="text-gray-300 mt-2">保存商品資料，並在條件符合時扣除庫存。</p>
+  </div>
+</div>
+
+---
+layout: default
+class: scroll-y
+---
+
+# ▶️ 編譯並執行 Java
+
+<div class="stage-badge mb-4">Step 2.6 — 把 JAR 加到 classpath</div>
+
+```bash
+# macOS / Linux：冒號代表加入 lib 裡的 JAR
+javac -cp "lib/sqlite-jdbc-3.53.4.0.jar" BuyProduct.java
+java -cp ".:lib/sqlite-jdbc-3.53.4.0.jar" BuyProduct
+```
+
+<div v-click class="callout mt-5">💡 執行後再用 SQLite Viewer 打開 `products.db`，重新查看 `products` 表，就會看到 cola 的 stock 已經減少。</div>
+
+<div v-click class="mt-5 p-4 rounded-lg bg-[#1E293B] border border-[#F59E0B]/30 text-sm">
+  <b class="text-[#F59E0B]">Windows classpath</b>
+  <span class="text-gray-300">把分隔符號 `:` 改成 `;`：`java -cp ".;lib\\sqlite-jdbc-3.53.4.0.jar" BuyProduct`</span>
+</div>
+
+---
+layout: default
+---
+
+# 🔁 從陣列到資料庫
+
+<div class="grid grid-cols-2 gap-6 mt-6">
+  <div v-click class="p-5 rounded-lg bg-[#1E293B] border border-[#3B82F6]/30">
+    <h3 class="text-[#3B82F6] font-bold text-lg mb-3">今天的學習路線</h3>
+    <div class="text-gray-300 text-sm space-y-3">
+      <p><b>1.</b> Java 陣列：先理解資料和邏輯</p>
+      <p><b>2.</b> SQL 資料表：讓資料可以保存</p>
+      <p><b>3.</b> Java JDBC：讓程式連線並操作資料庫</p>
+    </div>
+  </div>
+  <div v-click class="p-5 rounded-lg bg-[#1E293B] border border-[#10B981]/30">
+    <h3 class="text-[#10B981] font-bold text-lg mb-3">下一步會發生什麼？</h3>
+    <div class="text-gray-300 text-sm space-y-3">
+      <p>Java 使用 JDBC 連線 `products.db`。</p>
+      <p>Java 傳入數量，執行庫存更新。</p>
+      <p>查詢結果回到 Java，再顯示給使用者。</p>
+    </div>
+  </div>
+</div>
+
+<div v-click class="callout mt-6">💡 今天的關鍵：陣列裡的資料，現在由 Java JDBC 從真正的 SQLite 資料庫讀取與修改。</div>
 
 ---
 layout: default
