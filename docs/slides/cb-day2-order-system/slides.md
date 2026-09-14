@@ -444,7 +444,7 @@ layout: default
 
 <div class="stage-badge mb-4">Step 2.3 — CREATE TABLE</div>
 
-```sql {1-7|9-13|all}
+```sql {1-7|8-13|all}
 CREATE TABLE products (
     id INTEGER PRIMARY KEY,
     name TEXT NOT NULL,
@@ -497,35 +497,56 @@ SELECT * FROM products WHERE name = 'cola';
 
 ---
 layout: default
-class: code-small
+class: scroll-y
 ---
 
 # ☕ Java 連線 SQLite 完成購買
 
-```java {1-3|5-8|10-17|all}
+<div class="stage-badge mb-4">Step 2.5 — Java JDBC：更新資料，再讀回結果</div>
+
+```java {1-4|6-10|12-24|26-40|all}
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 public class BuyProduct {
   public static void main(String[] args) throws Exception {
     int productId = 1;
     int quantity = 2;
 
-    String sql = "UPDATE products "
+    String updateSql = "UPDATE products "
         + "SET stock = stock - ? "
         + "WHERE id = ? AND stock >= ?";
 
-    try (Connection connection = DriverManager.getConnection("jdbc:sqlite:products.db");
-         PreparedStatement statement = connection.prepareStatement(sql)) {
-      statement.setInt(1, quantity);
-      statement.setInt(2, productId);
-      statement.setInt(3, quantity);
+    try (Connection connection = DriverManager.getConnection("jdbc:sqlite:products.db")) {
+      // 先檢查庫存，再扣除購買數量
+      try (PreparedStatement statement = connection.prepareStatement(updateSql)) {
+        statement.setInt(1, quantity);
+        statement.setInt(2, productId);
+        statement.setInt(3, quantity);
 
-      if (statement.executeUpdate() == 1) {
-        System.out.println("購買成功！");
-      } else {
-        System.out.println("購買失敗：庫存不足");
+        if (statement.executeUpdate() == 1) {
+          System.out.println("購買成功！");
+        } else {
+          System.out.println("購買失敗：庫存不足或找不到商品");
+        }
+      }
+
+      // 再查一次，確認資料庫裡的庫存已經更新
+      String querySql = "SELECT name, price, stock "
+          + "FROM products WHERE id = ?";
+
+      try (PreparedStatement statement = connection.prepareStatement(querySql)) {
+        statement.setInt(1, productId);
+
+        try (ResultSet result = statement.executeQuery()) {
+          if (result.next()) {
+            System.out.println("商品：" + result.getString("name"));
+            System.out.println("價格：" + result.getInt("price"));
+            System.out.println("剩餘庫存：" + result.getInt("stock"));
+          }
+        }
       }
     }
   }
@@ -550,20 +571,51 @@ class: scroll-y
 
 # ▶️ 編譯並執行 Java
 
-<div class="stage-badge mb-4">Step 2.6 — 把 JAR 加到 classpath</div>
+<div class="stage-badge mb-4">Step 2.6 — 讓 Java 找得到 SQLite JAR</div>
+
+<div class="grid grid-cols-2 gap-5 mt-4">
+  <div v-click class="p-4 rounded-lg bg-[#1E293B] border border-[#3B82F6]/30">
+    <b class="text-[#3B82F6]">先確認資料夾</b>
+    <pre class="text-gray-300 mt-2">order-system/
+├─ BuyProduct.java
+├─ products.db
+└─ lib/
+   └─ sqlite-jdbc-3.53.4.0.jar</pre>
+    <p class="text-gray-400 text-xs mt-2">請在 `order-system/` 資料夾開啟終端機。</p>
+  </div>
+  <div v-click class="p-4 rounded-lg bg-[#1E293B] border border-[#10B981]/30">
+    <b class="text-[#10B981]">執行順序</b>
+    <ol class="text-gray-300 text-sm mt-2 space-y-1">
+      <li>先編譯：產生 `BuyProduct.class`</li>
+      <li>再執行：啟動 Java 程式</li>
+      <li>最後用 Viewer 查看庫存</li>
+    </ol>
+  </div>
+</div>
+
+<div v-click class="mt-4">
+  <b class="text-[#3B82F6]">macOS / Linux</b>
+</div>
 
 ```bash
-# macOS / Linux：冒號代表加入 lib 裡的 JAR
+# 1. 編譯：-cp 告訴 Java 去 lib 找 SQLite JAR
 javac -cp "lib/sqlite-jdbc-3.53.4.0.jar" BuyProduct.java
+
+# 2. 執行：. 代表目前資料夾，: 用來分隔兩個位置
 java -cp ".:lib/sqlite-jdbc-3.53.4.0.jar" BuyProduct
 ```
 
-<div v-click class="callout mt-5">💡 執行後再用 SQLite Viewer 打開 `products.db`，重新查看 `products` 表，就會看到 cola 的 stock 已經減少。</div>
-
-<div v-click class="mt-5 p-4 rounded-lg bg-[#1E293B] border border-[#F59E0B]/30 text-sm">
-  <b class="text-[#F59E0B]">Windows classpath</b>
-  <span class="text-gray-300">把分隔符號 `:` 改成 `;`：`java -cp ".;lib\\sqlite-jdbc-3.53.4.0.jar" BuyProduct`</span>
+<div v-click class="mt-4">
+  <b class="text-[#F59E0B]">Windows</b>
 </div>
+
+```powershell
+# Windows 只需把 classpath 分隔符號改成 ;
+javac -cp "lib\sqlite-jdbc-3.53.4.0.jar" BuyProduct.java
+java -cp ".;lib\sqlite-jdbc-3.53.4.0.jar" BuyProduct
+```
+
+<div v-click class="callout mt-4">💡 程式成功執行後，用 SQLite Viewer 打開 `products.db`，查看 `products` 表裡的 stock 是否已經減少。</div>
 
 ---
 layout: default
