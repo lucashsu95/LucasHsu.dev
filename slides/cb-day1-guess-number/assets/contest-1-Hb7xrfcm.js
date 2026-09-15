@@ -1,1 +1,0 @@
-var e=`/LucasHsu.dev/slides/cb-day1-guess-number/assets/contest-1-C_nLaJVN.webp`;export{e as t};
