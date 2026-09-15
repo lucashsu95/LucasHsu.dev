@@ -34,17 +34,6 @@ exportFilename: cb-day1-guess-number
   <p v-motion :initial="{ y: 20, opacity: 0 }" :enter="{ y: 0, opacity: 1, transition: { delay: 500, duration: 500 } }" class="text-lg text-gray-400 mt-2 text-center">
     Business Intelligence Center — 推動校園數位人才培育
   </p>
-  <div v-motion :initial="{ y: 30, opacity: 0 }" :enter="{ y: 0, opacity: 1, transition: { delay: 700, duration: 500 } }" class="mt-8 flex gap-4 text-center text-sm">
-    <div class="px-4 py-3 rounded-lg bg-[#1E293B] border border-[#3B82F6]/30">
-      <b class="text-[#3B82F6]">🏆 競賽獲獎</b>
-    </div>
-    <div class="px-4 py-3 rounded-lg bg-[#1E293B] border border-[#10B981]/30">
-      <b class="text-[#10B981]">🤝 業師輔導</b>
-    </div>
-    <div class="px-4 py-3 rounded-lg bg-[#1E293B] border border-[#F59E0B]/30">
-      <b class="text-[#F59E0B]">🚀 專案實作</b>
-    </div>
-  </div>
   <p v-motion :initial="{ opacity: 0 }" :enter="{ opacity: 1, transition: { delay: 1000, duration: 400 } }" class="mt-6 text-xs text-gray-600">
     2026 後端群體驗營
   </p>
@@ -81,7 +70,7 @@ layout: default
     <div class="text-base text-gray-300 space-y-3">
       <li>與明貴主任一起爬象山</li>
       <li>與明貴主任騎車環島</li>
-      <li>團隊建立活動</li>
+      <li>團隊建立活動(黑客松、北區聯盟程式競賽)</li>
     </div>
   </div>
   <div v-click class="p-6 rounded-lg bg-[#1E293B] border border-[#F59E0B]/30">
@@ -90,7 +79,6 @@ layout: default
       <li>北商聯盟競賽指導</li>
       <li>產學合作經驗、AI 算力資源支援</li>
       <li>考相關證照補助</li>
-      <li>出去比賽餐費車馬費補助</li>
     </div>
   </div>
 </div>
@@ -110,7 +98,7 @@ layout: default
 
 <div class="grid grid-cols-2 gap-6 mt-12">
   <div v-click class="p-6 rounded-lg bg-[#1E293B] border border-[#5382A1]/30 text-center">
-    <img src="./contest-1.webp" class="rounded-lg w-full h-64 object-cover mb-4" />
+    <img src="./IMG_4320.webp" class="rounded-lg w-full h-64 object-cover mb-4" />
     <p class="text-gray-400 text-sm italic">競賽實錄 01</p>
   </div>
   <div v-click class="p-6 rounded-lg bg-[#1E293B] border border-[#5382A1]/30 text-center">
@@ -202,6 +190,7 @@ layout: default
   </div>
 </div>
 
+
 ---
 layout: default
 ---
@@ -232,6 +221,7 @@ layout: default
     </div>
     <div class="text-gray-300 text-sm space-y-2">
       <p>▸ 產學合作 — 與大型廠商共同開發</p>
+      <p>▸ 中心黑客松 — 軟實力的考驗</p>
       <p>▸ 智慧校園 — 為學校打造系統</p>
       <p>▸ 實戰交付 — 從需求到上線的完整經驗</p>
     </div>
@@ -274,6 +264,27 @@ layout: default
         支援多角色（管理員、教師、學生）切換，大幅提升系統擴展性。
       </p>
     </div>
+  </div>
+</div>
+
+---
+layout: default
+---
+
+# 第一屆商智研究中心黑客松-「工具轉角」社區資源共享難題
+
+<div class="grid grid-cols-2 gap-4 mt-3">
+  <div class="rounded-lg overflow-hidden border border-[#3B82F6]/30 bg-[#1E293B]">
+    <img src="./IMG_20260912_112703.webp" class="w-full h-42 object-cover" alt="第一屆商智研究中心黑客松活動照片" />
+  </div>
+  <div class="rounded-lg overflow-hidden border border-[#10B981]/30 bg-[#1E293B]">
+    <img src="./IMG_20260912_130912.webp" class="w-full h-42 object-cover" alt="第一屆商智研究中心黑客松活動照片" />
+  </div>
+  <div class="rounded-lg overflow-hidden border border-[#F59E0B]/30 bg-[#1E293B]">
+    <img src="./MVIMG_20260912_161423.webp" class="w-full h-42 object-cover" alt="第一屆商智研究中心黑客松活動照片" />
+  </div>
+  <div class="rounded-lg overflow-hidden border border-[#8B5CF6]/30 bg-[#1E293B]">
+    <img src="./IMG_20260912_131029.webp" class="w-full h-42 object-cover" alt="第一屆商智研究中心黑客松活動照片" />
   </div>
 </div>
 
