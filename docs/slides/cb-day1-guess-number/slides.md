@@ -1027,7 +1027,7 @@ class: text-center
 </p>
 
 <div v-motion :initial="{ y: 20, opacity: 0 }" :enter="{ y: 0, opacity: 1, transition: { delay: 800, duration: 500 } }">
-  <a href="https://github.com/lucashsu95/cb-backend-camp" target="_blank" class="px-6 py-3 rounded-lg bg-[#3B82F6] text-white font-bold hover:bg-[#1d4ed8] transition inline-block">
+  <a href="https://github.com/lucashsu95/day1-guess-number" target="_blank" class="px-6 py-3 rounded-lg bg-[#3B82F6] text-white font-bold hover:bg-[#1d4ed8] transition inline-block">
     📦 範例程式碼
   </a>
 </div>

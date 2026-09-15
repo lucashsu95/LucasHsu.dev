@@ -137,7 +137,7 @@ layout: default
 <div v-click class="callout mt-8">🎯 <b>這些都是後端</b> — 你看不到，但它一直在運作</div>
 
 <div class="mt-6 text-center">
-  <a href="https://github.com/lucashsu95/cb-backend-camp" target="_blank" class="px-5 py-2 rounded-lg bg-[#3B82F6] text-white font-bold inline-block">
+  <a href="https://github.com/lucashsu95/day2-order-system" target="_blank" class="px-5 py-2 rounded-lg bg-[#3B82F6] text-white font-bold inline-block">
     📦 取得範例程式碼
   </a>
 </div>
