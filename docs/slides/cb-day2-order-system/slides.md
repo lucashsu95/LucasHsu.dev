@@ -90,6 +90,42 @@ layout: default
 layout: default
 ---
 
+# 📖 今天會遇到的新名詞
+
+<div class="grid grid-cols-3 gap-4 mt-6">
+  <div v-click class="p-4 rounded-lg bg-[#1E293B] border border-[#3B82F6]/30">
+    <b class="text-[#3B82F6] text-lg">變數</b>
+    <p class="text-gray-300 text-sm mt-2">存東西的盒子，例如 <code>int stock = 10;</code></p>
+  </div>
+  <div v-click class="p-4 rounded-lg bg-[#1E293B] border border-[#10B981]/30">
+    <b class="text-[#10B981] text-lg">陣列</b>
+    <p class="text-gray-300 text-sm mt-2">一排盒子，例如 <code>int[] prices = {30, 65};</code></p>
+  </div>
+  <div v-click class="p-4 rounded-lg bg-[#1E293B] border border-[#F59E0B]/30">
+    <b class="text-[#F59E0B] text-lg">資料庫</b>
+    <p class="text-gray-300 text-sm mt-2">永久保存資料的地方，例如 SQLite</p>
+  </div>
+</div>
+
+<div v-click class="grid grid-cols-3 gap-4 mt-4">
+  <div class="p-4 rounded-lg bg-[#1E293B] border border-[#3B82F6]/30">
+    <b class="text-[#3B82F6] text-lg">if / else</b>
+    <p class="text-gray-300 text-sm mt-2">判斷條件，決定走哪條路</p>
+  </div>
+  <div class="p-4 rounded-lg bg-[#1E293B] border border-[#10B981]/30">
+    <b class="text-[#10B981] text-lg">while 迴圈</b>
+    <p class="text-gray-300 text-sm mt-2">重複執行，直到條件不滿足</p>
+  </div>
+  <div class="p-4 rounded-lg bg-[#1E293B] border border-[#F59E0B]/30">
+    <b class="text-[#F59E0B] text-lg">SQL</b>
+    <p class="text-gray-300 text-sm mt-2">和資料庫溝通的語言，例如 <code>SELECT * FROM products</code></p>
+  </div>
+</div>
+
+---
+layout: default
+---
+
 # 🎯 今日目標
 
 <div class="mt-6 space-y-3">
@@ -144,6 +180,7 @@ layout: default
 
 ---
 layout: default
+class: scroll-y
 ---
 
 # 📦 步驟一：陣列就是資料的容器
@@ -291,6 +328,31 @@ layout: default
 layout: default
 ---
 
+# 📦 步驟三：庫存判斷（重點）
+
+<div class="stage-badge mb-4">第一部 — 陣列裡也可以保存庫存</div>
+
+```java {1|3-8|10-14|all}
+int[] stock = {10, 5, 8, 12, 7};  // 庫存數量
+
+// 檢查庫存
+if (stock[index] == 0) {
+    System.out.println("❌ " + products[index] + " 已售完，無法購買！");
+    continue;  // 跳過這次，回到迴圈開頭
+}
+// 庫存不足
+if (quantity > stock[index]) {
+    System.out.println("❌ 庫存不足！只剩 " + stock[index] + " 個");
+    continue;
+}
+// 扣庫存
+stock[index] -= quantity;
+```
+
+---
+layout: default
+---
+
 # 🚀 第二部開始：資料要保存在哪裡？
 
 <div class="stage-badge mb-4">這一部要完成：把 Java 陣列換成 SQLite 資料庫</div>
@@ -326,43 +388,18 @@ layout: default
 layout: default
 ---
 
-# 📦 步驟三：庫存判斷（重點）
-
-<div class="stage-badge mb-4">第一部 — 陣列裡也可以保存庫存</div>
-
-```java {1|3-8|10-14|all}
-int[] stock = {10, 5, 8, 12, 7};  // 庫存數量
-
-// 檢查庫存
-if (stock[index] == 0) {
-    System.out.println("❌ " + products[index] + " 已售完，無法購買！");
-    continue;  // 跳過這次，回到迴圈開頭
-}
-// 庫存不足
-if (quantity > stock[index]) {
-    System.out.println("❌ 庫存不足！只剩 " + stock[index] + " 個");
-    continue;
-}
-// 扣庫存
-stock[index] -= quantity;
-```
-
----
-layout: default
----
-
 # 🚀 第二部：把資料換成資料庫
 
 <div class="stage-badge mb-4">第二部 — 不換購物車邏輯，只換資料的來源</div>
 
 <div class="grid grid-cols-3 gap-4 mt-6 text-center">
-  <div v-click class="concept-card blue">
+  <div class="concept-card blue">
     <div class="text-3xl mb-2">📦</div>
     <b class="text-[#3B82F6]">原本</b>
     <p class="text-gray-300 text-sm mt-2">資料放在 Java 陣列</p>
   </div>
-  <div v-click class="flex items-center justify-center text-3xl text-[#F59E0B]">→</div>
-  <div v-click class="concept-card green">
+  <div class="flex items-center justify-center text-3xl text-[#F59E0B]">→</div>
+  <div class="concept-card green">
     <div class="text-3xl mb-2">🗄️</div>
     <b class="text-[#10B981]">現在</b>
     <p class="text-gray-300 text-sm mt-2">資料放在資料庫表格</p>
@@ -381,17 +418,14 @@ class: scroll-y
 <div class="stage-badge mb-4">第一部 — 用 Java Array 完成互動式購買</div>
 
 <div class="grid grid-cols-2 gap-6 mt-6">
-  <div v-click class="p-5 rounded-lg bg-[#1E293B] border border-[#3B82F6]/30">
+  <div class="p-5 rounded-lg bg-[#1E293B] border border-[#3B82F6]/30">
     <h3 class="text-[#3B82F6] font-bold text-lg mb-3">專案檔案</h3>
     <pre class="text-gray-300 text-sm">day2-order-system/
 └─ BuyProductArray.java</pre>
   </div>
-  <div v-click class="p-5 rounded-lg bg-[#1E293B] border border-[#10B981]/30">
-    <h3 class="text-[#10B981] font-bold text-lg mb-3">這個版本的資料</h3>
+  <div class="p-5 rounded-lg bg-[#1E293B] border border-[#10B981]/30">
+    <h3 class="text-[#10B981] font-bold text-lg mb-3">資料存放的地方</h3>
     <div class="text-gray-300 text-sm space-y-2">
-      <p><b class="text-white">products</b>：商品名稱</p>
-      <p><b class="text-white">prices</b>：商品價格</p>
-      <p><b class="text-white">stock</b>：目前庫存</p>
       <p>資料暫時保存在 Java 記憶體裡。</p>
     </div>
   </div>
@@ -403,6 +437,35 @@ class: scroll-y
 javac BuyProductArray.java
 java BuyProductArray</pre>
   <p class="text-gray-400 text-xs mt-3">輸入商品編號與數量完成購買；輸入 `0` 結束。程式關閉後，陣列庫存會消失。</p>
+</div>
+
+---
+layout: default
+---
+
+# ✅ 檢查點 1
+
+<div class="grid grid-cols-3 gap-4 mt-6">
+  <div class="p-4 rounded-lg bg-[#1E293B] border border-[#10B981]/30">
+    <b class="text-[#10B981] text-lg">✓ 我能說出</b>
+    <ul class="text-gray-300 text-sm mt-2 space-y-1">
+      <li>• 陣列是什麼？</li>
+      <li>• index 從 0 開始</li>
+      <li>• while 迴圈做什麼？</li>
+    </ul>
+  </div>
+  <div class="p-4 rounded-lg bg-[#1E293B] border border-[#F59E0B]/30">
+    <b class="text-[#F59E0B] text-lg">? 我還不太確定</b>
+    <ul class="text-gray-300 text-sm mt-2 space-y-1">
+      <li>• index 跟 length 的關係</li>
+      <li>• break 跟 continue 的差別</li>
+      <li>• 為什麼要 stock[index] -= 1</li>
+    </ul>
+  </div>
+  <div class="p-4 rounded-lg bg-[#1E293B] border border-[#3B82F6]/30">
+    <b class="text-[#3B82F6] text-lg">💡 馬上複習</b>
+    <p class="text-gray-300 text-sm mt-2">回到前面的「迴圈的妙用」投影片，重新看一次程式碼流程。</p>
+  </div>
 </div>
 
 ---
@@ -441,6 +504,68 @@ java -cp ".:lib/sqlite-jdbc-3.53.4.0.jar" BuyProduct</pre>
   <p class="text-gray-400 text-xs mt-3">程式會先自動建立資料表與商品資料，再執行購買；看到「購買成功！」後，用 SQLite Viewer 查看 stock 是否減少。</p>
 </div>
 
+---
+layout: default
+class: scroll-y
+---
+
+# 📖 JDBC 五兄弟小卡
+
+<div class="grid grid-cols-3 gap-4 mt-4">
+  <div v-click class="p-3 rounded-lg bg-[#1E293B] border border-[#3B82F6]/30">
+    <b class="text-[#3B82F6]">① Connection</b>
+    <p class="text-gray-300 text-xs mt-1">建立資料庫連線，就像拿起電話</p>
+  </div>
+  <div v-click class="p-3 rounded-lg bg-[#1E293B] border border-[#10B981]/30">
+    <b class="text-[#10B981]">② PreparedStatement</b>
+    <p class="text-gray-300 text-xs mt-1">準備好要問的問題（SQL）</p>
+    <p class="text-gray-400 text-xs mt-1">`?` 是先留空格，再用 setInt() 安全填值</p>
+  </div>
+  <div v-click class="p-3 rounded-lg bg-[#1E293B] border border-[#F59E0B]/30">
+    <b class="text-[#F59E0B]">③ ResultSet</b>
+    <p class="text-gray-300 text-xs mt-1">資料庫回答的結果</p>
+  </div>
+</div>
+
+<div v-click class="grid grid-cols-2 gap-4 mt-4">
+  <div class="p-3 rounded-lg bg-[#1E293B] border border-[#3B82F6]/30">
+    <b class="text-[#3B82F6]">④ executeQuery()</b>
+    <p class="text-gray-300 text-xs mt-1">執行 SELECT，回傳 ResultSet</p>
+  </div>
+  <div class="p-3 rounded-lg bg-[#1E293B] border border-[#10B981]/30">
+    <b class="text-[#10B981]">⑤ executeUpdate()</b>
+    <p class="text-gray-300 text-xs mt-1">執行 INSERT/UPDATE，回傳影響筆數</p>
+  </div>
+</div>
+
+---
+layout: default
+---
+
+# ✅ 檢查點 2
+
+<div class="grid grid-cols-3 gap-4 mt-6">
+  <div v-click class="p-4 rounded-lg bg-[#1E293B] border border-[#10B981]/30">
+    <b class="text-[#10B981] text-lg">✓ 我能說出</b>
+    <ul class="text-gray-300 text-sm mt-2 space-y-1">
+      <li>• JDBC 是什麼？</li>
+      <li>• Connection / PreparedStatement / ResultSet</li>
+      <li>• products.db 裡有哪些欄位？</li>
+    </ul>
+  </div>
+  <div v-click class="p-4 rounded-lg bg-[#1E293B] border border-[#F59E0B]/30">
+    <b class="text-[#F59E0B] text-lg">? 我還不太確定</b>
+    <ul class="text-gray-300 text-sm mt-2 space-y-1">
+      <li>• executeQuery vs executeUpdate</li>
+      <li>• 為什麼要 close()</li>
+      <li>• SQL 語法怎麼寫？</li>
+    </ul>
+  </div>
+  <div v-click class="p-4 rounded-lg bg-[#1E293B] border border-[#3B82F6]/30">
+    <b class="text-[#3B82F6] text-lg">💡 馬上複習</b>
+    <p class="text-gray-300 text-sm mt-2">回到前面的「JDBC 五兄弟小卡」，重新看一次每個物件的用途。</p>
+  </div>
+</div>
 
 ---
 layout: default
@@ -523,7 +648,7 @@ public class BuyProduct {
 
 <div v-click class="mt-5 p-4 rounded-lg bg-[#1E293B] border border-[#F59E0B]/30">
   <b class="text-[#F59E0B]">▶️ 如何啟動</b>
-  <pre class="text-gray-300 text-sm mt-3">cd order-system
+  <pre class="text-gray-300 text-sm mt-3">cd day2-order-system
 javac -cp "lib/sqlite-jdbc-3.53.4.0.jar" BuyProduct.java
 java -cp ".:lib/sqlite-jdbc-3.53.4.0.jar" BuyProduct</pre>
   <p class="text-gray-400 text-xs mt-2">輸入商品 id 與數量完成購買；輸入 `0` 結束，再用 SQLite Viewer 查看 stock。</p>
@@ -539,7 +664,7 @@ class: scroll-y
 <div class="stage-badge mb-4">第三部 — 用 Java API 串接瀏覽器前端</div>
 
 <div class="grid grid-cols-2 gap-6 mt-6">
-  <div v-click class="p-5 rounded-lg bg-[#1E293B] border border-[#3B82F6]/30">
+  <div class="p-5 rounded-lg bg-[#1E293B] border border-[#3B82F6]/30">
     <h3 class="text-[#3B82F6] font-bold text-lg mb-3">專案檔案</h3>
     <pre class="text-gray-300 text-sm">day2-order-system/
 ├─ BuyProductApi.java
@@ -548,7 +673,7 @@ class: scroll-y
 └─ lib/
    └─ sqlite-jdbc-3.53.4.0.jar</pre>
   </div>
-  <div v-click class="p-5 rounded-lg bg-[#1E293B] border border-[#10B981]/30">
+  <div class="p-5 rounded-lg bg-[#1E293B] border border-[#10B981]/30">
     <h3 class="text-[#10B981] font-bold text-lg mb-3">每個檔案的用途</h3>
     <div class="text-gray-300 text-sm space-y-2">
       <p><b class="text-white">BuyProductApi.java</b>：提供商品與購買 API</p>
@@ -618,8 +743,26 @@ class: scroll-y
 
 <div class="stage-badge mb-4">Step 3.1 — 把命令列程式變成前端可以呼叫的 API</div>
 
-```java {1-3|5-8|10-19|all}
+<div class="grid grid-cols-3 gap-4 mt-6 text-center">
+  <div class="concept-card blue"><b class="text-[#3B82F6]">前端</b><p class="text-gray-300 text-sm mt-2">送出<br><code>productId</code>、<code>quantity</code></p></div>
+  <div class="concept-card amber"><b class="text-[#F59E0B]">Java API</b><p class="text-gray-300 text-sm mt-2">接收請求<br>執行 JDBC</p></div>
+  <div class="concept-card green"><b class="text-[#10B981]">SQLite</b><p class="text-gray-300 text-sm mt-2">檢查庫存<br>扣除數量</p></div>
+</div>
+
+<div class="callout mt-5">💡 API 版本只是把原本的 JDBC 邏輯包在 HTTP 請求裡，資料庫操作本身沒有消失。</div>
+
+---
+layout: default
+class: scroll-y
+---
+
+# 🚀 第三部：Java API 串接前端 — 程式碼
+
+<div class="stage-badge mb-4">Step 3.1 — 把命令列程式變成前端可以呼叫的 API</div>
+
+```java {1-4|6-9|11-20|all}
 // BuyProductApi.java
+// 🔵 這段是 HTTP 伺服器的固定寫法，先照抄，重點看下面的 SQL
 server.createContext("/api/products", BuyProductApi::handleProducts);
 server.createContext("/api/buy", BuyProductApi::handleBuy);
 
@@ -642,13 +785,27 @@ private static void handleBuy(HttpExchange exchange) throws IOException {
 }
 ```
 
-<div class="grid grid-cols-3 gap-4 mt-5 text-center">
-  <div class="concept-card blue"><b class="text-[#3B82F6]">前端</b><p class="text-gray-300 text-sm mt-2">送出<br><code>productId</code>、<code>quantity</code></p></div>
-  <div class="concept-card amber"><b class="text-[#F59E0B]">Java API</b><p class="text-gray-300 text-sm mt-2">接收請求<br>執行 JDBC</p></div>
-  <div class="concept-card green"><b class="text-[#10B981]">SQLite</b><p class="text-gray-300 text-sm mt-2">檢查庫存<br>扣除數量</p></div>
-</div>
+---
+layout: default
+class: scroll-y
+---
 
-<div class="callout mt-5">💡 API 版本只是把原本的 JDBC 邏輯包在 HTTP 請求裡，資料庫操作本身沒有消失。</div>
+# 💻 這些指令在做什麼？
+
+<div class="grid grid-cols-2 gap-5 mt-5">
+  <div v-click class="p-4 rounded-lg bg-[#1E293B] border border-[#3B82F6]/30">
+    <b class="text-[#3B82F6] text-lg">javac — 編譯</b>
+    <p class="text-gray-300 text-sm mt-2">把人類看得懂的 .java 變成機器看得懂的 .class</p>
+    <pre class="text-gray-300 text-[11px] mt-2">javac -cp "lib/sqlite-jdbc-3.53.4.0.jar" BuyProductApi.java</pre>
+    <p class="text-gray-400 text-xs mt-1">`-cp` 告訴編譯器去哪裡找 JDBC 套件</p>
+  </div>
+  <div v-click class="p-4 rounded-lg bg-[#1E293B] border border-[#10B981]/30">
+    <b class="text-[#10B981] text-lg">java — 執行</b>
+    <p class="text-gray-300 text-sm mt-2">把編譯好的 .class 跑起來</p>
+    <pre class="text-gray-300 text-[11px] mt-2">java -cp ".:lib/sqlite-jdbc-3.53.4.0.jar" BuyProductApi</pre>
+    <p class="text-gray-400 text-xs mt-1">`.:lib/...` 表示同時在目前目錄和 lib 資料夾找</p>
+  </div>
+</div>
 
 ---
 layout: default
@@ -662,14 +819,14 @@ class: scroll-y
 <div class="grid grid-cols-2 gap-5 mt-4">
   <div class="p-4 rounded-lg bg-[#1E293B] border border-[#3B82F6]/30">
     <b class="text-[#3B82F6]">先確認資料夾</b>
-    <pre class="text-gray-300 mt-2">order-system/
+    <pre class="text-gray-300 mt-2">day2-order-system/
 ├─ BuyProduct.java
 ├─ BuyProductApi.java
 ├─ shop.html
 ├─ products.db
 └─ lib/
   └─ sqlite-jdbc-3.53.4.0.jar</pre>
-    <p class="text-gray-400 text-xs mt-2">請在 `order-system/` 資料夾開啟終端機。</p>
+    <p class="text-gray-400 text-xs mt-2">請在 `day2-order-system/` 資料夾開啟終端機。</p>
   </div>
   <div class="p-4 rounded-lg bg-[#1E293B] border border-[#10B981]/30">
     <b class="text-[#10B981]">執行順序</b>
@@ -778,6 +935,35 @@ layout: default
 </div>
 
 <div class="callout mt-6">💡 陣列是起點；真正的訂單系統，還需要前端、API 與資料庫一起合作。</div>
+
+---
+layout: default
+---
+
+# ✅ 檢查點 3
+
+<div class="grid grid-cols-3 gap-4 mt-6">
+  <div v-click class="p-4 rounded-lg bg-[#1E293B] border border-[#10B981]/30">
+    <b class="text-[#10B981] text-lg">✓ 我能說出</b>
+    <ul class="text-gray-300 text-sm mt-2 space-y-1">
+      <li>• 前端、API、資料庫的角色</li>
+      <li>• javac 跟 java 的差別</li>
+      <li>• 什麼是 HTTP 請求？</li>
+    </ul>
+  </div>
+  <div v-click class="p-4 rounded-lg bg-[#1E293B] border border-[#F59E0B]/30">
+    <b class="text-[#F59E0B] text-lg">? 我還不太確定</b>
+    <ul class="text-gray-300 text-sm mt-2 space-y-1">
+      <li>• API 端點是什麼？</li>
+      <li>• -cp 參數為什麼要寫？</li>
+      <li>• JSON 格式是什麼？</li>
+    </ul>
+  </div>
+  <div v-click class="p-4 rounded-lg bg-[#1E293B] border border-[#3B82F6]/30">
+    <b class="text-[#3B82F6] text-lg">💡 馬上複習</b>
+    <p class="text-gray-300 text-sm mt-2">回到「這些指令在做什麼」投影片，重新看一次每個指令的用途。</p>
+  </div>
+</div>
 
 ---
 layout: center
