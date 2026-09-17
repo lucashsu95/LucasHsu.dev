@@ -295,6 +295,7 @@ System.out.println("總共購買：" + orderCount + " 件");
 System.out.println("總金額：" + totalAmount + " 元");
 ```
 
+
 ---
 layout: default
 ---
@@ -348,6 +349,38 @@ if (quantity > stock[index]) {
 // 扣庫存
 stock[index] -= quantity;
 ```
+
+
+---
+layout: default
+class: scroll-y
+---
+
+# 📁 第一部分會用到哪些檔案？
+
+<div class="stage-badge mb-4">第一部 — 用 Java Array 完成互動式購買</div>
+
+<div class="grid grid-cols-2 gap-6 mt-6">
+  <div class="p-5 rounded-lg bg-[#1E293B] border border-[#3B82F6]/30">
+    <h3 class="text-[#3B82F6] font-bold text-lg mb-3">專案檔案</h3>
+    <pre class="text-gray-300 text-sm">day2-order-system/
+└─ BuyProductArray.java</pre>
+  </div>
+  <div class="p-5 rounded-lg bg-[#1E293B] border border-[#10B981]/30">
+    <h3 class="text-[#10B981] font-bold text-lg mb-3">資料存放的地方</h3>
+    <div class="text-gray-300 text-sm space-y-2">
+      <p>資料暫時保存在 Java 記憶體裡。</p>
+    </div>
+  </div>
+</div>
+
+<div class="mt-5 p-5 rounded-lg bg-[#1E293B] border border-[#F59E0B]/30">
+  <h3 class="text-[#F59E0B] font-bold text-lg mb-3">▶️ 如何啟動第一部分？</h3>
+  <pre class="text-gray-300 text-sm">cd day2-order-system
+javac BuyProductArray.java
+java BuyProductArray</pre>
+  <p class="text-gray-400 text-xs mt-3">輸入商品編號與數量完成購買；輸入 `0` 結束。程式關閉後，陣列庫存會消失。</p>
+</div>
 
 ---
 layout: default
@@ -408,36 +441,6 @@ layout: default
 
 <div v-click class="callout mt-6">🎯 商品名稱、價格、庫存這些「資料」不變；改變的是它們被保存、查詢的位置。</div>
 
----
-layout: default
-class: scroll-y
----
-
-# 📁 第一部分會用到哪些檔案？
-
-<div class="stage-badge mb-4">第一部 — 用 Java Array 完成互動式購買</div>
-
-<div class="grid grid-cols-2 gap-6 mt-6">
-  <div class="p-5 rounded-lg bg-[#1E293B] border border-[#3B82F6]/30">
-    <h3 class="text-[#3B82F6] font-bold text-lg mb-3">專案檔案</h3>
-    <pre class="text-gray-300 text-sm">day2-order-system/
-└─ BuyProductArray.java</pre>
-  </div>
-  <div class="p-5 rounded-lg bg-[#1E293B] border border-[#10B981]/30">
-    <h3 class="text-[#10B981] font-bold text-lg mb-3">資料存放的地方</h3>
-    <div class="text-gray-300 text-sm space-y-2">
-      <p>資料暫時保存在 Java 記憶體裡。</p>
-    </div>
-  </div>
-</div>
-
-<div class="mt-5 p-5 rounded-lg bg-[#1E293B] border border-[#F59E0B]/30">
-  <h3 class="text-[#F59E0B] font-bold text-lg mb-3">▶️ 如何啟動第一部分？</h3>
-  <pre class="text-gray-300 text-sm">cd day2-order-system
-javac BuyProductArray.java
-java BuyProductArray</pre>
-  <p class="text-gray-400 text-xs mt-3">輸入商品編號與數量完成購買；輸入 `0` 結束。程式關閉後，陣列庫存會消失。</p>
-</div>
 
 ---
 layout: default
@@ -542,35 +545,6 @@ class: scroll-y
 layout: default
 ---
 
-# ✅ 檢查點 2
-
-<div class="grid grid-cols-3 gap-4 mt-6">
-  <div v-click class="p-4 rounded-lg bg-[#1E293B] border border-[#10B981]/30">
-    <b class="text-[#10B981] text-lg">✓ 我能說出</b>
-    <ul class="text-gray-300 text-sm mt-2 space-y-1">
-      <li>• JDBC 是什麼？</li>
-      <li>• Connection / PreparedStatement / ResultSet</li>
-      <li>• products.db 裡有哪些欄位？</li>
-    </ul>
-  </div>
-  <div v-click class="p-4 rounded-lg bg-[#1E293B] border border-[#F59E0B]/30">
-    <b class="text-[#F59E0B] text-lg">? 我還不太確定</b>
-    <ul class="text-gray-300 text-sm mt-2 space-y-1">
-      <li>• executeQuery vs executeUpdate</li>
-      <li>• 為什麼要 close()</li>
-      <li>• SQL 語法怎麼寫？</li>
-    </ul>
-  </div>
-  <div v-click class="p-4 rounded-lg bg-[#1E293B] border border-[#3B82F6]/30">
-    <b class="text-[#3B82F6] text-lg">💡 馬上複習</b>
-    <p class="text-gray-300 text-sm mt-2">回到前面的「JDBC 五兄弟小卡」，重新看一次每個物件的用途。</p>
-  </div>
-</div>
-
----
-layout: default
----
-
 # 🧰 用 VS Code 看資料庫
 
 <div class="stage-badge mb-4">Step 2.2 — 安裝 SQLite Viewer，直接看資料</div>
@@ -650,9 +624,40 @@ public class BuyProduct {
   <b class="text-[#F59E0B]">▶️ 如何啟動</b>
   <pre class="text-gray-300 text-sm mt-3">cd day2-order-system
 javac -cp "lib/sqlite-jdbc-3.53.4.0.jar" BuyProduct.java
-java -cp ".:lib/sqlite-jdbc-3.53.4.0.jar" BuyProduct</pre>
+java -cp ".;lib/sqlite-jdbc-3.53.4.0.jar" BuyProduct</pre>
   <p class="text-gray-400 text-xs mt-2">輸入商品 id 與數量完成購買；輸入 `0` 結束，再用 SQLite Viewer 查看 stock。</p>
 </div>
+
+
+---
+layout: default
+---
+
+# ✅ 檢查點 2
+
+<div class="grid grid-cols-3 gap-4 mt-6">
+  <div v-click class="p-4 rounded-lg bg-[#1E293B] border border-[#10B981]/30">
+    <b class="text-[#10B981] text-lg">✓ 我能說出</b>
+    <ul class="text-gray-300 text-sm mt-2 space-y-1">
+      <li>• JDBC 是什麼？</li>
+      <li>• Connection / PreparedStatement / ResultSet</li>
+      <li>• products.db 裡有哪些欄位？</li>
+    </ul>
+  </div>
+  <div v-click class="p-4 rounded-lg bg-[#1E293B] border border-[#F59E0B]/30">
+    <b class="text-[#F59E0B] text-lg">? 我還不太確定</b>
+    <ul class="text-gray-300 text-sm mt-2 space-y-1">
+      <li>• executeQuery vs executeUpdate</li>
+      <li>• 為什麼要 close()</li>
+      <li>• SQL 語法怎麼寫？</li>
+    </ul>
+  </div>
+  <div v-click class="p-4 rounded-lg bg-[#1E293B] border border-[#3B82F6]/30">
+    <b class="text-[#3B82F6] text-lg">💡 馬上複習</b>
+    <p class="text-gray-300 text-sm mt-2">回到前面的「JDBC 五兄弟小卡」，重新看一次每個物件的用途。</p>
+  </div>
+</div>
+
 
 ---
 layout: default
