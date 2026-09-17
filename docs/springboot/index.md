@@ -65,6 +65,7 @@ head:
 - [Spring Boot × DDD：從貧血模型到完整領域防線](/springboot/ddd-in-spring-boot)
 
 ### 開發工具
+- [birc 實戰：從 npm 到 Book CRUD](/springboot/birc-bookstore-crud)
 - [Checkstyle / PMD / Spotless](/springboot/code-quality-tools)
 
 ## 建議閱讀順序
@@ -75,4 +76,5 @@ head:
 4. 然後看 [`Lazy vs Eager 載入策略`](/springboot/lazy) 跟 [`Spring Boot 分頁與 N+1 問題`](/springboot/data-pagination)。
 5. 有需要再看 [`Swagger 教學`](/springboot/swagger-docs) 與 [`Email 與 Scheduled 排程實作`](/springboot/email-scheduled)。
 6. 進階主題可補 [`Spring Boot AOP + @Async`](/springboot/aop-async) 和 [`Spring Boot 檔案上傳與下載`](/springboot/file-upload-download)。
+7. 要用產生器開專案、生 CRUD，看 [`birc 實戰：從 npm 到 Book CRUD`](/springboot/birc-bookstore-crud)。
 

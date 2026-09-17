@@ -29,6 +29,8 @@ head:
 5. `@Profile` 怎麼讓 Bean 認環境
 6. 怎麼跟 Docker 環境變數銜接
 
+用 `birc create` 生出來的專案，compose 已經寫好 `SPRING_PROFILES_ACTIVE=dev|prod`。課堂手冊：[birc 實戰：從 npm 到 Book CRUD](/springboot/birc-bookstore-crud)。
+
 ## 為什麼需要 Profile？
 
 > 開發用 localhost，正式用 production-db，每次部署都要手動改？那是上個世紀的做法。
