@@ -191,7 +191,7 @@ class: scroll-y
 import java.util.Scanner;
 
 // 陣列：把多筆商品資料暫時放在程式記憶體裡
-String[] products = {"cola", "sandwich", "chips", "cookie", "juice"};
+String[] products = {"可樂", "三明治", "薯條", "餅乾", "果汁"};
 int[] prices = {30, 65, 45, 35, 40};
 
 // 印出商品選單
@@ -229,7 +229,7 @@ layout: default
 
 ```java {1-2|4-8|9-13|all}
 // 陣列的 index 從 0 開始！
-String[] products = {"cola", "sandwich", "chips", "cookie", "juice"};
+String[] products = {"可樂", "三明治", "薯條", "餅乾", "果汁"};
 
 //                      ↑        ↑          ↑        ↑        ↑
 //    index:            0        1          2        3        4
@@ -500,7 +500,7 @@ class: scroll-y
   <h3 class="text-[#F59E0B] font-bold text-lg mb-3">▶️ 如何啟動第二部分？</h3>
   <pre class="text-gray-300 text-sm">cd day2-order-system
 javac -cp "lib/sqlite-jdbc-3.53.4.0.jar" BuyProduct.java
-java -cp ".:lib/sqlite-jdbc-3.53.4.0.jar" BuyProduct</pre>
+java -cp ".;lib/sqlite-jdbc-3.53.4.0.jar" BuyProduct</pre>
   <p class="text-gray-400 text-xs mt-3">程式會先自動建立資料表與商品資料，再執行購買；看到「購買成功！」後，用 SQLite Viewer 查看 stock 是否減少。</p>
 </div>
 
