@@ -34,6 +34,14 @@ export function sideBarDatabase() {
         { text: "索引設計與效能優化", link: "/database/mongodb/mongodb-indexing", activeMatch: "/database/mongodb/mongodb-indexing" },
         { text: "Prisma + MongoDB 實戰經驗談", link: "/database/mongodb/mongodb-prisma-lessons", activeMatch: "/database/mongodb/mongodb-prisma-lessons" },
       ]
+    },
+    {
+      text: "Redis",
+      items: [
+        { text: "Redis 秒殺入門｜從搶票轉圈圈開始", link: "/database/redis-seckill-intro", activeMatch: "/database/redis-seckill-intro" },
+        { text: "Redis 秒殺｜手動索引、分頁與排行榜", link: "/database/redis-seckill-indexing", activeMatch: "/database/redis-seckill-indexing" },
+        { text: "Redis 秒殺｜不能插隊的扣庫存與削峰", link: "/database/redis-seckill-streams", activeMatch: "/database/redis-seckill-streams" },
+      ]
     }
   ];
 }
