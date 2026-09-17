@@ -146,6 +146,11 @@ export function sidebarSpringboot() {
       collapsed: true,
       items: [
         {
+          text: "birc 實戰：Book CRUD",
+          link: "/springboot/birc-bookstore-crud",
+          activeMatch: '/springboot/birc-bookstore-crud',
+        },
+        {
           text: "Checkstyle / PMD / Spotless",
           link: "/springboot/code-quality-tools",
           activeMatch: '/springboot/code-quality-tools',
