@@ -1,10 +1,10 @@
 ---
 title: birc 實戰：從 npm 到 Book CRUD | LucasHsu.dev
-description: 用 npm 安裝 birc-generator，建立 bookstore 專案，生出 Book 的 CRUD 與 Flyway 遷移，並接上 record、ConfigurationProperties、Docker、Spring Profiles 與 CORS。
+description: npm 裝 birc-generator，建 bookstore 專案，生 Book CRUD 與 Flyway 遷移，再接 ConfigurationProperties、Docker、Spring Profiles 與 CORS。
 head:
   - - meta
     - name: keywords
-      content: birc, birc-generator, Spring Boot 4, Flyway, CRUD, record, ConfigurationProperties, Docker, Spring Profiles, CORS
+      content: birc, birc-generator, Spring Boot 4, Flyway, CRUD, record, ConfigurationProperties, Docker, Spring Profiles, CORS, MapStruct, Optional
   - - meta
     - property: og:title
       content: birc 實戰：從 npm 到 Book CRUD
@@ -21,7 +21,7 @@ head:
 
 # birc 實戰：從 npm 到 Book CRUD
 
-> 📝 TL;DR：`npm i -g birc-generator` 之後，`birc create bookstore --yes` 開專案（含 ValidGroup、Spotless），`birc make Book --example --fields ...` 一次生齊 CRUD 各層，`birc make:migration` 建 Flyway。CORS 只改 `CORS_ALLOWED_ORIGIN_PATTERNS`。
+> TL;DR：`npm i -g birc-generator` 之後，`birc create bookstore --yes` 開專案（含 ValidGroup、Spotless），`birc make Book --example --fields ...` 一次生齊 CRUD 各層，`birc make:migration` 建 Flyway。CORS 只改 `CORS_ALLOWED_ORIGIN_PATTERNS`。
 
 本機只起 MySQL（Docker），App 用 `./gradlew bootRun`。
 
@@ -60,7 +60,7 @@ birc create bookstore --yes
 cd bookstore
 ```
 
-`--yes` 不再問。預設勾 docker、log4j2、ValidGroup、Spotless，並寫入 agent 文件。package 會是 `tw.edu.ntub.birc.bookstore`。
+`--yes` 使用預設設定：Docker、log4j2、ValidGroup、Spotless，並寫入 agent 文件。
 
 `create` 一定是多模組：API 在根專案，Entity / DAO 在 `modules/bookstore-database-config`，Security 與 CORS 在 `modules/bookstore-config`。
 
@@ -71,9 +71,20 @@ docker compose up -d db
 set -a && source .env && set +a
 ```
 
-PowerShell 寫法見產出專案的 `README.md`。
+`./gradlew bootRun` 需要目前 shell 的資料庫環境變數。這個設定只影響目前的終端機，開新終端機時要重新執行；`.env` 只應載入自己信任的檔案。
 
-`docker compose` 會自己讀專案目錄的 `.env` 來起 MySQL。`./gradlew bootRun` 不會讀那個檔，只認目前 shell 的環境變數。沒 `source` 時，`application.yml` 用後備值：
+Windows PowerShell 不支援 `set -a` 和 `source`，但仍然需要把 `.env` 載入環境變數，才能讓 `bootRun` 讀到相同設定：
+
+```powershell
+docker compose up -d db
+Get-Content .env | ForEach-Object {
+  if ($_ -match '^\s*([^#][^=]*)=(.*)$') {
+    Set-Item -Path "Env:$($matches[1].Trim())" -Value $matches[2].Trim().Trim('"')
+  }
+}
+```
+
+`docker compose` 會自動讀 `.env`，但 `./gradlew bootRun` 不會。沒載入環境變數時，`application.yml` 會使用後備值：
 
 ```yaml
 url: ${DB_URL:jdbc:mysql://localhost:3306/app}
@@ -81,21 +92,19 @@ username: ${DB_USERNAME:root}
 password: ${DB_PASSWORD:}
 ```
 
-也就是庫名 `app`、帳號 `root`、密碼空白。容器裡實際是 `.env` 的庫名（例如 `bookstore`）和隨機密碼，會連不上。
+這通常和容器中的資料庫設定不一致，導致連線失敗。
 
 這堂不要 `docker compose up` 把 app 一起 build。Dockerfile 會在容器裡跑 Gradle，課堂會空等。
 
 ## 一次生齊：`birc make`
 
-| 你想做的事 | 指令 |
-| --- | --- |
-| 一次生 Entity、DAO、Mapper、DTO、Service、Controller | `birc make Book` |
-| Entity + DAO + Flyway | `birc make:model Book --migration` |
-| 只生 SQL | `birc make:migration create_book_table` |
+| 你想做的事                                           | 指令                                    |
+| ---------------------------------------------------- | --------------------------------------- |
+| 一次生 Entity、DAO、Mapper、DTO、Service、Controller | `birc make Book`                        |
+| Entity + DAO + Flyway                                | `birc make:model Book --migration`      |
+| 只生 SQL                                             | `birc make:migration create_book_table` |
 
-`make:model --controller` 只加 Controller，不加 Service / Mapper。Controller 會 import 不存在的 `BookService`，編不過。
-
-`--fields` 沒配 `--example` 只會提醒，欄位不會寫進 Entity。沒加 `--example` 的 Controller 也沒有 CRUD 方法。
+`make:model --controller` 只加 Controller，不會補齊 Service / Mapper。`--fields` 和 CRUD 範例也必須搭配 `--example`。
 
 ## 課堂指定指令
 
@@ -125,13 +134,13 @@ CREATE TABLE book (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 ```
 
-`jpa.hibernate.ddl-auto` 是 `validate`。不跑遷移，bootRun 會失敗：
+`jpa.hibernate.ddl-auto` 是 `validate`，所以要先執行遷移：
 
 ```bash
 birc migrate
 ```
 
-Flyway Community 做不到 rollback。`birc migrate:rollback` 只會說明：再寫一筆往前的遷移。課堂把表打壞：`birc migrate:reset --force`。
+Flyway Community 不支援 rollback；需要修正時請新增一筆遷移。重建資料庫可用 `birc migrate:reset --force`。
 
 ## 課堂必改：否則 API 全是 401
 
@@ -176,24 +185,22 @@ curl -s -X POST http://localhost:8080/api/books \
 
 ## ValidGroup
 
-`--yes` 會生 `validation/ValidGroup.java`：`Create`、`Update`、`Delete`、`Submit` 四個空介面，給 Bean Validation 的 `groups` 用。
+`--yes` 會生 `validation/ValidGroup.java`，提供 `Create`、`Update`、`Delete`、`Submit` 四組 Bean Validation group。
 
 `birc make Book --example` 之後：
 
 - Controller：`@Validated(ValidGroup.Create.class)` / `@Validated(ValidGroup.Update.class)`
 - `BookCreateRequest` 每個欄位：`@NotNull(groups = {ValidGroup.Create.class, ValidGroup.Update.class})`
 
-要用 `@Validated`，不是 `@Valid`。`@Valid` 不吃 groups。
+要用 `@Validated`，不是 `@Valid`；`@Valid` 不支援 groups。預設新增與更新都必填，若更新可省略 `isbn`，將它的 group 改成只含 `Create` 即可。
 
-骨架現在新增跟更新都必填，方便立刻打 CRUD。之後若更新不必帶 isbn，把 isbn 的 `groups` 改成只含 `Create` 即可，不必拆兩份 DTO。
+`Delete` 和 `Submit` 是預留的群組；預設 CRUD 不需要使用，但不要刪除介面。
 
-`Delete` 給「刪除還要帶原因、確認碼、version」的 body；只刪 id 就不用。`Submit` 給草稿可少填、送審要全填。預設 CRUD 不要標這兩組，也不要刪掉介面。
-
-缺 `title` 的 POST 應回 400，進不了 Service。`ExceptionHandleController` 只攔 `ProjectException`；驗證失敗是 Spring 的 `MethodArgumentNotValidException`，要統一 JSON 再自己加 handler。
+缺少 `title` 的 POST 會回 400，不會進入 Service。若要統一驗證錯誤格式，需另外處理 `MethodArgumentNotValidException`。
 
 ## Spotless
 
-`--yes` 會在根目錄放 `spotless_formatter.xml`（Eclipse 4.31），並把 Spotless 接到 Gradle。掃 controller、service、entity、dao 的 Java：排版、清 unused import、去行尾空白、檔案結尾換行。不管命名、不管潛在 bug，不要再另裝 Checkstyle 跟它搶排版。
+`--yes` 會加入 Spotless，負責 Java 排版、清除 unused import、移除行尾空白與補檔案結尾換行。不負責命名或潛在 bug。
 
 ```bash
 ./gradlew spotlessApply    # 直接改檔，commit 前跑
@@ -203,6 +210,164 @@ curl -s -X POST http://localhost:8080/api/books \
 Windows 用 `.\gradlew.bat`。CI 不要跑 `spotlessApply`。
 
 細節見 [@Valid 用於 Service 層](/springboot/valid-service)、[Checkstyle / PMD / Spotless](/springboot/code-quality-tools)。
+
+## 進階：加上作者（Author）
+
+Book API 已經能跑了。接下來加一個作者表，讓每本書可以綁定作者，順便練習 MapStruct 處理 Entity 關聯。
+
+### 建 Author Entity
+
+```bash
+birc make Author --example --fields name:String,birthYear:Integer,nationality:String
+birc make:migration create_author_table
+```
+
+### 加 FK 欄位
+
+Flyway 遷移檔要依序管理，總共會有 3 個：
+
+1. `V1__create_book_table.sql` — 建 Book 表（之前已建好）
+2. `V2__add_author_fk_to_book.sql` — ALTER TABLE 加 author_id FK
+3. `V3__create_author_table.sql` — 建 Author 表（由 `birc make:migration` 產生）
+
+先生成遷移檔：
+
+```bash
+birc make:migration add_author_fk_to_book
+```
+
+打開產生的 `V2__add_author_fk_to_book.sql`，貼上：
+
+```sql
+ALTER TABLE book ADD COLUMN author_id BIGINT NULL;
+ALTER TABLE book ADD CONSTRAINT fk_book_author
+  FOREIGN KEY (author_id) REFERENCES author(id);
+```
+
+執行遷移（三個檔案會依序跑）：
+
+```bash
+birc migrate
+```
+
+### 預設的 flat mapping
+
+birc 預設生成的 Mapper 是 flat mapping，不處理關聯：
+
+```java
+@Mapper(componentModel = "spring")
+public interface BookMapper {
+    BookResponse toResponse(Book book);
+    Book toEntity(BookCreateRequest request);
+}
+```
+
+這樣 `BookResponse.authorName` 會是 null，因為 MapStruct 不知道要去抓關聯的 Author。
+
+### 手動加 `@Mapping`
+
+如果要帶出作者名稱，手動加 `@Mapping`：
+
+```java {3,6}
+@Mapper(componentModel = "spring")
+public interface BookMapper {
+    @Mapping(source = "author.name", target = "authorName") // ← 帶出作者名稱
+    BookResponse toResponse(Book book);
+
+    @Mapping(target = "author", ignore = true) // ← 建書時不處理關聯
+    Book toEntity(BookCreateRequest request);
+}
+```
+
+`BookResponse` 要先加 `authorName` 欄位（birc 不會自己改 record）：
+
+```java
+public record BookResponse(
+    Long id,
+    String title,
+    String authorName,
+    String isbn,
+    BigDecimal price,
+    LocalDate publishedAt
+) {}
+```
+
+### 查詢要 JOIN
+
+用預設的 `findAll()` 查不到 Author。在 DAO 加 JOIN 方法：
+
+```java
+public interface BookDao extends BaseDao<Book> {
+    @Query("SELECT b FROM Book b LEFT JOIN FETCH b.author WHERE b.id = :id")
+    Optional<Book> findByIdWithAuthor(@Param("id") Long id);
+}
+```
+
+Service 層呼叫：
+
+```java
+public BookResponse findById(Long id) {
+    Book book = bookDao.findByIdWithAuthor(id)
+        .orElseThrow(() -> new NotFoundException("Book not found: " + id));
+    return bookMapper.toResponse(book);
+}
+```
+
+JOIN FETCH 會一次把關聯資料載入，避免 N+1 查詢問題。`findAll()` 若要帶 Author，也要改查法或用 `@EntityGraph`。
+
+## Optional 的實戰用法
+
+Spring Data JPA 的 `.findById()` 回傳 `Optional<T>`，不是 null。這是 Java 8 引入的容器型別，用來表達「可能有值、可能沒有」。
+
+### 舊寫法 vs 新寫法
+
+**舊寫法（不推薦）：**
+
+```java
+Book book = bookDao.findById(id);
+if (book == null) {
+    throw new NotFoundException("Book not found");
+}
+return bookMapper.toResponse(book);
+```
+
+**新寫法（用 Optional）：**
+
+```java
+Book book = bookDao.findById(id)
+    .orElseThrow(() -> new NotFoundException("Book not found"));
+return bookMapper.toResponse(book);
+```
+
+birc 生成的 `BaseServiceImpl` 已經用 Optional：
+
+```java
+public T findById(ID id) {
+    return dao.findById(id)
+        .orElseThrow(() -> new NotFoundException(
+            entityClass.getSimpleName() + " not found: " + id));
+}
+```
+
+### 常用方法
+
+```java
+// 有值就執行，沒有就跳過
+bookDao.findById(id).ifPresent(book -> {
+    log.info("Found: {}", book.getTitle());
+});
+
+// 有值就轉換，沒有就回傳預設值
+String title = bookDao.findById(id)
+    .map(Book::getTitle)
+    .orElse("Unknown");
+
+// 有值就轉換，沒有就丟例外
+Book book = bookDao.findById(id)
+    .orElseThrow(() -> new NotFoundException("Not found"));
+```
+
+Optional 的重點：**不要回傳 null，用 Optional 包起來**。呼叫端決定怎麼處理「沒有」的情況。
 
 ## 改版要記住的四件事
 
@@ -226,10 +391,10 @@ birc add file-upload
 
 產生器沒有生 `application-dev.yml` / `application-prod.yml`。共用設定在一份 `application.yml`，值用 `${DB_URL}` 這類環境變數。
 
-| 檔 | `SPRING_PROFILES_ACTIVE` |
-| --- | --- |
-| `docker-compose.yml` | `dev` |
-| `docker-compose.prod.yml` | `prod` |
+| 檔                        | `SPRING_PROFILES_ACTIVE` |
+| ------------------------- | ------------------------ |
+| `docker-compose.yml`      | `dev`                    |
+| `docker-compose.prod.yml` | `prod`                   |
 
 本機 `bootRun` 的 `DB_URL` host 是 `127.0.0.1`。容器裡的 App 讀 compose 的 `environment:`，host 必須是服務名 `db`。密碼不要寫進映像，放 `.env`。
 
@@ -243,7 +408,7 @@ birc add file-upload
 CORS_ALLOWED_ORIGIN_PATTERNS=http://localhost:5173
 ```
 
-逗號分隔、不要尾斜線、不要 `*`。`SecurityConfig` 已經用 `http.cors()` 接 `CorsConfigurationSource`。不要在 `WebMvcConfigurer` 加 `addCorsMappings`，preflight 會被 Security 擋成 401。
+多個來源用逗號分隔，不要尾斜線或 `*`。`SecurityConfig` 已經接上 `CorsConfigurationSource`，不要再用 `WebMvcConfigurer` 設定 CORS。
 
 空白 = 不開放跨來源。curl 不受 CORS 限制；瀏覽器從 Vite 打 API 才會。
 

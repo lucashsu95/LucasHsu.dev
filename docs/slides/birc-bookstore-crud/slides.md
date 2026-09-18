@@ -462,6 +462,97 @@ layout: section
 transition: fade
 ---
 
+<p class="font-mono accent-orange">PART 03‑B</p>
+
+# 擴充：Author 與 MapStruct
+
+<p class="font-mono muted">加上作者表、FK、Optional 與 @Mapping</p>
+
+---
+---
+
+# 建 Author Entity
+
+```bash
+birc make Author --example --fields name:String,birthYear:Integer,nationality:String
+birc make:migration create_author_table
+```
+
+### FK 遷移檔（共 3 個）
+
+| # | 檔案 | 用途 |
+|---|------|------|
+| V1 | `create_book_table.sql` | 建 Book 表（已完成） |
+| V2 | `add_author_fk_to_book.sql` | ALTER TABLE 加 author_id FK |
+| V3 | `create_author_table.sql` | 建 Author 表 |
+
+```bash
+birc make:migration add_author_fk_to_book
+```
+
+---
+---
+
+# V2：ALTER TABLE 加 FK
+
+```sql
+ALTER TABLE book ADD COLUMN author_id BIGINT NULL;
+ALTER TABLE book ADD CONSTRAINT fk_book_author
+  FOREIGN KEY (author_id) REFERENCES author(id);
+```
+
+```bash
+birc migrate
+```
+
+<div class="mt-5 terminal-card text-sm">
+  三個遷移檔會依序跑。FK 放在 Author 表建好之前，確保 ALTER TABLE 不會報錯。
+</div>
+
+---
+---
+
+# MapStruct：@Mapping 帶出關聯
+
+`BookMapper` 加一段 JOIN，把作者名字帶進 DTO：
+
+```java {3,6}
+@Mapper(componentModel = "spring")
+public interface BookMapper {
+    @Mapping(source = "author.name", target = "authorName")  // ← 帶出作者名稱
+    BookDTO toDTO(Book entity);
+
+    @Mapping(target = "author", ignore = true)               // ← 建書時不處理關聯
+    Book toEntity(BookDTO dto);
+}
+```
+
+<div class="mt-5 text-sm">
+  <code>author</code> 關聯用 <code>Optional</code> 安全取值，找不到就不塞。
+</div>
+
+---
+---
+
+# Optional：安全處理關聯
+
+Service 層取關聯時，用 `Optional` 避免 NullPointerException：
+
+```java
+Optional.ofNullable(entity.getAuthor())
+    .map(Author::getName)
+    .orElse(null);
+```
+
+<div class="mt-5 terminal-card text-sm">
+  Entity 的關聯欄位用 <code>Optional</code> 包一層，永遠不會炸。這是在 <code>BaseServiceImpl</code> 裡處理關聯的標準做法。
+</div>
+
+---
+layout: section
+transition: fade
+---
+
 <p class="font-mono accent-orange">PART 04</p>
 
 # ValidGroup 與 Spotless
