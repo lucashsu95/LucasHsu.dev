@@ -1,0 +1,9 @@
+import{L as e,T as t,X as n,_ as r,_t as i,b as a,g as o,ht as s,x as c}from"./modules/shiki-CbDrRYvT.js";import{it as l,rt as u}from"./index-DEQdgghN.js";import{t as d}from"./slidev/CodeBlockWrapper-Bw36AYRL.js";import{t as f}from"./slidev/default-BtRGxWq5.js";var p={__name:`slides.md__slidev_10`,setup(p){let{$slidev:m,$nav:h,$clicksContext:g,$clicks:_,$page:v,$renderContext:y,$frontmatter:b}=l();return g.setup(),(l,p)=>{let m=d;return e(),r(f,i(t(s(u)(s(b),9))),{default:n(()=>[p[1]||=o(`h1`,null,`資料夾長這樣`,-1),c(m,{title:``,ranges:[]},{default:n(()=>[...p[0]||=[o(`pre`,{class:`shiki shiki-themes vitesse-dark vitesse-light slidev-code`,style:{"--shiki-dark":`#dbd7caee`,"--shiki-light":`#393a34`,"--shiki-dark-bg":`#121212`,"--shiki-light-bg":`#ffffff`}},[o(`code`,{class:`language-text`},[o(`span`,{class:`line`},[o(`span`,null,`bookstore/`)]),a(`
+`),o(`span`,{class:`line`},[o(`span`,null,`  Application.java`)]),a(`
+`),o(`span`,{class:`line`},[o(`span`,null,`  build.gradle / settings.gradle / gradlew`)]),a(`
+`),o(`span`,{class:`line`},[o(`span`,null,`  .bircrc.json          ← birc 找專案根用這個`)]),a(`
+`),o(`span`,{class:`line`},[o(`span`,null,`  .env / .env.example   ← create 有勾 docker 才會複製`)]),a(`
+`),o(`span`,{class:`line`},[o(`span`,null,`  docker-compose.yml`)]),a(`
+`),o(`span`,{class:`line`},[o(`span`,null,`  docker-compose.prod.yml`)]),a(`
+`),o(`span`,{class:`line`},[o(`span`,null,`  modules/bookstore-config`)]),a(`
+`),o(`span`,{class:`line`},[o(`span`,null,`  modules/bookstore-database-config`)])])],-1)]]),_:1}),p[2]||=o(`div`,{class:`mt-5 terminal-card text-sm`},[a(` API 在根專案。Entity / DAO 在 `),o(`code`,null,`*-database-config`),a(`。Security、CORS 在 `),o(`code`,null,`*-config`),a(`。 `)],-1)]),_:1},16)}}};export{p as default};
