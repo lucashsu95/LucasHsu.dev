@@ -115,28 +115,17 @@ birc make Book --example --fields title:String,author:String,isbn:String,price:B
 
 DTO 是 Java record：`BookCreateRequest`、`BookResponse`。Entity 仍是 JPA class。CRUD 實作在 `BaseServiceImpl`，`BookServiceImpl` 只把 DAO 與 Mapper 丟進 `super`。
 
-## 改 Flyway SQL
+## 執行 Migration
 
-遷移範本不管 `--fields`。`--example` 時預設欄位是 `id`、`name`、時間戳。把 `src/main/resources/db/migration/V1__create_book_table.sql` 改成跟 Entity 對齊：
-
-```sql
-CREATE TABLE book (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    title VARCHAR(255) NOT NULL,
-    author VARCHAR(255) NOT NULL,
-    isbn VARCHAR(32) NOT NULL,
-    price DECIMAL(10, 2) NOT NULL,
-    published_at DATE NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-```
-
-`jpa.hibernate.ddl-auto` 是 `validate`，所以要先執行遷移：
+`--migration` 會自動讀取 Entity 的欄位與關聯，產生對應的建表 SQL，不用手動改遷移檔。
 
 ```bash
 birc migrate
 ```
+
+<div class="mt-4 text-sm muted">檔名 parse 成表名：create_book_table → 表 <code>book</code>。寫 create_books_table 會建成 <code>books</code>，跟 Entity 對不上。</div>
+
+`jpa.hibernate.ddl-auto` 是 `validate`，所以要先執行遷移。
 
 Flyway Community 不支援 rollback；需要修正時請新增一筆遷移。重建資料庫可用 `birc migrate:reset --force`。
 
