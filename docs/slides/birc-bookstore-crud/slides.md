@@ -274,12 +274,12 @@ transition: fade
 一次把各層生齊，Flyway 另開一筆：
 
 ```bash
-birc make Book --example --fields title:String,author:String,isbn:String,price:BigDecimal,publishedAt:LocalDate --migration --seed
+birc make Book --fields title:String,author:String,isbn:String,price:BigDecimal,publishedAt:LocalDate --migration --seed
 ```
 
 <div class="mt-5 grid grid-cols-2 gap-4 text-sm">
   <div class="concept-card"><strong>--example</strong><br><span class="muted">才有 CRUD 方法與 @Column。沒加只是空殼</span></div>
-  <div class="concept-card"><strong>--fields</strong><br><span class="muted">沒配 --example 只會提醒，欄位不會寫進 Entity</span></div>
+  <div class="concept-card"><strong>--fields</strong><br><span class="muted">把欄位寫入Entity</span></div>
 </div>
 
 <div class="mt-4 text-sm muted">遷移檔名用單數 <code>create_book_table</code>，才會建成表 <code>book</code>。</div>
@@ -305,26 +305,18 @@ birc make Book --example --fields title:String,author:String,isbn:String,price:B
 ---
 ---
 
-# 遷移檔要手改欄位
+# `--migration` 直接讀 Entity
 
-`make:migration` 的範本不管 `--fields`。`--example` 時預設只有 `id`、`name`、時間戳。
+`--migration` 直接讀 Entity Java 檔，自動產生對應的 Flyway SQL，不用手改欄位。
 
-把 `V1__create_book_table.sql` 改成跟 Entity 對齊：
+Entity 裡的 `@Column`、型別、長度限制都會反映在 SQL 裡。改完 Entity 重跑 `--migration` 就會更新 SQL。
 
-```sql
-CREATE TABLE book (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    title VARCHAR(255) NOT NULL,
-    author VARCHAR(255) NOT NULL,
-    isbn VARCHAR(32) NOT NULL,
-    price DECIMAL(10, 2) NOT NULL,
-    published_at DATE NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+```bash
+# 一次搞定 Entity + Migration + Seed
+birc make Book --example --fields \
+  title:String,author:String,isbn:String,price:BigDecimal,publishedAt:LocalDate \
+  --migration --seed
 ```
-
-<div class="mt-4 text-sm muted">檔名 parse 成表名：create_book_table → 表 <code>book</code>。寫 create_books_table 會建成 <code>books</code>，跟 Entity 對不上。</div>
 
 ---
 ---
@@ -929,7 +921,7 @@ dev 跟 prod 換的是 `.env` 的值，不是改 Java。
 <div class="grid grid-cols-2 gap-4 mt-5">
   <div v-click class="concept-card"><strong>npm → birc</strong><br><span class="muted">npm i -g birc-generator</span></div>
   <div v-click class="concept-card"><strong>create --yes</strong><br><span class="muted">docker、ValidGroup、Spotless</span></div>
-  <div v-click class="concept-card"><strong>make + migrate</strong><br><span class="muted">make 一次生齊各層；Flyway 要手改欄位</span></div>
+  <div v-click class="concept-card"><strong>make + migrate</strong><br><span class="muted">make 一次生 Entity + Migration + Seed</span></div>
   <div v-click class="concept-card"><strong>env 切環境</strong><br><span class="muted">Profiles 跟 CORS 都走 .env</span></div>
 </div>
 
@@ -948,9 +940,9 @@ birc create bookstore --yes && cd bookstore
 docker compose up -d db
 set -a && source .env && set +a
 
-birc make Book --example --fields title:String,author:String,isbn:String,price:BigDecimal,publishedAt:LocalDate
-birc make:migration create_book_table
-# 改 V1 SQL → 改 PUBLIC_PATHS → 改 CORS
+birc make Book --example --fields title:String,author:String,isbn:String,price:BigDecimal,publishedAt:LocalDate \
+  --migration --seed
+# 改 PUBLIC_PATHS → 改 CORS
 birc migrate
 ./gradlew bootRun
 ./gradlew spotlessApply
