@@ -475,38 +475,45 @@ transition: fade
 
 ```bash
 birc make Author --example --fields name:String,birthYear:Integer,nationality:String
+```
+
+### 建 Migration
+
+`birc make:migration` 自動讀 Entity，產生建表 SQL：
+
+```bash
 birc make:migration create_author_table
 ```
 
-### FK 遷移檔（共 3 個）
-
-| # | 檔案 | 用途 |
-|---|------|------|
-| V1 | `create_book_table.sql` | 建 Book 表（已完成） |
-| V2 | `add_author_fk_to_book.sql` | ALTER TABLE 加 author_id FK |
-| V3 | `create_author_table.sql` | 建 Author 表 |
-
-```bash
-birc make:migration add_author_fk_to_book
-```
-
----
----
-
-# V2：ALTER TABLE 加 FK
-
-```sql
-ALTER TABLE book ADD COLUMN author_id BIGINT NULL;
-ALTER TABLE book ADD CONSTRAINT fk_book_author
-  FOREIGN KEY (author_id) REFERENCES author(id);
-```
+如果有 FK 關聯，遷移檔會自動包含 ALTER TABLE。
 
 ```bash
 birc migrate
 ```
 
 <div class="mt-5 terminal-card text-sm">
-  三個遷移檔會依序跑。FK 放在 Author 表建好之前，確保 ALTER TABLE 不會報錯。
+  不用手動寫 SQL。Entity 有什麼欄位、什麼關聯，遷移檔就產生什麼。
+</div>
+
+---
+---
+
+# Seed 資料
+
+加 `--seed` 自動從 Entity 讀欄位，產生 INSERT：
+
+```bash
+birc make:migration seed_author_data --seed
+```
+
+```sql
+INSERT INTO author (name, birth_year, nationality) VALUES
+  ('村上春樹', 1949, '日本'),
+  ('東野圭吾', 1958, '日本');
+```
+
+<div class="mt-5 text-sm">
+  <code>--seed</code> 自動辨識欄位型別，省去手動寫 seed SQL。
 </div>
 
 ---

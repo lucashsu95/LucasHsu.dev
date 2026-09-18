@@ -219,36 +219,43 @@ Book API 已經能跑了。接下來加一個作者表，讓每本書可以綁�
 
 ```bash
 birc make Author --example --fields name:String,birthYear:Integer,nationality:String
+```
+
+### 建 Migration
+
+`birc make:migration` 會自動讀 Entity，產生建表的 SQL：
+
+```bash
 birc make:migration create_author_table
 ```
 
-### 加 FK 欄位
+如果 Entity 有 FK 關聯（例如 Book 的 `author_id`），遷移檔會自動包含 ALTER TABLE 加 FK，不用手動寫 SQL。
 
-Flyway 遷移檔要依序管理，總共會有 3 個：
-
-1. `V1__create_book_table.sql` — 建 Book 表（之前已建好）
-2. `V2__add_author_fk_to_book.sql` — ALTER TABLE 加 author_id FK
-3. `V3__create_author_table.sql` — 建 Author 表（由 `birc make:migration` 產生）
-
-先生成遷移檔：
-
-```bash
-birc make:migration add_author_fk_to_book
-```
-
-打開產生的 `V2__add_author_fk_to_book.sql`，貼上：
-
-```sql
-ALTER TABLE book ADD COLUMN author_id BIGINT NULL;
-ALTER TABLE book ADD CONSTRAINT fk_book_author
-  FOREIGN KEY (author_id) REFERENCES author(id);
-```
-
-執行遷移（三個檔案會依序跑）：
+執行遷移：
 
 ```bash
 birc migrate
 ```
+
+### Seed 資料
+
+加 `--seed` 可以自動從 Entity 讀取欄位結構，產生 INSERT 語法：
+
+```bash
+birc make:migration seed_author_data --seed
+```
+
+產生的遷移檔會包含預設資料，例如：
+
+```sql
+INSERT INTO author (name, birth_year, nationality) VALUES
+  ('村上春樹', 1949, '日本'),
+  ('東野圭吾', 1958, '日本');
+```
+
+<div class="mt-4 text-sm text-gray-500">
+`--seed` 會自動辨識 Entity 的欄位型別，產生對應的 INSERT 語法。省去手動寫 seed SQL 的麻煩。
+</div>
 
 ### 預設的 flat mapping
 
