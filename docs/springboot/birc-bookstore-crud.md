@@ -21,7 +21,7 @@ head:
 
 # birc 實戰：從 npm 到 Book CRUD
 
-> TL;DR：`npm i -g birc-generator` 之後，`birc create bookstore --yes` 開專案（含 ValidGroup、Spotless），`birc make Book --example --fields ...` 一次生齊 CRUD 各層，`birc make:migration` 建 Flyway。CORS 只改 `CORS_ALLOWED_ORIGIN_PATTERNS`。
+> TL;DR：`npm i -g birc-generator` 之後，`birc create bookstore --yes` 開專案（含 ValidGroup、Spotless），`birc make Book --example --fields ... --migration --seed` 一次生齊 CRUD 各層與 Flyway migration。CORS 只改 `CORS_ALLOWED_ORIGIN_PATTERNS`。
 
 本機只起 MySQL（Docker），App 用 `./gradlew bootRun`。
 
@@ -98,19 +98,17 @@ password: ${DB_PASSWORD:}
 
 ## 一次生齊：`birc make`
 
-| 你想做的事                                           | 指令                                    |
-| ---------------------------------------------------- | --------------------------------------- |
-| 一次生 Entity、DAO、Mapper、DTO、Service、Controller | `birc make Book`                        |
-| Entity + DAO + Flyway                                | `birc make:model Book --migration`      |
-| 只生 SQL                                             | `birc make:migration create_book_table` |
+| 你想做的事                                           | 指令                                              |
+| ---------------------------------------------------- | ------------------------------------------------- |
+| 一次生 Entity、DAO、Mapper、DTO、Service、Controller | `birc make Book`                                  |
+| 一次生齊 + 建表 SQL + Seed 資料                      | `birc make Book --example --fields ... --migration --seed` |
 
 `make:model --controller` 只加 Controller，不會補齊 Service / Mapper。`--fields` 和 CRUD 範例也必須搭配 `--example`。
 
 ## 課堂指定指令
 
 ```bash
-birc make Book --example --fields title:String,author:String,isbn:String,price:BigDecimal,publishedAt:LocalDate
-birc make:migration create_book_table
+birc make Book --example --fields title:String,author:String,isbn:String,price:BigDecimal,publishedAt:LocalDate --migration --seed
 ```
 
 表名是 entity 的 snake_case：`book`。HTTP 路徑是 `/api/books`。遷移檔請用 `create_book_table`（單數）；寫 `create_books_table` 會建成表 `books`，跟 `@Table(name = "book")` 對不上。
@@ -218,31 +216,16 @@ Book API 已經能跑了。接下來加一個作者表，讓每本書可以綁�
 ### 建 Author Entity
 
 ```bash
-birc make Author --example --fields name:String,birthYear:Integer,nationality:String
+birc make Author --example --fields name:String,birthYear:Integer,nationality:String --migration --seed
 ```
 
-### 建 Migration
-
-`birc make:migration` 會自動讀 Entity，產生建表的 SQL：
-
-```bash
-birc make:migration create_author_table
-```
-
-如果 Entity 有 FK 關聯（例如 Book 的 `author_id`），遷移檔會自動包含 ALTER TABLE 加 FK，不用手動寫 SQL。
+- `--migration` 自動產生建表 SQL，FK 也會自動處理
+- `--seed` 自動從 Entity 讀欄位，產生 INSERT 語法
 
 執行遷移：
 
 ```bash
 birc migrate
-```
-
-### Seed 資料
-
-加 `--seed` 可以自動從 Entity 讀取欄位結構，產生 INSERT 語法：
-
-```bash
-birc make:migration seed_author_data --seed
 ```
 
 產生的遷移檔會包含預設資料，例如：
@@ -252,10 +235,6 @@ INSERT INTO author (name, birth_year, nationality) VALUES
   ('村上春樹', 1949, '日本'),
   ('東野圭吾', 1958, '日本');
 ```
-
-<div class="mt-4 text-sm text-gray-500">
-`--seed` 會自動辨識 Entity 的欄位型別，產生對應的 INSERT 語法。省去手動寫 seed SQL 的麻煩。
-</div>
 
 ### 預設的 flat mapping
 
@@ -427,8 +406,7 @@ birc create bookstore --yes && cd bookstore
 docker compose up -d db
 set -a && source .env && set +a
 
-birc make Book --example --fields title:String,author:String,isbn:String,price:BigDecimal,publishedAt:LocalDate
-birc make:migration create_book_table
+birc make Book --example --fields title:String,author:String,isbn:String,price:BigDecimal,publishedAt:LocalDate --migration --seed
 # 改 V1 SQL、PUBLIC_PATHS、CORS
 birc migrate
 ./gradlew bootRun
