@@ -473,18 +473,13 @@ transition: fade
 # 建 Author Entity
 
 ```bash
-birc make Author --example --fields name:String,birthYear:Integer,nationality:String
+birc make Author --example --fields name:String,birthYear:Integer,nationality:String --migration --seed
 ```
 
-### 建 Migration
-
-`birc make:migration` 自動讀 Entity，產生建表 SQL：
-
-```bash
-birc make:migration create_author_table
-```
-
-如果有 FK 關聯，遷移檔會自動包含 ALTER TABLE。
+<div class="mt-5 grid grid-cols-2 gap-4 text-sm">
+  <div class="concept-card"><strong>--migration</strong><br><span class="muted">自動產生建表 SQL，FK 也會自動處理</span></div>
+  <div class="concept-card"><strong>--seed</strong><br><span class="muted">自動從 Entity 讀欄位，產生 INSERT 語法</span></div>
+</div>
 
 ```bash
 birc migrate
@@ -493,17 +488,6 @@ birc migrate
 <div class="mt-5 terminal-card text-sm">
   不用手動寫 SQL。Entity 有什麼欄位、什麼關聯，遷移檔就產生什麼。
 </div>
-
----
----
-
-# Seed 資料
-
-加 `--seed` 自動從 Entity 讀欄位，產生 INSERT：
-
-```bash
-birc make:migration seed_author_data --seed
-```
 
 ```sql
 INSERT INTO author (name, birth_year, nationality) VALUES
