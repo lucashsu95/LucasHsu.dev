@@ -274,8 +274,7 @@ transition: fade
 一次把各層生齊，Flyway 另開一筆：
 
 ```bash
-birc make Book --example --fields title:String,author:String,isbn:String,price:BigDecimal,publishedAt:LocalDate
-birc make:migration create_book_table
+birc make Book --example --fields title:String,author:String,isbn:String,price:BigDecimal,publishedAt:LocalDate --migration --seed
 ```
 
 <div class="mt-5 grid grid-cols-2 gap-4 text-sm">
