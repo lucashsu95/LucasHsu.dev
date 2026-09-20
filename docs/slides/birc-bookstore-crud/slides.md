@@ -492,6 +492,18 @@ INSERT INTO author (name, birth_year, nationality) VALUES
 </div>
 
 ---
+
+# 給 Book 表加 FK 欄位
+
+```bash
+birc make:migration add_author_id_to_book_table
+```
+
+<div class="mt-5 terminal-card text-sm">
+  新增 <code>author_id</code> 欄位並建立 FK 關聯到 <code>author</code> 表。
+</div>
+
+---
 ---
 
 # MapStruct：@Mapping 帶出關聯
