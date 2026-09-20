@@ -504,20 +504,60 @@ birc make:migration add_author_id_to_book_table
 </div>
 
 ---
+
+# 改 Book Entity 加關聯
+
+```java {7-8}
+@Entity
+@Table(name = "book")
+public class Book {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "author_id")
+    private Author author;
+
+    // ... 其他欄位
+}
+```
+
+<div class="mt-5 terminal-card text-sm">
+  <code>@ManyToOne</code> 建立多對一關聯，<code>.LAZY</code> 避免預載入。
+</div>
+
 ---
 
-# MapStruct：@Mapping 帶出關聯
+# 改 BookResponse 加 authorName
 
-`BookMapper` 加一段 JOIN，把作者名字帶進 DTO：
+```java
+public record BookResponse(
+    Long id,
+    String title,
+    String authorName,  // ← 新增
+    String isbn,
+    BigDecimal price,
+    LocalDate publishedAt
+) {}
+```
+
+<div class="mt-5 terminal-card text-sm">
+  birc 不會自己改 record，要手動加 <code>authorName</code> 欄位。
+</div>
+
+---
+
+# 改 BookMapper 加 @Mapping
 
 ```java {3,6}
 @Mapper(componentModel = "spring")
 public interface BookMapper {
     @Mapping(source = "author.name", target = "authorName")  // ← 帶出作者名稱
-    BookDTO toDTO(Book entity);
+    BookResponse toResponse(Book book);
 
     @Mapping(target = "author", ignore = true)               // ← 建書時不處理關聯
-    Book toEntity(BookDTO dto);
+    Book toEntity(BookCreateRequest request);
 }
 ```
 
@@ -526,8 +566,38 @@ public interface BookMapper {
 </div>
 
 ---
+
+# 改 BookDao 加 JOIN 查詢
+
+```java
+public interface BookDao extends BaseDao<Book> {
+    @Query("SELECT b FROM Book b LEFT JOIN FETCH b.author WHERE b.id = :id")
+    Optional<Book> findByIdWithAuthor(@Param("id") Long id);
+}
+```
+
+<div class="mt-5 terminal-card text-sm">
+  <code>JOIN FETCH</code> 一次載入關聯資料，避免 N+1 查詢問題。
+</div>
+
 ---
 
+# 改 BookServiceImpl 用 JOIN
+
+```java
+public BookResponse findById(Long id) {
+    Book book = bookDao.findByIdWithAuthor(id)
+        .orElseThrow(() -> new NotFoundException("Book not found: " + id));
+    return bookMapper.toResponse(book);
+}
+```
+
+<div class="mt-5 terminal-card text-sm">
+  改呼叫 <code>findByIdWithAuthor</code>，確保關聯資料正確載入。
+</div>
+---
+
+# Optional：安全處理關聯
 # Optional：安全處理關聯
 
 Service 層取關聯時，用 `Optional` 避免 NullPointerException：
