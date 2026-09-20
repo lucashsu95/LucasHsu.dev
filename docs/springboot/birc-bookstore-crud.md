@@ -220,10 +220,31 @@ birc migrate
 產生的遷移檔會包含預設資料，例如：
 
 ```sql
-INSERT INTO author (name, birth_year, nationality) VALUES
-  ('村上春樹', 1949, '日本'),
-  ('東野圭吾', 1958, '日本');
+'上春樹', 1949, '日本'
+'野圭吾', 1958, '日本'
 ```
+
+### 改 Book Entity 加關聯
+
+在 Book.java 加上 Author 的關聯欄位：
+
+```java
+@Entity
+@Table(name = "book")
+public class Book {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)   // [!code ++]
+    @JoinColumn(name = "author_id")  // [!code ++]
+    private Author author;  // [!code ++]
+
+    // ... 其他欄位
+}
+```
+
+`@ManyToOne` 建立多對一關聯，`FetchType.LAZY` 避免預載入。
 
 ### 預設的 flat mapping
 
@@ -260,35 +281,28 @@ public interface BookMapper {
 public record BookResponse(
     Long id,
     String title,
-    String authorName,
+    String authorName,  // [!code ++]
     String isbn,
     BigDecimal price,
     LocalDate publishedAt
 ) {}
 ```
 
-### 查詢要 JOIN
+### 查詢要帶關聯
 
-用預設的 `findAll()` 查不到 Author。在 DAO 加 JOIN 方法：
+用預設的 `findAll()` 查不到 Author（`author` 是 LAZY，不會預載入）。用 `@EntityGraph` 指定要載入的關聯：
 
 ```java
 public interface BookDao extends BaseDao<Book> {
-    @Query("SELECT b FROM Book b LEFT JOIN FETCH b.author WHERE b.id = :id")
-    Optional<Book> findByIdWithAuthor(@Param("id") Long id);
+    @EntityGraph(attributePaths = {"author"})
+    List<Book> findAll();
+
+    @EntityGraph(attributePaths = {"author"})
+    Optional<Book> findById(Long id);
 }
 ```
 
-Service 層呼叫：
-
-```java
-public BookResponse findById(Long id) {
-    Book book = bookDao.findByIdWithAuthor(id)
-        .orElseThrow(() -> new NotFoundException("Book not found: " + id));
-    return bookMapper.toResponse(book);
-}
-```
-
-JOIN FETCH 會一次把關聯資料載入，避免 N+1 查詢問題。`findAll()` 若要帶 Author，也要改查法或用 `@EntityGraph`。
+`@EntityGraph` 會覆蓋預設的 fetch 策略，一次把關聯資料載入，避免 N+1 查詢問題。不需要手寫 JPQL，也不需要改 Service 層——DAO 方法簽名不變，Service 照樣呼叫 `bookDao.findById(id)`。
 
 ## Optional 的實戰用法
 

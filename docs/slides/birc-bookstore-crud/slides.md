@@ -482,9 +482,8 @@ birc migrate
 </div>
 
 ```sql
-INSERT INTO author (name, birth_year, nationality) VALUES
-  ('村上春樹', 1949, '日本'),
-  ('東野圭吾', 1958, '日本');
+村上春樹', 1949, '日本'
+東野圭吾', 1958, '日本'
 ```
 
 <div class="mt-5 text-sm">
@@ -507,7 +506,7 @@ birc make:migration add_author_id_to_book_table
 
 # 改 Book Entity 加關聯
 
-```java {7-8}
+```java {7-10}
 @Entity
 @Table(name = "book")
 public class Book {
@@ -531,7 +530,7 @@ public class Book {
 
 # 改 BookResponse 加 authorName
 
-```java
+```java{4}
 public record BookResponse(
     Long id,
     String title,
@@ -567,33 +566,20 @@ public interface BookMapper {
 
 ---
 
-# 改 BookDao 加 JOIN 查詢
+# 改 BookDao 加 @EntityGraph
 
 ```java
 public interface BookDao extends BaseDao<Book> {
-    @Query("SELECT b FROM Book b LEFT JOIN FETCH b.author WHERE b.id = :id")
-    Optional<Book> findByIdWithAuthor(@Param("id") Long id);
+    @EntityGraph(attributePaths = {"author"})
+    List<Book> findAll();
+
+    @EntityGraph(attributePaths = {"author"})
+    Optional<Book> findById(Long id);
 }
 ```
 
 <div class="mt-5 terminal-card text-sm">
-  <code>JOIN FETCH</code> 一次載入關聯資料，避免 N+1 查詢問題。
-</div>
-
----
-
-# 改 BookServiceImpl 用 JOIN
-
-```java
-public BookResponse findById(Long id) {
-    Book book = bookDao.findByIdWithAuthor(id)
-        .orElseThrow(() -> new NotFoundException("Book not found: " + id));
-    return bookMapper.toResponse(book);
-}
-```
-
-<div class="mt-5 terminal-card text-sm">
-  改呼叫 <code>findByIdWithAuthor</code>，確保關聯資料正確載入。
+  <code>@EntityGraph</code> 覆蓋預設 fetch 策略，一次載入關聯資料，避免 N+1 查詢問題。方法簽名不變，Service 不用改。
 </div>
 ---
 
