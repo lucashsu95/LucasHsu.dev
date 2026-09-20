@@ -21,7 +21,7 @@ head:
 
 # birc 實戰：從 npm 到 Book CRUD
 
-> TL;DR：`npm i -g birc-generator` 之後，`birc create bookstore --yes` 開專案（含 ValidGroup、Spotless），`birc make Book --example --fields ... --migration --seed` 一次生齊 CRUD 各層與 Flyway migration。CORS 只改 `CORS_ALLOWED_ORIGIN_PATTERNS`。
+> TL;DR：`npm i -g birc-generator` 之後，`birc create bookstore --yes` 開專案（含 ValidGroup、Spotless），`birc make Book --fields ... --migration --seed` 一次產出 CRUD 各層、Flyway migration 與 Seeder。進資料庫是兩步：`birc migrate` 建表、`birc seed` 塞示範列。CORS 只改 `CORS_ALLOWED_ORIGIN_PATTERNS`。
 
 本機只起 MySQL（Docker），App 用 `./gradlew bootRun`。
 
@@ -101,15 +101,22 @@ password: ${DB_PASSWORD:}
 | 你想做的事                                           | 指令                                              |
 | ---------------------------------------------------- | ------------------------------------------------- |
 | 一次生 Entity、DAO、Mapper、DTO、Service、Controller | `birc make Book`                                  |
-| 一次生齊 + 建表 SQL + Seed 資料                      | `birc make Book --example --fields ... --migration --seed` |
+| 一次生齊 + 建表 SQL + Seeder                         | `birc make Book --fields ... --migration --seed`   |
+| 只補一支 Seeder                                      | `birc make:seeder BookSeeder`                      |
 
-`make:model --controller` 只加 Controller，不會補齊 Service / Mapper。`--fields` 和 CRUD 範例也必須搭配 `--example`。
+`make:model --controller` 只加 Controller，不會補齊 Service / Mapper。
+
+`--fields` 或 `--example` 有一個就是完整產出：欄位、CRUD 方法、`@Column` 都會生。差別只在欄位是你指定的，還是範本的 `id` / `name`；兩個一起加沒有額外效果。
 
 ## 課堂指定指令
 
 ```bash
-birc make Book --example --fields title:String,author:String,isbn:String,price:BigDecimal,publishedAt:LocalDate --migration --seed
+birc make Book --fields title:String,isbn:String,price:BigDecimal,publishedAt:LocalDate --migration --seed
 ```
+
+這行只產生檔案，什麼都還沒進資料庫。
+
+刻意沒有 `author`。作者後面會做成 `Author` 表的關聯，現在生一個字串欄位的話，之後加 `private Author author` 就會在同一個類別裡撞名。
 
 表名是 entity 的 snake_case：`book`。HTTP 路徑是 `/api/books`。遷移檔請用 `create_book_table`（單數）；寫 `create_books_table` 會建成表 `books`，跟 `@Table(name = "book")` 對不上。
 
@@ -117,7 +124,7 @@ DTO 是 Java record：`BookCreateRequest`、`BookResponse`。Entity 仍是 JPA c
 
 ## 執行 Migration
 
-`--migration` 會自動讀取 Entity 的欄位與關聯，產生對應的建表 SQL，不用手動改遷移檔。
+`--migration` 會自動讀取 Entity 的欄位與關聯，產生對應的建表 SQL，不用手動改遷移檔。SQL 裡只有 `CREATE TABLE`，示範資料不會寫成 `INSERT`。
 
 ```bash
 birc migrate
@@ -125,9 +132,57 @@ birc migrate
 
 <div class="mt-4 text-sm muted">檔名 parse 成表名：create_book_table → 表 <code>book</code>。寫 create_books_table 會建成 <code>books</code>，跟 Entity 對不上。</div>
 
-`jpa.hibernate.ddl-auto` 是 `validate`，所以要先執行遷移。
+`jpa.hibernate.ddl-auto` 是 `validate`，所以要先執行遷移。`migrate` 只建表。
 
-Flyway Community 不支援 rollback；需要修正時請新增一筆遷移。重建資料庫可用 `birc migrate:reset --force`。
+Flyway Community 不支援 rollback；需要修正時請新增一筆遷移。重建資料庫可用 `birc migrate:reset --force`（`flywayClean` + `migrate`）——表會回來，示範列不會，要再跑一次 `birc seed`。
+
+只想清空 schema、不重建，用 `birc db:wipe`（只跑 `flywayClean`）。
+
+### `No Flyway database plugin found to handle jdbc:mysql`
+
+Flyway 的資料庫支援是外掛，少了 MySQL 那顆就報這個。加在**根** `build.gradle` 的 `buildscript`：
+
+```groovy
+buildscript {
+    dependencies {
+        classpath "org.flywaydb:flyway-mysql"
+    }
+}
+```
+
+放進一般的 `dependencies` 沒用，Flyway 的 Gradle task 跑在 buildscript 的 classpath 上。
+
+## 塞示範資料：`birc seed`
+
+`--seed` 產的是 Java Seeder，不是 SQL。有 Entity 時會照欄位帶 `setXxx`：
+
+```java
+public class BookSeeder {
+    public void run() {
+        Book book = new Book();
+        book.setTitle("Domain-Driven Design");
+        book.setIsbn("9780321125217");
+        // price / publishedAt ...
+        dao.save(book);
+    }
+}
+```
+
+執行：
+
+```bash
+birc seed
+```
+
+所以完整流程是三步，不是兩步：
+
+```bash
+birc make Book --fields ... --migration --seed   # 只產檔案
+birc migrate                                    # 只建表
+birc seed                                       # 塞示範列
+```
+
+跑完 `migrate` 就去打 `GET /api/books` 會拿到空陣列，那不是壞掉，是還沒 `seed`。事後要補 Seeder 用 `birc make:seeder BookSeeder`（命名跟 Laravel 一樣帶後綴）。
 
 ## 課堂必改：否則 API 全是 401
 
@@ -161,20 +216,19 @@ curl -s -X POST http://localhost:8080/api/books \
   -H 'Content-Type: application/json' \
   -d '{
     "title": "Domain-Driven Design",
-    "author": "Eric Evans",
     "isbn": "9780321125217",
     "price": 1800,
     "publishedAt": "2003-08-30"
   }'
 ```
 
-接著 `GET /api/books/1`、`PUT`、`DELETE`。id 不存在會走專案內的 `NotFoundException`，回 404。
+先打一次 `GET /api/books`：看得到 `birc seed` 的示範資料，才表示 seed 真的生效了，空陣列就是漏跑。接著 `GET /api/books/1`、`PUT`、`DELETE`。id 不存在會走專案內的 `NotFoundException`，回 404。
 
 ## ValidGroup
 
 `--yes` 會生 `validation/ValidGroup.java`，提供 `Create`、`Update`、`Delete`、`Submit` 四組 Bean Validation group。
 
-`birc make Book --example` 之後：
+`birc make Book --fields ...` 之後：
 
 - Controller：`@Validated(ValidGroup.Create.class)` / `@Validated(ValidGroup.Update.class)`
 - `BookCreateRequest` 每個欄位：`@NotNull(groups = {ValidGroup.Create.class, ValidGroup.Update.class})`
@@ -205,24 +259,37 @@ Book API 已經能跑了。接下來加一個作者表，讓每本書可以綁�
 ### 建 Author Entity
 
 ```bash
-birc make Author --example --fields name:String,birthYear:Integer,nationality:String --migration --seed
+birc make Author --fields name:String,birthYear:Integer,nationality:String --migration --seed
 ```
 
-- `--migration` 自動產生建表 SQL，FK 也會自動處理
-- `--seed` 自動從 Entity 讀欄位，產生 INSERT 語法
+- `--migration` 讀 Entity 產生建表 SQL。Author 本身沒有關聯，就是單純一張表
+- `--seed` 產生 `AuthorSeeder.java`，內容是 `setXxx(...)`，不是 `INSERT`
 
-執行遷移：
+建表再塞資料：
 
 ```bash
+birc migrate   # 建 author 表
+birc seed      # 執行 AuthorSeeder
+```
+
+Seeder 長這樣，遷移檔裡不會有這幾列：
+
+```java
+author.setName("村上春樹");
+author.setBirthYear(1949);
+author.setNationality("日本");
+```
+
+`make Author` 也生了 Controller，所以會多一組 `/api/authors`。要打它就把 `/api/authors`、`/api/authors/**` 一起加進 `PUBLIC_PATHS`，否則一律 401。
+
+### 給 Book 表加 FK 欄位
+
+```bash
+birc make:migration add_author_id_to_book_table
 birc migrate
 ```
 
-產生的遷移檔會包含預設資料，例如：
-
-```sql
-'上春樹', 1949, '日本'
-'野圭吾', 1958, '日本'
-```
+欄位名是 `{ref}_id`、而且 `{ref}` 的表找得到時，才會一併產生 `ADD CONSTRAINT ... FOREIGN KEY`。所以順序有前提：`author` 表要先建好。表還不存在時只會給一個 `BIGINT`，不加 constraint。
 
 ### 改 Book Entity 加關聯
 
@@ -267,13 +334,19 @@ public interface BookMapper {
 ```java {3,6}
 @Mapper(componentModel = "spring")
 public interface BookMapper {
-    @Mapping(source = "author.name", target = "authorName") // ← 帶出作者名稱
+    @Mapping(source = "author.name", target = "authorName") // ← 讀出來：帶作者名稱
     BookResponse toResponse(Book book);
 
-    @Mapping(target = "author", ignore = true) // ← 建書時不處理關聯
+    @Mapping(target = "author", ignore = true) // ← 寫進去：先不處理
     Book toEntity(BookCreateRequest request);
 }
 ```
+
+帶關聯欄位出去就走這條：宣告在 Mapper，Service 不必寫程式。
+
+`author_id` 可以留空，所以 `book.getAuthor()` 可能是 `null`，但這條 `@Mapping` 不會 NPE——MapStruct 對 `author.name` 這種巢狀來源會自己補 null 檢查，沒作者就是 `authorName: null`。不需要在 Service 再包一層 `Optional.ofNullable(...)`。
+
+後面「Optional 的實戰用法」講的是另一件事：`Optional` 管「這筆資料存不存在」，`@Mapping` 管「欄位怎麼搬」。
 
 `BookResponse` 要先加 `authorName` 欄位（birc 不會自己改 record）：
 
@@ -288,12 +361,40 @@ public record BookResponse(
 ) {}
 ```
 
+### POST 怎麼指定作者
+
+上面的 `ignore = true` 表示寫入方向沒接，新建的書永遠沒有作者。前端只會傳 id，所以 DTO 收 `authorId`，再讓 Mapper 換成 Author：
+
+```java
+public record BookCreateRequest(
+    String title,
+    // isbn, price, publishedAt...
+    Long authorId   // 不填就是沒作者
+) {}
+```
+
+```java
+@Mapping(source = "authorId", target = "author")
+Book toEntity(BookCreateRequest request);
+
+default Author toAuthor(Long id) {
+    if (id == null) {
+        return null;
+    }
+    Author author = new Author();
+    author.setId(id);   // 寫入 book 只需要 author_id 這個值
+    return author;
+}
+```
+
+這個寫法不會去查 `author` 表。傳不存在的 id 會被資料庫的 FK constraint 擋下來，想先回 400 就自己在 Service 檢查一次。
+
 ### 查詢要帶關聯
 
 用預設的 `findAll()` 查不到 Author（`author` 是 LAZY，不會預載入）。用 `@EntityGraph` 指定要載入的關聯：
 
 ```java
-public interface BookDao extends BaseDao<Book> {
+public interface BookDAO extends BaseDAO<Book> {
     @EntityGraph(attributePaths = {"author"})
     List<Book> findAll();
 
@@ -302,7 +403,7 @@ public interface BookDao extends BaseDao<Book> {
 }
 ```
 
-`@EntityGraph` 會覆蓋預設的 fetch 策略，一次把關聯資料載入，避免 N+1 查詢問題。不需要手寫 JPQL，也不需要改 Service 層——DAO 方法簽名不變，Service 照樣呼叫 `bookDao.findById(id)`。
+`@EntityGraph` 會覆蓋預設的 fetch 策略，一次把關聯資料載入，避免 N+1 查詢問題。不需要手寫 JPQL，也不需要改 Service 層——DAO 方法簽名不變，Service 照樣呼叫 `bookDAO.findById(id)`。
 
 ## Optional 的實戰用法
 
@@ -313,7 +414,7 @@ Spring Data JPA 的 `.findById()` 回傳 `Optional<T>`，不是 null。這是 Ja
 **舊寫法（不推薦）：**
 
 ```java
-Book book = bookDao.findById(id);
+Book book = bookDAO.findById(id);
 if (book == null) {
     throw new NotFoundException("Book not found");
 }
@@ -323,7 +424,7 @@ return bookMapper.toResponse(book);
 **新寫法（用 Optional）：**
 
 ```java
-Book book = bookDao.findById(id)
+Book book = bookDAO.findById(id)
     .orElseThrow(() -> new NotFoundException("Book not found"));
 return bookMapper.toResponse(book);
 ```
@@ -342,17 +443,17 @@ public T findById(ID id) {
 
 ```java
 // 有值就執行，沒有就跳過
-bookDao.findById(id).ifPresent(book -> {
+bookDAO.findById(id).ifPresent(book -> {
     log.info("Found: {}", book.getTitle());
 });
 
 // 有值就轉換，沒有就回傳預設值
-String title = bookDao.findById(id)
+String title = bookDAO.findById(id)
     .map(Book::getTitle)
     .orElse("Unknown");
 
 // 有值就轉換，沒有就丟例外
-Book book = bookDao.findById(id)
+Book book = bookDAO.findById(id)
     .orElseThrow(() -> new NotFoundException("Not found"));
 ```
 
@@ -409,9 +510,10 @@ birc create bookstore --yes && cd bookstore
 docker compose up -d db
 set -a && source .env && set +a
 
-birc make Book --example --fields title:String,author:String,isbn:String,price:BigDecimal,publishedAt:LocalDate --migration --seed
-# 改 V1 SQL、PUBLIC_PATHS、CORS
+birc make Book --fields title:String,isbn:String,price:BigDecimal,publishedAt:LocalDate --migration --seed
+# 改 PUBLIC_PATHS、CORS
 birc migrate
+birc seed
 ./gradlew bootRun
 ./gradlew spotlessApply
 ```

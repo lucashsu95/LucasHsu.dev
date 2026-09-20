@@ -72,6 +72,49 @@ pre {
   color: var(--term-green);
 }
 
+.bad-card,
+.good-card {
+  border: 1px solid;
+  border-radius: 11px;
+  padding: 12px 14px;
+}
+
+.bad-card {
+  border-color: rgba(248, 81, 73, 0.55);
+  background: rgba(248, 81, 73, 0.07);
+}
+
+.good-card {
+  border-color: rgba(109, 179, 63, 0.55);
+  background: rgba(109, 179, 63, 0.07);
+}
+
+.bad-card .label,
+.good-card .label {
+  display: block;
+  margin-bottom: 6px;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+}
+
+.bad-card .label { color: #f85149; }
+.good-card .label { color: var(--spring-green); }
+
+.bad-card .slidev-code,
+.good-card .slidev-code {
+  margin: 0 !important;
+  border: none !important;
+}
+
+.bad-card pre,
+.good-card pre {
+  padding: 8px 10px !important;
+  background: rgba(13, 17, 23, 0.9) !important;
+  font-size: 12px !important;
+  line-height: 1.5 !important;
+}
+
 .slidev-code {
   border: 1px solid rgba(109, 179, 63, 0.25) !important;
   border-radius: 12px;

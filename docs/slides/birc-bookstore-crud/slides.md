@@ -44,7 +44,7 @@ exportFilename: birc-bookstore-crud
   <div class="mt-14 grid grid-cols-4 gap-3 font-mono text-sm text-center">
     <div class="concept-card"><strong>create</strong><br><span class="muted">開專案</span></div>
     <div class="concept-card"><strong>make</strong><br><span class="muted">CRUD 骨架</span></div>
-    <div class="concept-card"><strong>migrate</strong><br><span class="muted">Flyway</span></div>
+    <div class="concept-card"><strong>migrate + seed</strong><br><span class="muted">Flyway 建表、Seeder 塞列</span></div>
     <div class="concept-card"><strong>profiles</strong><br><span class="muted">dev / prod</span></div>
   </div>
 </div>
@@ -65,11 +65,12 @@ hideInToc: true
 <div class="grid grid-cols-2 gap-4 mt-7">
   <div v-click class="concept-card"><strong>01 / 安裝</strong><br><span class="muted">npm i -g birc-generator，確認 birc 能跑</span></div>
   <div v-click class="concept-card"><strong>02 / 開專案</strong><br><span class="muted">birc create bookstore --yes</span></div>
-  <div v-click class="concept-card"><strong>03 / Book CRUD</strong><br><span class="muted">make + Flyway，真的打得到 API</span></div>
-  <div v-click class="concept-card"><strong>04 / 改版</strong><br><span class="muted">ValidGroup、Spotless、record、Docker、CORS</span></div>
+  <div v-click class="concept-card"><strong>03 / Book CRUD</strong><br><span class="muted">make + migrate + seed，真的打得到 API</span></div>
+  <div v-click class="concept-card"><strong>04 / 加關聯</strong><br><span class="muted">Author、FK、MapStruct 帶出 authorName</span></div>
+  <div v-click class="concept-card"><strong>05 / 改版</strong><br><span class="muted">ValidGroup、Spotless、record、Docker、CORS</span></div>
 </div>
 
-<div v-click class="mt-6 terminal-card text-sm">
+<div v-click class="mt-5 terminal-card text-sm">
   <span class="accent-orange">目標：</span>下課時本機有一個能增刪改查的書店 API，而且知道 .env 怎麼切環境。
 </div>
 
@@ -83,7 +84,7 @@ layout: default
 | --- | --- | --- |
 | Node | 18 以上 | 跑 `birc` |
 | Docker | 能跑 `docker compose` | 只起 MySQL |
-| Java | 21（之後 Gradle 會抓 toolchain） | Spring Boot 4.0.5 |
+| Java | 25（之後 Gradle 會抓 toolchain） | Spring Boot 4.0.5 |
 
 <div class="mt-6 terminal-card text-sm">
   <p class="terminal-label">CHECK</p>
@@ -150,11 +151,17 @@ birc -h
 | `birc make` | Entity + DAO + Mapper + DTO + Service + Controller |
 | `birc make:model --migration` | Entity + DAO，順便生 Flyway |
 | `birc make:migration` | 只生 SQL |
-| `birc migrate` | 真的跑 `flywayMigrate` |
+| `birc make:seeder` | 只生 Java Seeder |
+| `birc migrate` | 真的跑 `flywayMigrate`，只建表 |
+| `birc seed` | 執行 Seeder，才有示範資料 |
 | `birc add` | 之後再加 email / openapi / file-upload |
 
 <div v-click class="mt-5 text-sm font-mono accent-orange">
   一次把 Mapper、Service、Controller 都生好：<code>birc make</code>
+</div>
+
+<div v-click class="mt-3 text-sm muted">
+  表結構走 Flyway，示範列走 Seeder。<code>migrate</code> 跟 <code>seed</code> 是兩個步驟。
 </div>
 
 ---
@@ -247,7 +254,7 @@ transition: fade
 
 # 生一本 Book 的 CRUD
 
-<p class="font-mono muted">骨架用 make，表用 Flyway，不要靠 ddl-auto:update</p>
+<p class="font-mono muted">骨架用 make，表用 Flyway，示範列用 Seeder，不要靠 ddl-auto:update</p>
 
 ---
 ---
@@ -258,6 +265,7 @@ transition: fade
 | --- | --- |
 | `birc make Book` | Entity、DAO、Mapper、DTO、Service、Controller |
 | `birc make:model Book --migration` | Entity、DAO，加上 Flyway |
+| `birc make Book --migration --seed` | 各層 + Flyway SQL + `BookSeeder.java` |
 | `birc make:controller Book` | 只有 Controller |
 
 <div v-click class="mt-5 terminal-card text-sm">
@@ -271,18 +279,29 @@ transition: fade
 
 # 課堂指定指令
 
-一次把各層生齊，Flyway 另開一筆：
+一行把各層、建表 SQL、Seeder 都生出來：
 
 ```bash
-birc make Book --fields title:String,author:String,isbn:String,price:BigDecimal,publishedAt:LocalDate --migration --seed
+birc make Book --fields title:String,isbn:String,price:BigDecimal,publishedAt:LocalDate --migration --seed
 ```
 
-<div class="mt-5 grid grid-cols-2 gap-4 text-sm">
-  <div class="concept-card"><strong>--example</strong><br><span class="muted">才有 CRUD 方法與 @Column。沒加只是空殼</span></div>
-  <div class="concept-card"><strong>--fields</strong><br><span class="muted">把欄位寫入Entity</span></div>
+<div class="mt-3 text-sm accent-orange">
+  注意沒有 <code>author</code>。作者等一下要做成**另一張表的關聯**，現在先不要生成字串欄位，否則之後會跟 <code>Author</code> 撞名。
 </div>
 
-<div class="mt-4 text-sm muted">遷移檔名用單數 <code>create_book_table</code>，才會建成表 <code>book</code>。</div>
+<div class="mt-5 grid grid-cols-3 gap-3 text-sm">
+  <div class="concept-card"><strong>--fields</strong><br><span class="muted">寫你自己的欄位。有它就是完整產出：欄位、CRUD、@Column</span></div>
+  <div class="concept-card"><strong>--migration</strong><br><span class="muted">讀 Entity 產建表 SQL</span></div>
+  <div class="concept-card"><strong>--seed</strong><br><span class="muted">產 BookSeeder.java，不是 INSERT</span></div>
+</div>
+
+<div class="mt-4 text-sm muted">
+  <code>--fields</code> 或 <code>--example</code> 有一個就是完整產出，不必兩個一起加。差別只在欄位是你指定的，還是範本的 <code>id</code> / <code>name</code>。
+</div>
+
+<div class="mt-2 text-sm accent-orange">
+  這行只是「產生檔案」。要進資料庫還要 <code>birc migrate</code> 和 <code>birc seed</code>。
+</div>
 
 ---
 ---
@@ -297,6 +316,7 @@ birc make Book --fields title:String,author:String,isbn:String,price:BigDecimal,
 | Service | `BookService` + `BookServiceImpl extends BaseServiceImpl` |
 | Controller | `/api/books` |
 | Flyway | `src/main/resources/db/migration/V1__create_book_table.sql` |
+| Seeder | `seeder/BookSeeder.java`（`--seed` 才有） |
 
 <div v-click class="mt-4 text-sm">
   表名是 snake_case 的 entity：<code>book</code>。URL 是 <code>/api/books</code>（名稱後面加 s）。
@@ -312,11 +332,15 @@ birc make Book --fields title:String,author:String,isbn:String,price:BigDecimal,
 Entity 裡的 `@Column`、型別、長度限制都會反映在 SQL 裡。改完 Entity 重跑 `--migration` 就會更新 SQL。
 
 ```bash
-# 一次搞定 Entity + Migration + Seed
-birc make Book --example --fields \
-  title:String,author:String,isbn:String,price:BigDecimal,publishedAt:LocalDate \
+# 一次產出 Entity + Migration SQL + Seeder（檔案而已）
+birc make Book --fields \
+  title:String,isbn:String,price:BigDecimal,publishedAt:LocalDate \
   --migration --seed
 ```
+
+<div class="mt-4 text-sm muted">
+  SQL 裡只有 <code>CREATE TABLE</code>。示範資料不會寫成 <code>INSERT</code>，那是 Seeder 的事。
+</div>
 
 ---
 ---
@@ -330,13 +354,86 @@ birc make Book --example --fields \
 birc migrate
 ```
 
-這條會呼叫專案裡的 Gradle wrapper `flywayMigrate`，不是只印指令。
+這條會呼叫專案裡的 Gradle wrapper `flywayMigrate`，不是只印指令。**只建表，不塞資料。**
 
 <div class="mt-5 terminal-card text-sm">
   <p class="terminal-label">ROLLBACK？</p>
   <div>Flyway Community 做不到 rollback。</div>
   <div class="mt-2"><code>birc migrate:rollback</code> 只會告訴你：再寫一筆往前的遷移。</div>
   <div class="mt-2">課堂打壞表：<code>birc migrate:reset --force</code>（flywayClean + migrate）。</div>
+  <div class="mt-2 accent-orange">reset 之後表會回來，示範列不會，要再跑一次 <code>birc seed</code>。</div>
+</div>
+
+---
+---
+
+# 示範資料走 Seeder，不走 SQL
+
+`--seed` 產的是 Java，不是 `INSERT`。有 Entity 就照欄位帶 `setXxx`：
+
+```java
+public class BookSeeder {
+    public void run() {
+        Book book = new Book();
+        book.setTitle("Domain-Driven Design");
+        book.setIsbn("9780321125217");
+        // price / publishedAt ...
+        dao.save(book);
+    }
+}
+```
+
+<div class="mt-4 terminal-card text-sm">
+  <div><span class="cmd">birc seed</span> 才會真的執行它。</div>
+  <div class="mt-2">表結構的唯一來源是 Flyway；示範列的唯一來源是 Seeder。兩邊不要混。</div>
+</div>
+
+---
+---
+
+# 完整流程是三步
+
+```bash
+birc make Book --fields ... --migration --seed   # 只產檔案
+birc migrate                                    # 只建表
+birc seed                                       # 才真的塞示範資料
+```
+
+<div class="mt-5 grid grid-cols-3 gap-3 text-sm">
+  <div class="concept-card"><strong>make</strong><br><span class="muted">寫檔案，什麼都還沒進 DB</span></div>
+  <div class="concept-card"><strong>migrate</strong><br><span class="muted">schema 進 DB</span></div>
+  <div class="concept-card"><strong>seed</strong><br><span class="muted">資料列進 DB</span></div>
+</div>
+
+<div v-click class="mt-5 text-sm accent-orange">
+  最常見的卡點：跑完 <code>migrate</code> 就去 <code>GET /api/books</code>，拿到空陣列以為壞了。少的是 <code>birc seed</code>。
+</div>
+
+<div v-click class="mt-3 text-sm muted">
+  事後才想補 Seeder：<code>birc make:seeder BookSeeder</code>（命名跟 Laravel 一樣帶後綴）。
+</div>
+
+---
+---
+
+# Flyway 起不來的那個錯
+
+```
+No Flyway database plugin found to handle jdbc:mysql
+```
+
+Flyway 的資料庫支援是外掛，少了 MySQL 那顆就報這個。修在**根** `build.gradle` 的 `buildscript`：
+
+```groovy
+buildscript {
+    dependencies {
+        classpath "org.flywaydb:flyway-mysql"
+    }
+}
+```
+
+<div class="mt-4 text-sm muted">
+  加在一般的 <code>dependencies</code> 沒用，Flyway 的 Gradle task 跑在 buildscript 的 classpath 上。改完再 <code>birc migrate</code>。
 </div>
 
 ---
@@ -348,7 +445,7 @@ birc migrate
 
 今天還沒做登入，先把書本 API 放行：
 
-```java
+```java {6,7}
 public static final List<String> PUBLIC_PATHS = List.of(
         "/swagger-ui/**",
         "/v3/api-docs/**",
@@ -392,7 +489,6 @@ curl -s -X POST http://localhost:8080/api/books \
   -H 'Content-Type: application/json' \
   -d '{
     "title": "Domain-Driven Design",
-    "author": "Eric Evans",
     "isbn": "9780321125217",
     "price": 1800,
     "publishedAt": "2003-08-30"
@@ -400,12 +496,17 @@ curl -s -X POST http://localhost:8080/api/books \
 ```
 
 ```bash
+curl -s http://localhost:8080/api/books          # 先看 seed 的資料在不在
 curl -s http://localhost:8080/api/books/1
 curl -s -X PUT http://localhost:8080/api/books/1 -H 'Content-Type: application/json' -d '{ ... }'
 curl -s -X DELETE http://localhost:8080/api/books/1
 ```
 
 <div class="mt-4 text-sm muted">成功長 Result.success(data)。id 不存在會 NotFoundException → HTTP 404。</div>
+
+<div v-click class="mt-3 text-sm accent-orange">
+  第一條 <code>GET /api/books</code> 就是 <code>birc seed</code> 的驗收：看得到示範資料才算真的塞進去了。空陣列＝漏跑 seed。
+</div>
 
 ---
 ---
@@ -416,13 +517,12 @@ curl -s -X DELETE http://localhost:8080/api/books/1
 public record BookCreateRequest(
         @NotNull(groups = {ValidGroup.Create.class, ValidGroup.Update.class})
         String title,
-        // author, isbn, price, publishedAt...
+        // isbn, price, publishedAt...
 ) {}
 
 public record BookResponse(
         Long id,
         String title,
-        String author,
         String isbn,
         BigDecimal price,
         LocalDate publishedAt
@@ -465,29 +565,27 @@ transition: fade
 # 建 Author Entity
 
 ```bash
-birc make Author --example --fields name:String,birthYear:Integer,nationality:String --migration --seed
+birc make Author --fields name:String,birthYear:Integer,nationality:String --migration --seed
 ```
 
 <div class="mt-5 grid grid-cols-2 gap-4 text-sm">
-  <div class="concept-card"><strong>--migration</strong><br><span class="muted">自動產生建表 SQL，FK 也會自動處理</span></div>
-  <div class="concept-card"><strong>--seed</strong><br><span class="muted">自動從 Entity 讀欄位，產生 INSERT 語法</span></div>
+  <div class="concept-card"><strong>--migration</strong><br><span class="muted">讀 Entity 產建表 SQL（Author 沒有關聯，就是單純一張表）</span></div>
+  <div class="concept-card"><strong>--seed</strong><br><span class="muted">產 AuthorSeeder.java，裡面是 setXxx</span></div>
 </div>
 
 ```bash
-birc migrate
+birc migrate   # 建 author 表
+birc seed      # 塞村上春樹、東野圭吾
 ```
 
-<div class="mt-5 terminal-card text-sm">
-  不用手動寫 SQL。Entity 有什麼欄位、什麼關聯，遷移檔就產生什麼。
+<div class="mt-4 terminal-card text-sm">
+  <div>Seeder 是 Java，長這樣：</div>
+  <div class="mt-2 font-mono text-xs">author.setName("村上春樹"); author.setBirthYear(1949); author.setNationality("日本");</div>
+  <div class="mt-2">遷移檔裡不會有這幾列，別去 SQL 裡找。</div>
 </div>
 
-```sql
-村上春樹', 1949, '日本'
-東野圭吾', 1958, '日本'
-```
-
-<div class="mt-5 text-sm">
-  <code>--seed</code> 自動辨識欄位型別，省去手動寫 seed SQL。
+<div v-click class="mt-3 text-sm accent-orange">
+  <code>make Author</code> 也生了 Controller，所以多了 <code>/api/authors</code>。要打它就把 <code>/api/authors</code>、<code>/api/authors/**</code> 一起加進 <code>PUBLIC_PATHS</code>，不然一律 401。
 </div>
 
 ---
@@ -496,10 +594,12 @@ birc migrate
 
 ```bash
 birc make:migration add_author_id_to_book_table
+birc migrate
 ```
 
 <div class="mt-5 terminal-card text-sm">
-  新增 <code>author_id</code> 欄位並建立 FK 關聯到 <code>author</code> 表。
+  <div>欄位名是 <code>{ref}_id</code>、而且 <code>{ref}</code> 的表找得到時，才會一併 <code>ADD CONSTRAINT ... FOREIGN KEY</code>。</div>
+  <div class="mt-2 accent-orange">所以順序很重要：<code>author</code> 表要先建好。表還不存在時只會給你一個 <code>BIGINT</code>，不加 constraint。</div>
 </div>
 
 ---
@@ -549,27 +649,75 @@ public record BookResponse(
 
 # 改 BookMapper 加 @Mapping
 
-```java {3,6}
+```java {3,4,6,7}
 @Mapper(componentModel = "spring")
 public interface BookMapper {
-    @Mapping(source = "author.name", target = "authorName")  // ← 帶出作者名稱
+    @Mapping(source = "author.name", target = "authorName")  // ← 讀出來：帶作者名稱
     BookResponse toResponse(Book book);
 
-    @Mapping(target = "author", ignore = true)               // ← 建書時不處理關聯
+    @Mapping(target = "author", ignore = true)               // ← 寫進去：先不處理
     Book toEntity(BookCreateRequest request);
 }
 ```
 
 <div class="mt-5 text-sm">
-  <code>author</code> 關聯用 <code>Optional</code> 安全取值，找不到就不塞。
+  帶出 <code>authorName</code> 就走這條：宣告在 Mapper，Service 不用寫程式。
+</div>
+
+<div v-click class="mt-3 text-sm accent-orange">
+  但 <code>ignore = true</code> 表示 POST 設不了作者——新建的書永遠沒有 Author。下一頁補起來。
 </div>
 
 ---
 
-# 改 BookDao 加 @EntityGraph
+# POST 怎麼指定作者
+
+前端只會傳一個 id，不會傳整個 Author 物件。兩邊各改一處：
+
+<div class="grid grid-cols-2 gap-4 mt-4">
+
+<div class="good-card">
+<span class="label">① DTO 收 authorId</span>
 
 ```java
-public interface BookDao extends BaseDao<Book> {
+public record BookCreateRequest(
+    String title,
+    // isbn, price, publishedAt...
+    Long authorId   // 不填就是沒作者
+) {}
+```
+
+</div>
+
+<div class="good-card">
+<span class="label">② Mapper 換成 Author</span>
+
+```java
+@Mapping(source = "authorId", target = "author")
+Book toEntity(BookCreateRequest request);
+
+default Author toAuthor(Long id) {
+    if (id == null) return null;
+    Author a = new Author();
+    a.setId(id);        // 只要 FK
+    return a;
+}
+```
+
+</div>
+
+</div>
+
+<div class="mt-4 text-sm muted">
+  不用去查 <code>author</code> 表：寫入 <code>book</code> 只需要 <code>author_id</code> 這個值。傳不存在的 id 會被 FK constraint 擋下來，想先回 400 就自己在 Service 檢查一次。
+</div>
+
+---
+
+# 改 BookDAO 加 @EntityGraph
+
+```java {2-6}
+public interface BookDAO extends BaseDAO<Book> {
     @EntityGraph(attributePaths = {"author"})
     List<Book> findAll();
 
@@ -581,21 +729,138 @@ public interface BookDao extends BaseDao<Book> {
 <div class="mt-5 terminal-card text-sm">
   <code>@EntityGraph</code> 覆蓋預設 fetch 策略，一次載入關聯資料，避免 N+1 查詢問題。方法簽名不變，Service 不用改。
 </div>
+
 ---
 
-# Optional：安全處理關聯
-# Optional：安全處理關聯
+# Optional：情境是「查一本不存在的書」
 
-Service 層取關聯時，用 `Optional` 避免 NullPointerException：
+打 `GET /api/books/999`，資料庫裡沒有 999。同一件事，兩種寫法：
+
+<div class="grid grid-cols-2 gap-4 mt-4">
+
+<div class="bad-card">
+<span class="label">❌ 回 null</span>
 
 ```java
-Optional.ofNullable(entity.getAuthor())
-    .map(Author::getName)
-    .orElse(null);
+Book book = dao.findByIdOrNull(id);
+// book 是 null
+return mapper.toResponse(book);
 ```
 
-<div class="mt-5 terminal-card text-sm">
-  Entity 的關聯欄位用 <code>Optional</code> 包一層，永遠不會炸。這是在 <code>BaseServiceImpl</code> 裡處理關聯的標準做法。
+</div>
+
+<div class="good-card">
+<span class="label">✅ 回 Optional</span>
+
+```java
+Book book = dao.findById(id)
+    .orElseThrow(() ->
+        new NotFoundException("Book: " + id));
+return mapper.toResponse(book);
+```
+
+</div>
+
+</div>
+
+<div class="grid grid-cols-2 gap-4 mt-3 text-sm">
+  <div class="text-center"><span class="accent-orange">NullPointerException → 500</span><br><span class="muted">前端看到伺服器爆掉，還要翻 log</span></div>
+  <div class="text-center"><span class="accent-green">NotFoundException → 404</span><br><span class="muted">前端知道是「沒這本書」</span></div>
+</div>
+
+<div v-click class="mt-4 text-sm muted">
+  重點不是「Optional 比較潮」，是 <code>null</code> 可以被忘記檢查、<code>Optional</code> 不行——你非得寫 <code>orElseThrow</code> 之類的收尾才拿得到 <code>Book</code>。
+</div>
+
+---
+
+# 忘記檢查 vs 編譯器逼你檢查
+
+<div class="grid grid-cols-2 gap-4 mt-4">
+
+<div class="bad-card">
+<span class="label">❌ 每個呼叫端都要自己記得</span>
+
+```java
+Book book = dao.findByIdOrNull(id);
+if (book == null) {            // 漏寫就是 500
+    throw new NotFoundException("...");
+}
+return book.getTitle();
+```
+
+</div>
+
+<div class="good-card">
+<span class="label">✅ 漏寫就編不過</span>
+
+```java
+// Optional<Book> 沒有 getTitle()
+return dao.findById(id)
+    .map(Book::getTitle)       // 有才轉換
+    .orElse("(未知書名)");      // 沒有給預設值
+```
+
+</div>
+
+</div>
+
+<div class="mt-5 grid grid-cols-3 gap-3 text-sm">
+  <div class="concept-card"><strong>orElseThrow</strong><br><span class="muted">沒有就丟例外 → CRUD 用這個</span></div>
+  <div class="concept-card"><strong>orElse</strong><br><span class="muted">沒有就給預設值</span></div>
+  <div class="concept-card"><strong>ifPresent</strong><br><span class="muted">有才做，沒有就跳過</span></div>
+</div>
+
+<div class="mt-4 text-sm muted">
+  <code>BaseServiceImpl.getById</code> 已經是第一種，所以 Book 的 CRUD 你一行都不用寫。
+</div>
+
+---
+
+# 那 author 是 null 呢？
+
+情境換了：書存在，但 `author_id` 沒填。這次**不要**自己用 Optional。
+
+<div class="grid grid-cols-2 gap-4 mt-4">
+
+<div class="bad-card">
+<span class="label">❌ 在 Service 手動拆關聯</span>
+
+```java
+BookResponse res = mapper.toResponse(book);
+String name = Optional
+    .ofNullable(book.getAuthor())
+    .map(Author::getName)
+    .orElse(null);
+// 再想辦法塞回 record…（record 不能改）
+```
+
+</div>
+
+<div class="good-card">
+<span class="label">✅ 交給 Mapper 宣告</span>
+
+```java
+@Mapping(source = "author.name",
+         target = "authorName")
+BookResponse toResponse(Book book);
+
+// Service 只有這行
+return mapper.toResponse(book);
+```
+
+</div>
+
+</div>
+
+<div class="mt-4 terminal-card text-sm">
+  <p class="terminal-label">為什麼右邊不會 NPE</p>
+  <div class="font-mono text-xs">authorName = book.getAuthor() == null ? null : book.getAuthor().getName();</div>
+  <div class="mt-2">MapStruct 產的 code 自己補了 null 檢查。沒作者就是 <code>authorName: null</code>，你不用再包一層。</div>
+</div>
+
+<div v-click class="mt-4 text-sm accent-orange">
+  分工：<code>Optional</code> 管「這筆資料存不存在」，<code>@Mapping</code> 管「欄位怎麼搬」。不是二選一，是用在不同地方。
 </div>
 
 ---
@@ -651,7 +916,7 @@ DTO：
 public record BookCreateRequest(
         @NotNull(groups = {ValidGroup.Create.class, ValidGroup.Update.class})
         String title,
-        // author, isbn, price, publishedAt 也一樣
+        // isbn, price, publishedAt 也一樣
 ) {}
 ```
 
@@ -666,15 +931,17 @@ public record BookCreateRequest(
 
 骨架現在 Create / Update 都必填，是為了能馬上打 CRUD。之後若更新允許只改書名：
 
-```java
-@NotNull(groups = ValidGroup.Create.class)
-String isbn;
+```java {2,5}
+public record BookCreateRequest(
+        @NotNull(groups = ValidGroup.Create.class)              // 只有新增必填
+        String isbn,
 
-@NotNull(groups = {ValidGroup.Create.class, ValidGroup.Update.class})
-String title;
+        @NotNull(groups = {ValidGroup.Create.class, ValidGroup.Update.class})
+        String title                                            // 兩邊都必填
+) {}
 ```
 
-POST 缺 isbn → 400。PUT 可以不帶 isbn，title 仍必填。還是同一份 `BookCreateRequest`，不必拆兩個 class。
+POST 缺 isbn → 400。PUT 可以不帶 isbn，title 仍必填。還是同一份 `BookCreateRequest`，不必拆成兩份 DTO。
 
 <div v-click class="mt-5 text-sm accent-orange">
   <code>Delete</code> / <code>Submit</code> 今天是空的，不要刪。預設 CRUD 也不要標這兩組。
@@ -690,7 +957,7 @@ POST 缺 isbn → 400。PUT 可以不帶 isbn，title 仍必填。還是同一�
 ```bash
 curl -i -X POST http://localhost:8080/api/books \
   -H 'Content-Type: application/json' \
-  -d '{"author":"Eric Evans","isbn":"9780321125217","price":1800,"publishedAt":"2003-08-30"}'
+  -d '{"isbn":"9780321125217","price":1800,"publishedAt":"2003-08-30"}'
 ```
 
 應是 400。這條不會進 Service。
@@ -989,7 +1256,7 @@ dev 跟 prod 換的是 `.env` 的值，不是改 Java。
 <div class="grid grid-cols-2 gap-4 mt-5">
   <div v-click class="concept-card"><strong>npm → birc</strong><br><span class="muted">npm i -g birc-generator</span></div>
   <div v-click class="concept-card"><strong>create --yes</strong><br><span class="muted">docker、ValidGroup、Spotless</span></div>
-  <div v-click class="concept-card"><strong>make + migrate</strong><br><span class="muted">make 一次生 Entity + Migration + Seed</span></div>
+  <div v-click class="concept-card"><strong>make → migrate → seed</strong><br><span class="muted">make 一次產檔；進 DB 是 migrate 建表、seed 塞列</span></div>
   <div v-click class="concept-card"><strong>env 切環境</strong><br><span class="muted">Profiles 跟 CORS 都走 .env</span></div>
 </div>
 
@@ -1008,15 +1275,20 @@ birc create bookstore --yes && cd bookstore
 docker compose up -d db
 set -a && source .env && set +a
 
-birc make Book --example --fields title:String,author:String,isbn:String,price:BigDecimal,publishedAt:LocalDate \
+birc make Book --fields title:String,isbn:String,price:BigDecimal,publishedAt:LocalDate \
   --migration --seed
 # 改 PUBLIC_PATHS → 改 CORS
 birc migrate
+birc seed
 ./gradlew bootRun
 ./gradlew spotlessApply
 ```
 
 之後要加模組：`birc add openapi`、`birc add file-upload`。
+
+<div class="mt-3 text-sm muted">
+  進階：<code>birc db:wipe</code> 只跑 <code>flywayClean</code>，把 schema 清掉不重建；要清掉再建回來才是 <code>birc migrate:reset --force</code>。
+</div>
 
 ---
 layout: end
@@ -1028,8 +1300,8 @@ class: text-center
 <p class="mt-5 font-mono muted">下一步：Spring Profiles 文章，把 dev/prod 再拆細</p>
 
 <div class="mt-10 terminal-card inline-block text-left text-sm">
-  <div><span class="accent-green">$</span> birc make Book --example --fields ...</div>
-  <div class="accent-orange mt-2">create → make → migrate → bootRun</div>
+  <div><span class="accent-green">$</span> birc make Book --fields ... --migration --seed</div>
+  <div class="accent-orange mt-2">create → make → migrate → seed → bootRun</div>
 </div>
 
 <!--
