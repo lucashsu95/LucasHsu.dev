@@ -1398,22 +1398,23 @@ app:
 
 # Harbor：`birc add gitlab-ci`
 
-沒有 `birc harbor`。Harbor 是映像倉庫，產生器給的是對齊 teaching-platform 的 `.gitlab-ci.yml`：
+實驗室的 CI **都會把映像推到 Harbor**。沒有 `birc harbor`：Harbor 是倉庫，`birc add gitlab-ci` 生的是 `.gitlab-ci.yml`。
 
 ```bash
 birc add gitlab-ci
 ```
 
-會問 GitLab 專案路徑（例如 `birc-backend/bookstore`），CI 只在那個 repo 跑；可留空。帳密**全部**放 GitLab CI/CD Variables，不要寫進檔、也不要用 Docker build-arg（`docker history` 看得到）。
+模板帶進**這個專案**的名字，不是寫死 teaching-platform。bookstore 會變成：
 
-| 變數 | 給誰 |
+| 寫進 yml 的 | 值 |
 | --- | --- |
-| `HARBOR_URL` / `HARBOR_USER` / `HARBOR_PASSWORD` | 登入 Harbor、push 映像 |
-| `BETA_USER` `BETA_HOST` `BETA_SSH_KEY` `BETA_SSH_HOST_KEY` | development 部到測試機 |
-| `ONLINE_USER` `ONLINE_HOST` `ONLINE_SSH_KEY` `ONLINE_SSH_HOST_KEY` | main 部到正式機 |
+| `IMAGE_NAME` | `$HARBOR_URL/bookstore/bookstore_app` |
+| `DEPLOY_DIR` | `/opt/bookstore/backend` |
+
+Harbor 位址、帳密、要部哪台，全部是 GitLab CI/CD Variables（`HARBOR_*`、`BETA_*`、`ONLINE_*`）。不要寫進檔，也不要用 Docker build-arg。
 
 <div class="mt-4 text-sm muted">
-  <code>SSH_HOST_KEY</code> 用 <code>ssh-keyscan -t ed25519 &lt;host&gt;</code> 的輸出。沒填 pipeline 直接失敗。Password 走 stdin 餵 <code>docker login</code>，不拼進遠端指令。
+  會問 GitLab 專案路徑（CI 只在那個 repo 跑），可留空。<code>SSH_HOST_KEY</code> 用 <code>ssh-keyscan -t ed25519 &lt;host&gt;</code>，沒填 pipeline 直接失敗。
 </div>
 
 ---
@@ -1438,7 +1439,7 @@ APP_TAG=latest
 之後 `docker compose -f docker-compose.prod.yml pull app && up -d --no-deps app`。db 沒起來才會順便起。
 
 <div class="mt-4 text-sm accent-orange">
-  這堂不必真的 push。重點是：憑證在 GitLab Variables，映像在 Harbor，機器上的 <code>.env</code> 管 tag。
+  這堂不必真的 push。之後作業／專題的 CI 也是這條路：GitLab 建映像 → push Harbor → 機器 pull。
 </div>
 
 ---
@@ -1450,10 +1451,10 @@ APP_TAG=latest
 birc add sentry
 ```
 
-會生 `SentryConfig` 跟 yml。DSN 放 `.env`，空白 = 不送：
+會生 `SentryConfig` 跟 yml。專案開在 [sentry.ntubimdbirc.tw](https://sentry.ntubimdbirc.tw/)，DSN 從那邊複製，放 `.env`，空白 = 不送：
 
 ```
-SENTRY_DSN=https://xxxx@sentry.example/1
+SENTRY_DSN=https://xxxx@sentry.ntubimdbirc.tw/1
 ```
 
 本機 `source .env` 再重啟。正式機同一鍵寫在伺服器 `.env`（compose prod 已經接了 `SENTRY_DSN`）。

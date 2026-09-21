@@ -580,13 +580,15 @@ curl -s -X DELETE          http://localhost:8080/api/files/a1b2c3d4-....png
 
 ### Harbor 與 GitLab CI
 
-沒有 `birc harbor`。Harbor 是映像倉庫，產生器給的是 `.gitlab-ci.yml`：
+實驗室的 CI 都會把映像推到 Harbor。沒有 `birc harbor`——Harbor 是倉庫，指令是生 `.gitlab-ci.yml`：
 
 ```bash
 birc add gitlab-ci
 ```
 
-會問 GitLab 專案路徑（CI 只在那個 repo 跑，可留空）。帳密全部放 GitLab CI/CD Variables，不要寫進檔，也不要用 Docker build-arg。
+模板帶進這個專案的名字，不是寫死 teaching-platform。`IMAGE_NAME` 是 `$HARBOR_URL/<專案>/<專案>_app`，伺服器目錄 `/opt/<專案>/backend`。Harbor 位址、帳密、要部哪台機器，全部是 GitLab CI/CD Variables，不要寫進檔，也不要用 Docker build-arg。
+
+會問 GitLab 專案路徑（CI 只在那個 repo 跑，可留空）。
 
 | 變數 | 用途 |
 | --- | --- |
@@ -596,7 +598,7 @@ birc add gitlab-ci
 
 `SSH_HOST_KEY` 用 `ssh-keyscan -t ed25519 <host>` 的輸出，沒填 pipeline 直接失敗。Password 走 stdin 餵 `docker login`。
 
-`development` / MR → `build-beta` + `deploy-beta`（tag `beta-<sha>`）。`main` → `build-online`，`deploy-online` 要在 GitLab 手動按。映像名是 `$HARBOR_URL/<專案>/<專案>_app`，伺服器目錄 `/opt/<專案>/backend`。
+`development` / MR → `build-beta` + `deploy-beta`（tag `beta-<sha>`）。`main` → `build-online`，`deploy-online` 要在 GitLab 手動按。
 
 CI 只改伺服器 `.env` 的 `APP_TAG`。第一次部署要自己先填 `DOCKER_IMAGE`，再讓 pipeline 去 `pull` / `up -d --no-deps app`。
 
@@ -606,7 +608,11 @@ CI 只改伺服器 `.env` 的 `APP_TAG`。第一次部署要自己先填 `DOCKER
 birc add sentry
 ```
 
-DSN 放 `.env` 的 `SENTRY_DSN`，空白 = 不送。compose prod 已經接了這個鍵。
+DSN 從 [sentry.ntubimdbirc.tw](https://sentry.ntubimdbirc.tw/) 複製，放 `.env` 的 `SENTRY_DSN`，空白 = 不送。compose prod 已經接了這個鍵。
+
+```
+SENTRY_DSN=https://xxxx@sentry.ntubimdbirc.tw/1
+```
 
 會送沒接住的 5xx。4xx、`NotFoundException`、驗證失敗會被 `SentryConfig` 的 `BeforeSendCallback` 丟掉——`ProjectException` 看 `getHttpStatus()` 是不是 4xx，之後自己加例外不必改這份設定。
 
