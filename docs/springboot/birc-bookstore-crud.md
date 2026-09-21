@@ -1,10 +1,10 @@
 ---
 title: birc 實戰：從 npm 到 Book CRUD | LucasHsu.dev
-description: npm 裝 birc-generator，建 bookstore 專案，生 Book CRUD 與 Flyway 遷移，再接 ConfigurationProperties、Docker、Spring Profiles 與 CORS。
+description: npm 裝 birc-generator，建 bookstore 專案，生 Book CRUD 與 Flyway 遷移，再接檔案上傳、Docker、Spring Profiles 與 CORS。
 head:
   - - meta
     - name: keywords
-      content: birc, birc-generator, Spring Boot 4, Flyway, CRUD, record, ConfigurationProperties, Docker, Spring Profiles, CORS, MapStruct, Optional
+      content: birc, birc-generator, Spring Boot 4, Flyway, CRUD, record, Docker, Spring Profiles, CORS, MapStruct, Optional
   - - meta
     - property: og:title
       content: birc 實戰：從 npm 到 Book CRUD
@@ -130,9 +130,9 @@ DTO 是 Java record：`BookCreateRequest`、`BookResponse`。Entity 仍是 JPA c
 birc migrate
 ```
 
-<div class="mt-4 text-sm muted">檔名 parse 成表名：create_book_table → 表 <code>book</code>。寫 create_books_table 會建成 <code>books</code>，跟 Entity 對不上。</div>
-
 `jpa.hibernate.ddl-auto` 是 `validate`，所以要先執行遷移。`migrate` 只建表。
+
+檔名 parse 成表名：`create_book_table` → 表 `book`。寫 `create_books_table` 會建成 `books`，跟 Entity 對不上。
 
 Flyway Community 不支援 rollback；需要修正時請新增一筆遷移。重建資料庫可用 `birc migrate:reset --force`（`flywayClean` + `migrate`）——表會回來，示範列不會，要再跑一次 `birc seed`。
 
@@ -290,6 +290,77 @@ birc migrate
 ```
 
 欄位名是 `{ref}_id`、而且 `{ref}` 的表找得到時，才會一併產生 `ADD CONSTRAINT ... FOREIGN KEY`。所以順序有前提：`author` 表要先建好。表還不存在時只會給一個 `BIGINT`，不加 constraint。
+
+### 改欄位型別：`change_{column}_on_{table}_table`
+
+`make:migration` 認檔名：`create_` 建表、`add_` 加欄、`change_` 改型別。
+
+`change_*` 出 `MODIFY COLUMN`，新型別只讀 Entity。Entity 上沒有那個欄位就失敗、不寫檔——猜錯的 MODIFY 會截斷既有資料。所以先改 Java 型別，再產生遷移。
+
+課堂在 `Book.java` 加一個用不到的欄，DTO 不必動：
+
+```java
+@Column(name = "stock")
+private Integer stock;
+```
+
+然後：
+
+```bash
+birc make:migration add_stock_to_book_table
+birc migrate
+```
+
+打開 SQL，應是 `ADD COLUMN stock INT NULL`。把 `Integer` 改成 `Long`，再：
+
+```bash
+birc make:migration change_stock_on_book_table
+birc migrate
+```
+
+打開 SQL，應是 `MODIFY COLUMN stock BIGINT NULL`。
+
+故意打不存在的欄位：
+
+```bash
+birc make:migration change_foo_on_book_table
+```
+
+應失敗、不寫檔。改完 Entity 先停 `bootRun` 再 migrate；`ddl-auto: validate` 對不上會起不來。
+
+### 軟刪：`--soft-delete`
+
+硬刪是 `DELETE FROM`。軟刪多一欄 `deleted_at`：刪的時候填時間戳，列還在，查詢當它不存在。`deleteById` 不用改。沒有 restore / withTrashed。
+
+在 `make` 時加旗標，Entity 跟 SQL 一次到位。不要對已有表跑 `make:migration add_deleted_at_to_book_table`：`deleted_at` 不是 Entity 欄位，產生器會退回 `VARCHAR(50)`。
+
+```bash
+birc make Review --fields content:String --migration --soft-delete
+birc migrate
+```
+
+Entity 會有 Hibernate `@SoftDelete(columnName = "deleted_at", strategy = TIMESTAMP)`，建表 SQL 多 `deleted_at TIMESTAMP NULL`。
+
+`PUBLIC_PATHS` 放行 `/api/reviews`、`/api/reviews/**`，重啟後自己打一遍：
+
+```bash
+curl -s -X POST http://localhost:8080/api/reviews \
+  -H 'Content-Type: application/json' \
+  -d '{"content":"好看"}'
+curl -s http://localhost:8080/api/reviews
+curl -s -X DELETE http://localhost:8080/api/reviews/1
+curl -s http://localhost:8080/api/reviews      # 空陣列
+curl -s http://localhost:8080/api/reviews/1    # 404
+```
+
+列還在：
+
+```bash
+docker compose exec db mysql -u"$DB_USER" -p"$DB_PASSWORD" "$DB_DATABASE" \
+  -e "SELECT id, content, deleted_at FROM review;"
+```
+
+`deleted_at` 有值。GET 是 404，不是因為列被清掉。
 
 ### 改 Book Entity 加關聯
 
@@ -459,25 +530,42 @@ Book book = bookDAO.findById(id)
 
 Optional 的重點：**不要回傳 null，用 Optional 包起來**。呼叫端決定怎麼處理「沒有」的情況。
 
-## 改版要記住的四件事
+## 改版要記住的幾件事
 
 ### record
 
 進出 API 用 record。Entity 不出 Controller。細節見 [Record DTO](/springboot/record-dto-projection)。
 
-### `@ConfigurationProperties`
-
-一組相關設定收成類別，不要到處 `@Value`。課堂看得到實檔的方式：
+### 檔案上傳
 
 ```bash
 birc add file-upload
 ```
 
-會生 `FileStorageProperties`（prefix `file-storage`）。SSO、外部 API client 也是同一套路。yml 插在 `# birc-generator:config-anchor` 後面，那一行不要刪。
+會生 `FileStorageService`、`FileUploadController`（`/api/files`）。yml 插在 `# birc-generator:config-anchor` 後面，那一行不要刪。沒有自己的表。檔丟在 `./uploads`（`FILE_STORAGE_PATH`），不要 commit。`SecurityConfig` 再放行 `/api/files`、`/api/files/**`，然後重啟。
 
-完整綁定規則見 [@ConfigurationProperties](/springboot/configuration-properties)。
+```bash
+curl -s -F "file=@./cover.png" http://localhost:8080/api/files
+# {"success":true,"data":"a1b2c3d4-....png"}
+curl -s -o cover-back.png http://localhost:8080/api/files/a1b2c3d4-....png
+curl -s -X DELETE          http://localhost:8080/api/files/a1b2c3d4-....png
+```
+
+回傳的是存進去的檔名（UUID + 原副檔名）。Controller 這裡回 `Map`，不是 `Result`。
+
+`store()` 會擋空檔、超過 10MB、副檔名不在白名單、副檔名跟檔頭簽章對不起來（`fake.png` 其實是文字）、以及路徑想跳出 `./uploads`。要收書封用 `store(file, "covers")`，回傳 `covers/uuid.png`，不要自己拼路徑。
 
 ### Docker 與 Profiles
+
+三種啟動，選一個：
+
+| 何時 | 怎麼開 | 誰在跑 App |
+| --- | --- | --- |
+| 每天寫程式（這堂課） | `docker compose up -d db` 再 `./gradlew bootRun` | 本機 JVM。只起 MySQL，改完重啟、能 debug |
+| 本機整包容器 | `docker compose up`（讀 `docker-compose.yml`） | 容器裡 **build** 映像，慢；db 對外映射、開 JDWP 5005 |
+| 測試機 / 正式機 | `docker compose -f docker-compose.prod.yml up -d` | 從 Harbor **pull**，不在機器上 build；db 不對外開 port |
+
+沒加 `-f` 就是那份沒有 `.prod` 的。課堂不要 `docker compose up` 把 app 也建進去。
 
 產生器沒有生 `application-dev.yml` / `application-prod.yml`。共用設定在一份 `application.yml`，值用 `${DB_URL}` 這類環境變數。
 
@@ -489,6 +577,40 @@ birc add file-upload
 本機 `bootRun` 的 `DB_URL` host 是 `127.0.0.1`。容器裡的 App 讀 compose 的 `environment:`，host 必須是服務名 `db`。密碼不要寫進映像，放 `.env`。
 
 之後若要依環境關 Swagger、改 log，再自己加 `application-prod.yml`。優先順序與切換方式見 [Spring Profiles](/springboot/spring-profiles)。
+
+### Harbor 與 GitLab CI
+
+沒有 `birc harbor`。Harbor 是映像倉庫，產生器給的是 `.gitlab-ci.yml`：
+
+```bash
+birc add gitlab-ci
+```
+
+會問 GitLab 專案路徑（CI 只在那個 repo 跑，可留空）。帳密全部放 GitLab CI/CD Variables，不要寫進檔，也不要用 Docker build-arg。
+
+| 變數 | 用途 |
+| --- | --- |
+| `HARBOR_URL` / `HARBOR_USER` / `HARBOR_PASSWORD` | 登入 Harbor、push 映像 |
+| `BETA_*`（USER / HOST / SSH_KEY / SSH_HOST_KEY） | `development` 部到測試機 |
+| `ONLINE_*` | `main` 部到正式機 |
+
+`SSH_HOST_KEY` 用 `ssh-keyscan -t ed25519 <host>` 的輸出，沒填 pipeline 直接失敗。Password 走 stdin 餵 `docker login`。
+
+`development` / MR → `build-beta` + `deploy-beta`（tag `beta-<sha>`）。`main` → `build-online`，`deploy-online` 要在 GitLab 手動按。映像名是 `$HARBOR_URL/<專案>/<專案>_app`，伺服器目錄 `/opt/<專案>/backend`。
+
+CI 只改伺服器 `.env` 的 `APP_TAG`。第一次部署要自己先填 `DOCKER_IMAGE`，再讓 pipeline 去 `pull` / `up -d --no-deps app`。
+
+### Sentry
+
+```bash
+birc add sentry
+```
+
+DSN 放 `.env` 的 `SENTRY_DSN`，空白 = 不送。compose prod 已經接了這個鍵。
+
+會送沒接住的 5xx。4xx、`NotFoundException`、驗證失敗會被 `SentryConfig` 的 `BeforeSendCallback` 丟掉——`ProjectException` 看 `getHttpStatus()` 是不是 4xx，之後自己加例外不必改這份設定。
+
+課堂驗：暫時丟 `RuntimeException`，Sentry 要看得到；`GET /api/books/999` 的 404 不該出現。
 
 ### CORS
 
@@ -518,7 +640,88 @@ birc seed
 ./gradlew spotlessApply
 ```
 
-之後加模組：`birc add openapi`、`birc add file-upload`。
+之後加模組：`birc add auth`、`birc add permission`、`birc add clockin`、`birc add file-upload`、`birc add gitlab-ci`（Harbor）、`birc add sentry`。`--yes` 已經有 OpenAPI，不必再 add。沒有 `birc login` / `birc checkin` 這兩個指令。
+
+## 登入：`birc add auth`
+
+`--yes` 不會勾帳號登入。要自己加：
+
+```bash
+birc add auth
+```
+
+會生 `auth_users` 表、`POST /api/auth/login`、`GET /api/auth/me`，以及掛 JWT 的 filter。專案已經有 `V1__create_book_table.sql` 的話，把產生的 `V1__create_auth_users_table.sql` 改成還沒用過的版本號，再 `birc migrate`。
+
+測試裡的 tester 走 `create-drop`，進不了你的 MySQL。自己寫一個 `AuthUserSeeder`，`birc seed` 才跑：`account=tester`、`password=passwordEncoder.encode("secret")`、`authorities="user:read"`。
+
+```bash
+curl -i -X POST http://localhost:8080/api/auth/login \
+  -H 'Content-Type: application/json' \
+  -d '{"account":"tester","password":"secret"}'
+```
+
+成功時 JWT 在回應標頭 `X-Auth-Token`，不在 body。之後的請求用 `Authorization: Bearer <token>`。沒帶 → 401；權限不夠 → 403。
+
+`JWT_SECRET` 寫在 `.env`，沒有就啟動時產生一把。密碼要先用 `PasswordEncoder` 編碼再塞進 `auth_users`。
+
+## 簽到：`birc add clockin`
+
+```bash
+birc add clockin
+```
+
+不建自己的表。`ClockInClient` 用帳密去中心簽到系統登入拿 JWT，再把簽到、簽退、查紀錄轉打出去。帳密放環境變數，不要寫進 yml：
+
+```
+BIRC_CLOCKIN_ACCOUNT=...
+BIRC_CLOCKIN_PASSWORD=...
+```
+
+預設打 `140.131.115.44:50035`，要換再設 `BIRC_CLOCKIN_BASE_URL`。
+
+```bash
+curl -s -X POST http://localhost:8080/api/clockin/{學號}     # 簽到
+curl -s -X PATCH http://localhost:8080/api/clockin/clockout/{帳號}
+curl -s http://localhost:8080/api/clockin/today              # 今天還沒簽的人
+```
+
+中心系統一律回 HTTP 200，成敗看 body 的 `result`；權限過期是 errorCode `User - AccessDenied`，不是 401。Client 會自己重登再打一次。
+
+課堂如果還沒放行 `/api/clockin/**`，這些端點會 401。要打它就加進 `PUBLIC_PATHS`，或先裝 auth 再帶 Bearer。
+
+## 權限：`birc add permission`
+
+沒有完整 RBAC。這組只給你一個註解、一個 Aspect。要先有 `birc add auth`。
+
+```bash
+birc add permission
+```
+
+會生 `RequirePermission` 跟 `PermissionAspect`，gradle 接 `spring-boot-starter-aspectj`。標在 Controller 方法上，`value` 是權限代碼字串，例如 `"book:delete"`。Aspect 從 SecurityContext 拿出 authorities **原樣比對**，沒有 `ROLE_` 前綴。
+
+`auth_users.authorities` 是逗號分隔（`user:read,book:delete`），跟 JWT claim 同一組字串。Aspect 不查資料庫，只看 token。改表之後要再登入一次，舊 JWT 不會變。
+
+課堂在 `BookController.delete` 加上 `@RequirePermission("book:delete")`，重啟 `bootRun`。先 POST 一本當砲灰，用回傳的 id（不要刪 seed 的 1），依序打：
+
+```bash
+# 1. 沒帶 token（PUBLIC_PATHS 進得了 Controller）→ 403
+curl -i -X DELETE http://localhost:8080/api/books/$ID
+
+# 2. tester 只有 user:read，帶 JWT 仍 403
+curl -si -X POST http://localhost:8080/api/auth/login \
+  -H 'Content-Type: application/json' \
+  -d '{"account":"tester","password":"secret"}'
+curl -i -X DELETE http://localhost:8080/api/books/$ID \
+  -H "Authorization: Bearer $TOKEN"
+```
+
+然後改表，再登入拿新 token：
+
+```sql
+UPDATE auth_users SET authorities='user:read,book:delete' WHERE account='tester';
+```
+
+DELETE 才 200。舊 token 裡還是 `user:read`。
 
 ## 延伸閱讀
 
