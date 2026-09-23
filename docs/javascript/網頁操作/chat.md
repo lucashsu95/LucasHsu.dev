@@ -23,10 +23,6 @@ head:
 
 # 聊天機器人
 
-## DEMO
-
-[DEMO](https://lucashsu95.github.io/webDesign/chat/vanilla.html)
-
 ![alt text](../assets/網頁操作/聯天機器人/image.webp)
 
 ## 互動體驗：聊天機器人
@@ -270,6 +266,4 @@ const robotMessage = (msg) => {
 ```
 
 到這就完成了！
-
-想要看到最完整的程式碼到DEMO的網站，請點選[DEMO](https://lucashsu95.github.io/webDesign/chat/vanilla.html)
 
