@@ -476,6 +476,178 @@ public interface BookDAO extends BaseDAO<Book> {
 
 `@EntityGraph` 會覆蓋預設的 fetch 策略，一次把關聯資料載入，避免 N+1 查詢問題。不需要手寫 JPQL，也不需要改 Service 層——DAO 方法簽名不變，Service 照樣呼叫 `bookDAO.findById(id)`。
 
+### 同一本書，兩種回傳形狀
+
+前面加的 `stock` 只給後台看，一般讀者不該拿到。同一個 Entity、看的人不同就少一個欄位，這在舊專案很常見。
+
+**舊寫法：手動 `ObjectData.add`**
+
+```java
+private ObjectData bookObject(Book book, boolean admin) {
+    ObjectData data = new ObjectData()
+            .add("id", book.getId())
+            .add("title", book.getTitle())
+            .add("isbn", book.getIsbn())
+            .add("price", book.getPrice())
+            .add("publishedAt", book.getPublishedAt());
+    if (admin) {
+        data.add("stock", book.getStock());
+    }
+    return data;
+}
+```
+
+每個欄位都要抄一次 key 字串。Entity 加欄位時這裡不會報錯，只是 JSON 少一個 key；key 打錯字也要等前端拿不到值才會發現。回傳型別是一袋 Map，Swagger 看不出裡面有什麼。
+
+**新寫法：Response record + Mapper**
+
+`BookResponse` 多一個 `stock`。欄位是 `null` 時不輸出這個 key，這樣一般讀者的 JSON 跟舊寫法一樣沒有 `stock`：
+
+```java
+public record BookResponse(
+    Long id,
+    String title,
+    String authorName,
+    String isbn,
+    BigDecimal price,
+    LocalDate publishedAt,
+    @JsonInclude(JsonInclude.Include.NON_NULL) Long stock  // [!code ++]
+) {}
+```
+
+`@JsonInclude` 只標在 `stock` 上，不要標在整個 record。標在 record 上，沒有作者的書連 `authorName` 都會一起消失。
+
+Mapper 開兩個方法：一般讀者用的忽略 `stock`，後台用的不忽略。
+
+```java
+@Mapper(componentModel = "spring")
+public interface BookMapper {
+    @Mapping(source = "author.name", target = "authorName")
+    @Mapping(target = "stock", ignore = true) // ← 一般讀者：不帶庫存
+    BookResponse toResponse(Book book);
+
+    @Mapping(source = "author.name", target = "authorName")
+    BookResponse toAdminResponse(Book book); // ← 後台：全部帶
+
+    // toEntity ...
+}
+```
+
+`id`、`title`、`isbn`、`price`、`publishedAt`、`stock` 都沒寫，因為 MapStruct 在編譯時比對名字：`Book` 有 `getTitle()`、`BookResponse` 有 `title`，就自動對上。要寫 `@Mapping` 的只有兩種：名字對不上的（`author.name` → `authorName`），以及刻意不帶的（`stock`）。
+
+編譯後 MapStruct 產生的程式大致長這樣，這就是原本手寫的那段：
+
+```java
+public BookResponse toResponse(Book book) {
+    if (book == null) {
+        return null;
+    }
+    return new BookResponse(
+            book.getId(),
+            book.getTitle(),
+            book.getAuthor() == null ? null : book.getAuthor().getName(),
+            book.getIsbn(),
+            book.getPrice(),
+            book.getPublishedAt(),
+            null);                 // stock 被 ignore
+}
+
+public BookResponse toAdminResponse(Book book) {
+    // ... 同上，最後一格是 book.getStock()
+}
+```
+
+產生出來的檔在 `build/generated/sources/annotationProcessor/`，看不懂某個欄位為什麼是 `null` 時，直接打開那支 `BookMapperImpl.java`。
+
+Service 只決定用哪一支。`BaseServiceImpl` 繼承下來的 `mapper` 型別是 `BaseMapper`，看不到 `toAdminResponse`，所以 `BookServiceImpl` 自己留一個 `BookMapper`：
+
+```java
+@Service
+public class BookServiceImpl
+        extends BaseServiceImpl<Book, Long, BookCreateRequest, BookResponse>
+        implements BookService {
+
+    private final BookMapper bookMapper;  // [!code ++]
+
+    public BookServiceImpl(BookDAO bookDAO, BookMapper mapper) {
+        super(bookDAO, mapper);
+        this.bookMapper = mapper;  // [!code ++]
+    }
+
+    @Override
+    public BookResponse getForAdmin(Long id) {
+        Book book = dao.findById(id)
+            .orElseThrow(() -> new NotFoundException("查無資料，id：" + id));
+        return bookMapper.toAdminResponse(book);
+    }
+}
+```
+
+`BookService` 介面加上 `getForAdmin`。原本繼承來的 `getById` 走 `toResponse`，一般讀者拿不到 `stock`；預設就是安全的那一邊，後台要多開一支才看得到。
+
+新增欄位時，`Book` 跟 `BookResponse` 各加一個同名欄位，兩支方法下次編譯都會帶上，不用回來改 Mapper。
+
+**排除兩個以上的欄位**
+
+一個欄位寫一行，疊在同一個方法上。MapStruct 沒有 `ignore = {"stock", "isbn"}` 這種寫法：
+
+```java
+@Mapping(source = "author.name", target = "authorName")
+@Mapping(target = "stock", ignore = true)
+@Mapping(target = "isbn", ignore = true)
+BookResponse toResponse(Book book);
+```
+
+`BookResponse` 裡的 `isbn` 也要標 `@JsonInclude(JsonInclude.Include.NON_NULL)`，不然 JSON 會出現 `"isbn": null`。
+
+同一組排除要用在好幾個方法時，把它們收進一個自訂註解，MapStruct 會展開：
+
+```java
+@Retention(RetentionPolicy.CLASS)
+@Target(ElementType.METHOD)
+@Mapping(target = "stock", ignore = true)
+@Mapping(target = "isbn", ignore = true)
+public @interface HideAdminFields {
+}
+```
+
+```java
+@Mapping(source = "author.name", target = "authorName")
+@HideAdminFields
+BookResponse toResponse(Book book);
+```
+
+以後後台多一個欄位，只改 `HideAdminFields` 一處。
+
+最省事的是讓一般讀者的 record 根本沒有這些欄位。MapStruct 只填目標有的欄位，來源多出來的 `stock`、`isbn` 直接略過，不用寫任何 `ignore`：
+
+```java
+public record PublicBookResponse(
+    Long id,
+    String title,
+    String authorName,
+    BigDecimal price,
+    LocalDate publishedAt
+) {}
+```
+
+```java
+@Mapping(source = "author.name", target = "authorName")
+PublicBookResponse toPublicResponse(Book book);
+```
+
+不用 `@JsonInclude`，Swagger 上也看得出一般讀者拿不到哪些欄位。代價是多一支 record。要藏的欄位超過一兩個，就走這條。
+
+跟 Laravel Resource 對照：
+
+| Laravel | MapStruct |
+| --- | --- |
+| `except(['stock'])` | `@Mapping(target = "stock", ignore = true)` |
+| `only(['id', 'title'])` | `@BeanMapping(ignoreByDefault = true)`，再逐個 `@Mapping(target = "id")` 點名 |
+| `$this->when($admin, $this->stock)` | 兩支方法，Service 選一支；或 `@Mapping(target = "stock", conditionExpression = "java(admin)")` 搭配 `@Context boolean admin` |
+
+兩種身分差很多欄位、或一般讀者根本不該知道那些欄位存在時，拆成兩支 record（`BookResponse`、`AdminBookResponse`），不要全塞進同一支靠 `null` 藏。
+
 ## Optional 的實戰用法
 
 Spring Data JPA 的 `.findById()` 回傳 `Optional<T>`，不是 null。這是 Java 8 引入的容器型別，用來表達「可能有值、可能沒有」。
