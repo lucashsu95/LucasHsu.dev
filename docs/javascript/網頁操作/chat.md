@@ -31,9 +31,13 @@ head:
 
 ## 教學
 
+訊息就是一直把一段文字加進畫面上。快捷按鈕和輸入框做的是同一件事：拿到一段文字，先顯示使用者說的，再顯示機器人回的。
+
+機器人回什麼放在一個物件裡。問題當 key、回答當 value，找不到就用一句預設的。
+
 ### HTML
 
-把HTML和CSS放上去吧!
+`main` 拿來放訊息。快捷按鈕用 `data-key` 帶要送出的文字，下面的表單則是自己打字。
 
 ```html
 <div id="chat">
@@ -186,83 +190,66 @@ button {
 
 ### JS
 
-今天的重點
-
-#### 先把DOM抓好
+先抓好訊息區、輸入框和表單。
 
 ```js
-// DOM抓取
-const main = document.querySelector("main");
-const btns = [...document.querySelectorAll("button")];
-const input = document.querySelector("input");
-const form = document.querySelector(".message-input");
+const main = document.querySelector("main")
+const input = document.querySelector("input")
+const form = document.querySelector("form")
 ```
 
-#### 綁定事件
+回答放在一個物件裡。
 
 ```js
-for (btn of btns) {
-  btn.addEventListener("click", handleMessageSubmit);
+const replies = {
+  "4月最強": "「在演藝圈（這個世界）裡，謊言就是武器。」2023年4月最強廣世巨作「我推的孩子」",
+  "戀愛": "最近有「我內心的糟糕念頭」是最甜最甜的純真戀愛動漫，保證甜死你!",
+  "異世界": "如果你問我，那我也只能說高橋李依最棒!不訪試試看「為美好的世界獻上爆焰」！",
 }
-form.addEventListener("submit", handleMessageSubmit);
 ```
 
-#### 使用者點擊後要做什麼
+使用者的話和機器人的話都用同一個函式加進去，差在 class 和頭像。
 
 ```js
-// 使用者輸入
-const handleMessageSubmit = (e) => {
-  e.preventDefault(); // 防止表單送出
+function addMessage(text, isUser) {
+  const who = isUser ? "user" : ""
+  const img = isUser ? "imgs/R.jpg" : "imgs/L.jpg"
 
-  const msg = e.target.dataset.key ?? input.value; // 取得按鈕或輸入
   main.innerHTML += `
-        <div class='message user'>
-            <div class="avatar">
-                <img src="imgs/R.jpg" alt="R.jpg" />
-            </div>
-            <div class="content">${msg}</div>
-        </div>`;
-  input.value = ""; // 清空輸入
+    <div class="message ${who}">
+      <div class="avatar">
+        <img src="${img}" alt="" />
+      </div>
+      <div class="content">${text}</div>
+    </div>`
 
-  setTimeout(() => {
-    robotMessage(msg); // 呼叫機器人回應的函式
-  }, 500); // 延遲500毫秒
-};
+  main.scrollTop = main.scrollHeight
+}
 ```
 
-#### 機器人回應
+送出時先顯示使用者的文字，再用剛才的物件找出回答。物件沒有這個 key，就回預設那句。
 
 ```js
-const robotMessage = (msg) => {
-  let data = "";
-  switch (msg) {
-    case "4月最強":
-      data =
-        "「在演藝圈（這個世界）裡，謊言就是武器。」2023年4月最強廣世巨作「我推的孩子」";
-      break;
-    case "戀愛":
-      data = "最近有「我內心的糟糕念頭」是最甜最甜的純真戀愛動漫，保證甜死你!";
-      break;
-    case "異世界":
-      data =
-        "如果你問我，那我也只能說高橋李依最棒!不訪試試看「為美好的世界獻上爆焰」！";
-      break;
-    default:
-      data = "感謝您的回覆，如果還有什麼需求可以再告訴我喔";
-      break;
-  }
+function send(text) {
+  if (!text) return
 
-  main.innerHTML += `
-        <div class='message'>
-            <div class="avatar">
-                <img src="imgs/L.jpg" alt="L.jpg" />
-            </div>
-            <div class="content">${data}</div>
-        </div>
-    `;
+  addMessage(text, true)
+  input.value = ""
+  addMessage(replies[text] || "感謝您的回覆，如果還有什麼需求可以再告訴我喔", false)
+}
+```
 
-  main.scrollTop = main.scrollHeight; // 滾動到最下面
-};
+表單送出打字的內容，快捷按鈕送出自己的 `data-key`。兩邊都呼叫 `send`。
+
+```js
+form.addEventListener("submit", (e) => {
+  e.preventDefault()
+  send(input.value)
+})
+
+document.querySelectorAll("[data-key]").forEach((btn) => {
+  btn.addEventListener("click", () => send(btn.dataset.key))
+})
 ```
 
 到這就完成了！
