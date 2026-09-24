@@ -818,7 +818,7 @@ birc seed
 ./gradlew spotlessApply
 ```
 
-之後加模組：`birc add auth`、`birc add permission`、`birc add clockin`、`birc add file-upload`、`birc add gitlab-ci`（Harbor）、`birc add sentry`。`--yes` 已經有 OpenAPI，不必再 add。沒有 `birc login` / `birc checkin` 這兩個指令。
+之後加模組：`birc add auth`、`birc add permission`、`birc add file-upload`、`birc add gitlab-ci`（Harbor）、`birc add sentry`。`--yes` 已經有 OpenAPI，不必再 add。沒有 `birc login` / `birc checkin` 這兩個指令。
 
 ## 登入：`birc add auth`
 
@@ -842,30 +842,6 @@ curl -i -X POST http://localhost:8080/api/auth/login \
 
 `JWT_SECRET` 寫在 `.env`，沒有就啟動時產生一把。密碼要先用 `PasswordEncoder` 編碼再塞進 `auth_users`。
 
-## 簽到：`birc add clockin`
-
-```bash
-birc add clockin
-```
-
-不建自己的表。`ClockInClient` 用帳密去中心簽到系統登入拿 JWT，再把簽到、簽退、查紀錄轉打出去。帳密放環境變數，不要寫進 yml：
-
-```
-BIRC_CLOCKIN_ACCOUNT=...
-BIRC_CLOCKIN_PASSWORD=...
-```
-
-預設打 `140.131.115.44:50035`，要換再設 `BIRC_CLOCKIN_BASE_URL`。
-
-```bash
-curl -s -X POST http://localhost:8080/api/clockin/{學號}     # 簽到
-curl -s -X PATCH http://localhost:8080/api/clockin/clockout/{帳號}
-curl -s http://localhost:8080/api/clockin/today              # 今天還沒簽的人
-```
-
-中心系統一律回 HTTP 200，成敗看 body 的 `result`；權限過期是 errorCode `User - AccessDenied`，不是 401。Client 會自己重登再打一次。
-
-課堂如果還沒放行 `/api/clockin/**`，這些端點會 401。要打它就加進 `PUBLIC_PATHS`，或先裝 auth 再帶 Bearer。
 
 ## 權限：`birc add permission`
 
