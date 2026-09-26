@@ -150,3 +150,10 @@ docs/public/slides/*
 .agents
 skills-lock.json
 .DS_Store
+stop-slop/CHANGELOG.md
+stop-slop/LICENSE
+stop-slop/README.md
+stop-slop/SKILL.md
+stop-slop/references/examples.md
+stop-slop/references/phrases.md
+stop-slop/references/structures.md
