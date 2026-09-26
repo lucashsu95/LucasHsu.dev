@@ -1,6 +1,6 @@
 ---
 title: Spring Boot 檔案上傳與下載 | LucasHsu.dev
-description: Spring Boot 檔案上傳與下載完整教學，包含 MultipartFile 處理、中文檔名編碼、上傳器介面設計與常見問題。
+description: Spring Boot 檔案上傳與下載教學，包含 MultipartFile 處理、中文檔名編碼、上傳器介面設計與常見問題。
 head:
   - - meta
     - name: keywords
@@ -10,7 +10,7 @@ head:
       content: Spring Boot 檔案上傳與下載 | LucasHsu.dev
   - - meta
     - property: og:description
-      content: Spring Boot 檔案上傳與下載完整教學，含 MultipartFile、中文檔名處理。
+      content: Spring Boot 檔案上傳與下載教學，含 MultipartFile、中文檔名處理。
   - - meta
     - property: og:type
       content: article
@@ -18,11 +18,9 @@ head:
 
 # Spring Boot 檔案上傳與下載
 
-> 📝 TL;DR：後端接檔案用 `MultipartFile`，下載注意中文檔名需 RFC 5987 編碼。上傳邏輯建議抽成 `Uploader` 介面 + `MultipartFileUploader` 實作，不要全塞在 Controller。以下範例取自 [`@pets/`](https://github.com/LucasHsu95/pets) 專案的真實程式碼。
+後端接檔案用 `MultipartFile`，下載時中文檔名需 RFC 5987 編碼。上傳邏輯建議抽成 `Uploader` 介面 + `MultipartFileUploader` 實作，別全塞在 Controller。範例取自 [`@pets/`](https://github.com/LucasHsu95/pets) 專案實際程式碼。
 
-## 1. 專案架構總覽
-
-先看整個檔案處理的 package 結構，方便對照後續範例：
+## 1. 專案架構
 
 ```
 src/main/java/.../
@@ -53,7 +51,7 @@ src/main/java/.../
 
 ---
 
-## 2. 設定檔案儲存路徑（application.yml）
+## 2. 設定檔案儲存路徑
 
 ```yaml
 server:
@@ -78,7 +76,7 @@ public class FileProperties {
 
 ---
 
-## 3. 限制檔案大小（application.properties）
+## 3. 限制檔案大小
 
 ```properties
 # 單一檔案最大限制
@@ -88,13 +86,13 @@ spring.servlet.multipart.max-file-size=5MB
 spring.servlet.multipart.max-request-size=10MB
 ```
 
-超過這個大小，Spring 會拋 `MaxUploadSizeExceededException`。
+超過大小會拋 `MaxUploadSizeExceededException`。
 
 ---
 
-## 4. Directory 目錄抽象（檔案存放位置管理）
+## 4. Directory 目錄抽象
 
-上傳前需要知道檔案要存到哪個目錄。`Directory` 介面封裝了目錄操作：
+上傳前得知道檔案存哪。`Directory` 介面封裝目錄操作：
 
 ```java
 public interface Directory extends Copyable {
@@ -138,9 +136,9 @@ public interface Uploader {
 
 ---
 
-## 6. MultipartFileUploader 實作（核心）
+## 6. MultipartFileUploader 實作
 
-這是最重要的類別，封裝了單檔、多檔、自訂檔名等上傳情境：
+封裝單檔、多檔、自訂檔名等上傳情境：
 
 ```java
 public class MultipartFileUploader {
@@ -152,7 +150,7 @@ public class MultipartFileUploader {
         this.baseURL = baseURL;
     }
 
-    // === 單檔上傳（自動隨機檔名）===
+    // 單檔上傳（自動隨機檔名）
     @NonNull
     public UploadResult upload(@NonNull MultipartFile multipartFile, String... subDirectoryName) throws FileException {
         // 1. 檢查空檔案
@@ -204,13 +202,13 @@ public class MultipartFileUploader {
         return FileUtils.getRandomFileName() + originalFilename.substring(lastDotIndex);
     }
 
-    // === 多檔上傳（陣列版）===
+    // 多檔上傳（陣列版）
     @NonNull
     public List<UploadResult> upload(@NonNull MultipartFile[] fileArray, String... subDirectoryName) throws FileException {
         return upload(List.of(fileArray), subDirectoryName);
     }
 
-    // === 多檔上傳（List 版）===
+    // 多檔上傳（List 版）
     @NonNull
     public List<UploadResult> upload(@NonNull List<MultipartFile> fileArray, String... subDirectoryName) throws FileException {
         return fileArray.parallelStream()
@@ -218,14 +216,14 @@ public class MultipartFileUploader {
                 .collect(Collectors.toList());
     }
 
-    // === 自訂檔名上傳 ===
+    // 自訂檔名上傳
     public UploadResult uploadFileName(@NonNull MultipartFile multipartFile, String fileName, String... subDirectoryName) throws FileException {
-        // ...（類似流程，但使用自訂檔名）
+        // ... 類似流程，改用自訂檔名
     }
 }
 ```
 
-### 核心流程圖
+### 核心流程
 
 ```
 upload(multipartFile, subDir...)
@@ -253,16 +251,15 @@ public class FileUtils {
         int lastDotIndex = fullFileName.lastIndexOf('.');
         if (lastDotIndex == -1) {
             throw new FileExtensionNotFoundException(fullFileName);
-        } else {
-            return fullFileName.substring(lastDotIndex + 1);
         }
+        return fullFileName.substring(lastDotIndex + 1);
     }
 }
 ```
 
 ---
 
-## 7. UploadResult（上傳結果）
+## 7. UploadResult
 
 ```java
 @Data
@@ -276,7 +273,7 @@ public class UploadResult {
 
 ---
 
-## 8. Bean 註冊（Spring Boot 啟動類）
+## 8. Bean 註冊
 
 在 `@SpringBootApplication` 中註冊 `Directory` 和 `MultipartFileUploader`：
 
@@ -299,9 +296,9 @@ public class Practice extends SpringBootServletInitializer {
 
 ---
 
-## 9. 實際應用範例：Review 評價圖片上傳
+## 9. 實際範例：Review 評價圖片上傳
 
-### Controller 層
+### Controller
 
 ```java
 @RestController
@@ -328,7 +325,7 @@ public class ReviewController {
 }
 ```
 
-### Service 層（完整上傳 + 驗證邏輯）
+### Service（完整上傳 + 驗證）
 
 ```java
 @Service
@@ -345,7 +342,6 @@ public class ReviewServiceImpl implements ReviewService {
                                         String content, List<MultipartFile> images) {
         // ... 訂單驗證、權限檢查 ...
 
-        // 1. 逐一驗證每個檔案
         if (images != null && !images.isEmpty()) {
             for (MultipartFile file : images) {
                 if (file.isEmpty()) {
@@ -365,16 +361,16 @@ public class ReviewServiceImpl implements ReviewService {
                 }
             }
 
-            // 2. 批次上傳到 "reviews" 子目錄
+            // 批次上傳到 "reviews" 子目錄
             List<UploadResult> uploadResults = uploader.upload(images, "reviews");
 
-            // 3. 將上傳結果寫入資料庫
+            // 寫入資料庫
             for (int i = 0; i < images.size(); i++) {
                 UploadResult result = uploadResults.get(i);
                 ReviewImage reviewImage = new ReviewImage();
                 reviewImage.setReviewId(review.getId());
                 reviewImage.setOriginalName(sanitizeFileName(images.get(i).getOriginalFilename()));
-                reviewImage.setFilePath(result.getUrl());  // 儲存 URL 而非實體路徑
+                reviewImage.setFilePath(result.getUrl());
                 reviewImageDAO.save(reviewImage);
             }
         }
@@ -386,7 +382,7 @@ public class ReviewServiceImpl implements ReviewService {
 
 ## 10. 錯誤處理
 
-### 自訂例外層級
+### 自訂例外
 
 ```
 FileException (abstract)
@@ -399,7 +395,7 @@ FileException (abstract)
 └── FileUnknownException            - 未知錯誤
 ```
 
-### 全域例外處理器（節錄檔案相關）
+### 全域例外處理器
 
 ```java
 @ControllerAdvice
@@ -425,7 +421,7 @@ public class ExceptionHandleController {
 
 ## 11. 檔案下載
 
-下載不難，難的是**中文檔名會變亂碼**：
+下載邏輯不複雜，難的是中文檔名會變亂碼：
 
 ```java
 // 1. 解碼 URL 傳來的檔名
@@ -454,36 +450,32 @@ return ResponseEntity.ok()
         .body(resource);
 ```
 
-**關鍵：** `filename*=UTF-8''` 是 RFC 5987 標準，沒加這個，中文檔名下載下來保證變亂碼。
+`filename*=UTF-8''` 是 RFC 5987 標準，沒加這個中文檔名下載下來就是亂碼。
 
 ---
 
-## 常見問題
+## 12. 常見問題
 
-### Q1：為什麼要用 UUID 隨機檔名？
-
+**為什麼用 UUID 隨機檔名？**
 避免檔名衝突與目錄遍歷攻擊。使用者傳 `../../etc/passwd` 時，UUID 檔名完全不受影響。
 
-### Q2：Tika 驗證是做什麼的？
+**Tika 驗證是做什麼？**
+`FileExtensionUtils.verifyRealImageType()` 用 Apache Tika 讀取檔案內容的真實 MIME type，不是只看副檔名。防止有人把 `.exe` 改名成 `.jpg` 上傳。
 
-`FileExtensionUtils.verifyRealImageType()` 使用 Apache Tika **讀取檔案內容的真實 MIME type**，而不是只看副檔名。這樣可以防止有人把 `.exe` 改名成 `.jpg` 上傳。
-
-### Q3：如何限制檔案類型？
-
-兩種做法：
+**如何限制檔案類型？**
 
 ```java
-// 方法 1：用 ContentType（基本）
+// 做法 1：用 ContentType（基本）
 String contentType = file.getContentType();
 if (!"application/pdf".equals(contentType)) {
     throw new IllegalArgumentException("僅接受 PDF 檔案");
 }
 
-// 方法 2：用 Tika 驗證真實類型（進階，防止偽造）
-FileExtensionUtils.verifyRealImageType(file); // 會讀取檔案內容
+// 做法 2：用 Tika 驗證真實類型（進階，防偽造）
+FileExtensionUtils.verifyRealImageType(file);
 ```
 
-### Q4：多檔案上傳？
+**多檔案上傳？**
 
 ```java
 // Controller 接收
@@ -494,13 +486,114 @@ public ResponseEntity<?> uploadMultiple(@RequestParam("files") List<MultipartFil
 List<UploadResult> results = uploader.upload(files, "reviews");
 ```
 
-### Q5：上傳的檔案儲存在哪裡？
-
-由 `FileProperties` 的 `server.file.path` 決定，範例中設為 `/data/upload`。對外 URL 則由 `server.file.url` 決定（例如 `/file`）。
+**上傳的檔案儲存在哪？**
+由 `FileProperties` 的 `server.file.path` 決定（範例設 `/data/upload`）。對外 URL 由 `server.file.url` 決定（如 `/file`）。
 
 ---
 
-## 總結
+## 13. 多 FileStorageService Bean（各自設定）
+
+不同檔案類型要不同限制：大頭貼 1MB 限圖片、文件 50MB 限 PDF/Office。註冊多個 Bean，用 `@Qualifier` 注入。
+
+### 13.1 設定檔
+
+```yaml
+file-storage:
+  avatar:
+    max-file-size-bytes: 1048576      # 1MB
+    allowed-extensions: png,jpg,webp
+    base-path: ./uploads/avatar
+  document:
+    max-file-size-bytes: 52428800     # 50MB
+    allowed-extensions: pdf,doc,docx
+    base-path: ./uploads/document
+```
+
+### 13.2 設定類別
+
+```java
+@Data
+@ConfigurationProperties(prefix = "file-storage")
+public class FileStorageProperties {
+    private long maxFileSizeBytes;
+    private List<String> allowedExtensions;
+    private String basePath;
+}
+```
+
+### 13.3 註冊 Bean
+
+```java
+@Configuration
+public class FileStorageConfig {
+
+    @Bean
+    @ConfigurationProperties("file-storage.avatar")
+    public FileStorageProperties avatarProps() {
+        return new FileStorageProperties();
+    }
+
+    @Bean
+    @ConfigurationProperties("file-storage.document")
+    public FileStorageProperties docProps() {
+        return new FileStorageProperties();
+    }
+
+    @Bean
+    public FileStorageService avatarStorage(FileStorageProperties p) {
+        return new FileStorageServiceImpl(p);
+    }
+
+    @Bean
+    public FileStorageService documentStorage(FileStorageProperties p) {
+        return new FileStorageServiceImpl(p);
+    }
+}
+```
+
+### 13.4 Controller 注入
+
+```java
+@RestController
+@RequestMapping("/api/upload")
+public class UploadController {
+
+    private final FileStorageService avatarStorage;
+    private final FileStorageService documentStorage;
+
+    public UploadController(
+            @Qualifier("avatarStorage") FileStorageService avatarStorage,
+            @Qualifier("documentStorage") FileStorageService documentStorage) {
+        this.avatarStorage = avatarStorage;
+        this.documentStorage = documentStorage;
+    }
+
+    @PostMapping("/avatar")
+    public ResponseEntity<String> uploadAvatar(@RequestParam MultipartFile file) {
+        avatarStorage.save(file);
+        return ResponseEntity.ok("大頭貼上傳成功");
+    }
+
+    @PostMapping("/document")
+    public ResponseEntity<String> uploadDocument(@RequestParam MultipartFile file) {
+        documentStorage.save(file);
+        return ResponseEntity.ok("文件上傳成功");
+    }
+}
+```
+
+### 比較
+
+| 維度 | 單一 Bean | 多 Bean |
+|------|-----------|---------|
+| 檔案大小 | 全域共用 | 各自獨立（avatar 1MB、document 50MB） |
+| 允許副檔名 | 全域共用 | 各自獨立 |
+| 儲存路徑 | 單一路徑 | 各自目錄 |
+| 維護性 | 改一處動全身 | 隔離互不干擾 |
+
+---
+
+## 重點整理
 
 1. **上傳架構**：`Uploader` 介面 → `MultipartFileUploader` 實作 → 注入 Service → Controller 呼叫
 2. **檔名安全**：UUID 隨機檔名 + Tika 真實類型驗證
@@ -508,3 +601,4 @@ List<UploadResult> results = uploader.upload(files, "reviews");
 4. **下載**：`Resource` + RFC 5987 `filename*=UTF-8''` 處理中文
 5. **錯誤處理**：`@ControllerAdvice` 統一捕獲檔案例外
 6. **設定集中**：`FileProperties` + `@ConfigurationProperties`
+7. **多 Bean 支援**：`@Qualifier` 注入不同設定的 `FileStorageService`
