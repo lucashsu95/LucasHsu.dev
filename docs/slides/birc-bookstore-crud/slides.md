@@ -242,6 +242,52 @@ Get-Content .env | ForEach-Object {
 </div>
 
 ---
+---
+
+# 1. DTO 改成 record
+
+以前常見 Lombok `@Data` class。現在 CreateRequest / Response 是 Java record。
+
+| | class + setter | record |
+| --- | --- | --- |
+| 可變性 | 呼叫端可改欄位 | 建立後就不能改 |
+| 樣板 | getter/setter/equals 自己產 | 編譯器給 |
+| 定位 | 容易跟 Entity 長得太像 | 一眼看出這是 API 語言 |
+
+<div v-click class="mt-5 text-sm">
+  Entity 仍是 class（JPA 要無參建構子與可變欄位）。record 留給進出 API 的資料。
+</div>
+
+---
+---
+
+# .env 怎麼接到 Spring
+
+`.env` 裡這些鍵，Spring 用 `${}` 讀：
+
+```
+DB_URL=jdbc:mysql://127.0.0.1:3306/bookstore
+DB_USERNAME=bookstore_user
+DB_PASSWORD=...
+CORS_ALLOWED_ORIGIN_PATTERNS=
+```
+
+`application.yml`：
+
+```yaml
+spring:
+  datasource:
+    url: ${DB_URL:jdbc:mysql://localhost:3306/app}
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:}
+app:
+  cors:
+    allowed-origin-patterns: ${CORS_ALLOWED_ORIGIN_PATTERNS:}
+```
+
+容器裡的 App 不讀你筆電上的 `.env` 檔，讀 compose 的 `environment:`。所以 compose 才要再寫一次 `DB_URL: jdbc:mysql://db:3306/${DB_DATABASE}`（host 是服務名 `db`，不是 127.0.0.1）。
+
+---
 layout: section
 transition: fade
 ---
@@ -539,200 +585,6 @@ public record BookResponse(
 <div class="mt-5 text-sm">
   額外業務（例如依 ISBN 查重）寫在 <code>BookService</code> / <code>BookServiceImpl</code>，不要重寫那四個 CRUD。
 </div>
-
----
-transition: fade
----
-
-# 登入：`birc add auth`
-
-現在我們來加入登入功能，birc-generator提供了快速加入登入模組的方法。
-
-再加入前我們可以先做git儲存
-```bash
-git init
-git add .
-git commit -m "init"
-```
-
-接著加入 auth 模組
-```bash
-birc add auth
-```
-
-可以看到新增了檔些檔案。
-
----
-transition: fade
-class: scroll-y
----
-
-# 登入：`birc add auth`
-
-**產生假資料**
-```bash
-birc make:seeder AuthUser
-```
-
-再 `AuthUserSeeder.java` 加入這三行，密碼沒有人在明文儲存的
-```java
-package tw.edu.ntub.birc.bookstore.seeder;
-
-import lombok.RequiredArgsConstructor;
-
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Component;
-import tw.edu.ntub.birc.bookstore.databaseconfig.dao.AuthUserDAO;
-import tw.edu.ntub.birc.bookstore.databaseconfig.entity.AuthUser;
-
-@Component
-@RequiredArgsConstructor
-public class AuthUserSeeder implements Seeder {
-
-    private final AuthUserDAO authUserDAO;
-    private final PasswordEncoder passwordEncoder;
-
-    @Override
-    public void run() {
-        if (authUserDAO.count() > 0) {
-            return;
-        }
-        AuthUser authUser = new AuthUser();
-        authUser.setAccount("tester");
-        authUser.setPassword(passwordEncoder.encode("secert"));
-        authUser.setDisplayName("tester");
-        authUserDAO.save(authUser);
-    }
-}
-```
-
-最後執行 seed 把資料產生到 db
-```bash
-birc seed
-```
-
----
----
-
-# 登入：`birc add auth`
-
-**測試**
-
-```bash
-curl -i -X POST http://localhost:8080/api/auth/login \
-  -H 'Content-Type: application/json' \
-  -d '{"account":"tester","password":"secret"}'
-curl -s http://localhost:8080/api/auth/me -H "Authorization: Bearer $TOKEN"
-```
-
-<div class="mt-4 grid grid-cols-3 gap-3 text-sm">
-  <div class="concept-card"><strong>會生什麼</strong><br><span class="muted">auth_users 、 /api/auth/login 、 /api/auth/me、JWT filter</span></div>
-  <div class="concept-card"><strong>Token 在標頭</strong><br><span class="muted">成功看 <code>X-Auth-Token</code>，body 只回帳號與權限</span></div>
-  <div class="concept-card"><strong>之後帶 Bearer</strong><br><span class="muted">沒帶 → 401。權限不夠 → 403</span></div>
-</div>
-
-<div class="mt-3 text-sm muted">
-  <code>JWT_SECRET</code> 寫在 <code>.env</code>。
-</div>
-
----
-transition: fade
-class: scroll-y
----
-
-# 權限：`birc add permission`
-
-能成功登入之後，就是權限的部分了，相信各位都知道什麼時候要回401，什麼時候要回403
-
-```bash
-birc add permission
-```
-
-會生 `RequirePermission.java`、`PermissionAspect.java`、`SecurityUtils.java`，gradle 接 `spring-boot-starter-aspectj`。
-
-**產生資料表 auth_roles 的假資料**
-
-現在來產生權限角色的資料
-
-```bash
-birc make:seeder AuthRole
-```
-
-```java
-AuthRole user = new AuthRole();
-user.setPosition("ROLE_USER");
-authRoleDAO.save(user);
-
-AuthRole admin = new AuthRole();
-admin.setPosition("ROLE_ADMIN");
-authRoleDAO.save(admin);
-```
-執行 seed 指令來產生資料到 DB 裡
-```bash
-birc seed
-```
-
----
-layout: default
----
-
-# 權限：`birc add permission`
-
-**使用方式**
-有提供有很多種方式，越複雜的專案越會使用 `SecurityUtils` 這樣的功具來管理大量的角色權限
-```java
-// 單一權限
-@RequirePermission("ROLE_ADMIN")
-// 多重權限（任一符合即可，等同 hasAnyAuthority）
-@RequirePermission({"ROLE_ADMIN", "ROLE_AUDITOR"})
-// 搭配 SecurityUtils 常用組合
-@RequirePermission(SecurityUtils.HAS_SYS_ADMIN_AUTHORITY)
-```
-
-**在 Controller 使用**
-
-那我們現在回到Book的Controller.java 先簡單的為刪除api 加上權限的驗證
-
-```java
-@RequirePermission("ROLE_ADMIN")
-@DeleteMapping("/{id}")
-public Result<Void> delete(@PathVariable Long id) { ... }
-```
-
----
----
-
-# 課堂：刪書要有 admin
-
-先 POST 一本當砲灰，用回傳的 id（不要刪 seed 的 1）：
-
-```bash
-# 1. 沒帶 token → 403 缺少權限
-curl -i -X DELETE http://localhost:8080/api/books/$ID
-
-# 2. tester 沒有 ROLE_ADMIN，帶 JWT 仍 403
-# 從 X-Auth-Token 抄到 TOKEN=
-curl -si -X POST http://localhost:8080/api/auth/login \
-  -H 'Content-Type: application/json' \
-  -d '{"account":"tester","password":"secret"}'
-curl -i -X DELETE http://localhost:8080/api/books/$ID \
-  -H "Authorization: Bearer $TOKEN"
-```
-
-<div class="mt-3 text-sm accent-orange">
-  舊 JWT 的 claim 不會跟著 UPDATE 變，一定要再登入一次。
-</div>
-
-**SecurityUtils 常用權限組合**
-
-```java
-// 系統管理員或一般管理員
-public static final String HAS_SYS_ADMIN_AUTHORITY =
-    "hasAnyAuthority('ROLE_SYS_ADMIN', 'ROLE_ADMIN')";
-// 管理員 + 承辦人
-public static final String HAS_ADMIN_AND_HANDLER_AUTHORITY =
-    "hasAnyAuthority('ROLE_SYS_ADMIN', 'ROLE_ADMIN', 'ROLE_AUDITOR')";
-```
 
 ---
 layout: section
@@ -1134,6 +986,200 @@ docker compose exec db mysql -u"$DB_USER" -p"$DB_PASSWORD" "$DB_DATABASE" \
 </div>
 
 ---
+transition: fade
+---
+
+# 登入：`birc add auth`
+
+現在我們來加入登入功能，birc-generator提供了快速加入登入模組的方法。
+
+再加入前我們可以先做git儲存
+```bash
+git init
+git add .
+git commit -m "init"
+```
+
+接著加入 auth 模組
+```bash
+birc add auth
+```
+
+可以看到新增了檔些檔案。
+
+---
+transition: fade
+class: scroll-y
+---
+
+# 登入：`birc add auth`
+
+**產生假資料**
+```bash
+birc make:seeder AuthUser
+```
+
+再 `AuthUserSeeder.java` 加入這三行，密碼沒有人在明文儲存的
+```java
+package tw.edu.ntub.birc.bookstore.seeder;
+
+import lombok.RequiredArgsConstructor;
+
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
+import tw.edu.ntub.birc.bookstore.databaseconfig.dao.AuthUserDAO;
+import tw.edu.ntub.birc.bookstore.databaseconfig.entity.AuthUser;
+
+@Component
+@RequiredArgsConstructor
+public class AuthUserSeeder implements Seeder {
+
+    private final AuthUserDAO authUserDAO;
+    private final PasswordEncoder passwordEncoder;
+
+    @Override
+    public void run() {
+        if (authUserDAO.count() > 0) {
+            return;
+        }
+        AuthUser authUser = new AuthUser();
+        authUser.setAccount("tester");
+        authUser.setPassword(passwordEncoder.encode("secert"));
+        authUser.setDisplayName("tester");
+        authUserDAO.save(authUser);
+    }
+}
+```
+
+最後執行 seed 把資料產生到 db
+```bash
+birc seed
+```
+
+---
+---
+
+# 登入：`birc add auth`
+
+**測試**
+
+```bash
+curl -i -X POST http://localhost:8080/api/auth/login \
+  -H 'Content-Type: application/json' \
+  -d '{"account":"tester","password":"secret"}'
+curl -s http://localhost:8080/api/auth/me -H "Authorization: Bearer $TOKEN"
+```
+
+<div class="mt-4 grid grid-cols-3 gap-3 text-sm">
+  <div class="concept-card"><strong>會生什麼</strong><br><span class="muted">auth_users 、 /api/auth/login 、 /api/auth/me、JWT filter</span></div>
+  <div class="concept-card"><strong>Token 在標頭</strong><br><span class="muted">成功看 <code>X-Auth-Token</code>，body 只回帳號與權限</span></div>
+  <div class="concept-card"><strong>之後帶 Bearer</strong><br><span class="muted">沒帶 → 401。權限不夠 → 403</span></div>
+</div>
+
+<div class="mt-3 text-sm muted">
+  <code>JWT_SECRET</code> 寫在 <code>.env</code>。
+</div>
+
+---
+transition: fade
+class: scroll-y
+---
+
+# 權限：`birc add permission`
+
+能成功登入之後，就是權限的部分了，相信各位都知道什麼時候要回401，什麼時候要回403
+
+```bash
+birc add permission
+```
+
+會生 `RequirePermission.java`、`PermissionAspect.java`、`SecurityUtils.java`，gradle 接 `spring-boot-starter-aspectj`。
+
+**產生資料表 auth_roles 的假資料**
+
+現在來產生權限角色的資料
+
+```bash
+birc make:seeder AuthRole
+```
+
+```java
+AuthRole user = new AuthRole();
+user.setPosition("ROLE_USER");
+authRoleDAO.save(user);
+
+AuthRole admin = new AuthRole();
+admin.setPosition("ROLE_ADMIN");
+authRoleDAO.save(admin);
+```
+執行 seed 指令來產生資料到 DB 裡
+```bash
+birc seed
+```
+
+---
+layout: default
+---
+
+# 權限：`birc add permission`
+
+**使用方式**
+有提供有很多種方式，越複雜的專案越會使用 `SecurityUtils` 這樣的功具來管理大量的角色權限
+```java
+// 單一權限
+@RequirePermission("ROLE_ADMIN")
+// 多重權限（任一符合即可，等同 hasAnyAuthority）
+@RequirePermission({"ROLE_ADMIN", "ROLE_AUDITOR"})
+// 搭配 SecurityUtils 常用組合
+@RequirePermission(SecurityUtils.HAS_SYS_ADMIN_AUTHORITY)
+```
+
+**在 Controller 使用**
+
+那我們現在回到Book的Controller.java 先簡單的為刪除api 加上權限的驗證
+
+```java
+@RequirePermission("ROLE_ADMIN")
+@DeleteMapping("/{id}")
+public Result<Void> delete(@PathVariable Long id) { ... }
+```
+
+---
+---
+
+# 課堂：刪書要有 admin
+
+先 POST 一本當砲灰，用回傳的 id（不要刪 seed 的 1）：
+
+```bash
+# 1. 沒帶 token → 403 缺少權限
+curl -i -X DELETE http://localhost:8080/api/books/$ID
+
+# 2. tester 沒有 ROLE_ADMIN，帶 JWT 仍 403
+# 從 X-Auth-Token 抄到 TOKEN=
+curl -si -X POST http://localhost:8080/api/auth/login \
+  -H 'Content-Type: application/json' \
+  -d '{"account":"tester","password":"secret"}'
+curl -i -X DELETE http://localhost:8080/api/books/$ID \
+  -H "Authorization: Bearer $TOKEN"
+```
+
+<div class="mt-3 text-sm accent-orange">
+  舊 JWT 的 claim 不會跟著 UPDATE 變，一定要再登入一次。
+</div>
+
+**SecurityUtils 常用權限組合**
+
+```java
+// 系統管理員或一般管理員
+public static final String HAS_SYS_ADMIN_AUTHORITY =
+    "hasAnyAuthority('ROLE_SYS_ADMIN', 'ROLE_ADMIN')";
+// 管理員 + 承辦人
+public static final String HAS_ADMIN_AND_HANDLER_AUTHORITY =
+    "hasAnyAuthority('ROLE_SYS_ADMIN', 'ROLE_ADMIN', 'ROLE_AUDITOR')";
+```
+
+---
 layout: section
 transition: fade
 ---
@@ -1239,268 +1285,6 @@ curl -i -X POST http://localhost:8080/api/books \
 ---
 ---
 
-# 改 Book Entity 加關聯
-
-```java {7-10}
-@Entity
-@Table(name = "book")
-public class Book {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "author_id")
-    private Author author;
-
-    // ... 其他欄位
-}
-```
-
-<div class="mt-5 terminal-card text-sm">
-  <code>@ManyToOne</code> 建立多對一關聯，<code>.LAZY</code> 避免預載入。
-</div>
-
----
-
-# 改 BookResponse 加 authorName
-
-```java{4}
-public record BookResponse(
-    Long id,
-    String title,
-    String authorName,  // ← 新增
-    String isbn,
-    BigDecimal price,
-    LocalDate publishedAt
-) {}
-```
-
-<div class="mt-5 terminal-card text-sm">
-  birc 不會自己改 record，要手動加 <code>authorName</code> 欄位。
-</div>
-
----
-
-# 改 BookMapper 加 @Mapping
-
-```java {3,4,6,7}
-@Mapper(componentModel = "spring")
-public interface BookMapper {
-    @Mapping(source = "author.name", target = "authorName")  // ← 讀出來：帶作者名稱
-    BookResponse toResponse(Book book);
-
-    @Mapping(target = "author", ignore = true)               // ← 寫進去：先不處理
-    Book toEntity(BookCreateRequest request);
-}
-```
-
-<div class="mt-5 text-sm">
-  帶出 <code>authorName</code> 就走這條：宣告在 Mapper，Service 不用寫程式。
-</div>
-
-<div v-click class="mt-3 text-sm accent-orange">
-  但 <code>ignore = true</code> 表示 POST 設不了作者——新建的書永遠沒有 Author。下一頁補起來。
-</div>
-
----
-
-# POST 怎麼指定作者
-
-前端只會傳一個 id，不會傳整個 Author 物件。兩邊各改一處：
-
-<div class="grid grid-cols-2 gap-4 mt-4">
-
-<div class="good-card">
-<span class="label">① DTO 收 authorId</span>
-
-```java
-public record BookCreateRequest(
-    String title,
-    // isbn, price, publishedAt...
-    Long authorId   // 不填就是沒作者
-) {}
-```
-
-</div>
-
-<div class="good-card">
-<span class="label">② Mapper 換成 Author</span>
-
-```java
-@Mapping(source = "authorId", target = "author")
-Book toEntity(BookCreateRequest request);
-
-default Author toAuthor(Long id) {
-    if (id == null) return null;
-    Author a = new Author();
-    a.setId(id);        // 只要 FK
-    return a;
-}
-```
-
-</div>
-
-</div>
-
-<div class="mt-4 text-sm muted">
-  不用去查 <code>author</code> 表：寫入 <code>book</code> 只需要 <code>author_id</code> 這個值。傳不存在的 id 會被 FK constraint 擋下來，想先回 400 就自己在 Service 檢查一次。
-</div>
-
----
-
-# 改 BookDAO 加 @EntityGraph
-
-```java {2-6}
-public interface BookDAO extends BaseDAO<Book> {
-    @EntityGraph(attributePaths = {"author"})
-    List<Book> findAll();
-
-    @EntityGraph(attributePaths = {"author"})
-    Optional<Book> findById(Long id);
-}
-```
-
-<div class="mt-5 terminal-card text-sm">
-  <code>@EntityGraph</code> 覆蓋預設 fetch 策略，一次載入關聯資料，避免 N+1 查詢問題。方法簽名不變，Service 不用改。
-</div>
-
----
-
-# Optional：情境是「查一本不存在的書」
-
-打 `GET /api/books/999`，資料庫裡沒有 999。同一件事，兩種寫法：
-
-<div class="grid grid-cols-2 gap-4 mt-4">
-
-<div class="bad-card">
-<span class="label">❌ 回 null</span>
-
-```java
-Book book = dao.findByIdOrNull(id);
-// book 是 null
-return mapper.toResponse(book);
-```
-
-</div>
-
-<div class="good-card">
-<span class="label">✅ 回 Optional</span>
-
-```java
-Book book = dao.findById(id)
-    .orElseThrow(() ->
-        new NotFoundException("Book: " + id));
-return mapper.toResponse(book);
-```
-
-</div>
-
-</div>
-
-<div class="grid grid-cols-2 gap-4 mt-3 text-sm">
-  <div class="text-center"><span class="accent-orange">NullPointerException → 500</span><br><span class="muted">前端看到伺服器爆掉，還要翻 log</span></div>
-  <div class="text-center"><span class="accent-green">NotFoundException → 404</span><br><span class="muted">前端知道是「沒這本書」</span></div>
-</div>
-
-<div v-click class="mt-4 text-sm muted">
-  重點不是「Optional 比較潮」，是 <code>null</code> 可以被忘記檢查、<code>Optional</code> 不行——你非得寫 <code>orElseThrow</code> 之類的收尾才拿得到 <code>Book</code>。
-</div>
-
----
-
-# 忘記檢查 vs 編譯器逼你檢查
-
-<div class="grid grid-cols-2 gap-4 mt-4">
-
-<div class="bad-card">
-<span class="label">❌ 每個呼叫端都要自己記得</span>
-
-```java
-Book book = dao.findByIdOrNull(id);
-if (book == null) {            // 漏寫就是 500
-    throw new NotFoundException("...");
-}
-return book.getTitle();
-```
-
-</div>
-
-<div class="good-card">
-<span class="label">✅ 漏寫就編不過</span>
-
-```java
-// Optional<Book> 沒有 getTitle()
-return dao.findById(id)
-    .map(Book::getTitle)       // 有才轉換
-    .orElse("(未知書名)");      // 沒有給預設值
-```
-
-</div>
-
-</div>
-
-<div class="mt-5 grid grid-cols-3 gap-3 text-sm">
-  <div class="concept-card"><strong>orElseThrow</strong><br><span class="muted">沒有就丟例外 → CRUD 用這個</span></div>
-  <div class="concept-card"><strong>orElse</strong><br><span class="muted">沒有就給預設值</span></div>
-  <div class="concept-card"><strong>ifPresent</strong><br><span class="muted">有才做，沒有就跳過</span></div>
-</div>
-
-<div class="mt-4 text-sm muted">
-  <code>BaseServiceImpl.getById</code> 已經是第一種，所以 Book 的 CRUD 你一行都不用寫。
-</div>
-
----
-
-# 那 author 是 null 呢？
-
-情境換了：書存在，但 `author_id` 沒填。這次**不要**自己用 Optional。
-
-<div class="grid grid-cols-2 gap-4 mt-4">
-
-<div class="bad-card">
-<span class="label">❌ 在 Service 手動拆關聯</span>
-
-```java
-BookResponse res = mapper.toResponse(book);
-String name = Optional
-    .ofNullable(book.getAuthor())
-    .map(Author::getName)
-    .orElse(null);
-// 再想辦法塞回 record…（record 不能改）
-```
-
-</div>
-
-<div class="good-card">
-<span class="label">✅ 交給 Mapper 宣告</span>
-
-```java
-@Mapping(source = "author.name",
-         target = "authorName")
-BookResponse toResponse(Book book);
-
-// Service 只有這行
-return mapper.toResponse(book);
-```
-
-</div>
-
-</div>
-
-<div class="mt-4 terminal-card text-sm">
-  <p class="terminal-label">為什麼右邊不會 NPE</p>
-  <div class="font-mono text-xs">authorName = book.getAuthor() == null ? null : book.getAuthor().getName();</div>
-  <div class="mt-2">MapStruct 產的 code 自己補了 null 檢查。沒作者就是 <code>authorName: null</code>，你不用再包一層。</div>
-</div>
-
-<div v-click class="mt-4 text-sm accent-orange">
-  分工：<code>Optional</code> 管「這筆資料存不存在」，<code>@Mapping</code> 管「欄位怎麼搬」。不是二選一，是用在不同地方。
-</div>
-
----
----
-
 # Spotless：只管格式，不改邏輯
 
 `--yes` 會在專案根放 `spotless_formatter.xml`（Eclipse 4.31），Gradle 接 Spotless plugin。
@@ -1537,107 +1321,6 @@ Windows：`.\gradlew.bat spotlessApply`
 </div>
 
 ---
-layout: section
-transition: fade
----
-
-<p class="font-mono accent-orange">PART 05</p>
-
-# 這次改版要講的
-
-<p class="font-mono muted">record、上傳、Docker、Profiles、CORS</p>
-
----
----
-
-# 1. DTO 改成 record
-
-以前常見 Lombok `@Data` class。現在 CreateRequest / Response 是 Java record。
-
-| | class + setter | record |
-| --- | --- | --- |
-| 可變性 | 呼叫端可改欄位 | 建立後就不能改 |
-| 樣板 | getter/setter/equals 自己產 | 編譯器給 |
-| 定位 | 容易跟 Entity 長得太像 | 一眼看出這是 API 語言 |
-
-<div v-click class="mt-5 text-sm">
-  Entity 仍是 class（JPA 要無參建構子與可變欄位）。record 留給進出 API 的資料。
-</div>
-
----
----
-
-# 2. 帶著做：`birc add file-upload`
-
-```bash
-birc add file-upload
-```
-
-會多 `FileStorageProperties`、`FileStorageService`、`FileUploadController`（`/api/files`），還有副檔名 / 路徑檢查。沒有自己的表。
-
-`SecurityConfig` 再放行一次，否則上傳也是 401：
-
-```java
-"/api/files",
-"/api/files/**"
-```
-
-改完**重啟** `bootRun`。這是課堂捷徑，正式環境不要把寫入長期放在 PUBLIC_PATHS。
-
-<div class="mt-4 text-sm muted">
-  檔丟在 <code>./uploads</code>（<code>FILE_STORAGE_PATH</code>）。不要 commit 進去。yml 插在 <code># birc-generator:config-anchor</code> 後面，那一行不要刪。
-</div>
-
----
----
-
-# 傳一張、再拿回來
-
-找一張小的 png（副檔名跟內容都要是 png，改名騙不過）：
-
-```bash
-curl -s -F "file=@./cover.png" http://localhost:8080/api/files
-# {"result":true,"data":"a1b2c3d4-....png"}
-```
-
-回傳的是**存進去的檔名**（UUID + 原副檔名），不是你上傳時的名字。接下來用這個檔名：
-
-```bash
-curl -s -o cover-back.png http://localhost:8080/api/files/a1b2c3d4-....png
-curl -s -X DELETE          http://localhost:8080/api/files/a1b2c3d4-....png
-```
-
-<div class="mt-4 text-sm muted">
-  Controller 這裡回 <code>Map</code>，不是 <code>Result</code>。路徑是 <code>GET/DELETE /api/files/{*storedFileName}</code>，後面整段當檔名，所以可以帶子目錄。
-</div>
-
----
----
-
-# 它幫你擋了什麼
-
-`store()` 依序檢查，過了才寫碟：
-
-| 擋什麼 | 例外 |
-| --- | --- |
-| 空檔 / 沒帶 file | `EmptyFileException` |
-| 超過 `max-file-size-bytes`（預設 10MB） | `FileTooLargeException` |
-| 副檔名不在白名單 | `FileExtensionIllegalException` |
-| 副檔名是 png、開頭卻不是 `89 50 4E 47` | 同一個例外（內容對不上） |
-| 路徑想跳出 `./uploads`（`..`） | `InvalidStoredFileException` |
-
-課堂驗一次「改名攻擊」：把一段文字存成 `fake.png` 再上傳，應該被擋。
-
-```bash
-echo hello > fake.png
-curl -i -F "file=@./fake.png" http://localhost:8080/api/files
-```
-
-<div class="mt-3 text-sm muted">
-  旋鈕都在 <code>FileStorageProperties</code>。要收書封用 <code>store(file, "covers")</code>，回傳 <code>covers/uuid.png</code>，不要自己拼路徑。
-</div>
-
----
 ---
 
 # 3. 三種啟動，選一個
@@ -1666,35 +1349,6 @@ curl -i -F "file=@./fake.png" http://localhost:8080/api/files
 <div class="mt-4 text-sm accent-orange">
   沒加 <code>-f</code> 就是那份沒有 <code>.prod</code> 的。課堂不要 <code>docker compose up</code> 把 app 也建進去，第一次會卡很久。
 </div>
-
----
----
-
-# .env 怎麼接到 Spring
-
-`.env` 裡這些鍵，Spring 用 `${}` 讀：
-
-```
-DB_URL=jdbc:mysql://127.0.0.1:3306/bookstore
-DB_USERNAME=bookstore_user
-DB_PASSWORD=...
-CORS_ALLOWED_ORIGIN_PATTERNS=
-```
-
-`application.yml`：
-
-```yaml
-spring:
-  datasource:
-    url: ${DB_URL:jdbc:mysql://localhost:3306/app}
-    username: ${DB_USERNAME:root}
-    password: ${DB_PASSWORD:}
-app:
-  cors:
-    allowed-origin-patterns: ${CORS_ALLOWED_ORIGIN_PATTERNS:}
-```
-
-容器裡的 App 不讀你筆電上的 `.env` 檔，讀 compose 的 `environment:`。所以 compose 才要再寫一次 `DB_URL: jdbc:mysql://db:3306/${DB_DATABASE}`（host 是服務名 `db`，不是 127.0.0.1）。
 
 ---
 ---

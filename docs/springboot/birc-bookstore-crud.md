@@ -96,6 +96,10 @@ password: ${DB_PASSWORD:}
 
 這堂不要 `docker compose up` 把 app 一起 build。Dockerfile 會在容器裡跑 Gradle，課堂會空等。
 
+### record
+
+進出 API 用 record。Entity 不出 Controller。細節見 [Record DTO](/springboot/record-dto-projection)。
+
 ## 一次生齊：`birc make`
 
 | 你想做的事                                           | 指令                                              |
@@ -217,34 +221,6 @@ curl -s -X POST http://localhost:8080/api/books \
 ```
 
 先打一次 `GET /api/books`：看得到 `birc seed` 的示範資料，才表示 seed 真的生效了，空陣列就是漏跑。接著 `GET /api/books/1`、`PUT`、`DELETE`。id 不存在會走專案內的 `NotFoundException`，回 404。
-
-## ValidGroup
-
-`--yes` 會生 `validation/ValidGroup.java`，提供 `Create`、`Update`、`Delete`、`Submit` 四組 Bean Validation group。
-
-`birc make Book --fields ...` 之後：
-
-- Controller：`@Validated(ValidGroup.Create.class)` / `@Validated(ValidGroup.Update.class)`
-- `BookCreateRequest` 每個欄位：`@NotNull(groups = {ValidGroup.Create.class, ValidGroup.Update.class})`
-
-要用 `@Validated`，不是 `@Valid`；`@Valid` 不支援 groups。預設新增與更新都必填，若更新可省略 `isbn`，將它的 group 改成只含 `Create` 即可。
-
-`Delete` 和 `Submit` 是預留的群組；預設 CRUD 不需要使用，但不要刪除介面。
-
-缺少 `title` 的 POST 會回 400，不會進入 Service。若要統一驗證錯誤格式，需另外處理 `MethodArgumentNotValidException`。
-
-## Spotless
-
-`--yes` 會加入 Spotless，負責 Java 排版、清除 unused import、移除行尾空白與補檔案結尾換行。不負責命名或潛在 bug。
-
-```bash
-./gradlew spotlessApply    # 直接改檔，commit 前跑
-./gradlew spotlessCheck    # 只檢查，CI 用這個
-```
-
-Windows 用 `.\gradlew.bat`。CI 不要跑 `spotlessApply`。
-
-細節見 [@Valid 用於 Service 層](/springboot/valid-service)、[Checkstyle / PMD / Spotless](/springboot/code-quality-tools)。
 
 ## 進階：加上作者（Author）
 
@@ -696,131 +672,6 @@ Book book = bookDAO.findById(id)
 
 Optional 的重點：**不要回傳 null，用 Optional 包起來**。呼叫端決定怎麼處理「沒有」的情況。
 
-## 改版要記住的幾件事
-
-### record
-
-進出 API 用 record。Entity 不出 Controller。細節見 [Record DTO](/springboot/record-dto-projection)。
-
-### 檔案上傳
-
-```bash
-birc add file-upload
-```
-
-會生 `FileStorageService`、`FileUploadController`（`/api/files`）。yml 插在 `# birc-generator:config-anchor` 後面，那一行不要刪。沒有自己的表。檔丟在 `./uploads`（`FILE_STORAGE_PATH`），不要 commit。`SecurityConfig` 再放行 `/api/files`、`/api/files/**`，然後重啟。
-
-路徑是 `GET/DELETE /api/files/{*storedFileName}`，後面整段當檔名，**支援子目錄**（如 `covers/uuid.png`）。
-
-```bash
-curl -s -F "file=@./cover.png" http://localhost:8080/api/files
-# {"result":true,"data":"a1b2c3d4-....png"}
-curl -s -o cover-back.png http://localhost:8080/api/files/a1b2c3d4-....png
-curl -s -X DELETE          http://localhost:8080/api/files/a1b2c3d4-....png
-# 子目錄範例：
-curl -s -o cover-back.png http://localhost:8080/api/files/covers/a1b2c3d4-....png
-curl -s -X DELETE          http://localhost:8080/api/files/covers/a1b2c3d4-....png
-```
-
-回傳的是存進去的檔名（UUID + 原副檔名）。Controller 這裡回 `Map`，不是 `Result`。
-
-`store()` 會擋空檔、超過 10MB、副檔名不在白名單、副檔名跟檔頭簽章對不起來（`fake.png` 其實是文字）、以及路徑想跳出 `./uploads`。要收書封用 `store(file, "covers")`，回傳 `covers/uuid.png`，不要自己拼路徑。
-
-### Docker 與 Profiles
-
-三種啟動，選一個：
-
-| 何時 | 怎麼開 | 誰在跑 App |
-| --- | --- | --- |
-| 每天寫程式（這堂課） | `docker compose up -d db` 再 `./gradlew bootRun` | 本機 JVM。只起 MySQL，改完重啟、能 debug |
-| 本機整包容器 | `docker compose up`（讀 `docker-compose.yml`） | 容器裡 **build** 映像，慢；db 對外映射、開 JDWP 5005 |
-| 測試機 / 正式機 | `docker compose -f docker-compose.prod.yml up -d` | 從 Harbor **pull**，不在機器上 build；db 不對外開 port |
-
-沒加 `-f` 就是那份沒有 `.prod` 的。課堂不要 `docker compose up` 把 app 也建進去。
-
-產生器沒有生 `application-dev.yml` / `application-prod.yml`。共用設定在一份 `application.yml`，值用 `${DB_URL}` 這類環境變數。
-
-| 檔                        | `SPRING_PROFILES_ACTIVE` |
-| ------------------------- | ------------------------ |
-| `docker-compose.yml`      | `dev`                    |
-| `docker-compose.prod.yml` | `prod`                   |
-
-本機 `bootRun` 的 `DB_URL` host 是 `127.0.0.1`。容器裡的 App 讀 compose 的 `environment:`，host 必須是服務名 `db`。密碼不要寫進映像，放 `.env`。
-
-之後若要依環境關 Swagger、改 log，再自己加 `application-prod.yml`。優先順序與切換方式見 [Spring Profiles](/springboot/spring-profiles)。
-
-### Harbor 與 GitLab CI
-
-實驗室的 CI 都會把映像推到 Harbor。沒有 `birc harbor`——Harbor 是倉庫，指令是生 `.gitlab-ci.yml`：
-
-```bash
-birc add gitlab-ci
-```
-
-模板帶進這個專案的名字，不是寫死 teaching-platform。`IMAGE_NAME` 是 `$HARBOR_URL/<專案>/<專案>_app`，伺服器目錄 `/opt/<專案>/backend`。Harbor 位址、帳密、要部哪台機器，全部是 GitLab CI/CD Variables，不要寫進檔，也不要用 Docker build-arg。
-
-會問 GitLab 專案路徑（CI 只在那個 repo 跑，可留空）。
-
-| 變數 | 用途 |
-| --- | --- |
-| `HARBOR_URL` / `HARBOR_USER` / `HARBOR_PASSWORD` | 登入 Harbor、push 映像 |
-| `BETA_*`（USER / HOST / SSH_KEY / SSH_HOST_KEY） | `development` 部到測試機 |
-| `ONLINE_*` | `main` 部到正式機 |
-
-`SSH_HOST_KEY` 用 `ssh-keyscan -t ed25519 <host>` 的輸出，沒填 pipeline 直接失敗。Password 走 stdin 餵 `docker login`。
-
-`development` / MR → `build-beta` + `deploy-beta`（tag `beta-<sha>`）。`main` → `build-online`，`deploy-online` 要在 GitLab 手動按。
-
-CI 只改伺服器 `.env` 的 `APP_TAG`。第一次部署要自己先填 `DOCKER_IMAGE`，再讓 pipeline 去 `pull` / `up -d --no-deps app`。
-
-### Sentry
-
-```bash
-birc add sentry
-```
-
-DSN 從 [sentry.ntubimdbirc.tw](https://sentry.ntubimdbirc.tw/) 複製，放 `.env` 的 `SENTRY_DSN`，空白 = 不送。compose prod 已經接了這個鍵。
-
-```
-SENTRY_DSN=https://xxxx@sentry.ntubimdbirc.tw/1
-```
-
-會送沒接住的 5xx。4xx、`NotFoundException`、驗證失敗會被 `SentryConfig` 的 `BeforeSendCallback` 丟掉——`ProjectException` 看 `getHttpStatus()` 是不是 4xx，之後自己加例外不必改這份設定。
-
-課堂驗：暫時丟 `RuntimeException`，Sentry 要看得到；`GET /api/books/999` 的 404 不該出現。
-
-### CORS
-
-只改環境變數，重啟 Spring：
-
-```bash
-CORS_ALLOWED_ORIGIN_PATTERNS=http://localhost:5173
-```
-
-多個來源用逗號分隔，不要尾斜線或 `*`。`SecurityConfig` 已經接上 `CorsConfigurationSource`，不要再用 `WebMvcConfigurer` 設定 CORS。
-
-空白 = 不開放跨來源。curl 不受 CORS 限制；瀏覽器從 Vite 打 API 才會。
-
-## 指令速查
-
-```bash
-npm i -g birc-generator
-birc create bookstore --yes && cd bookstore
-docker compose up -d db
-set -a && source .env && set +a
-
-birc make Book --fields title:String,isbn:String,price:BigDecimal,publishedAt:LocalDate --migration --seed
-# 改 PUBLIC_PATHS、CORS
-birc migrate
-birc seed
-./gradlew bootRun
-./gradlew spotlessApply
-```
-
-之後加模組：`birc add auth`、`birc add permission`、`birc add file-upload`、`birc add gitlab-ci`（Harbor）、`birc add sentry`。`--yes` 已經有 OpenAPI，不必再 add。沒有 `birc login` / `birc checkin` 這兩個指令。
-
-進階：`birc db:wipe` 只跑 `flywayClean`，把 schema 清掉不重建；要清掉再建回來才是 `birc migrate:reset --force`。
-
 ## 登入：`birc add auth`
 
 `--yes` 不會勾帳號登入。要自己加：
@@ -970,6 +821,131 @@ public static final String HAS_ADMIN_AND_HANDLER_AUTHORITY =
 @DeleteMapping("/{id}")
 public Result<Void> delete(@PathVariable Long id) { ... }
 ```
+
+## ValidGroup
+
+`--yes` 會生 `validation/ValidGroup.java`，提供 `Create`、`Update`、`Delete`、`Submit` 四組 Bean Validation group。
+
+`birc make Book --fields ...` 之後：
+
+- Controller：`@Validated(ValidGroup.Create.class)` / `@Validated(ValidGroup.Update.class)`
+- `BookCreateRequest` 每個欄位：`@NotNull(groups = {ValidGroup.Create.class, ValidGroup.Update.class})`
+
+要用 `@Validated`，不是 `@Valid`；`@Valid` 不支援 groups。預設新增與更新都必填，若更新可省略 `isbn`，將它的 group 改成只含 `Create` 即可。
+
+`Delete` 和 `Submit` 是預留的群組；預設 CRUD 不需要使用，但不要刪除介面。
+
+缺少 `title` 的 POST 會回 400，不會進入 Service。若要統一驗證錯誤格式，需另外處理 `MethodArgumentNotValidException`。
+
+## Spotless
+
+`--yes` 會加入 Spotless，負責 Java 排版、清除 unused import、移除行尾空白與補檔案結尾換行。不負責命名或潛在 bug。
+
+```bash
+./gradlew spotlessApply    # 直接改檔，commit 前跑
+./gradlew spotlessCheck    # 只檢查，CI 用這個
+```
+
+Windows 用 `.\gradlew.bat`。CI 不要跑 `spotlessApply`。
+
+細節見 [@Valid 用於 Service 層](/springboot/valid-service)、[Checkstyle / PMD / Spotless](/springboot/code-quality-tools)。
+
+## 改版要記住的幾件事
+
+### Docker 與 Profiles
+
+三種啟動，選一個：
+
+| 何時 | 怎麼開 | 誰在跑 App |
+| --- | --- | --- |
+| 每天寫程式（這堂課） | `docker compose up -d db` 再 `./gradlew bootRun` | 本機 JVM。只起 MySQL，改完重啟、能 debug |
+| 本機整包容器 | `docker compose up`（讀 `docker-compose.yml`） | 容器裡 **build** 映像，慢；db 對外映射、開 JDWP 5005 |
+| 測試機 / 正式機 | `docker compose -f docker-compose.prod.yml up -d` | 從 Harbor **pull**，不在機器上 build；db 不對外開 port |
+
+沒加 `-f` 就是那份沒有 `.prod` 的。課堂不要 `docker compose up` 把 app 也建進去。
+
+產生器沒有生 `application-dev.yml` / `application-prod.yml`。共用設定在一份 `application.yml`，值用 `${DB_URL}` 這類環境變數。
+
+| 檔                        | `SPRING_PROFILES_ACTIVE` |
+| ------------------------- | ------------------------ |
+| `docker-compose.yml`      | `dev`                    |
+| `docker-compose.prod.yml` | `prod`                   |
+
+本機 `bootRun` 的 `DB_URL` host 是 `127.0.0.1`。容器裡的 App 讀 compose 的 `environment:`，host 必須是服務名 `db`。密碼不要寫進映像，放 `.env`。
+
+之後若要依環境關 Swagger、改 log，再自己加 `application-prod.yml`。優先順序與切換方式見 [Spring Profiles](/springboot/spring-profiles)。
+
+### Harbor 與 GitLab CI
+
+實驗室的 CI 都會把映像推到 Harbor。沒有 `birc harbor`——Harbor 是倉庫，指令是生 `.gitlab-ci.yml`：
+
+```bash
+birc add gitlab-ci
+```
+
+模板帶進這個專案的名字，不是寫死 teaching-platform。`IMAGE_NAME` 是 `$HARBOR_URL/<專案>/<專案>_app`，伺服器目錄 `/opt/<專案>/backend`。Harbor 位址、帳密、要部哪台機器，全部是 GitLab CI/CD Variables，不要寫進檔，也不要用 Docker build-arg。
+
+會問 GitLab 專案路徑（CI 只在那個 repo 跑，可留空）。
+
+| 變數 | 用途 |
+| --- | --- |
+| `HARBOR_URL` / `HARBOR_USER` / `HARBOR_PASSWORD` | 登入 Harbor、push 映像 |
+| `BETA_*`（USER / HOST / SSH_KEY / SSH_HOST_KEY） | `development` 部到測試機 |
+| `ONLINE_*` | `main` 部到正式機 |
+
+`SSH_HOST_KEY` 用 `ssh-keyscan -t ed25519 <host>` 的輸出，沒填 pipeline 直接失敗。Password 走 stdin 餵 `docker login`。
+
+`development` / MR → `build-beta` + `deploy-beta`（tag `beta-<sha>`）。`main` → `build-online`，`deploy-online` 要在 GitLab 手動按。
+
+CI 只改伺服器 `.env` 的 `APP_TAG`。第一次部署要自己先填 `DOCKER_IMAGE`，再讓 pipeline 去 `pull` / `up -d --no-deps app`。
+
+### Sentry
+
+```bash
+birc add sentry
+```
+
+DSN 從 [sentry.ntubimdbirc.tw](https://sentry.ntubimdbirc.tw/) 複製，放 `.env` 的 `SENTRY_DSN`，空白 = 不送。compose prod 已經接了這個鍵。
+
+```
+SENTRY_DSN=https://xxxx@sentry.ntubimdbirc.tw/1
+```
+
+會送沒接住的 5xx。4xx、`NotFoundException`、驗證失敗會被 `SentryConfig` 的 `BeforeSendCallback` 丟掉——`ProjectException` 看 `getHttpStatus()` 是不是 4xx，之後自己加例外不必改這份設定。
+
+課堂驗：暫時丟 `RuntimeException`，Sentry 要看得到；`GET /api/books/999` 的 404 不該出現。
+
+### CORS
+
+只改環境變數，重啟 Spring：
+
+```bash
+CORS_ALLOWED_ORIGIN_PATTERNS=http://localhost:5173
+```
+
+多個來源用逗號分隔，不要尾斜線或 `*`。`SecurityConfig` 已經接上 `CorsConfigurationSource`，不要再用 `WebMvcConfigurer` 設定 CORS。
+
+空白 = 不開放跨來源。curl 不受 CORS 限制；瀏覽器從 Vite 打 API 才會。
+
+## 指令速查
+
+```bash
+npm i -g birc-generator
+birc create bookstore --yes && cd bookstore
+docker compose up -d db
+set -a && source .env && set +a
+
+birc make Book --fields title:String,isbn:String,price:BigDecimal,publishedAt:LocalDate --migration --seed
+# 改 PUBLIC_PATHS、CORS
+birc migrate
+birc seed
+./gradlew bootRun
+./gradlew spotlessApply
+```
+
+之後加模組：`birc add auth`、`birc add permission`、`birc add file-upload`、`birc add gitlab-ci`（Harbor）、`birc add sentry`。`--yes` 已經有 OpenAPI，不必再 add。沒有 `birc login` / `birc checkin` 這兩個指令。
+
+進階：`birc db:wipe` 只跑 `flywayClean`，把 schema 清掉不重建；要清掉再建回來才是 `birc migrate:reset --force`。
 
 ## 延伸閱讀
 
