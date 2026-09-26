@@ -24,13 +24,16 @@ import CssRwdLab from '../../.vitepress/theme/components/CssRwdLab.vue'
 
 # CSS 響應式網頁設計（RWD）
 
-RWD 不是替幾種裝置各做一版，而是讓內容在一段連續尺寸中都能閱讀與操作。本篇統一採 **mobile-first**：先寫窄版基礎，再用 `min-width` 或 range syntax 逐步增強。
+RWD 的核心不是為幾種裝置各寫一版。重點是讓內容在**一段連續尺寸**中都能閱讀、操作。這裡統一用 **mobile-first**：先把窄版寫好，再用 `min-width` 或 range syntax 逐步加強。
 
-> **實作順序**
-> 1. 正確 viewport
-> 2. 流動尺寸與可換行版面
-> 3. 內容真的撐不住時才加斷點
-> 4. 圖片、偏好設定與互動一起測試
+## 實作四步走
+
+1. **正確 viewport** — 沒有它，media query 與字級都會跑掉
+2. **流動尺寸 + 可換行版面** — 先建立彈性基底
+3. **內容真的撐不住才加斷點** — 別預設立陣營
+4. **圖片、偏好設定、互動一起測** — 斷點只是其中一環
+
+---
 
 ## 簡報版本
 
@@ -40,25 +43,29 @@ RWD 不是替幾種裝置各做一版，而是讓內容在一段連續尺寸中�
   description="用 mobile-first、容器查詢與流動尺寸建立韌性版面"
 />
 
+---
+
 ## 互動實驗室
 
-拖曳預覽寬度，觀察 container query、`clamp()` 與偏好模擬如何改變卡片。
+拖曳預覽寬度，直接看 container query、`clamp()` 與偏好模擬如何改變卡片。
 
 <CssRwdLab />
 
-## Viewport 設定
+---
 
-行動瀏覽器若缺少 viewport meta，可能先用較寬的虛擬版面再縮小，導致 media query 與文字尺寸不如預期：
+## Viewport：別讓瀏覽器猜
+
+行動瀏覽器若缺少 viewport meta，會先用較寬的虛擬版面再縮小，導致 media query 與文字尺寸全跑掉：
 
 ```html
 <meta name="viewport" content="width=device-width, initial-scale=1">
 ```
 
-不要加入 `user-scalable=no` 或過度限制 maximum-scale；使用者需要放大內容。VitePress 通常已提供這項設定，獨立 HTML 頁面則應自行確認。
+**別加 `user-scalable=no`、別過度限制 `maximum-scale`** — 使用者需要放大。VitePress 通常已內建；獨立 HTML 請自行確認。
 
-## Mobile-first 基礎
+---
 
-先讓窄版可用，再於內容需要時增加欄位：
+## Mobile-first：先把窄版寫死
 
 ```css
 .cards {
@@ -80,11 +87,13 @@ RWD 不是替幾種裝置各做一版，而是讓內容在一段連續尺寸中�
 }
 ```
 
-斷點應來自內容：逐步縮放畫面，當行長過長、控制項擠壓或版面失衡時才記錄斷點，不要把裝置名稱當規格。
+斷點從**內容**來：逐步縮放，行長過長、控制項擠壓、版面失衡時才記錄。別拿 iPhone、iPad、Desktop 當規格。
 
-## Media query range syntax
+---
 
-Media Queries Level 4 可用比較運算子，讀法更接近數學：
+## Media Query Range Syntax：讀起來像數學
+
+Media Queries Level 4 引入比較運算子：
 
 ```css
 @media (width >= 40rem) {
@@ -96,11 +105,13 @@ Media Queries Level 4 可用比較運算子，讀法更接近數學：
 }
 ```
 
-傳統 `(min-width: 40rem)` 仍有效。避免同時寫相鄰的 `max-width: 64rem` 與 `min-width: 64rem`，因為邊界可能重疊；range syntax 可清楚表達包含關係。
+傳統 `(min-width: 40rem)` 仍可用。但避免寫相鄰的 `max-width: 64rem` 和 `min-width: 64rem` — 邊界會重疊。range syntax 能清楚表達包含關係，一眼看懂。
 
-## 流動尺寸與 `clamp()`
+---
 
-不是每個尺寸變化都需要斷點。`clamp(min, preferred, max)` 可讓值在上下限間連續調整：
+## `clamp()`：不是每個尺寸都要斷點
+
+`clamp(min, preferred, max)` 讓值在上下限間**連續**調整，不用堆 media query：
 
 ```css
 :root {
@@ -117,11 +128,13 @@ main {
 }
 ```
 
-字級 preferred 值最好包含 `rem` 與 viewport 單位，而非只用 `vw`，以保留縮放行為。
+**關鍵**：字級的 preferred 值請混用 `rem` + `vw`。只用 `vw` 會殺掉使用者縮放行為。
 
-## Container queries
+---
 
-Media query 看 viewport；可重用元件更常需要看**自己的容器**：
+## Container Queries：元件看自己的容器
+
+Media query 看 viewport；但可重用元件常要看**自己的可用空間**：
 
 ```css
 .card-region {
@@ -140,7 +153,9 @@ Media query 看 viewport；可重用元件更常需要看**自己的容器**：
 }
 ```
 
-可搭配 container query units：
+同一張卡片，放在 sidebar 320px、main 700px，各自變版 — 不用寫一堆 viewport breakpoint。
+
+也可搭配 container query units：
 
 ```css
 .card__title {
@@ -148,11 +163,11 @@ Media query 看 viewport；可重用元件更常需要看**自己的容器**：
 }
 ```
 
-`cqi` 是 query container inline size 的 1%。沒有合適容器時會依 small viewport 尺寸回退，因此仍要設定合理上下限。
+`cqi` = query container inline size 的 1%。找不到合適容器時會退回 small viewport，所以上下限仍要設。
 
-## 使用者偏好與輸入能力
+---
 
-RWD 也包含環境與偏好，不只是寬度：
+## 使用者偏好：RWD 不只管寬度
 
 ```css
 @media (prefers-reduced-motion: reduce) {
@@ -179,11 +194,13 @@ RWD 也包含環境與偏好，不只是寬度：
 }
 ```
 
-hover 效果不能是取得資訊或操作的唯一方式；觸控裝置可能沒有 hover，鍵盤則需要 `:focus-visible`。
+**hover 不能是唯一管道** — 觸控裝置沒有 hover，鍵盤操作需 `:focus-visible`。
 
-## 響應式圖片
+---
 
-只寫 `max-width: 100%` 能避免溢出，但不會避免手機下載過大的圖片。
+## 響應式圖片：別讓手機下載 4K
+
+`max-width: 100%` 只擋溢出，**擋不住手機下載過大圖片**。
 
 ### 同一構圖，不同解析度
 
@@ -201,7 +218,7 @@ hover 效果不能是取得資訊或操作的唯一方式；觸控裝置可能�
 >
 ```
 
-瀏覽器根據 `srcset`、`sizes`、viewport 與像素密度選檔。提供 `width`、`height` 可預留比例，降低 layout shift。
+瀏覽器根據 `srcset`、`sizes`、viewport 與像素密度自動選檔。加上 `width`、`height` 可預留比例，**直接減少 layout shift**。
 
 ### 不同構圖或格式
 
@@ -213,9 +230,11 @@ hover 效果不能是取得資訊或操作的唯一方式；觸控裝置可能�
 </picture>
 ```
 
-`picture` 適合 art direction 或格式選擇；alt 放在 `img` 上並描述內容，不描述「圖片」本身。
+`picture` 用於 **art direction**（裁切不同）或**格式選擇**；alt 寫在 `img` 上，描述內容而非「這是一張圖片」。
 
-## 韌性細節
+---
+
+## 韌性細節：這幾行省掉無數 bug
 
 ```css
 img, video {
@@ -234,23 +253,31 @@ img, video {
 }
 ```
 
-- 避免固定高度包住可換行文字。
-- 測試 200% 文字縮放、320 CSS px 寬度與橫向模式。
-- 觸控目標要有足夠尺寸與間距。
-- 不要依 CSS 視覺重排破壞 DOM、Tab 與閱讀順序。
+- 別用固定高度包可換行文字
+- 必測：200% 文字縮放、320 CSS px 寬度、橫向模式
+- 觸控目標給足尺寸與間距
+- 別靠 CSS 視覺重排破壞 DOM、Tab 與閱讀順序
 
-## 練習
+---
 
-1. 將單欄卡片在內容需要時增強為兩欄，全程只用 mobile-first。
-2. 用 range syntax 寫出 `40rem ≤ width < 64rem`。
-3. 讓 card 依容器而非 viewport 切換圖文排列。
-4. 為 hero 圖加入 `srcset`、`sizes`、固有寬高與有意義 alt。
+## 練習（照著做一次比看十遍強）
+
+1. 單欄卡片 → 內容需要時變兩欄，全程 mobile-first
+2. 用 range syntax 寫出 `40rem ≤ width < 64rem`
+3. 讓 card 依容器而非 viewport 切換圖文排列
+4. 為 hero 圖加入 `srcset`、`sizes`、固有寬高與有意義 alt
+
+---
 
 ## FAQ
 
-- **斷點要用 px 還是 rem？** 兩者皆可；`rem` 常能更貼近使用者字級設定。重點是由內容決定並一致使用。
-- **Container query 可取代 media query 嗎？** 不完全。頁面級環境用 media query；元件局部版面用 container query。
-- **mobile-first 是否一定較快？** 不保證效能，但 cascade 通常較清楚；網路效能仍要處理圖片、字型與 JavaScript。
+**斷點用 px 還是 rem？** 都行。`rem` 較貼近使用者字級設定。關鍵是**由內容決定、一致使用**。
+
+**Container query 能取代 media query？** 不能。頁面級環境用 media query；元件局部版面用 container query。
+
+**mobile-first 較快？** 不保證。但 cascade 較清楚。網路效能仍要處理圖片、字型與 JS。
+
+---
 
 ## 延伸閱讀
 
