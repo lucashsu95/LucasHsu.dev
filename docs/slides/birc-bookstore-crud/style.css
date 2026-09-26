@@ -17,6 +17,20 @@
   letter-spacing: 0.01em;
 }
 
+.slidev-layout.scroll-y {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.slidev-layout.scroll-y::-webkit-scrollbar {
+  width: 6px;
+}
+
+.slidev-layout.scroll-y::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+}
+
 .font-mono,
 code,
 pre {
@@ -55,11 +69,21 @@ pre {
   letter-spacing: 0.12em;
 }
 
-.accent-blue { color: var(--java-blue); }
-.accent-orange { color: var(--java-orange); }
-.accent-green { color: var(--term-green); }
-.accent-spring { color: var(--spring-green); }
-.muted { color: #8b949e; }
+.accent-blue {
+  color: var(--java-blue);
+}
+.accent-orange {
+  color: var(--java-orange);
+}
+.accent-green {
+  color: var(--term-green);
+}
+.accent-spring {
+  color: var(--spring-green);
+}
+.muted {
+  color: #8b949e;
+}
 
 .concept-card {
   border: 1px solid #30363d;
@@ -98,8 +122,12 @@ pre {
   letter-spacing: 0.06em;
 }
 
-.bad-card .label { color: #f85149; }
-.good-card .label { color: var(--spring-green); }
+.bad-card .label {
+  color: #f85149;
+}
+.good-card .label {
+  color: var(--spring-green);
+}
 
 .bad-card .slidev-code,
 .good-card .slidev-code {

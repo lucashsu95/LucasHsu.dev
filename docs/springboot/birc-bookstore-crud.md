@@ -21,7 +21,7 @@ head:
 
 # birc 實戰：從 npm 到 Book CRUD
 
-> TL;DR：`npm i -g birc-generator` 之後，`birc create bookstore --yes` 開專案（含 ValidGroup、Spotless），`birc make Book --fields ... --migration --seed` 一次產出 CRUD 各層、Flyway migration 與 Seeder。進資料庫是兩步：`birc migrate` 建表、`birc seed` 塞示範列。CORS 只改 `CORS_ALLOWED_ORIGIN_PATTERNS`。
+> TL;DR：`npm i -g birc-generator` 之後，`birc create bookstore --yes` 開專案（含 ValidGroup、Spotless），`birc make Book --fields ... --migration --seed` 一次產出 CRUD 各層、Flyway migration 與 Seeder。產生檔案後，進資料庫要兩步：`migrate` 建表、`seed` 塞資料。CORS 只改 `CORS_ALLOWED_ORIGIN_PATTERNS`。
 
 本機只起 MySQL（Docker），App 用 `./gradlew bootRun`。
 
@@ -37,7 +37,7 @@ head:
 - Docker（`docker compose version`）
 - 一個空目錄，不要建在別人的 git repo 裡
 
-Java 21 第一次跑 Gradle 時會用 toolchain 補，不必先糾結 IDE。
+Java 25 第一次跑 Gradle 時會用 toolchain 補，不必先糾結 IDE。
 
 ## 安裝
 
@@ -134,7 +134,7 @@ birc migrate
 
 檔名 parse 成表名：`create_book_table` → 表 `book`。寫 `create_books_table` 會建成 `books`，跟 Entity 對不上。
 
-Flyway Community 不支援 rollback；需要修正時請新增一筆遷移。重建資料庫可用 `birc migrate:reset --force`（`flywayClean` + `migrate`）——表會回來，示範列不會，要再跑一次 `birc seed`。
+Flyway Community 不支援 rollback；需要修正時請新增一筆遷移。執行 `birc migrate:rollback` 會提示你建立 forward migration。重建資料庫可用 `birc migrate:reset --force`（`flywayClean` + `migrate`）——表會回來，示範列不會，要再跑一次 `birc seed`。
 
 只想清空 schema、不重建，用 `birc db:wipe`（只跑 `flywayClean`）。
 
@@ -186,22 +186,16 @@ birc seed                                       # 塞示範列
 
 ## 課堂必改：否則 API 全是 401
 
-`create` 一定帶 `SecurityConfig`。除了 swagger 與 health，其餘要登入。今天還沒做登入，先放行書本 API。
-
-檔案：`modules/bookstore-config/src/main/java/tw/edu/ntub/birc/bookstore/config/SecurityConfig.java`
+在 `modules/bookstore-config/src/main/java/tw/edu/ntub/birc/bookstore/config/` 建立一個 `BookSecurityCustomizer.java`
 
 ```java
-public static final List<String> PUBLIC_PATHS = List.of(
-        "/swagger-ui/**",
-        "/v3/api-docs/**",
-        "/actuator/health",
-        "/actuator/health/**",
-        "/api/books",
-        "/api/books/**"
-);
+default void customize(HttpSecurity http) throws Exception {
+    http.authorizeHttpRequests(auth -> auth
+        .requestMatchers(HttpMethod.GET, "/api/books", "/api/books/**").permitAll()
+        .requestMatchers("/api/books/**").hasAuthority("ROLE_ADMIN")
+    );
+}
 ```
-
-這是課堂捷徑。正式專案不要把寫入端點長期放在這裡。
 
 ## 啟動並打 API
 
@@ -716,11 +710,16 @@ birc add file-upload
 
 會生 `FileStorageService`、`FileUploadController`（`/api/files`）。yml 插在 `# birc-generator:config-anchor` 後面，那一行不要刪。沒有自己的表。檔丟在 `./uploads`（`FILE_STORAGE_PATH`），不要 commit。`SecurityConfig` 再放行 `/api/files`、`/api/files/**`，然後重啟。
 
+路徑是 `GET/DELETE /api/files/{*storedFileName}`，後面整段當檔名，**支援子目錄**（如 `covers/uuid.png`）。
+
 ```bash
 curl -s -F "file=@./cover.png" http://localhost:8080/api/files
-# {"success":true,"data":"a1b2c3d4-....png"}
+# {"result":true,"data":"a1b2c3d4-....png"}
 curl -s -o cover-back.png http://localhost:8080/api/files/a1b2c3d4-....png
 curl -s -X DELETE          http://localhost:8080/api/files/a1b2c3d4-....png
+# 子目錄範例：
+curl -s -o cover-back.png http://localhost:8080/api/files/covers/a1b2c3d4-....png
+curl -s -X DELETE          http://localhost:8080/api/files/covers/a1b2c3d4-....png
 ```
 
 回傳的是存進去的檔名（UUID + 原副檔名）。Controller 這裡回 `Map`，不是 `Result`。
@@ -820,6 +819,8 @@ birc seed
 
 之後加模組：`birc add auth`、`birc add permission`、`birc add file-upload`、`birc add gitlab-ci`（Harbor）、`birc add sentry`。`--yes` 已經有 OpenAPI，不必再 add。沒有 `birc login` / `birc checkin` 這兩個指令。
 
+進階：`birc db:wipe` 只跑 `flywayClean`，把 schema 清掉不重建；要清掉再建回來才是 `birc migrate:reset --force`。
+
 ## 登入：`birc add auth`
 
 `--yes` 不會勾帳號登入。要自己加：
@@ -830,12 +831,49 @@ birc add auth
 
 會生 `auth_users` 表、`POST /api/auth/login`、`GET /api/auth/me`，以及掛 JWT 的 filter。專案已經有 `V1__create_book_table.sql` 的話，把產生的 `V1__create_auth_users_table.sql` 改成還沒用過的版本號，再 `birc migrate`。
 
-測試裡的 tester 走 `create-drop`，進不了你的 MySQL。自己寫一個 `AuthUserSeeder`，`birc seed` 才跑：`account=tester`、`password=passwordEncoder.encode("secret")`、`authorities="user:read"`。
+測試裡的 tester 走 `create-drop`，進不了你的 MySQL。自己寫一個 `AuthUserSeeder`，`birc seed` 才跑：`account=tester`、`password=passwordEncoder.encode("secret")`。權限由 `birc add permission` 產生的角色管理，Seeder 不設定 authorities。
 
 ```bash
+birc make:seeder
+```
+
+```java {4,14,21}
+package tw.edu.ntub.birc.bookstore.seeder;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
+import tw.edu.ntub.birc.bookstore.databaseconfig.dao.AuthUserDAO;
+import tw.edu.ntub.birc.bookstore.databaseconfig.entity.AuthUser;
+
+@RequiredArgsConstructor
+public class AuthUserSeeder implements Seeder {
+
+  private final AuthUserDAO authUserDAO;
+  private final PasswordEncoder passwordEncoder;
+
+  @Override
+  public void run() {
+    if (authUserDAO.count() > 0) {
+      return;
+    }
+    AuthUser authUser = new AuthUser();
+    authUser.setAccount("tester");
+    authUser.setPassword(passwordEncoder.encode("secret"));
+    authUser.setDisplayName("tester");
+    authUserDAO.save(authUser);
+  }
+}
+```
+
+```bash
+birc seed
+
 curl -i -X POST http://localhost:8080/api/auth/login \
   -H 'Content-Type: application/json' \
   -d '{"account":"tester","password":"secret"}'
+
+curl -s http://localhost:8080/api/auth/me -H "Authorization: Bearer $TOKEN"
 ```
 
 成功時 JWT 在回應標頭 `X-Auth-Token`，不在 body。之後的請求用 `Authorization: Bearer <token>`。沒帶 → 401；權限不夠 → 403。
@@ -845,23 +883,66 @@ curl -i -X POST http://localhost:8080/api/auth/login \
 
 ## 權限：`birc add permission`
 
-沒有完整 RBAC。這組只給你一個註解、一個 Aspect。要先有 `birc add auth`。
+沒有完整 RBAC。這組給你 `@RequirePermission`（支援多權限 OR 邏輯）、`PermissionAspect`、`SecurityUtils`（常用權限組合常數）。要先有 `birc add auth`。
+
+**安裝**
 
 ```bash
 birc add permission
 ```
 
-會生 `RequirePermission` 跟 `PermissionAspect`，gradle 接 `spring-boot-starter-aspectj`。標在 Controller 方法上，`value` 是權限代碼字串，例如 `"book:delete"`。Aspect 從 SecurityContext 拿出 authorities **原樣比對**，沒有 `ROLE_` 前綴。
+會生 `RequirePermission.java`、`PermissionAspect.java`、`SecurityUtils.java`，gradle 接 `spring-boot-starter-aspectj`。
 
-`auth_users.authorities` 是逗號分隔（`user:read,book:delete`），跟 JWT claim 同一組字串。Aspect 不查資料庫，只看 token。改表之後要再登入一次，舊 JWT 不會變。
+---
 
-課堂在 `BookController.delete` 加上 `@RequirePermission("book:delete")`，重啟 `bootRun`。先 POST 一本當砲灰，用回傳的 id（不要刪 seed 的 1），依序打：
+**產生資料表 auth_roles 的假資料**
 
 ```bash
-# 1. 沒帶 token（PUBLIC_PATHS 進得了 Controller）→ 403
+birc make:seeder AuthRole
+```
+
+```java
+AuthRole user = new AuthRole();
+user.setPosition("ROLE_USER");
+authRoleDAO.save(user);
+
+AuthRole admin = new AuthRole();
+admin.setPosition("ROLE_ADMIN");
+authRoleDAO.save(admin);
+```
+
+```bash
+birc seed
+```
+
+---
+
+**使用方式**
+
+```java
+// 單一權限
+@RequirePermission("ROLE_ADMIN")
+// 多重權限（任一符合即可，等同 hasAnyAuthority）
+@RequirePermission({"ROLE_ADMIN", "ROLE_AUDITOR"})
+// 搭配 SecurityUtils 常用組合
+@RequirePermission(SecurityUtils.HAS_SYS_ADMIN_AUTHORITY)
+```
+
+**在 Controller 使用**
+
+```java
+@RequirePermission("ROLE_ADMIN") // [!code ++]
+@DeleteMapping("/{id}")
+public Result<Void> delete(@PathVariable Long id) { ... }
+```
+
+**測試**
+
+```bash
+# 1. 沒帶 token → 403
 curl -i -X DELETE http://localhost:8080/api/books/$ID
 
-# 2. tester 只有 user:read，帶 JWT 仍 403
+# 2. tester 沒有 ROLE_ADMIN，帶 JWT 仍 403
 curl -si -X POST http://localhost:8080/api/auth/login \
   -H 'Content-Type: application/json' \
   -d '{"account":"tester","password":"secret"}'
@@ -869,13 +950,26 @@ curl -i -X DELETE http://localhost:8080/api/books/$ID \
   -H "Authorization: Bearer $TOKEN"
 ```
 
-然後改表，再登入拿新 token：
+**進階用法**
 
-```sql
-UPDATE auth_users SET authorities='user:read,book:delete' WHERE account='tester';
+SecurityUtils 常用權限組合（`@RequirePermission` 或 `@PreAuthorize` 皆可用）
+
+```java
+// SecurityUtils.java（由 birc 產出，請改成專案實際權限代碼）
+public static final String HAS_SYS_ADMIN_AUTHORITY =
+    "hasAnyAuthority('ROLE_SYS_ADMIN', 'ROLE_ADMIN')";
+public static final String HAS_ADMIN_AUTHORITY = HAS_SYS_ADMIN_AUTHORITY;
+public static final String HAS_ADMIN_AND_HANDLER_AUTHORITY =
+    "hasAnyAuthority('ROLE_SYS_ADMIN', 'ROLE_ADMIN', 'ROLE_AUDITOR')";
+// ...
 ```
 
-DELETE 才 200。舊 token 裡還是 `user:read`。
+用法：
+```java
+@RequirePermission(SecurityUtils.HAS_SYS_ADMIN_AUTHORITY)
+@DeleteMapping("/{id}")
+public Result<Void> delete(@PathVariable Long id) { ... }
+```
 
 ## 延伸閱讀
 

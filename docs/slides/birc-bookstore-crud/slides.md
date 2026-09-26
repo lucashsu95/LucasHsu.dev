@@ -156,10 +156,9 @@ birc -h
 | `birc make:seeder` | 只生 Java Seeder |
 | `birc migrate` | 真的跑 `flywayMigrate`，只建表 |
 | `birc seed` | 執行 Seeder，才有示範資料 |
-| `birc add` | auth / clockin / permission / file-upload / gitlab-ci / sentry |
+| `birc add` | auth / permission / file-upload / gitlab-ci / sentry |
 
 ---
-layout: section
 transition: fade
 ---
 
@@ -170,6 +169,7 @@ transition: fade
 <p class="font-mono muted">create 一定是多模組，沒有單模組選項</p>
 
 ---
+transition: fade
 ---
 
 # 建專案
@@ -192,6 +192,7 @@ cd bookstore
 </div>
 
 ---
+transition: fade
 ---
 
 # 資料夾長這樣
@@ -213,6 +214,7 @@ bookstore/
 </div>
 
 ---
+transition: fade
 ---
 
 # 先起資料庫，不要整包 compose up
@@ -251,6 +253,7 @@ transition: fade
 <p class="font-mono muted">骨架用 make，表用 Flyway，示範列用 Seeder，不要靠 ddl-auto:update</p>
 
 ---
+transition: fade
 ---
 
 # 一次生齊：birc make
@@ -269,6 +272,7 @@ transition: fade
 </div>
 
 ---
+transition: fade
 ---
 
 # 課堂指定指令
@@ -298,6 +302,7 @@ birc make Book --fields title:String,isbn:String,price:BigDecimal,publishedAt:Lo
 </div>
 
 ---
+transition: fade
 ---
 
 # 會寫出哪些檔
@@ -317,13 +322,14 @@ birc make Book --fields title:String,isbn:String,price:BigDecimal,publishedAt:Lo
 </div>
 
 ---
+transition: fade
 ---
 
 # `--migration` 直接讀 Entity
 
 `--migration` 直接讀 Entity Java 檔，自動產生對應的 Flyway SQL，不用手改欄位。
 
-Entity 裡的 `@Column`、型別、長度限制都會反映在 SQL 裡。改完 Entity 重跑 `--migration` 就會更新 SQL。
+Entity 裡的 `@Column`、型別、長度限制都會反映在 SQL 裡。**要修改既有表結構，請新增一筆遷移**（例如 `add_...`、`change_...`），不要覆寫既有 migration.
 
 ```bash
 # 一次產出 Entity + Migration SQL + Seeder（檔案而已）
@@ -337,6 +343,7 @@ birc make Book --fields \
 </div>
 
 ---
+transition: fade
 ---
 
 # 套用遷移
@@ -359,6 +366,7 @@ birc migrate
 </div>
 
 ---
+transition: fade
 ---
 
 # 示範資料走 Seeder，不走 SQL
@@ -383,6 +391,7 @@ public class BookSeeder {
 </div>
 
 ---
+transition: fade
 ---
 
 # 完整流程是三步
@@ -408,55 +417,24 @@ birc seed                                       # 才真的塞示範資料
 </div>
 
 ---
----
-
-# Flyway 起不來的那個錯
-
-```
-No Flyway database plugin found to handle jdbc:mysql
-```
-
-Flyway 的資料庫支援是外掛，少了 MySQL 那顆就報這個。修在**根** `build.gradle` 的 `buildscript`：
-
-```groovy
-buildscript {
-    dependencies {
-        classpath "org.flywaydb:flyway-mysql"
-    }
-}
-```
-
-<div class="mt-4 text-sm muted">
-  加在一般的 <code>dependencies</code> 沒用，Flyway 的 Gradle task 跑在 buildscript 的 classpath 上。改完再 <code>birc migrate</code>。
-</div>
-
----
+transition: fade
 ---
 
 # 課堂必改：否則 API 全是 401
 
-`create` 一定帶 `SecurityConfig`。除了 swagger 與 health，其餘 `authenticated()`。
+在 `modules/bookstore-config/src/main/java/tw/edu/ntub/birc/bookstore/config/` 建立一個 `BookSecurityCustomizer.java`
 
-今天還沒做登入，先把書本 API 放行：
-
-```java {6,7}
-public static final List<String> PUBLIC_PATHS = List.of(
-        "/swagger-ui/**",
-        "/v3/api-docs/**",
-        "/actuator/health",
-        "/actuator/health/**",
-        "/api/books",
-        "/api/books/**"
-);
+```java
+default void customize(HttpSecurity http) throws Exception {
+    http.authorizeHttpRequests(auth -> auth
+        .requestMatchers(HttpMethod.GET, "/api/books", "/api/books/**").permitAll()
+        .requestMatchers("/api/books/**").hasAuthority("ROLE_ADMIN")
+    );
+}
 ```
 
-檔在 `modules/bookstore-config/.../config/SecurityConfig.java`。
-
-<div v-click class="mt-4 text-sm accent-orange">
-  這是課堂捷徑。正式專案不要把寫入端點長期放在 PUBLIC_PATHS。
-</div>
-
 ---
+transition: fade
 ---
 
 # 啟動
@@ -474,6 +452,7 @@ Windows：`.\gradlew.bat bootRun`
 </div>
 
 ---
+transition: fade
 ---
 
 # 真的打 CRUD
@@ -496,13 +475,14 @@ curl -s -X PUT http://localhost:8080/api/books/1 -H 'Content-Type: application/j
 curl -s -X DELETE http://localhost:8080/api/books/1
 ```
 
-<div class="mt-4 text-sm muted">成功長 Result.success(data)。id 不存在會 NotFoundException → HTTP 404。</div>
+<div class="mt-4 text-sm muted">成功長 Result.result(data)。id 不存在會 NotFoundException → HTTP 404。</div>
 
 <div v-click class="mt-3 text-sm accent-orange">
   第一條 <code>GET /api/books</code> 就是 <code>birc seed</code> 的驗收：看得到示範資料才算真的塞進去了。空陣列＝漏跑 seed。
 </div>
 
 ---
+transition: fade
 ---
 
 # 請求 / 回應是 record，不是 Entity
@@ -543,17 +523,80 @@ public record BookResponse(
 </div>
 
 ---
+transition: fade
 ---
 
 # 登入：`birc add auth`
 
-沒有 `birc login`。`--yes` 也不會勾登入，要自己加模組：
+現在我們來加入登入功能，birc-generator提供了快速加入登入模組的方法。
 
+再加入前我們可以先做git儲存
+```bash
+git init
+git add .
+git commit -m "init"
+```
+
+接著加入 auth 模組
 ```bash
 birc add auth
-# 已有 V1 建 book 表的話，把 auth_users 那個 SQL 改成還沒用過的版本號
-birc migrate
 ```
+
+可以看到新增了檔些檔案。
+
+---
+transition: fade
+class: scroll-y
+---
+
+# 登入：`birc add auth`
+
+**產生假資料**
+```bash
+birc make:seeder AuthUser
+```
+
+再 `AuthUserSeeder.java` 加入這三行，密碼沒有人在明文儲存的
+```java {4,13,22}
+package tw.edu.ntub.birc.bookstore.seeder;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
+import tw.edu.ntub.birc.bookstore.databaseconfig.dao.AuthUserDAO;
+import tw.edu.ntub.birc.bookstore.databaseconfig.entity.AuthUser;
+
+@RequiredArgsConstructor
+public class AuthUserSeeder implements Seeder {
+
+  private final AuthUserDAO authUserDAO;
+  private final PasswordEncoder passwordEncoder;
+
+  @Override
+  public void run() {
+    if (authUserDAO.count() > 0) {
+      return;
+    }
+    AuthUser authUser = new AuthUser();
+    authUser.setAccount("tester");
+    authUser.setPassword(passwordEncoder.encode("secret"));
+    authUser.setDisplayName("tester");
+    authUserDAO.save(authUser);
+  }
+}
+```
+
+最後執行 seed 把資料產生到 db
+```bash
+birc seed
+```
+
+---
+---
+
+# 登入：`birc add auth`
+
+**測試**
 
 ```bash
 curl -i -X POST http://localhost:8080/api/auth/login \
@@ -563,104 +606,116 @@ curl -s http://localhost:8080/api/auth/me -H "Authorization: Bearer $TOKEN"
 ```
 
 <div class="mt-4 grid grid-cols-3 gap-3 text-sm">
-  <div class="concept-card"><strong>會生什麼</strong><br><span class="muted">auth_users、/api/auth/login、/api/auth/me、JWT filter</span></div>
+  <div class="concept-card"><strong>會生什麼</strong><br><span class="muted">auth_users 、 /api/auth/login 、 /api/auth/me、JWT filter</span></div>
   <div class="concept-card"><strong>Token 在標頭</strong><br><span class="muted">成功看 <code>X-Auth-Token</code>，body 只回帳號與權限</span></div>
   <div class="concept-card"><strong>之後帶 Bearer</strong><br><span class="muted">沒帶 → 401。權限不夠 → 403</span></div>
 </div>
 
 <div class="mt-3 text-sm muted">
-  <code>JWT_SECRET</code> 寫在 <code>.env</code>。測裡的 tester 走 create-drop，進不了 MySQL。自己寫 <code>AuthUserSeeder</code>：<code>tester</code> / <code>encoder.encode("secret")</code> / <code>authorities="user:read"</code>，再 <code>birc seed</code>。
+  <code>JWT_SECRET</code> 寫在 <code>.env</code>。
 </div>
 
 ---
----
-
-# 簽到：`birc add clockin`
-
-沒有 `birc checkin`。這模組不建自己的表，是把中心簽到系統包成 `ClockInClient`：
-
-```bash
-birc add clockin
-```
-
-帳密放環境變數，不要寫進 yml：
-
-```
-BIRC_CLOCKIN_ACCOUNT=...
-BIRC_CLOCKIN_PASSWORD=...
-# 預設 140.131.115.44:50035，要換再設 BIRC_CLOCKIN_BASE_URL
-```
-
-```bash
-curl -s -X POST  http://localhost:8080/api/clockin/{學號}      # 簽到
-curl -s -X PATCH http://localhost:8080/api/clockin/clockout/{帳號}
-curl -s          http://localhost:8080/api/clockin/today        # 今天還沒簽的人
-```
-
-<div class="mt-4 terminal-card text-sm">
-  <div>中心系統一律回 HTTP 200，成敗看 body 的 result。權限過期是 <code>User - AccessDenied</code>，不是 401；Client 會自己重登再打一次。</div>
-  <div class="mt-2 accent-orange">沒放行 <code>/api/clockin/**</code> 會 401。加進 PUBLIC_PATHS，或先裝 auth 再帶 Bearer。</div>
-</div>
-
----
+transition: fade
+class: scroll-y
 ---
 
 # 權限：`birc add permission`
 
-沒有完整 RBAC。這組只給你一個註解、一個 Aspect。要先有 `birc add auth`。
+能成功登入之後，就是權限的部分了，相信各位都知道什麼時候要回401，什麼時候要回403
 
 ```bash
 birc add permission
 ```
 
-會寫 `RequirePermission.java`、`PermissionAspect.java`，gradle 接 `spring-boot-starter-aspectj`。
+會生 `RequirePermission.java`、`PermissionAspect.java`、`SecurityUtils.java`，gradle 接 `spring-boot-starter-aspectj`。
 
-標在 **Controller 方法**上，value 是權限代碼字串：
+**產生資料表 auth_roles 的假資料**
 
-```java
-@RequirePermission("book:delete")
+現在來產生權限角色的資料
+
+```bash
+birc make:seeder AuthRole
 ```
 
-<div class="mt-4 terminal-card text-sm">
-  <div>Aspect 從 SecurityContext 拿出 authorities，<strong>原樣比對</strong>，沒有 <code>ROLE_</code> 前綴。</div>
-  <div class="mt-2"><code>auth_users.authorities</code> 逗號分隔（<code>user:read,book:delete</code>），跟 JWT claim 同一組字串。</div>
-  <div class="mt-2">Aspect 不查資料庫，只看 token。改表之後要<strong>再登入一次</strong>，舊 JWT 不會變。</div>
-</div>
+```java
+AuthRole user = new AuthRole();
+user.setPosition("ROLE_USER");
+authRoleDAO.save(user);
+
+AuthRole admin = new AuthRole();
+admin.setPosition("ROLE_ADMIN");
+authRoleDAO.save(admin);
+```
+執行 seed 指令來產生資料到 DB 裡
+```bash
+birc seed
+```
 
 ---
+layout: default
 ---
 
-# 課堂：刪書要有 `book:delete`
+# 權限：`birc add permission`
 
-`BookController.delete` 加上註解，重啟 `bootRun`：
+**使用方式**
+有提供有很多種方式，越複雜的專案越會使用 `SecurityUtils` 這樣的功具來管理大量的角色權限
+```java
+// 單一權限
+@RequirePermission("ROLE_ADMIN")
+// 多重權限（任一符合即可，等同 hasAnyAuthority）
+@RequirePermission({"ROLE_ADMIN", "ROLE_AUDITOR"})
+// 搭配 SecurityUtils 常用組合
+@RequirePermission(SecurityUtils.HAS_SYS_ADMIN_AUTHORITY)
+```
+
+**在 Controller 使用**
+
+那我們現在回到Book的Controller.java 先簡單的為刪除api 加上權限的驗證
 
 ```java
+@RequirePermission("ROLE_ADMIN")
 @DeleteMapping("/{id}")
-@RequirePermission("book:delete")
 public Result<Void> delete(@PathVariable Long id) { ... }
 ```
+
+---
+---
+
+# 課堂：刪書要有 admin
 
 先 POST 一本當砲灰，用回傳的 id（不要刪 seed 的 1）：
 
 ```bash
-# 1. 沒帶 token → 403 缺少權限: book:delete
+# 1. 沒帶 token → 403 缺少權限
 curl -i -X DELETE http://localhost:8080/api/books/$ID
 
-# 2. tester 只有 user:read，帶 JWT 仍 403
+# 2. tester 沒有 ROLE_ADMIN，帶 JWT 仍 403
 # 從 X-Auth-Token 抄到 TOKEN=
 curl -si -X POST http://localhost:8080/api/auth/login \
   -H 'Content-Type: application/json' \
   -d '{"account":"tester","password":"secret"}'
 curl -i -X DELETE http://localhost:8080/api/books/$ID \
   -H "Authorization: Bearer $TOKEN"
-
-# 3. UPDATE auth_users SET authorities='user:read,book:delete'
-#    WHERE account='tester'; 再 login，DELETE 才 200
 ```
 
 <div class="mt-3 text-sm accent-orange">
   舊 JWT 的 claim 不會跟著 UPDATE 變，一定要再登入一次。
 </div>
+
+---
+---
+
+**SecurityUtils 常用權限組合**
+
+```java
+// 系統管理員或一般管理員
+public static final String HAS_SYS_ADMIN_AUTHORITY =
+    "hasAnyAuthority('ROLE_SYS_ADMIN', 'ROLE_ADMIN')";
+// 管理員 + 承辦人
+public static final String HAS_ADMIN_AND_HANDLER_AUTHORITY =
+    "hasAnyAuthority('ROLE_SYS_ADMIN', 'ROLE_ADMIN', 'ROLE_AUDITOR')";
+```
 
 ---
 layout: section
@@ -676,7 +731,7 @@ transition: fade
 ---
 ---
 
-# 建 Author Entity
+# 建 Author CRUD
 
 ```bash
 birc make Author --fields name:String,birthYear:Integer,nationality:String --migration --seed
@@ -1260,7 +1315,7 @@ birc add file-upload
 
 ```bash
 curl -s -F "file=@./cover.png" http://localhost:8080/api/files
-# {"success":true,"data":"a1b2c3d4-....png"}
+# {"result":true,"data":"a1b2c3d4-....png"}
 ```
 
 回傳的是**存進去的檔名**（UUID + 原副檔名），不是你上傳時的名字。接下來用這個檔名：
@@ -1605,7 +1660,7 @@ birc seed
 ./gradlew spotlessApply
 ```
 
-之後要加模組：`birc add auth`、`birc add permission`、`birc add clockin`、`birc add file-upload`、`birc add gitlab-ci`（Harbor）、`birc add sentry`。`--yes` 已經有 OpenAPI，不必再 add。
+之後要加模組：`birc add auth`、`birc add permission`、`birc add file-upload`、`birc add gitlab-ci`（Harbor）、`birc add sentry`。`--yes` 已經有 OpenAPI，不必再 add。
 
 <div class="mt-3 text-sm muted">
   進階：<code>birc db:wipe</code> 只跑 <code>flywayClean</code>，把 schema 清掉不重建；要清掉再建回來才是 <code>birc migrate:reset --force</code>。
