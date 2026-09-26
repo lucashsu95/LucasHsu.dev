@@ -335,7 +335,7 @@ Entity 裡的 `@Column`、型別、長度限制都會反映在 SQL 裡。**要�
 # 一次產出 Entity + Migration SQL + Seeder（檔案而已）
 birc make Book --fields \
   title:String,isbn:String,price:BigDecimal,publishedAt:LocalDate \
-  --migration --seed
+  --migration --seed --public-read
 ```
 
 <div class="mt-4 text-sm muted">
@@ -424,12 +424,20 @@ transition: fade
 
 在 `modules/bookstore-config/src/main/java/tw/edu/ntub/birc/bookstore/config/` 建立一個 `BookSecurityCustomizer.java`
 
-```java
-default void customize(HttpSecurity http) throws Exception {
-    http.authorizeHttpRequests(auth -> auth
-        .requestMatchers(HttpMethod.GET, "/api/books", "/api/books/**").permitAll()
-        .requestMatchers("/api/books/**").hasAuthority("ROLE_ADMIN")
-    );
+機制都在你產出的專案裡：SecurityConfig 預設是 `anyRequest().authenticated()`
+
+**注意兩件事：**
+1. 沒接 auth 模組時，沒有任何東西能通過 `authenticated()`（沒登入端點、沒 JWT filter），所以沒列進去的路徑一律鎖死——「全開」必須明確列。
+2. 放行路徑只能走 `publicPaths()`，不要在 `customize()` 裡自己調 authorizeHttpRequests（Spring 不准在 anyRequest 之後再加 matcher）。
+
+```java {4}
+public interface BookSecurityCustomizer {
+
+    default List<String> publicPaths() {
+        return List.of("/api/books", "/api/books/**");
+    }
+
+    default void customize(HttpSecurity http) throws Exception {}
 }
 ```
 
@@ -470,8 +478,18 @@ curl -s -X POST http://localhost:8080/api/books \
 
 ```bash
 curl -s http://localhost:8080/api/books          # 先看 seed 的資料在不在
+
 curl -s http://localhost:8080/api/books/1
-curl -s -X PUT http://localhost:8080/api/books/1 -H 'Content-Type: application/json' -d '{ ... }'
+
+curl -s -X PUT http://localhost:8080/api/books/1 \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "title": "Domain-Driven Design",
+    "isbn": "9780321125217",
+    "price": 1800,
+    "publishedAt": "2003-08-30"
+  }'
+
 curl -s -X DELETE http://localhost:8080/api/books/1
 ```
 
@@ -557,32 +575,34 @@ birc make:seeder AuthUser
 ```
 
 再 `AuthUserSeeder.java` 加入這三行，密碼沒有人在明文儲存的
-```java {4,13,22}
+```java
 package tw.edu.ntub.birc.bookstore.seeder;
 
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import tw.edu.ntub.birc.bookstore.databaseconfig.dao.AuthUserDAO;
 import tw.edu.ntub.birc.bookstore.databaseconfig.entity.AuthUser;
 
+@Component
 @RequiredArgsConstructor
 public class AuthUserSeeder implements Seeder {
 
-  private final AuthUserDAO authUserDAO;
-  private final PasswordEncoder passwordEncoder;
+    private final AuthUserDAO authUserDAO;
+    private final PasswordEncoder passwordEncoder;
 
-  @Override
-  public void run() {
-    if (authUserDAO.count() > 0) {
-      return;
+    @Override
+    public void run() {
+        if (authUserDAO.count() > 0) {
+            return;
+        }
+        AuthUser authUser = new AuthUser();
+        authUser.setAccount("tester");
+        authUser.setPassword(passwordEncoder.encode("secert"));
+        authUser.setDisplayName("tester");
+        authUserDAO.save(authUser);
     }
-    AuthUser authUser = new AuthUser();
-    authUser.setAccount("tester");
-    authUser.setPassword(passwordEncoder.encode("secret"));
-    authUser.setDisplayName("tester");
-    authUserDAO.save(authUser);
-  }
 }
 ```
 
@@ -703,9 +723,6 @@ curl -i -X DELETE http://localhost:8080/api/books/$ID \
   舊 JWT 的 claim 不會跟著 UPDATE 變，一定要再登入一次。
 </div>
 
----
----
-
 **SecurityUtils 常用權限組合**
 
 ```java
@@ -734,7 +751,7 @@ transition: fade
 # 建 Author CRUD
 
 ```bash
-birc make Author --fields name:String,birthYear:Integer,nationality:String --migration --seed
+birc make Author --fields name:String,birthYear:Integer,nationality:String --migration --seed --public
 ```
 
 <div class="mt-5 grid grid-cols-2 gap-4 text-sm">
@@ -747,11 +764,13 @@ birc migrate   # 建 author 表
 birc seed      # 塞村上春樹、東野圭吾
 ```
 
-<div class="mt-4 terminal-card text-sm">
-  <div>Seeder 是 Java，長這樣：</div>
-  <div class="mt-2 font-mono text-xs">author.setName("村上春樹"); author.setBirthYear(1949); author.setNationality("日本");</div>
-  <div class="mt-2">遷移檔裡不會有這幾列，別去 SQL 裡找。</div>
-</div>
+**Seeder**
+
+```java
+author.setName("村上春樹");
+author.setBirthYear(1949);
+author.setNationality("日本");
+```
 
 <div v-click class="mt-3 text-sm accent-orange">
   <code>make Author</code> 也生了 Controller，所以多了 <code>/api/authors</code>。要打它就把 <code>/api/authors</code>、<code>/api/authors/**</code> 一起加進 <code>PUBLIC_PATHS</code>，不然一律 401。
@@ -772,86 +791,6 @@ birc migrate
 </div>
 
 ---
----
-
-# 改欄位：先改 Entity，再 `change_*`
-
-`make:migration` 認檔名：`create_` 建表、`add_` 加欄、`change_` 改型別。
-
-`change_*` 出 `MODIFY COLUMN`，**新型別只讀 Entity**。找不到那個欄位就失敗、不寫檔——猜錯的 MODIFY 會截斷既有資料。
-
-課堂自己加一個用不到的欄，專門看遷移長什麼：
-
-```java
-@Column(name = "stock")
-private Integer stock;   // 加在 Book.java，DTO 不用動
-```
-
-```bash
-birc make:migration add_stock_to_book_table
-# 打開 SQL：ADD COLUMN stock INT NULL
-birc migrate
-
-# 把 Integer 改成 Long，再：
-birc make:migration change_stock_on_book_table
-# 打開 SQL：MODIFY COLUMN stock BIGINT NULL
-birc migrate
-```
-
-<div class="mt-3 terminal-card text-sm">
-  <div>故意打 <code>change_foo_on_book_table</code>：Entity 沒有 foo，應失敗、不寫檔。</div>
-  <div class="mt-2 accent-orange">改完 Entity 先停 bootRun 再 migrate。<code>validate</code> 對不上會起不來。</div>
-</div>
-
----
----
-
-# 軟刪：`--soft-delete`
-
-硬刪是 `DELETE FROM`。軟刪是多一欄 `deleted_at`：刪的時候填時間戳，列還在，查詢當它不存在。
-
-`make` 時加旗標，Entity 跟 SQL 一次到位：
-
-```bash
-birc make Review --fields content:String --migration --soft-delete
-birc migrate
-```
-
-Entity 會有 Hibernate `@SoftDelete(columnName = "deleted_at", strategy = TIMESTAMP)`。建表 SQL 多 `deleted_at TIMESTAMP NULL`。`deleteById` 不用改。
-
-<div class="mt-4 terminal-card text-sm">
-  <div>沒有 restore / withTrashed。之後要救回來得自己寫。</div>
-  <div class="mt-2 accent-orange">不要對已有表跑 <code>add_deleted_at_to_book_table</code>：那不是 Entity 欄位，產生器會退回 VARCHAR(50)。軟刪請在 make 時加旗標。</div>
-</div>
-
----
----
-
-# 課堂：刪一筆 Review，再看 SQL
-
-`PUBLIC_PATHS` 放行 `/api/reviews`、`/api/reviews/**`，重啟 `bootRun`：
-
-```bash
-curl -s -X POST http://localhost:8080/api/reviews \
-  -H 'Content-Type: application/json' \
-  -d '{"content":"好看"}'
-curl -s http://localhost:8080/api/reviews
-curl -s -X DELETE http://localhost:8080/api/reviews/1
-curl -s http://localhost:8080/api/reviews      # 空陣列
-curl -s http://localhost:8080/api/reviews/1    # 404
-```
-
-列還在，只是 API 當它沒了：
-
-```bash
-docker compose exec db mysql -u"$DB_USER" -p"$DB_PASSWORD" "$DB_DATABASE" \
-  -e "SELECT id, content, deleted_at FROM review;"
-```
-
-<div class="mt-3 text-sm accent-orange">
-  <code>deleted_at</code> 有值。GET 是 404，不是因為列被清掉。
-</div>
-
 ---
 
 # 改 Book Entity 加關聯
@@ -1114,6 +1053,87 @@ return mapper.toResponse(book);
 </div>
 
 ---
+---
+
+# 改欄位：先改 Entity，再 `change_*`
+
+`make:migration` 認檔名：`create_` 建表、`add_` 加欄、`change_` 改型別。
+
+`change_*` 出 `MODIFY COLUMN`，**新型別只讀 Entity**。找不到那個欄位就失敗、不寫檔——猜錯的 MODIFY 會截斷既有資料。
+
+課堂自己加一個用不到的欄，專門看遷移長什麼：
+
+```java
+@Column(name = "stock")
+private Integer stock;   // 加在 Book.java，DTO 不用動
+```
+
+```bash
+birc make:migration add_stock_to_book_table
+# 打開 SQL：ADD COLUMN stock INT NULL
+birc migrate
+
+# 把 Integer 改成 Long，再：
+birc make:migration change_stock_on_book_table
+# 打開 SQL：MODIFY COLUMN stock BIGINT NULL
+birc migrate
+```
+
+<div class="mt-3 terminal-card text-sm">
+  <div>故意打 <code>change_foo_on_book_table</code>：Entity 沒有 foo，應失敗、不寫檔。</div>
+  <div class="mt-2 accent-orange">改完 Entity 先停 bootRun 再 migrate。<code>validate</code> 對不上會起不來。</div>
+</div>
+
+---
+---
+
+# 軟刪：`--soft-delete`
+
+硬刪是 `DELETE FROM`。軟刪是多一欄 `deleted_at`：刪的時候填時間戳，列還在，查詢當它不存在。
+
+`make` 時加旗標，Entity 跟 SQL 一次到位：
+
+```bash
+birc make Review --fields content:String --migration --soft-delete --public
+birc migrate
+```
+
+Entity 會有 Hibernate `@SoftDelete(columnName = "deleted_at", strategy = TIMESTAMP)`。建表 SQL 多 `deleted_at TIMESTAMP NULL`。`deleteById` 不用改。
+
+<div class="mt-4 terminal-card text-sm">
+  <div>沒有 restore / withTrashed。之後要救回來得自己寫。</div>
+  <div class="mt-2 accent-orange">不要對已有表跑 <code>add_deleted_at_to_book_table</code>：那不是 Entity 欄位，產生器會退回 VARCHAR(50)。軟刪請在 make 時加旗標。</div>
+</div>
+
+---
+---
+
+# 課堂：刪一筆 Review，再看 SQL
+
+`PUBLIC_PATHS` 放行 `/api/reviews`、`/api/reviews/**`，重啟 `bootRun`：
+
+```bash
+curl -s -X POST http://localhost:8080/api/reviews \
+  -H 'Content-Type: application/json' \
+  -d '{"content":"好看"}'
+curl -s http://localhost:8080/api/reviews
+curl -s -X DELETE http://localhost:8080/api/reviews/1
+curl -s http://localhost:8080/api/reviews      # 空陣列
+curl -s http://localhost:8080/api/reviews/1    # 404
+```
+
+列還在，只是 API 當它沒了：
+
+```bash
+docker compose exec db mysql -u"$DB_USER" -p"$DB_PASSWORD" "$DB_DATABASE" \
+  -e "SELECT id, content, deleted_at FROM review;"
+```
+
+<div class="mt-3 text-sm accent-orange">
+  <code>deleted_at</code> 有值。GET 是 404，不是因為列被清掉。
+</div>
+
+---
 layout: section
 transition: fade
 ---
@@ -1214,6 +1234,268 @@ curl -i -X POST http://localhost:8080/api/books \
 
 <div class="mt-5 concept-card text-sm">
   <code>ExceptionHandleController</code> 只攔 <code>ProjectException</code>。驗證失敗走 Spring 預設的 <code>MethodArgumentNotValidException</code>，之後要統一 JSON 再自己加 <code>@ExceptionHandler</code>。
+</div>
+
+---
+---
+
+# 改 Book Entity 加關聯
+
+```java {7-10}
+@Entity
+@Table(name = "book")
+public class Book {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "author_id")
+    private Author author;
+
+    // ... 其他欄位
+}
+```
+
+<div class="mt-5 terminal-card text-sm">
+  <code>@ManyToOne</code> 建立多對一關聯，<code>.LAZY</code> 避免預載入。
+</div>
+
+---
+
+# 改 BookResponse 加 authorName
+
+```java{4}
+public record BookResponse(
+    Long id,
+    String title,
+    String authorName,  // ← 新增
+    String isbn,
+    BigDecimal price,
+    LocalDate publishedAt
+) {}
+```
+
+<div class="mt-5 terminal-card text-sm">
+  birc 不會自己改 record，要手動加 <code>authorName</code> 欄位。
+</div>
+
+---
+
+# 改 BookMapper 加 @Mapping
+
+```java {3,4,6,7}
+@Mapper(componentModel = "spring")
+public interface BookMapper {
+    @Mapping(source = "author.name", target = "authorName")  // ← 讀出來：帶作者名稱
+    BookResponse toResponse(Book book);
+
+    @Mapping(target = "author", ignore = true)               // ← 寫進去：先不處理
+    Book toEntity(BookCreateRequest request);
+}
+```
+
+<div class="mt-5 text-sm">
+  帶出 <code>authorName</code> 就走這條：宣告在 Mapper，Service 不用寫程式。
+</div>
+
+<div v-click class="mt-3 text-sm accent-orange">
+  但 <code>ignore = true</code> 表示 POST 設不了作者——新建的書永遠沒有 Author。下一頁補起來。
+</div>
+
+---
+
+# POST 怎麼指定作者
+
+前端只會傳一個 id，不會傳整個 Author 物件。兩邊各改一處：
+
+<div class="grid grid-cols-2 gap-4 mt-4">
+
+<div class="good-card">
+<span class="label">① DTO 收 authorId</span>
+
+```java
+public record BookCreateRequest(
+    String title,
+    // isbn, price, publishedAt...
+    Long authorId   // 不填就是沒作者
+) {}
+```
+
+</div>
+
+<div class="good-card">
+<span class="label">② Mapper 換成 Author</span>
+
+```java
+@Mapping(source = "authorId", target = "author")
+Book toEntity(BookCreateRequest request);
+
+default Author toAuthor(Long id) {
+    if (id == null) return null;
+    Author a = new Author();
+    a.setId(id);        // 只要 FK
+    return a;
+}
+```
+
+</div>
+
+</div>
+
+<div class="mt-4 text-sm muted">
+  不用去查 <code>author</code> 表：寫入 <code>book</code> 只需要 <code>author_id</code> 這個值。傳不存在的 id 會被 FK constraint 擋下來，想先回 400 就自己在 Service 檢查一次。
+</div>
+
+---
+
+# 改 BookDAO 加 @EntityGraph
+
+```java {2-6}
+public interface BookDAO extends BaseDAO<Book> {
+    @EntityGraph(attributePaths = {"author"})
+    List<Book> findAll();
+
+    @EntityGraph(attributePaths = {"author"})
+    Optional<Book> findById(Long id);
+}
+```
+
+<div class="mt-5 terminal-card text-sm">
+  <code>@EntityGraph</code> 覆蓋預設 fetch 策略，一次載入關聯資料，避免 N+1 查詢問題。方法簽名不變，Service 不用改。
+</div>
+
+---
+
+# Optional：情境是「查一本不存在的書」
+
+打 `GET /api/books/999`，資料庫裡沒有 999。同一件事，兩種寫法：
+
+<div class="grid grid-cols-2 gap-4 mt-4">
+
+<div class="bad-card">
+<span class="label">❌ 回 null</span>
+
+```java
+Book book = dao.findByIdOrNull(id);
+// book 是 null
+return mapper.toResponse(book);
+```
+
+</div>
+
+<div class="good-card">
+<span class="label">✅ 回 Optional</span>
+
+```java
+Book book = dao.findById(id)
+    .orElseThrow(() ->
+        new NotFoundException("Book: " + id));
+return mapper.toResponse(book);
+```
+
+</div>
+
+</div>
+
+<div class="grid grid-cols-2 gap-4 mt-3 text-sm">
+  <div class="text-center"><span class="accent-orange">NullPointerException → 500</span><br><span class="muted">前端看到伺服器爆掉，還要翻 log</span></div>
+  <div class="text-center"><span class="accent-green">NotFoundException → 404</span><br><span class="muted">前端知道是「沒這本書」</span></div>
+</div>
+
+<div v-click class="mt-4 text-sm muted">
+  重點不是「Optional 比較潮」，是 <code>null</code> 可以被忘記檢查、<code>Optional</code> 不行——你非得寫 <code>orElseThrow</code> 之類的收尾才拿得到 <code>Book</code>。
+</div>
+
+---
+
+# 忘記檢查 vs 編譯器逼你檢查
+
+<div class="grid grid-cols-2 gap-4 mt-4">
+
+<div class="bad-card">
+<span class="label">❌ 每個呼叫端都要自己記得</span>
+
+```java
+Book book = dao.findByIdOrNull(id);
+if (book == null) {            // 漏寫就是 500
+    throw new NotFoundException("...");
+}
+return book.getTitle();
+```
+
+</div>
+
+<div class="good-card">
+<span class="label">✅ 漏寫就編不過</span>
+
+```java
+// Optional<Book> 沒有 getTitle()
+return dao.findById(id)
+    .map(Book::getTitle)       // 有才轉換
+    .orElse("(未知書名)");      // 沒有給預設值
+```
+
+</div>
+
+</div>
+
+<div class="mt-5 grid grid-cols-3 gap-3 text-sm">
+  <div class="concept-card"><strong>orElseThrow</strong><br><span class="muted">沒有就丟例外 → CRUD 用這個</span></div>
+  <div class="concept-card"><strong>orElse</strong><br><span class="muted">沒有就給預設值</span></div>
+  <div class="concept-card"><strong>ifPresent</strong><br><span class="muted">有才做，沒有就跳過</span></div>
+</div>
+
+<div class="mt-4 text-sm muted">
+  <code>BaseServiceImpl.getById</code> 已經是第一種，所以 Book 的 CRUD 你一行都不用寫。
+</div>
+
+---
+
+# 那 author 是 null 呢？
+
+情境換了：書存在，但 `author_id` 沒填。這次**不要**自己用 Optional。
+
+<div class="grid grid-cols-2 gap-4 mt-4">
+
+<div class="bad-card">
+<span class="label">❌ 在 Service 手動拆關聯</span>
+
+```java
+BookResponse res = mapper.toResponse(book);
+String name = Optional
+    .ofNullable(book.getAuthor())
+    .map(Author::getName)
+    .orElse(null);
+// 再想辦法塞回 record…（record 不能改）
+```
+
+</div>
+
+<div class="good-card">
+<span class="label">✅ 交給 Mapper 宣告</span>
+
+```java
+@Mapping(source = "author.name",
+         target = "authorName")
+BookResponse toResponse(Book book);
+
+// Service 只有這行
+return mapper.toResponse(book);
+```
+
+</div>
+
+</div>
+
+<div class="mt-4 terminal-card text-sm">
+  <p class="terminal-label">為什麼右邊不會 NPE</p>
+  <div class="font-mono text-xs">authorName = book.getAuthor() == null ? null : book.getAuthor().getName();</div>
+  <div class="mt-2">MapStruct 產的 code 自己補了 null 檢查。沒作者就是 <code>authorName: null</code>，你不用再包一層。</div>
+</div>
+
+<div v-click class="mt-4 text-sm accent-orange">
+  分工：<code>Optional</code> 管「這筆資料存不存在」，<code>@Mapping</code> 管「欄位怎麼搬」。不是二選一，是用在不同地方。
 </div>
 
 ---
