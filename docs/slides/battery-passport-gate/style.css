@@ -1,0 +1,741 @@
+/*
+  電池護照資料閘門 — deck theme
+  單一強調色（低飽和玫瑰）／冷中性底色，非純黑，列印時轉白底。
+*/
+
+:root {
+  --bg: #0b1013;
+  --panel: #131b20;
+  --ink: #eef3f4;
+  --muted: #92a4ad;
+  --accent: #e4837a;
+  --accent-soft: #f0b6a8;
+  --pass: #8fbf9f;
+  --line: rgba(255, 255, 255, 0.1);
+}
+
+.slidev-layout {
+  background:
+    radial-gradient(circle at 82% 8%, rgba(228, 131, 122, 0.07), transparent 34%),
+    linear-gradient(rgba(255, 255, 255, 0.022) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.022) 1px, transparent 1px),
+    var(--bg);
+  background-size: auto, 28px 28px, 28px 28px, auto;
+  color: var(--ink);
+  font-family: "Inter", "PingFang TC", "Noto Sans TC", sans-serif;
+  letter-spacing: 0.01em;
+  padding: 2.2rem 3rem;
+}
+
+.slidev-layout h1 {
+  font-size: 2.1rem;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1.1;
+  margin-bottom: 0.9rem;
+  color: var(--ink);
+}
+
+.slidev-layout:not(.cover):not(.section):not(.end) h1::after {
+  content: "";
+  display: block;
+  width: 58px;
+  height: 2px;
+  margin-top: 10px;
+  background: var(--accent);
+  opacity: 0.85;
+}
+
+.slidev-layout code,
+.slidev-layout pre {
+  font-family: "JetBrains Mono", "PingFang TC", "Noto Sans TC", monospace;
+}
+
+.slidev-layout p,
+.slidev-layout li {
+  font-size: 0.86rem;
+  line-height: 1.7;
+}
+
+.lead,
+.lab-note {
+  color: var(--muted);
+  font-size: 0.88rem;
+  line-height: 1.75;
+}
+
+.lab-note {
+  font-size: 0.82rem;
+}
+
+.kicker {
+  color: var(--accent-soft);
+  font: 700 0.76rem "JetBrains Mono", monospace;
+  letter-spacing: 0.2em;
+  margin-bottom: 1.1rem;
+  
+}
+
+/* ---------- cover ---------- */
+
+.slidev-layout.cover h1 {
+  font-size: 3.5rem;
+  line-height: 1.02;
+  width: 62%;
+}
+
+.slidev-layout.cover h1 span {
+  color: var(--accent);
+  font-size: 1.75rem;
+  letter-spacing: -0.02em;
+}
+
+.slidev-layout.cover .lead {
+  width: 54%;
+}
+
+.gate-visual {
+  position: absolute;
+  right: 6%;
+  top: 22%;
+  width: 32%;
+  display: grid;
+  gap: 0.55rem;
+}
+
+.gate-row {
+  display: grid;
+  grid-template-columns: 1fr auto 10px;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.55rem 0.8rem;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: rgba(19, 27, 32, 0.82);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.gate-row code {
+  font-size: 0.62rem;
+  color: var(--muted);
+  background: transparent !important;
+  border: none !important;
+  padding: 0;
+}
+
+.gate-row span {
+  font: 0.7rem "JetBrains Mono", monospace;
+  color: var(--ink);
+}
+
+.gate-row i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.gate-row i.ok {
+  background: var(--pass);
+}
+
+.gate-row i.bad {
+  background: var(--accent);
+}
+
+.gate-row i.wait {
+  background: var(--muted);
+  opacity: 0.5;
+}
+
+/* ---------- layout helpers ---------- */
+
+.thesis {
+  border-left: 3px solid var(--accent);
+  padding: 0.8rem 0 0.8rem 1rem;
+  background: linear-gradient(90deg, rgba(228, 131, 122, 0.07), transparent 70%);
+}
+
+.thesis b {
+  color: var(--accent);
+  font-size: 0.7rem;
+  letter-spacing: 0.16em;
+}
+
+.thesis p {
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-top: 0.35rem;
+}
+
+.stat-stack {
+  display: grid;
+  gap: 0.9rem;
+  align-content: start;
+}
+
+.stat-stack > div {
+  border-top: 1px solid var(--line);
+  padding-top: 0.65rem;
+}
+
+.stat-stack b {
+  display: block;
+  font: 800 1.6rem "JetBrains Mono", monospace;
+  letter-spacing: -0.03em;
+  color: var(--accent);
+}
+
+.stat-stack span {
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.grid-3-1 {
+  display: grid;
+  grid-template-columns: 1.85fr 1fr;
+  gap: 1.4rem;
+  margin-top: 1rem;
+  align-items: start;
+}
+
+.row-mark {
+  display: grid;
+  grid-template-columns: 2.6rem 1fr;
+  gap: 0.3rem 0.9rem;
+  border-top: 1px solid var(--line);
+  padding: 0.75rem 0;
+}
+
+.row-mark b {
+  grid-row: span 2;
+  color: var(--accent);
+  font: 800 1.1rem "JetBrains Mono", monospace;
+  letter-spacing: -0.02em;
+}
+
+.row-mark span {
+  font-weight: 700;
+  font-size: 0.92rem;
+}
+
+.row-mark em {
+  color: var(--muted);
+  font-style: normal;
+  font-size: 0.78rem;
+}
+
+/* ---------- paper cards ---------- */
+
+.paper-tag {
+  color: var(--accent-soft);
+  font: 700 0.7rem "JetBrains Mono", monospace;
+  letter-spacing: 0.14em;
+  margin-bottom: 0.7rem;
+}
+
+.stack {
+  display: grid;
+  gap: 0.7rem;
+  margin-top: 0.8rem;
+}
+
+.stack > div {
+  border-left: 2px solid var(--line);
+  padding-left: 0.85rem;
+}
+
+.stack b {
+  display: block;
+  color: var(--accent);
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.2rem;
+}
+
+.stack span {
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.limits {
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: rgba(19, 27, 32, 0.78);
+  padding: 1rem 1.1rem;
+}
+
+.limits-head {
+  color: var(--accent);
+  font: 700 0.68rem "JetBrains Mono", monospace;
+  letter-spacing: 0.18em;
+  margin-bottom: 0.6rem;
+}
+
+.limits ul {
+  margin: 0;
+  padding-left: 1rem;
+  display: grid;
+  gap: 0.45rem;
+}
+
+.limits li {
+  color: var(--muted);
+  font-size: 0.79rem;
+  line-height: 1.6;
+}
+
+.limits li b {
+  color: var(--ink);
+  font-family: "JetBrains Mono", monospace;
+}
+
+.limits-note {
+  margin-top: 0.8rem;
+  border-top: 1px dashed var(--line);
+  padding-top: 0.6rem;
+  color: var(--accent-soft);
+  font-size: 0.76rem;
+  line-height: 1.6;
+}
+
+.limits-note.tall {
+  margin-top: 0;
+  font-size: 0.82rem;
+  padding: 0.9rem 1rem;
+  border: 1px solid var(--line);
+  border-top: 1px solid var(--line);
+  border-radius: 12px;
+  background: rgba(228, 131, 122, 0.06);
+}
+
+.limits-note p {
+  margin: 0;
+}
+
+.split-12k {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.8rem;
+  margin: 0.9rem 0;
+}
+
+.split-12k > div {
+  border-top: 2px solid var(--accent);
+  padding-top: 0.5rem;
+}
+
+.split-12k b {
+  display: block;
+  font: 800 1.35rem "JetBrains Mono", monospace;
+  color: var(--ink);
+  letter-spacing: -0.03em;
+}
+
+.split-12k span {
+  color: var(--muted);
+  font-size: 0.74rem;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 0.9rem;
+}
+
+.chips span {
+  font: 0.7rem "JetBrains Mono", "PingFang TC", monospace;
+  color: var(--muted);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 0.15rem 0.6rem;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.verdict-box {
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: rgba(228, 131, 122, 0.07);
+  padding: 1rem 1.1rem;
+}
+
+.verdict-kicker {
+  color: var(--accent);
+  font: 800 0.7rem "JetBrains Mono", monospace;
+  letter-spacing: 0.2em;
+  margin-bottom: 0.5rem;
+}
+
+.verdict-box p {
+  font-size: 0.95rem;
+  line-height: 1.55;
+}
+
+.verdict-box b {
+  color: var(--accent-soft);
+}
+
+.verdict-now {
+  margin-top: 0.6rem;
+  padding-top: 0.6rem;
+  border-top: 1px solid var(--line);
+  color: var(--ink) !important;
+  font-weight: 700;
+}
+
+/* ---------- Q stack ---------- */
+
+.q-stack {
+  display: grid;
+  gap: 0.7rem;
+  margin-top: 0.6rem;
+}
+
+.q-item {
+  display: grid;
+  grid-template-columns: 3.2rem 1fr;
+  gap: 1rem;
+  border-top: 1px solid var(--line);
+  padding-top: 0.7rem;
+}
+
+.q-num {
+  color: var(--accent);
+  font: 800 1rem "JetBrains Mono", monospace;
+  letter-spacing: -0.02em;
+}
+
+.q-item b {
+  font-size: 0.95rem;
+}
+
+.q-item p {
+  color: var(--muted);
+  margin: 0.15rem 0;
+  font-size: 0.79rem;
+}
+
+.q-item em {
+  color: var(--accent-soft);
+  font-style: normal;
+  font-size: 0.78rem;
+}
+
+/* ---------- pipeline / split / method ---------- */
+
+.split-panel {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin: 0.9rem 0 1rem;
+}
+
+.split-panel > div {
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  padding: 0.85rem 1rem;
+  background: rgba(19, 27, 32, 0.72);
+}
+
+.split-panel b {
+  font: 700 0.78rem "JetBrains Mono", monospace;
+  letter-spacing: 0.12em;
+}
+
+.split-panel b.no {
+  color: var(--muted);
+}
+
+.split-panel b.yes {
+  color: var(--accent);
+}
+
+.split-panel p {
+  color: var(--muted);
+  margin: 0.4rem 0 0.35rem;
+  font-size: 0.8rem;
+}
+
+.split-panel em {
+  color: var(--ink);
+  font-style: normal;
+  font-size: 0.78rem;
+}
+
+.method-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.9rem;
+  border-top: 1px solid var(--line);
+  padding-top: 0.8rem;
+}
+
+.method-row b {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.method-row span {
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+
+.method-row .on b {
+  color: var(--accent);
+}
+
+.method-row .on span {
+  color: var(--ink);
+}
+
+/* ---------- eval ---------- */
+
+.eval-stack {
+  display: grid;
+  gap: 0.85rem;
+  margin-top: 0.8rem;
+}
+
+.eval-stack > div {
+  border-top: 1px solid var(--line);
+  padding-top: 0.7rem;
+}
+
+.eval-stack b {
+  color: var(--ink);
+  font-size: 0.95rem;
+}
+
+.eval-stack p {
+  color: var(--muted);
+  font-size: 0.79rem;
+  margin: 0.2rem 0 0;
+}
+
+/* ---------- timeline ---------- */
+
+.timeline {
+  display: grid;
+  gap: 0.55rem;
+  margin-top: 0.9rem;
+}
+
+.tl-row {
+  display: grid;
+  grid-template-columns: 3.4rem 1fr;
+  grid-template-areas: "m bar" "m label";
+  column-gap: 0.9rem;
+  align-items: center;
+}
+
+.tl-m {
+  grid-area: m;
+  color: var(--accent);
+  font: 800 0.82rem "JetBrains Mono", monospace;
+  letter-spacing: -0.02em;
+}
+
+.tl-row i {
+  grid-area: bar;
+  display: block;
+  height: 7px;
+  border-radius: 4px;
+  margin-left: var(--s, 0%);
+  width: var(--w, 12.5%);
+  min-width: 26px;
+  background: linear-gradient(90deg, var(--accent), rgba(228, 131, 122, 0.35));
+}
+
+.tl-row b {
+  grid-area: label;
+  color: var(--muted);
+  font-size: 0.79rem;
+  font-weight: 600;
+  margin-top: 0.15rem;
+}
+
+/* ---------- quiz ---------- */
+
+.quiz {
+  margin-top: 0.7rem;
+}
+
+.quiz > div {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 0.6rem 0.9rem;
+  margin-top: 0.7rem;
+  color: var(--muted);
+  font-size: 0.83rem;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.quiz .answer {
+  color: var(--accent-soft);
+  border-color: rgba(228, 131, 122, 0.45);
+  background: rgba(228, 131, 122, 0.07);
+}
+
+/* ---------- blocks ---------- */
+
+.slidev-code {
+  max-height: 300px;
+  overflow: hidden;
+  border: 1px solid rgba(228, 131, 122, 0.28) !important;
+  border-radius: 13px !important;
+}
+
+.mermaid {
+  max-height: 240px;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 0.8rem;
+}
+
+.mermaid svg {
+  max-height: 230px;
+}
+
+/* Mermaid renders inside a shadow root: outer CSS cannot size it.
+   Height is driven by the `scale` option in the fence, e.g. ```mermaid {scale: 0.6} */
+.mermaid {
+  margin-bottom: 0.8rem;
+}
+
+/* ---------- six-layer stack (paper 03) ---------- */
+
+.layers {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.55rem;
+  margin: 1rem 0;
+}
+
+.layers > div {
+  border: 1px solid var(--line);
+  border-top: 2px solid var(--accent);
+  border-radius: 10px;
+  background: rgba(19, 27, 32, 0.72);
+  padding: 0.5rem 0.65rem;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.layers b {
+  display: block;
+  color: var(--accent);
+  font: 800 0.66rem "JetBrains Mono", monospace;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.15rem;
+}
+
+.layers span {
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+/* ---------- vertical centering (opt-in per slide) ---------- */
+
+.slidev-layout.v-center {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.slidev-layout.v-center.two-columns {
+  display: grid;
+  align-content: center;
+}
+
+/* ---------- motion / print ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+@media print {
+  .slidev-layout {
+    background: #fff !important;
+    color: #14191c !important;
+    print-color-adjust: exact;
+  }
+
+  .slidev-layout h1,
+  .slidev-layout h2,
+  .slidev-layout p,
+  .slidev-layout li,
+  .slidev-layout span,
+  .slidev-layout b,
+  .slidev-layout em,
+  .slidev-layout td,
+  .slidev-layout th {
+    color: #14191c !important;
+  }
+
+  .lead,
+  .lab-note,
+  .stack span,
+  .limits li,
+  .row-mark em,
+  .q-item p,
+  .split-panel p,
+  .method-row span,
+  .eval-stack p,
+  .tl-row b,
+  .quiz > div {
+    color: #4a565c !important;
+  }
+
+  .kicker,
+  .paper-tag,
+  .limits-head,
+  .thesis b,
+  .stack b,
+  .q-item em,
+  .verdict-kicker,
+  .split-panel b.yes,
+  .limits-note,
+  .quiz .answer,
+  .method-row .on b,
+  .tl-m,
+  .gate-visual span {
+    color: #a4443b !important;
+  }
+
+  .gate-visual,
+  .limits,
+  .thesis,
+  .verdict-box,
+  .split-panel > div,
+  .quiz > div,
+  .limits-note.tall {
+    border-color: #c9d1d4 !important;
+    background: #f7f9f9 !important;
+    box-shadow: none !important;
+  }
+
+  .thesis {
+    background: #fdf3f2 !important;
+  }
+
+  .row-mark,
+  .stat-stack > div,
+  .q-item,
+  .eval-stack > div,
+  .tl-row i {
+    border-color: #c9d1d4 !important;
+  }
+
+  .tl-row i {
+    background: #a4443b !important;
+  }
+
+  .slidev-code {
+    max-height: none !important;
+  }
+}
