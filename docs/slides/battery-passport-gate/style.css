@@ -68,6 +68,51 @@
   font-size: 0.82rem;
 }
 
+/* 出處／待確認標註：比 lab-note 更小更淡，附在數字或主張後面 */
+.src {
+  display: block;
+  margin-top: 0.3rem;
+  color: var(--muted);
+  opacity: 0.75;
+  font-size: 0.7rem;
+  line-height: 1.6;
+}
+
+.src::before {
+  content: "來源 / 待確認　";
+  color: var(--accent-soft);
+  letter-spacing: 0.06em;
+}
+
+/* 封面名詞小教室：專有名詞第一次出現時的一句話解釋 */
+.terms {
+  display: grid;
+  gap: 0.4rem;
+  margin-top: 1.2rem;
+  max-width: 54%;
+}
+
+.terms > div {
+  display: grid;
+  grid-template-columns: 6.6rem 1fr;
+  gap: 0.8rem;
+  align-items: baseline;
+  border-top: 1px solid var(--line);
+  padding-top: 0.45rem;
+}
+
+.terms b {
+  color: var(--accent-soft);
+  font: 700 0.78rem "JetBrains Mono", monospace;
+  letter-spacing: 0.04em;
+}
+
+.terms span {
+  color: var(--muted);
+  font-size: 0.78rem;
+  line-height: 1.6;
+}
+
 .kicker {
   color: var(--accent-soft);
   font: 700 0.76rem "JetBrains Mono", monospace;
@@ -343,13 +388,21 @@
   margin-bottom: 0.9rem;
 }
 
-.chips span {
+.chips span,
+.chips a {
   font: 0.7rem "JetBrains Mono", "PingFang TC", monospace;
   color: var(--muted);
   border: 1px solid var(--line);
   border-radius: 999px;
   padding: 0.15rem 0.6rem;
   background: rgba(255, 255, 255, 0.02);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.chips a:hover {
+  color: var(--accent-soft);
+  border-color: var(--accent);
 }
 
 .verdict-box {
@@ -387,8 +440,8 @@
 
 .q-stack {
   display: grid;
-  gap: 0.7rem;
-  margin-top: 0.6rem;
+  gap: 0.45rem;
+  margin-top: 0.5rem;
 }
 
 .q-item {
@@ -396,7 +449,7 @@
   grid-template-columns: 3.2rem 1fr;
   gap: 1rem;
   border-top: 1px solid var(--line);
-  padding-top: 0.7rem;
+  padding-top: 0.55rem;
 }
 
 .q-num {
@@ -679,6 +732,8 @@
 
   .lead,
   .lab-note,
+  .terms span,
+  .src,
   .stack span,
   .limits li,
   .row-mark em,
@@ -693,6 +748,8 @@
 
   .kicker,
   .paper-tag,
+  .terms b,
+  .src::before,
   .limits-head,
   .thesis b,
   .stack b,
