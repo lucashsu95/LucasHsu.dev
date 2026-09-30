@@ -96,7 +96,7 @@ layout: two-cols
 layoutClass: gap-9
 ---
 
-<div class="paper-tag">PAPER 01 · Cruz et al. · Applied Sciences, 2025</div>
+<div class="paper-tag">PAPER 01 · <a href="https://www.mdpi.com/2076-3417/15/18/10259/pdf" target="_blank" rel="noopener">Rosado da Cruz et al. · Applied Sciences, 2025</a></div>
 
 # 紡織數位產品護照：用機器學習檢查廠商上傳的資料
 
@@ -120,12 +120,18 @@ layoutClass: gap-9
   <div class="limits-note">223 筆太少，還不能證明「機器學習比照規則檢查更強」。</div>
 </div>
 
+<div class="spoken">
+  <div class="spoken-head">口述稿</div>
+  <p>衣服護照的資料來自很多工廠，有些工廠數位化程度很低，數據容易填錯。作者用真實紡織資料試了四種做法，做成 API，已經有公司在使用。不過資料只有兩百多筆，結果不太穩定。</p>
+  <p class="spoken-key">用 AI 檢查 DPP 資料這條路有人走過，而且已經做出來了。</p>
+</div>
+
 ---
 layout: two-cols
 layoutClass: gap-9
 ---
 
-<div class="paper-tag">PAPER 02 · Adewumi et al. · arXiv 2604.26986, 2026</div>
+<div class="paper-tag">PAPER 02 · <a href="https://arxiv.org/html/2604.26986v1" target="_blank" rel="noopener">Adewumi et al. · BatteryPass-12K, 2026</a></div>
 
 # BatteryPass-12K：第一個公開的「電池護照合規」題庫
 
@@ -155,12 +161,18 @@ layoutClass: gap-9
   <div class="limits-note">0.98 是在同一批合成資料裡切出來的練習卷，不代表真實護照的準確度。</div>
 </div>
 
+<div class="spoken">
+  <div class="spoken-head">口述稿</div>
+  <p>歐盟 2027 年 2 月要求電池護照前後一致，但沒有公開資料能測 AI。作者做了 1 萬 2 千份護照，讓 22 個 AI 考試，最好的在練習卷 0.98，正式考只有 0.71，常把合規的誤判成不合規，還會被一句「忽略指令」誘導。</p>
+  <p class="spoken-key">0.98 和 0.71 之間那個落差，就是我的題目所在。</p>
+</div>
+
 ---
 layout: two-cols
 layoutClass: gap-9
 ---
 
-<div class="paper-tag">PAPER 03 · Bharucha · WJFTCSE, 2025</div>
+<div class="paper-tag">PAPER 03 · <a href="https://wjftcse.org/index.php/wjftcse/article/view/142" target="_blank" rel="noopener">Bharucha · WJFTCSE, 2025</a></div>
 
 # 用 AI 做紡織數位產品護照：區塊鏈加預測分析
 
@@ -187,6 +199,12 @@ layoutClass: gap-9
     <li>資料一進門的品質檢查，還是空的</li>
   </ul>
   <div class="limits-note">資料進門口那一刻還沒人檢查，這就是本計畫的起點。</div>
+</div>
+
+<div class="spoken">
+  <div class="spoken-head">口述稿</div>
+  <p>區塊鏈像全班都有一本相同的日記，有人改字就會被發現。AI 讀護照資料，替衣服打分數、預測供應商風險，最準的 XGBoost 拿到 0.947，滿分是 1。但資料是模擬的 5 萬筆，不是真的工廠資料。</p>
+  <p class="spoken-key">它保證「進去之後沒被改」，沒保證「進去的時候就是對的」。</p>
 </div>
 
 ---
