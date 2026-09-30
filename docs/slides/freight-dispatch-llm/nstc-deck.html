@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" data-theme="auto">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>自然語言轉調度模型 — 國科會大專學生研究計畫</title>
+<style>
+  :root {
+    --bg: #f7f8f8; --panel: #ffffff; --ink: #16232b; --muted: #56666e;
+    --line: #dde4e6; --accent: #b4473c; --accent-soft: #8f362e; --wash: #fdf2f1;
+    --ok: #2f6b47;
+  }
+  html[data-theme="dark"] {
+    --bg: #0b1013; --panel: #131b20; --ink: #eef3f4; --muted: #92a4ad;
+    --line: rgba(255,255,255,.12); --accent: #e4837a; --accent-soft: #f0b6a8; --wash: rgba(228,131,122,.07);
+    --ok: #8fbf9f;
+  }
+  @media (prefers-color-scheme: dark) {
+    html[data-theme="auto"] {
+      --bg: #0b1013; --panel: #131b20; --ink: #eef3f4; --muted: #92a4ad;
+      --line: rgba(255,255,255,.12); --accent: #e4837a; --accent-soft: #f0b6a8; --wash: rgba(228,131,122,.07);
+      --ok: #8fbf9f;
+    }
+  }
+
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", -apple-system, "Segoe UI", sans-serif;
+    font-size: clamp(14px, 1.05vw, 17px); line-height: 1.65;
+    display: flex; flex-direction: column;
+  }
+
+  /* ---------- chrome ---------- */
+  header {
+    display: flex; align-items: center; gap: .8rem; flex-wrap: wrap;
+    padding: .7rem clamp(1rem, 3vw, 2.4rem); border-bottom: 1px solid var(--line);
+  }
+  .title { font-weight: 700; font-size: .95rem; margin-right: auto; }
+  .title small { color: var(--muted); font-weight: 400; margin-left: .5rem; }
+  button {
+    font: inherit; font-size: .82rem; color: var(--muted); cursor: pointer;
+    background: none; border: 1px solid var(--line); border-radius: 999px; padding: .28rem .9rem;
+  }
+  button:hover { color: var(--accent); border-color: var(--accent); }
+  button:disabled { opacity: .35; cursor: default; }
+  button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  main { flex: 1; overflow: auto; padding: clamp(1rem, 2.6vw, 2.2rem); }
+
+  /* ---------- slides ---------- */
+  .slide { display: none; max-width: 1180px; margin: 0 auto; }
+  .slide.on { display: block; }
+  h1 {
+    font-size: clamp(1.35rem, 2.5vw, 2rem); font-weight: 800; letter-spacing: -.02em;
+    margin: 0 0 .3rem; line-height: 1.2;
+  }
+  h1::after {
+    content: ""; display: block; width: 54px; height: 2px; margin: .55rem 0 1rem;
+    background: var(--accent); opacity: .85;
+  }
+  .tag {
+    color: var(--accent-soft); font-family: ui-monospace, "JetBrains Mono", monospace;
+    font-size: .74rem; font-weight: 700; letter-spacing: .12em; margin-bottom: .5rem;
+  }
+  .tag a { color: inherit; text-decoration: none; border-bottom: 1px dotted currentColor; }
+  .tag a:hover { color: var(--accent); }
+  .tag a::after { content: " ↗"; opacity: .7; }
+  .lede { color: var(--muted); font-size: .92rem; margin: 0 0 1.1rem; max-width: 62ch; }
+
+  /* ---------- cards ---------- */
+  .cards { display: grid; gap: .8rem; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+  .card {
+    border: 1px solid var(--line); border-radius: 12px; background: var(--panel);
+    padding: .85rem 1rem;
+  }
+  .card > b {
+    display: block; color: var(--accent); font-size: .78rem; letter-spacing: .1em; margin-bottom: .3rem;
+  }
+  .card p { margin: 0; color: var(--muted); font-size: .88rem; }
+  .card em { display: block; font-style: normal; color: var(--ink); font-size: .84rem; margin-top: .45rem; }
+
+  .limits { border: 1px solid var(--line); border-radius: 12px; background: var(--panel); padding: .9rem 1.1rem; }
+  .limits > b { display: block; color: var(--accent); font-size: .78rem; letter-spacing: .1em; margin-bottom: .5rem; }
+  .limits ul { margin: 0; padding-left: 1.1rem; display: grid; gap: .35rem; }
+  .limits li { color: var(--muted); font-size: .86rem; }
+  .limits .note {
+    margin: .6rem 0 0; padding-top: .55rem; border-top: 1px dashed var(--line);
+    color: var(--accent-soft); font-size: .82rem;
+  }
+
+  /* numbered list */
+  ol.steps { margin: 0; padding: 0; list-style: none; display: grid; gap: .6rem; }
+  ol.steps > li {
+    display: grid; grid-template-columns: 1.7rem 1fr; gap: .7rem;
+    border-top: 1px solid var(--line); padding-top: .6rem;
+  }
+  ol.steps > li > b { grid-row: span 2; color: var(--accent); font-family: ui-monospace, monospace; font-size: .95rem; }
+  ol.steps strong { display: block; font-size: .95rem; }
+  ol.steps span { color: var(--muted); font-size: .85rem; }
+
+  table { width: 100%; border-collapse: collapse; font-size: .85rem; }
+  th, td { text-align: left; padding: .42rem .5rem; border-top: 1px solid var(--line); vertical-align: top; }
+  th { color: var(--accent); font-size: .76rem; letter-spacing: .08em; font-weight: 700; }
+  td { color: var(--muted); }
+  td:first-child { color: var(--ink); white-space: nowrap; }
+  .skip { color: var(--muted); }
+
+  .hyp { display: grid; gap: .5rem; }
+  .hyp > div { border-left: 3px solid var(--accent); background: var(--wash); padding: .6rem .8rem; border-radius: 0 10px 10px 0; }
+  .hyp b { color: var(--accent-soft); font-size: .8rem; letter-spacing: .08em; }
+  .hyp p { margin: .15rem 0 0; font-size: .88rem; }
+
+  .quote {
+    border: 1px solid var(--line); border-left: 3px solid var(--accent);
+    background: var(--panel); border-radius: 0 12px 12px 0; padding: .8rem 1rem; font-size: .95rem;
+  }
+
+  /* 第 4、5 頁：內文放大 4px，層級比例維持不變 */
+  .slide.big h1 { font-size: calc(clamp(1.35rem, 2.5vw, 2rem) + 4px); }
+  .slide.big .tag { font-size: calc(.74rem + 4px); }
+  .slide.big .lede { font-size: calc(.92rem + 4px); }
+  .slide.big .card > b { font-size: calc(.78rem + 4px); }
+  .slide.big .card p { font-size: calc(.88rem + 4px); }
+  .slide.big .card em { font-size: calc(.84rem + 4px); }
+  .slide.big .limits li { font-size: calc(.86rem + 4px); }
+  .slide.big .limits .note { font-size: calc(.82rem + 4px); }
+  .slide.big .limits > b { font-size: calc(.78rem + 4px); }
+  .slide.big ol.steps strong { font-size: calc(.95rem + 4px); }
+  .slide.big ol.steps > li > b { font-size: calc(.95rem + 4px); }
+  .slide.big ol.steps span { font-size: calc(.85rem + 4px); }
+  .slide.big .hyp b { font-size: calc(.80rem + 4px); }
+  .slide.big .hyp p { font-size: calc(.88rem + 4px); }
+  .slide.big .quote { font-size: calc(.95rem + 4px); }
+  .slide.big .quote p { font-size: calc(.95rem + 4px); }
+  .slide.big table { font-size: calc(.85rem + 4px); }
+  .slide.big th { font-size: calc(.76rem + 4px); }
+
+  /* 第 5 頁內容較多：放大字級的同時壓縮垂直間距，避免被裁切 */
+  .slide.big.dense h1 { margin-bottom: .1rem; }
+  .slide.big.dense h1::after { margin: .35rem 0 .6rem; }
+  .slide.big.dense ol.steps { gap: .3rem; margin-bottom: .6rem; }
+  .slide.big.dense ol.steps > li { padding-top: .38rem; }
+  .slide.big.dense .hyp { gap: .35rem; margin-bottom: .6rem; }
+  .slide.big.dense .hyp > div { padding: .42rem .7rem; }
+  .slide.big.dense .cards { gap: .6rem; margin-bottom: .6rem; }
+  .slide.big.dense .card { padding: .6rem .85rem; }
+  .slide.big.dense table { margin-top: .2rem; }
+  .slide.big.dense th, .slide.big.dense td { padding: .26rem .45rem; }
+  .slide.big.dense .lede { margin: .5rem 0 0; }
+
+  /* 借用 main 的外層 padding：行變長後可少折行，同時省下垂直空間 */
+  .slide.big.dense { margin: -1.1rem -1.5rem; line-height: 1.55; }
+  .slide.big.dense .two-col { display: grid; grid-template-columns: 1.1fr 1fr; gap: .7rem; align-items: start; }
+  @media (max-width: 900px) { .slide.big.dense .two-col { grid-template-columns: 1fr; } }
+
+  footer {
+    display: flex; align-items: center; gap: .8rem; flex-wrap: wrap;
+    padding: .6rem clamp(1rem, 3vw, 2.4rem); border-top: 1px solid var(--line); color: var(--muted); font-size: .8rem;
+  }
+  .dots { display: flex; gap: .35rem; margin-right: auto; }
+  .dots span {
+    width: 7px; height: 7px; border-radius: 50%; background: var(--line); cursor: pointer;
+  }
+  .dots span.on { background: var(--accent); }
+
+  @media print {
+    header, footer { display: none; }
+    .slide { display: block !important; page-break-after: always; }
+    body { background: #fff; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="title">自然語言轉調度模型<small>國科會大專學生研究計畫</small></div>
+  <button id="theme" type="button">淺／深色</button>
+  <button id="prev" type="button" aria-label="上一頁">← 上一頁</button>
+  <button id="next" type="button" aria-label="下一頁">下一頁 →</button>
+</header>
+
+<main>
+
+  <!-- 1 -->
+  <section class="slide on">
+    <div class="tag">PAPER 01 · <a href="https://zenodo.org/records/21237136/files/329-339.pdf?download=1" target="_blank" rel="noopener">HSR London, 2026</a></div>
+    <h1>MARL ＋ LLM 卡車調度</h1>
+    <p class="lede">規則式與最佳化式調度跟不上的地方是即時變動。這篇想把兩種方法合起來。</p>
+    <div class="cards">
+      <div class="card">
+        <b>問題</b>
+        <p>規則式與最佳化式調度難以適應即時變動。純 MARL 缺乏可解釋性，也無法處理仲介訊息等非結構化文字。</p>
+      </div>
+      <div class="card">
+        <b>方法</b>
+        <p>卡車、貨物、路線、獲利四個 agent 用 MARL 學調度。LLM 把訊息轉成限制向量，注入狀態。</p>
+      </div>
+      <div class="card">
+        <b>結果（純模擬）</b>
+        <p>Total Reward 0.91（單一 RL 0.79）；空駛比 0.18（0.31）；準時率 93%（84%）。</p>
+      </div>
+    </div>
+    <div class="limits" style="margin-top:.8rem">
+      <b>限制與我們的觀察</b>
+      <ul>
+        <li>沒有「只用 MARL、不加 LLM」的對照，LLM 的貢獻未被驗證。</li>
+        <li>模擬細節、隨機種子、變異數都未交代。</li>
+        <li>參考文獻編號與清單對不上。</li>
+      </ul>
+      <p class="note">這篇我當靈感，不當證據。</p>
+    </div>
+  </section>
+
+  <!-- 2 -->
+  <section class="slide">
+    <div class="tag">PAPER 02 · <a href="https://arxiv.org/pdf/2103.03450" target="_blank" rel="noopener">ICAPS 2021</a></div>
+    <h1>DeepFreight：多次轉運的貨運配送</h1>
+    <p class="lede">貨運要同時顧到服務所有訂單與省油。VRP／MILP 在大規模下算不動，也沒考慮貨物中途轉運。</p>
+    <div class="cards">
+      <div class="card">
+        <b>問題</b>
+        <p>大規模配送下，完整最佳化求解算不動；同時貨物的多次轉運被忽略。</p>
+      </div>
+      <div class="card">
+        <b>方法</b>
+        <p>QMIX 學卡車派遣，DFS 貪婪配對（允許多次轉運），剩餘少量訂單交給 MILP。</p>
+      </div>
+      <div class="card">
+        <b>結果（純模擬）</b>
+        <p>20 輛車、4 萬筆訂單。未送達件數：MILP 約 3,826、DeepFreight 約 643、兩者合用為 0。允許轉運使行駛時間少約 7.5%、未完成件數少約 60%。</p>
+      </div>
+    </div>
+    <div class="limits" style="margin-top:.8rem">
+      <b>限制與我們的觀察</b>
+      <ul>
+        <li><b>行駛時間不能直接比較</b>：MILP 平均約 14.7 小時最低，是因為它漏送了很多件；DeepFreight＋MILP 約 19.5 小時、DeepFreight 約 24.1 小時。</li>
+        <li>純模擬：美東 10 個配送中心。</li>
+        <li>需求需事先已知，不能線上應對新單。</li>
+        <li>純 RL 訓練不穩定。程式碼已公開。</li>
+      </ul>
+      <p class="note">「啟發式處理大部分、求解器收尾」這一段可以直接沿用。</p>
+    </div>
+  </section>
+
+  <!-- 3 -->
+  <section class="slide">
+    <div class="tag"><a href="https://arxiv.org/pdf/2512.14417v1" target="_blank" rel="noopener">PAPER 03</a></div>
+    <h1>PortAgent：讓 LLM 當虛擬專家團隊</h1>
+    <p class="lede">調度系統搬到新港口，需要專家、大量資料與人工調校。這篇想用 LLM 取代其中一部分。</p>
+    <div class="cards">
+      <div class="card">
+        <b>問題</b>
+        <p>調度系統從一個港口搬到另一個港口，就要重找專家、重收資料，重新調校。</p>
+      </div>
+      <div class="card">
+        <b>方法</b>
+        <p>LLM 扮演四個虛擬專家（檢索、建模、寫程式、除錯），搭配 RAG few-shot 與 Reflexion 式自我修正，輸出 Pyomo／Gurobi 模型。只有這四個模組，沒有 Verifier。</p>
+      </div>
+      <div class="card">
+        <b>結果</b>
+        <p>45 個案例（15 個基礎情境 × 3 種使用者專業程度）：可執行率 100%，解正確率 93.33%（42／45），平均約 83 秒。拿掉 RAG 或自我修正，解正確率降到約 27% 與 33%。</p>
+      </div>
+    </div>
+    <div class="limits" style="margin-top:.8rem">
+      <b>限制與我們的觀察</b>
+      <ul>
+        <li>測試問題簡單，本質是加了限制的最短路徑（30 台 AGV、20 個節點）。</li>
+        <li>3 次失敗全是語意誤解：2 次沒處理好雙向封路，1 次把指定路線當成整條路徑。</li>
+        <li>只用單一模型（Gemini 2.5 Flash）。</li>
+        <li>「專業程度無顯著影響」是 p&gt;0.05，每組僅 15 個案例，檢定力不足，不能當作「證明沒有影響」。</li>
+        <li>程式與資料只說可向作者索取。</li>
+      </ul>
+      <p class="note">20 個節點的規模，撐不起調度題目的複雜度。</p>
+    </div>
+  </section>
+
+  <!-- 4 -->
+  <section class="slide big">
+    <div class="tag">PART 02</div>
+    <h1>我們的社會貢獻</h1>
+
+    <div class="quote" style="margin-bottom:1rem">
+      <b style="color:var(--accent); font-size:.78rem; letter-spacing:.1em">研究問題</b>
+      <p style="margin:.3rem 0 0">在多車、多站點的貨運調度中，LLM 能否把調度員的自然語言限制正確轉成最佳化模型，並在規模變大時仍求得可用的解？</p>
+    </div>
+
+    <div class="cards" style="margin-bottom:1.1rem">
+      <div class="card">
+        <b>社會需求</b>
+        <p>中小型運輸業者不懂最佳化。調度限制（禁行路段、限高限重、危險品路線）若被誤解會造成安全風險；空駛與油耗也影響碳排。</p>
+      </div>
+      <div class="card">
+        <b>缺口：三篇各停在哪裡</b>
+        <p>DeepFreight 解決規模與省油，但限制寫死在模型裡。PortAgent 能把自然語言轉成模型，但只測小問題，失敗都是語意誤解。論文①宣稱兩者兼得，但缺對照實驗。<em>缺口在兩者交會處。</em></p>
+      </div>
+    </div>
+
+    <ol class="steps">
+      <li>
+        <b>1</b>
+        <div>
+          <strong>主問題（可信賴）</strong>
+          <span>自然語言限制轉成模型時，如何讓結果可驗證？做法：為每條限制自動產生通過／不通過的小測試；指令模糊時反問使用者；用繁體中文口語指令測試。</span>
+        </div>
+      </li>
+      <li>
+        <b>2</b>
+        <div>
+          <strong>延伸測試（可擴展）</strong>
+          <span>規模變大時，正確率與求解時間如何變化？做法：LLM 產生模型後，先用簡單啟發式處理大部分訂單，剩餘難題交給求解器。</span>
+        </div>
+      </li>
+      <li>
+        <b>3</b>
+        <div>
+          <strong>成果（可重現）</strong>
+          <span>自建小型測試集，不再當獨立問題。做法：以 OpenStreetMap 或政府開放資料建路網，設計「自然語言指令＋標準答案」；多組隨機種子；用等效性檢定而不只是 p&gt;0.05。</span>
+        </div>
+      </li>
+    </ol>
+  </section>
+
+  <!-- 5 -->
+  <section class="slide big dense">
+    <div class="tag">PART 03</div>
+    <h1>具體方案</h1>
+
+    <ol class="steps" style="margin-bottom:1.1rem">
+      <li>
+        <b>1</b>
+        <div>
+          <strong>可信賴：每條限制都要有測試案例</strong>
+          <span>為每條限制自動產生一個通過與一個不通過的小測試；指令模糊時反問使用者，不自己猜門檻；用繁體中文口語指令測試。</span>
+        </div>
+      </li>
+      <li>
+        <b>2</b>
+        <div>
+          <strong>可擴展：啟發式先跑，求解器收尾</strong>
+          <span>沿用 DeepFreight＋MILP 的分工概念，但不使用 QMIX。LLM 負責把指令變成模型，規模問題交給演算法。</span>
+        </div>
+      </li>
+      <li>
+        <b>3</b>
+        <div>
+          <strong>可重現：自建小型測試集</strong>
+          <span>以 OpenStreetMap 或政府開放資料建路網，設計「自然語言指令＋標準答案」；多組隨機種子；用等效性檢定報信賴區間。</span>
+        </div>
+      </li>
+    </ol>
+
+    <div class="two-col">
+      <div class="hyp">
+        <div>
+          <b>H1</b>
+          <p>加入限制驗證後，解正確率高於未加驗證的版本。</p>
+        </div>
+        <div>
+          <b>H2</b>
+          <p>加入啟發式分解後，在較大規模下求解時間縮短，且解的品質可接受。</p>
+        </div>
+      </div>
+
+      <div class="cards">
+        <div class="card">
+          <b>第一年範圍</b>
+          <p>只做三種限制：禁行路段、限高限重、危險品路線。問題設定為有容量的多車配送。</p>
+        </div>
+        <div class="card">
+          <b>成效指標</b>
+          <p>限制正確率、程式可執行率、求解時間、空駛比。</p>
+        </div>
+      </div>
+    </div>
+
+    <table>
+      <thead>
+        <tr><th>元件取捨</th><th>決定</th><th>理由</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>LLM 自動建模</td><td>採用</td><td>PortAgent 的概念</td></tr>
+        <tr><td>先啟發式、剩餘交給求解器</td><td>採用</td><td>DeepFreight＋MILP 的概念</td></tr>
+        <tr><td>QMIX 多智能體強化學習</td><td class="skip">先不做</td><td>訓練久、不穩定，且與本題核心無關</td></tr>
+        <tr><td>LLM 解析仲介訊息</td><td class="skip">只取想法</td><td>不列為本計畫的作法</td></tr>
+      </tbody>
+    </table>
+
+    <p class="lede" style="margin:.9rem 0 0">
+      我們的定位：不是「驗證 PortAgent」，而是針對它已知的失敗模式提出並測試修補，並延伸到貨運與繁體中文場景。以上做法與成效均為預期，尚未執行。
+    </p>
+  </section>
+
+</main>
+
+<footer>
+  <div class="dots" id="dots"></div>
+  <span id="pos">1 / 5</span>
+  <span>← → 鍵或按鈕翻頁</span>
+</footer>
+
+<script>
+  var slides = document.querySelectorAll('.slide');
+  var i = 0;
+  var prev = document.getElementById('prev');
+  var next = document.getElementById('next');
+  var pos = document.getElementById('pos');
+  var dots = document.getElementById('dots');
+
+  slides.forEach(function (_, n) {
+    var d = document.createElement('span');
+    d.addEventListener('click', function () { go(n); });
+    dots.appendChild(d);
+  });
+
+  function go(n) {
+    i = Math.max(0, Math.min(slides.length - 1, n));
+    slides.forEach(function (s, k) { s.classList.toggle('on', k === i); });
+    prev.disabled = i === 0;
+    next.disabled = i === slides.length - 1;
+    pos.textContent = (i + 1) + ' / ' + slides.length;
+    Array.prototype.forEach.call(dots.children, function (d, k) {
+      d.classList.toggle('on', k === i);
+    });
+  }
+
+  prev.addEventListener('click', function () { go(i - 1); });
+  next.addEventListener('click', function () { go(i + 1); });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowRight' || e.key === 'PageDown') { go(i + 1); }
+    if (e.key === 'ArrowLeft' || e.key === 'PageUp') { go(i - 1); }
+    if (e.key === 'Home') { go(0); }
+    if (e.key === 'End') { go(slides.length - 1); }
+  });
+
+  document.getElementById('theme').addEventListener('click', function () {
+    var el = document.documentElement;
+    var order = ['auto', 'light', 'dark'];
+    var now = order.indexOf(el.getAttribute('data-theme'));
+    el.setAttribute('data-theme', order[(now + 1) % order.length]);
+  });
+
+  go(0);
+</script>
+
+</body>
+</html>
