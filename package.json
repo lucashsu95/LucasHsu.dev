@@ -88,6 +88,9 @@
     "slidev:dev:cb-day2": "slidev docs/slides/cb-day2-order-system/slides.md --remote",
     "slidev:build:cb-day2": "slidev build docs/slides/cb-day2-order-system/slides.md --out ../../public/slides/cb-day2 --base /LucasHsu.dev/slides/cb-day2/",
     "slidev:export:cb-day2": "bash scripts/slidev-export-pdf.sh cb-day2-order-system",
+    "slidev:dev:backend-101-network-framework": "slidev docs/slides/backend-101-network-framework/slides.md --remote",
+    "slidev:build:backend-101-network-framework": "slidev build docs/slides/backend-101-network-framework/slides.md --out ../../public/slides/backend-101-network-framework --base /LucasHsu.dev/slides/backend-101-network-framework/",
+    "slidev:export:backend-101-network-framework": "bash scripts/slidev-export-pdf.sh backend-101-network-framework",
     "slidev:build:all": "bash scripts/slidev-build.sh"
   },
   "dependencies": {

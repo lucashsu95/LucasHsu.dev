@@ -157,3 +157,6 @@ stop-slop/SKILL.md
 stop-slop/references/examples.md
 stop-slop/references/phrases.md
 stop-slop/references/structures.md
+/.opencode/skills/diagram-design
+/_overflow.mjs
+/overflow-check.mjs

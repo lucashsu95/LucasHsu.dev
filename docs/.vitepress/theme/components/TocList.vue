@@ -4,7 +4,10 @@ import { ref, computed, onMounted, onBeforeUnmount } from "vue";
 import sidebarData from "../sidebarData.json";
 
 const list = computed(() => {
-  const list = sidebarData.map((item) => ({ ...item, category: "Docs" }));
+  const list = sidebarData.map((item) => ({
+    ...item,
+    category: item.isSlide ? "簡報" : "Docs",
+  }));
   return list.filter((item) => item.link);
 });
 
