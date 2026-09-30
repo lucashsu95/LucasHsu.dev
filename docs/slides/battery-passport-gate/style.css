@@ -625,14 +625,7 @@
   border: 1px solid rgba(228, 131, 122, 0.32);
   border-radius: 13px;
   background: rgba(228, 131, 122, 0.06);
-  padding: 0.8rem 1rem;
-}
-
-.spoken-head {
-  color: var(--accent);
-  font: 700 0.68rem "JetBrains Mono", monospace;
-  letter-spacing: 0.18em;
-  margin-bottom: 0.5rem;
+  padding: 0.85rem 1rem;
 }
 
 .spoken p {

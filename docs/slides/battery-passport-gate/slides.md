@@ -121,7 +121,6 @@ layoutClass: gap-9
 </div>
 
 <div class="spoken">
-  <div class="spoken-head">口述稿</div>
   <p>衣服護照的資料來自很多工廠，有些工廠數位化程度很低，數據容易填錯。作者用真實紡織資料試了四種做法，做成 API，已經有公司在使用。不過資料只有兩百多筆，結果不太穩定。</p>
   <p class="spoken-key">用 AI 檢查 DPP 資料這條路有人走過，而且已經做出來了。</p>
 </div>
@@ -162,7 +161,6 @@ layoutClass: gap-9
 </div>
 
 <div class="spoken">
-  <div class="spoken-head">口述稿</div>
   <p>歐盟 2027 年 2 月要求電池護照前後一致，但沒有公開資料能測 AI。作者做了 1 萬 2 千份護照，讓 22 個 AI 考試，最好的在練習卷 0.98，正式考只有 0.71，常把合規的誤判成不合規，還會被一句「忽略指令」誘導。</p>
   <p class="spoken-key">0.98 和 0.71 之間那個落差，就是我的題目所在。</p>
 </div>
@@ -202,7 +200,6 @@ layoutClass: gap-9
 </div>
 
 <div class="spoken">
-  <div class="spoken-head">口述稿</div>
   <p>區塊鏈像全班都有一本相同的日記，有人改字就會被發現。AI 讀護照資料，替衣服打分數、預測供應商風險，最準的 XGBoost 拿到 0.947，滿分是 1。但資料是模擬的 5 萬筆，不是真的工廠資料。</p>
   <p class="spoken-key">它保證「進去之後沒被改」，沒保證「進去的時候就是對的」。</p>
 </div>
@@ -240,7 +237,7 @@ transition: fade
 
 ---
 
-# 三個小問題
+# 四個小問題
 
 <div class="q-stack">
   <div class="q-item" v-click>
