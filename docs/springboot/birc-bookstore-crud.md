@@ -190,16 +190,36 @@ birc seed                                       # 塞示範列
 
 ## 課堂必改：否則 API 全是 401
 
-在 `modules/bookstore-config/src/main/java/tw/edu/ntub/birc/bookstore/config/` 建立一個 `BookSecurityCustomizer.java`
+SecurityConfig 是 `birc create` 產出來的，預設 `anyRequest().authenticated()`。沒接 auth 模組時沒有任何東西能通過它（沒登入端點、沒 JWT filter），所以沒列進去的路徑一律鎖死。
+
+不用自己寫，讓產生器產：
+
+```bash
+birc make:security Book
+```
+
+產出 `src/main/java/tw/edu/ntub/birc/bookstore/config/BookSecurityCustomizer.java`：
 
 ```java
-default void customize(HttpSecurity http) throws Exception {
-    http.authorizeHttpRequests(auth -> auth
-        .requestMatchers(HttpMethod.GET, "/api/books", "/api/books/**").permitAll()
-        .requestMatchers("/api/books/**").hasAuthority("ROLE_ADMIN")
-    );
+@Component
+public class BookSecurityCustomizer implements SecurityCustomizer {
+
+    @Override
+    public List<String> publicPaths() {
+        return List.of("/api/books", "/api/books/**");
+    }
 }
 ```
+
+`implements SecurityCustomizer` 與 `@Component` 兩個都不能少：SecurityConfig 是用 `ObjectProvider<SecurityCustomizer>` 收集實作，型別不符或沒被 Spring 掃到就永遠收不到，`anyRequest().authenticated()` 會照樣鎖死所有路徑。
+
+::: warning 容易踩的坑
+自己宣告一個新的 `interface BookSecurityCustomizer`（不 `implements`、沒 `@Component`）是無效的。它跟專案裡的 `SecurityCustomizer` 沒有任何關聯，SecurityConfig 收不到，而這條路徑**不會寫任何 log 或丟例外**，只會安靜地一直回 401。
+:::
+
+放行路徑只能走 `publicPaths()`。不要在 `customize()` 裡自己呼叫 `authorizeHttpRequests` — Spring 不允許在 `anyRequest()` 之後再加 matcher。
+
+另一種寫法：建 Entity 時就一起產，`birc make Book --fields ... --migration --seed --public-read`。差別是它還會幫 Controller 的寫入方法掛 `@PreAuthorize("isAuthenticated()")`；事後補的 `make:security` 只動 filter 層。
 
 ## 啟動並打 API
 

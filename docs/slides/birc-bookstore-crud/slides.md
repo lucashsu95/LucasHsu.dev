@@ -468,24 +468,49 @@ transition: fade
 
 # 課堂必改：否則 API 全是 401
 
-在 `modules/bookstore-config/src/main/java/tw/edu/ntub/birc/bookstore/config/` 建立一個 `BookSecurityCustomizer.java`
+SecurityConfig 是 `birc create` 產出來的，預設 `anyRequest().authenticated()`。沒接 auth 模組時沒有任何東西能通過它（沒登入端點、沒 JWT filter），所以沒列進去的路徑一律鎖死。
 
-機制都在你產出的專案裡：SecurityConfig 預設是 `anyRequest().authenticated()`
+**不用自己寫**，讓產生器產：
 
-**注意兩件事：**
-1. 沒接 auth 模組時，沒有任何東西能通過 `authenticated()`（沒登入端點、沒 JWT filter），所以沒列進去的路徑一律鎖死——「全開」必須明確列。
-2. 放行路徑只能走 `publicPaths()`，不要在 `customize()` 裡自己調 authorizeHttpRequests（Spring 不准在 anyRequest 之後再加 matcher）。
+```bash
+birc make:security Book
+```
 
-```java {4}
-public interface BookSecurityCustomizer {
+產出 `src/main/java/.../config/BookSecurityCustomizer.java`：
 
-    default List<String> publicPaths() {
+```java {1-2}
+@Component
+public class BookSecurityCustomizer implements SecurityCustomizer {
+
+    @Override
+    public List<String> publicPaths() {
         return List.of("/api/books", "/api/books/**");
     }
-
-    default void customize(HttpSecurity http) throws Exception {}
 }
 ```
+
+---
+transition: fade
+---
+
+# 兩個關鍵字不能少
+
+<div class="concept-card text-m">
+<strong style="display:block">implements SecurityCustomizer</strong>
+SecurityConfig 用 <code>ObjectProvider&lt;SecurityCustomizer&gt;</code> 收集實作，型別不符就永遠收不到。
+
+<strong style="display:block;margin-top:10px">@Component</strong>
+沒有它就不會被 Spring 掃到，收集到的集合是空的。
+</div>
+
+<div class="mt-3 bad-card text-m">
+<span class="label">不要自己宣告一個新介面</span>
+自己寫一個 <code>interface BookSecurityCustomizer</code>（不 implements、沒 <code>@Component</code>）無效：型別跟專案裡的 <code>SecurityCustomizer</code> 無關，收不到，<code>authenticated()</code> 照樣鎖死全部。<span class="accent-orange">而且沒有任何 log 或例外</span>，只會安靜地一直回 401。
+</div>
+
+<div class="mt-3 muted text-m">
+另一種寫法：建 Entity 時加 <code>--public-read</code> 一起產，它會多掛 Controller 的 <code>@PreAuthorize</code>；<code>make:security</code> 只動 filter 層。
+</div>
 
 ---
 transition: fade
