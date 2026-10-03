@@ -138,7 +138,7 @@
 }
 
 /* ── Slide chrome ───────────────────────────────────────────────────────── */
-.slidev-layout::before {
+.slidev-layout:not(.no)::before {
   content: "";
   position: absolute;
   left: var(--pad-x);
@@ -149,7 +149,7 @@
   pointer-events: none;
 }
 
-.slidev-layout::after {
+.slidev-layout:not(.no)::after {
   content: "後端 101 · 網路與框架";
   position: absolute;
   left: var(--pad-x);
