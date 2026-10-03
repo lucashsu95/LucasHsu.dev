@@ -94,6 +94,7 @@
     "slidev:build:all": "bash scripts/slidev-build.sh"
   },
   "dependencies": {
+    "animejs": "^4.5.0",
     "busuanzi.pure.js": "^1.0.3",
     "viewerjs": "^1.11.6",
     "vitepress-plugin-back-to-top": "^1.0.1",

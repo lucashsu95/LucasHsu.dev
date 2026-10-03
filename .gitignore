@@ -160,3 +160,12 @@ stop-slop/references/structures.md
 /.opencode/skills/diagram-design
 /_overflow.mjs
 /overflow-check.mjs
+
+# Java / Maven build output
+target/
+*.class
+
+# Eclipse / STS project files (demo sources, not committed)
+.classpath
+.project
+.settings/

@@ -360,6 +360,7 @@ layout: default
   <div class="tc-note__t">注意 MySQL 和 Redis 的 port 不在 HTTP 的家族裡</div>
   <div class="tc-note__b">它們是「別的服務」，只是剛好也住在同一台機器上。</div>
 </div>
+
 ---
 layout: default
 class: scroll-y
@@ -551,7 +552,7 @@ class: scroll-y
 
 <span class="tc-panel__label" style="margin-top:14px">同一份程式碼，狀態碼是這樣決定的</span>
 
-```java {1-4|6-8|10-12|14-16|all}
+```java
 if (方法不對)              → 405  我不接這種請求
 if (參數不是正整數)         → 400  你送壞了
 if (找不到這筆商品)         → 400  你送壞了
@@ -640,7 +641,7 @@ class: scroll-y
 
 <p class="tc-sm">我們的 Day 2 程式裡這一行：</p>
 
-```java {1-2|all}
+```java
 HttpServer server = HttpServer.create(new InetSocketAddress(8080), 0);
 //                                              ↑ 門牌 8080
 ```
@@ -723,22 +724,22 @@ layout: default
 </div>
 
 <div class="tc-grid tc-grid--even" style="margin-top:12px">
-  <div v-click class="tc-note tc-note--accent">
+  <div class="tc-note tc-note--accent">
     <div class="tc-note__t"><i class="ic ic-box ic--sm"></i> 套件 Library</div>
     <div class="tc-note__b">你<b>呼叫</b>它。控制權在你。<br>例：<code>Math.random()</code>、<code>new Scanner()</code></div>
   </div>
-  <div v-click class="tc-note tc-note--warn">
+  <div class="tc-note tc-note--warn">
     <div class="tc-note__t"><i class="ic ic-tool ic--sm"></i> 框架 Framework</div>
     <div class="tc-note__b">它<b>呼叫</b>你。你把程式碼交給它，它決定何時執行。<br>例：Spring Boot、React、Vue</div>
   </div>
 </div>
 
-<div v-click class="tc-term" style="margin-top:12px">
+<div class="tc-term" style="margin-top:12px">
 怎麼分辨？問自己一句話：
 「<b>這段程式碼是它主動跑，還是我主動跑？</b>」
 我主動跑 → 套件。　它主動跑我寫的 → 框架。</div>
 
-<div v-click class="tc-grid tc-grid--even" style="margin-top:12px">
+<div class="tc-grid tc-grid--even" style="margin-top:12px">
   <div class="tc-panel tc-panel--inset" style="padding:11px 14px">
     <b class="tc-sm">沒有框架時（Day2 你寫的）</b>
     <p class="tc-xs tc-mono tc-dim">main() → new → 註冊 → start()</p>
@@ -751,7 +752,7 @@ layout: default
   </div>
 </div>
 
-<div v-click class="tc-note tc-note--accent" style="margin-top:12px">
+<div class="tc-note tc-note--accent" style="margin-top:12px">
   <div class="tc-note__t">這就是為什麼框架的正式名字叫「反向控制」（IoC, Inversion of Control）</div>
   <div class="tc-note__b">控制權被反轉了。</div>
 </div>
@@ -824,7 +825,7 @@ class: scroll-y
 
 <div class="tc-row tc-row--center" style="gap:8px"><i class="ic ic-cross ic--sm tc-err"></i><span class="tc-h2">原生版</span></div>
 
-```java {1-2|4-5|all}
+```java
 // 綁 port、決定生命週期
 HttpServer server = HttpServer.create(new InetSocketAddress(8080), 0);
 // 手動註冊每一條路由
@@ -846,7 +847,7 @@ try (OutputStream out = exchange.getResponseBody()) { out.write(content); }
 
 <div class="tc-row tc-row--center" style="gap:8px;margin-top:8px"><i class="ic ic-check ic--sm tc-ok"></i><span class="tc-h2">框架版</span></div>
 
-```java {1-3|5-6|all}
+```java
 @RestController
 @RequestMapping("/api")
 public class ProductController {
@@ -1132,7 +1133,7 @@ const products = await response.json();
 
 <div class="tc-row tc-row--center" style="gap:8px;margin-top:10px"><span class="tc-rowline__k">02</span><span class="tc-h2">後端：收請求</span></div>
 
-```java {2|4|all}
+```java
 private static void handleProducts(HttpExchange ex) throws IOException {
     // 圖上的：讀取商品清單
     sendJson(ex, 200, json.toString());
@@ -1203,6 +1204,7 @@ class: scroll-y
     <p class="tc-xs tc-mute" style="margin-top:6px">這樣你才看得出<b>框架換掉的是哪一層</b>。</p>
   </div>
 </div>
+
 ---
 layout: default
 class: scroll-y
@@ -1291,9 +1293,6 @@ curl -i localhost:8080/api/buy
   <div class="tc-note__b">圖上的每一支箭頭，在這個畫面裡都會出現一次。</div>
 </div>
 
----
-layout: default
-class: scroll-y
 ---
 
 <div class="tc-head tc-head--tight">
@@ -1452,7 +1451,7 @@ class: scroll-y
   <div class="tc-head__meta"><b>ProductController.java · 66 行</b> — Day 2 的 BuyProductApi.java 是 189 行</div>
 </div>
 
-```java {1-2|5-13|16-19|21-25|27-32|all}
+```java
 package com.birc.backend101;                    // 套件 → 對應到路徑，框架靠這個找
 
 @RestController                                 // ① 「我是個 API 控制器」
@@ -1490,38 +1489,38 @@ class: scroll-y
 ---
 
 <div class="tc-head tc-head--tight">
-  <div class="tc-kicker">10 · 逐行拆解</div>
+  <div class="tc-kicker">10 · 配置魔法</div>
   <h1 class="tc-h1">框架幫你做了什麼</h1>
 </div>
 
 <div class="tc-rows">
-  <div v-click class="tc-rowline" style="grid-template-columns:150px 1fr;padding:10px 0">
+  <div class="tc-rowline" style="grid-template-columns:150px 1fr;padding:10px 0">
     <code class="tc-rowline__k tc-xs">package + 資料夾結構</code>
-    <span class="tc-rowline__v tc-xs">Java 規定：<b>套件名必須對應資料夾</b>。所以 <code>com.birc.backend101</code> 必須在 <code>com/birc/backend101/</code> — 這是 Java 語言規則，但 Spring 靠它自動掃描。放錯就找不到。</span>
+    <span class="tc-rowline__v tc-xs">編譯器與類別載入器的慣例：<b>套件名必須對應資料夾</b>。所以 <code>com.birc.backend101</code> 必須在 <code>com/birc/backend101/</code> — Spring 靠它自動掃描。放錯就找不到。</span>
   </div>
-  <div v-click class="tc-rowline" style="grid-template-columns:150px 1fr;padding:10px 0">
+  <div class="tc-rowline" style="grid-template-columns:150px 1fr;padding:10px 0">
     <code class="tc-rowline__k tc-xs">@RestController</code>
     <span class="tc-rowline__v tc-xs">= 「這個類別的方法，回傳值直接變成 HTTP 回應 body」。<b>取代了手動呼叫 sendJson</b>。它 = <code>@Controller</code> + <code>@ResponseBody</code>。</span>
   </div>
-  <div v-click class="tc-rowline" style="grid-template-columns:150px 1fr;padding:10px 0">
+  <div class="tc-rowline" style="grid-template-columns:150px 1fr;padding:10px 0">
     <code class="tc-rowline__k tc-xs">@RequestMapping("/api")</code>
-    <span class="tc-rowline__v tc-xs">這三個字<b>取代了 createContext 註冊</b>。整個類別的網址前綴。</span>
+    <span class="tc-rowline__v tc-xs">這一行<b>取代了 createContext 註冊</b>。整個類別的網址前綴。</span>
   </div>
-  <div v-click class="tc-rowline" style="grid-template-columns:150px 1fr;padding:10px 0">
+  <div class="tc-rowline" style="grid-template-columns:150px 1fr;padding:10px 0">
     <code class="tc-rowline__k tc-xs">@GetMapping("/products")</code>
-    <span class="tc-rowline__v tc-xs">組出 <code>GET /api/products</code>。<b>HTTP 方法 + 路徑，兩個字合併</b>。</span>
+    <span class="tc-rowline__v tc-xs">組出 <code>GET /api/products</code>。<b>HTTP 方法與路徑合在一個註解裡</b>。</span>
   </div>
-  <div v-click class="tc-rowline" style="grid-template-columns:150px 1fr;padding:10px 0">
+  <div class="tc-rowline" style="grid-template-columns:150px 1fr;padding:10px 0">
     <code class="tc-rowline__k tc-xs">return products;</code>
-    <span class="tc-rowline__v tc-xs">回傳 <code>List&lt;Product&gt;</code> → <b>自動序列化成 JSON</b>，自動設 <code>Content-Type: application/json</code>，自動呼叫 sendResponseHeaders，自動 close()。<b>86 行手刻 JSON 變成 1 行</b>。</span>
+    <span class="tc-rowline__v tc-xs">回傳 <code>List&lt;Product&gt;</code> → <b>自動序列化成 JSON</b>，自動設 <code>Content-Type: application/json</code>，自動呼叫 sendResponseHeaders，自動 close()。<b>十幾行手刻 JSON（含跳脫處理）變成 1 行</b>。</span>
   </div>
-  <div v-click class="tc-rowline" style="grid-template-columns:150px 1fr;padding:10px 0">
+  <div class="tc-rowline" style="grid-template-columns:150px 1fr;padding:10px 0">
     <code class="tc-rowline__k tc-xs">@RequestBody</code>
-    <span class="tc-rowline__v tc-xs">自動讀 body、解析 JSON、<b>塞進你的物件</b>。取代了 <code>readAllBytes()</code> + <code>parseForm()</code> + <code>getOrDefault()</code>。</span>
+    <span class="tc-rowline__v tc-xs">自動讀 body、解析 JSON、<b>塞進你的物件</b>。取代了 <code>readAllBytes()</code> + <code>parseForm()</code> + <code>getOrDefault()</code>，且 body 從 form 格式換成 JSON。</span>
   </div>
-  <div v-click class="tc-rowline" style="grid-template-columns:150px 1fr;padding:10px 0">
+  <div class="tc-rowline" style="grid-template-columns:150px 1fr;padding:10px 0">
     <code class="tc-rowline__k tc-xs">ResponseEntity.ok(...)</code>
-    <span class="tc-rowline__v tc-xs"><code>ok()</code> = 200、<code>badRequest()</code> = 400、<code>status(409)</code> = 409。<b>一行搞定狀態碼 + body</b>。</span>
+    <span class="tc-rowline__v tc-xs"><code>ok()</code> = 200、<code>badRequest()</code> = 400、<code>ResponseEntity.status(409)</code> = 409。<b>一行搞定狀態碼 + body</b>。</span>
   </div>
 </div>
 
@@ -1652,7 +1651,6 @@ layout: center
     <p class="tc-lead" style="--i:3;margin-top:20px">你現在可以解釋網路怎麼跑、狀態碼代表什麼、以及框架到底解決了什麼。這就是後端的真實面貌。</p>
     <div class="tc-rows" style="--i:4;margin-top:26px;max-width:460px">
       <div class="tc-rowline" style="grid-template-columns:78px 1fr"><span class="tc-rowline__n">回家複習</span><span class="tc-rowline__v tc-sm"><code>localhost:8080</code> 的 Port 那一頁</span></div>
-      <div class="tc-rowline" style="grid-template-columns:78px 1fr"><span class="tc-rowline__n">下次課程</span><span class="tc-rowline__v tc-sm">記得先裝好 <code>Maven</code></span></div>
     </div>
     <p class="tc-xs tc-mute" style="--i:5;margin-top:22px">LucasHsu.dev — 2026 商智中心後端群體驗營</p>
   </div>

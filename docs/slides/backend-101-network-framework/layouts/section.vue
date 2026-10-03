@@ -1,5 +1,7 @@
 <template>
   <div class="slidev-layout section">
-    <slot />
+    <StageReveal>
+      <slot />
+    </StageReveal>
   </div>
 </template>

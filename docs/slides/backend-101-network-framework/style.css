@@ -700,10 +700,10 @@
 }
 
 .tc-checks__i {
-  display: grid;
-  grid-template-columns: 15px 1fr;
+  display: flex;
   gap: 8px;
-  align-items: start;
+  align-items: flex-start;
+  flex-wrap: wrap;
   font-size: var(--fs-sm);
   line-height: 1.5;
   color: var(--fg-2);
@@ -711,6 +711,7 @@
 
 .tc-checks__i::before {
   content: "";
+  flex: none;
   width: 9px;
   height: 9px;
   margin-top: 5px;
