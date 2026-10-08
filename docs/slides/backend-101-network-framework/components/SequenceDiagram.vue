@@ -1,10 +1,19 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref } from 'vue'
-import { createTimeline, stagger } from 'animejs'
+import { createTimeline, stagger, utils } from 'animejs'
 
 // 由 diagram-design skill 產出，於建置時內嵌，確保 Vite 能打包
 // 配色對齊 style.css 的 design tokens（accent / ok / err / fg-2）
 // 分步播放：anime.js v4 createTimeline 串接 4 個 phase；載入失敗時降級為靜態圖
+//
+// 修正重點：
+// 1. 改用 IntersectionObserver：投影片真的出現在畫面上才播放，離開時倒回起點。
+//    （Slidev 會預先掛載相鄰頁面，原本 onMounted 就播，使用者翻到時早就播完了）
+// 2. 建立 timeline 前先把所有 [data-phase] 元素設為透明，
+//    避免後面階段的元素在一開始先以完整樣子閃現，輪到時才消失再淡入。
+// 3. 同一階段內的箭頭與標籤用較大的 stagger，變成一則一則依序出現。
+// 4. 匯出 PDF（print 媒體）時直接顯示終態，不播動畫。
+// 5. 底部 409 箭頭原本超出生命線與 viewBox，已延伸生命線並加高畫布。
 
 const props = withDefaults(defineProps<{ autoplay?: boolean }>(), { autoplay: true })
 
@@ -13,23 +22,47 @@ type SeqTimeline = ReturnType<typeof createTimeline>
 const root = ref<HTMLElement | null>(null)
 const currentStep = ref(0)
 const totalSteps = 4
+const MSG_STAGGER = 220
 let tl: SeqTimeline | null = null
+let io: IntersectionObserver | null = null
 
-function reduceMotion(): boolean {
+function skipMotion(): boolean {
+  if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') return false
   return (
-    typeof window !== 'undefined' &&
-    typeof window.matchMedia === 'function' &&
-    window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
+    window.matchMedia('print').matches
   )
 }
 
+function phaseTargets(): SVGElement[] {
+  const svg = root.value?.querySelector('svg')
+  return svg ? Array.from(svg.querySelectorAll<SVGElement>('[data-phase]')) : []
+}
+
+// 不依賴 anime：直接清掉行內樣式，確保降級時一定看得到完整圖
+function revealAll() {
+  phaseTargets().forEach((el) => {
+    el.style.opacity = ''
+    el.style.transform = ''
+  })
+}
+
 function showFinal() {
+  revealAll()
   currentStep.value = totalSteps
+}
+
+function hideAll() {
+  utils.set(phaseTargets(), { opacity: 0 })
 }
 
 function buildTimeline(): SeqTimeline | null {
   const svg = root.value?.querySelector('svg')
   if (!svg) return null
+
+  // 先隱藏，timeline 才不會讓後面階段的元素提早露臉
+  hideAll()
+
   const timeline = createTimeline({ defaults: { ease: 'outExpo', duration: 500 }, autoplay: false })
   for (let phase = 1; phase <= totalSteps; phase += 1) {
     const group = Array.from(svg.querySelectorAll<SVGElement>(`[data-phase="${phase}"]`))
@@ -42,30 +75,30 @@ function buildTimeline(): SeqTimeline | null {
     const at: number | string = phase === 1 ? 0 : '+=160'
     let placed = false
     const parallel = () => (placed ? '<' : at)
-    if (lines.length > 0) {
-      // 線條：opacity 淡入
-      timeline.add(lines, { opacity: [0, 1], duration: 450, ease: 'outExpo', delay: stagger(80) }, parallel())
-      placed = true
-    }
     if (bars.length > 0) {
-      // activation bar：scaleY（頂端為軸）+ opacity
+      // activation bar：先長出來，再接訊息
       timeline.add(
         bars,
-        { opacity: [0, 1], scaleY: [0, 1], transformOrigin: '50% 0%', duration: 450, ease: 'inOutQuad', delay: stagger(80) },
+        { opacity: [0, 1], scaleY: [0, 1], transformOrigin: '50% 0%', duration: 450, ease: 'inOutQuad', delay: stagger(MSG_STAGGER) },
         parallel(),
       )
       placed = true
     }
     if (frames.length > 0) {
       // ALT 外框：opacity 淡入
-      timeline.add(frames, { opacity: [0, 1], duration: 400, ease: 'outExpo', delay: stagger(80) }, parallel())
+      timeline.add(frames, { opacity: [0, 1], duration: 400, ease: 'outExpo', delay: stagger(MSG_STAGGER) }, parallel())
+      placed = true
+    }
+    if (lines.length > 0) {
+      // 線條：依序淡入，一則訊息一則訊息出現
+      timeline.add(lines, { opacity: [0, 1], duration: 450, ease: 'outExpo', delay: stagger(MSG_STAGGER) }, parallel())
       placed = true
     }
     if (labels.length > 0) {
-      // 標籤：translateY + opacity
+      // 標籤：translateY + opacity，節奏與線條一致，會和各自的箭頭配成一對
       timeline.add(
         labels,
-        { opacity: [0, 1], translateY: [8, 0], duration: 450, ease: 'outExpo', delay: stagger(80) },
+        { opacity: [0, 1], translateY: [8, 0], duration: 450, ease: 'outExpo', delay: stagger(MSG_STAGGER) },
         parallel(),
       )
       placed = true
@@ -74,10 +107,17 @@ function buildTimeline(): SeqTimeline | null {
       currentStep.value = phase
     })
   }
-  timeline.call(() => {
-    showFinal()
-  })
   return timeline
+}
+
+function degrade() {
+  try {
+    tl?.revert()
+  } catch {
+    // 降級：忽略 revert 失敗，保持靜態終態
+  }
+  tl = null
+  showFinal()
 }
 
 function replay() {
@@ -86,19 +126,25 @@ function replay() {
     currentStep.value = 0
     tl.restart()
   } catch {
-    try {
-      tl.revert()
-    } catch {
-      // 降級：忽略 revert 失敗，保持靜態終態
-    }
-    tl = null
-    showFinal()
+    degrade()
+  }
+}
+
+// 離開畫面：倒回起點並暫停，下次進來可以重播
+function rewind() {
+  if (!tl) return
+  try {
+    tl.pause()
+    tl.seek(0)
+    currentStep.value = 0
+  } catch {
+    degrade()
   }
 }
 
 onMounted(() => {
-  // 尊重 prefers-reduced-motion：直接顯示終態
-  if (reduceMotion()) {
+  // 尊重 prefers-reduced-motion，也涵蓋 PDF 匯出：直接顯示終態
+  if (skipMotion()) {
     showFinal()
     return
   }
@@ -108,21 +154,34 @@ onMounted(() => {
       showFinal()
       return
     }
-    // timeline 初始化即套用起始影格（不經 CSS 隱藏，避免動畫被抑制時空白）
     tl.seek(0)
-    if (props.autoplay) tl.play()
-  } catch {
-    try {
-      tl?.revert()
-    } catch {
-      // 降級：忽略 revert 失敗，保持靜態終態
+
+    if (typeof IntersectionObserver === 'undefined' || !root.value) {
+      if (props.autoplay) tl.play()
+      return
     }
-    tl = null
-    showFinal()
+    // 只有實際看得到才播放。display:none 的預載頁面不算 intersecting，
+    // 切換為可見的瞬間才會觸發。
+    io = new IntersectionObserver(
+      (entries) => {
+        const visible = entries.some((e) => e.isIntersecting)
+        if (visible) {
+          if (props.autoplay) replay()
+        } else {
+          rewind()
+        }
+      },
+      { threshold: 0.5 },
+    )
+    io.observe(root.value)
+  } catch {
+    degrade()
   }
 })
 
 onUnmounted(() => {
+  io?.disconnect()
+  io = null
   try {
     tl?.revert()
   } catch {
@@ -135,7 +194,7 @@ onUnmounted(() => {
 <template>
   <div ref="root" class="seq-stepped">
     <div class="seq-diagram">
-      <svg viewBox="0 0 900 430" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="b101-seq-title b101-seq-desc">
+      <svg viewBox="0 0 900 440" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="b101-seq-title b101-seq-desc">
         <title id="b101-seq-title">前後端如何溝通 — 一次下單的完整對話</title>
         <desc id="b101-seq-desc">瀏覽器先送出 GET /api/products 讀取商品，Java API 查詢記憶體商品清單後回傳 200。接著使用者點擊下單，瀏覽器送出 POST /api/buy，ALT 片段顯示庫存足夠時回傳 200 購買成功，庫存不足時回傳 409 衝突。</desc>
 
@@ -174,17 +233,17 @@ onUnmounted(() => {
           <text x="730" y="45">商品資料</text>
         </g>
 
-        <!-- lifelines -->
-        <line x1="170" y1="62" x2="170" y2="392" class="d-life"/>
-        <line x1="450" y1="62" x2="450" y2="392" class="d-life"/>
-        <line x1="730" y1="62" x2="730" y2="392" class="d-life"/>
+        <!-- lifelines：延伸到 424，涵蓋底部的 409 回應 -->
+        <line x1="170" y1="62" x2="170" y2="424" class="d-life"/>
+        <line x1="450" y1="62" x2="450" y2="424" class="d-life"/>
+        <line x1="730" y1="62" x2="730" y2="424" class="d-life"/>
 
         <!-- activation bars -->
         <rect x="167" y="96" width="6" height="112" rx="3" class="d-act" data-phase="1"/>
         <rect x="447" y="126" width="6" height="82" rx="3" class="d-act" data-phase="1"/>
         <rect x="727" y="144" width="6" height="30" rx="3" class="d-act" data-phase="1"/>
         <rect x="167" y="260" width="6" height="20" rx="3" class="d-act" data-phase="2"/>
-        <rect x="447" y="288" width="6" height="100" rx="3" class="d-act" data-phase="2"/>
+        <rect x="447" y="288" width="6" height="124" rx="3" class="d-act" data-phase="2"/>
         <rect x="727" y="298" width="6" height="24" rx="3" class="d-act" data-phase="2"/>
 
         <!-- phase 1 : read products -->
@@ -212,7 +271,7 @@ onUnmounted(() => {
         <text x="590" y="288" class="d-lbl" data-phase="2">檢查並扣減庫存</text>
 
         <!-- ALT block -->
-        <rect x="140" y="312" width="700" height="106" rx="8" class="d-alt" data-phase="3"/>
+        <rect x="140" y="312" width="700" height="114" rx="8" class="d-alt" data-phase="3"/>
         <rect x="140" y="312" width="34" height="14" rx="3" class="d-alt-tab" data-phase="3"/>
         <text x="157" y="322" class="d-alt-tag" data-phase="3">ALT</text>
 
@@ -223,8 +282,8 @@ onUnmounted(() => {
         <line x1="152" y1="376" x2="828" y2="376" class="d-rule d-rule--dashed" data-phase="4"/>
 
         <text x="156" y="396" class="d-cond d-cond--err" data-phase="4">[stock &lt; quantity]</text>
-        <line x1="440" y1="406" x2="176" y2="406" class="d-res d-res--err" marker-end="url(#b101-arrow-err)" data-phase="4"/>
-        <text x="310" y="398" class="d-lbl d-lbl--err" data-phase="4">409 · 庫存不足</text>
+        <line x1="440" y1="410" x2="176" y2="410" class="d-res d-res--err" marker-end="url(#b101-arrow-err)" data-phase="4"/>
+        <text x="310" y="402" class="d-lbl d-lbl--err" data-phase="4">409 · 庫存不足</text>
 
       </svg>
     </div>
@@ -256,7 +315,7 @@ onUnmounted(() => {
   width: 600px;
   max-width: 100%;
   height: auto;
-  aspect-ratio: 900 / 430;
+  aspect-ratio: 900 / 440;
   display: block;
 }
 
@@ -381,14 +440,6 @@ onUnmounted(() => {
   font-family: "JetBrains Mono", monospace;
   font-size: 8px;
   letter-spacing: 0.14em;
-  text-anchor: middle;
-}
-
-.d-foot {
-  fill: rgba(255, 255, 255, 0.28);
-  font-family: "JetBrains Mono", "PingFang TC", monospace;
-  font-size: 9.5px;
-  letter-spacing: 0.1em;
   text-anchor: middle;
 }
 

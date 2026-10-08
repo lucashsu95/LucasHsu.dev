@@ -43,12 +43,14 @@ exportFilename: backend-101-network-framework
     <div class="tc-rows tc-in" style="width:100%">
       <div class="tc-rowline" style="grid-template-columns:52px 1fr;--i:5"><span class="tc-rowline__n">時長</span><span class="tc-rowline__v tc-sm">50 分鐘</span></div>
       <div class="tc-rowline" style="grid-template-columns:52px 1fr;--i:6"><span class="tc-rowline__n">範圍</span><span class="tc-rowline__v tc-sm">網路 · 狀態碼 · Port · 框架</span></div>
-      <div class="tc-rowline" style="grid-template-columns:52px 1fr;--i:7"><span class="tc-rowline__n">講者</span><span class="tc-rowline__v tc-sm">LucasHsu.dev</span></div>
     </div>
   </div>
 </div>
 <div class="tc-grain"></div>
 
+---
+src: ./server-intro.md
+---
 ---
 layout: cover
 transition: slide-left
@@ -212,6 +214,7 @@ layout: default
 
 ---
 layout: default
+class: scroll-y no
 ---
 
 <div class="tc-head">

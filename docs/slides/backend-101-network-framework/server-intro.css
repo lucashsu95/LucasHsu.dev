@@ -1,0 +1,196 @@
+/* ===== server-intro：附加到 style.css 最後面 ===== */
+
+.sv {
+  --sv-a: #5eead4;
+  --sv-b: #fbbf24;
+  --sv-line: rgba(255, 255, 255, 0.16);
+  --sv-dim: rgba(255, 255, 255, 0.62);
+  --sv-card: rgba(255, 255, 255, 0.045);
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin-top: 8px;
+}
+
+/* 流程列 */
+.sv-flow {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  padding: 26px 8px 34px;
+}
+.sv-flow--end { padding: 6px 8px 0; }
+.sv-flow--3 .sv-track { min-width: 70px; }
+
+.sv-node {
+  flex: none;
+  min-width: 150px;
+  padding: 14px 18px;
+  border: 1px solid var(--sv-line);
+  border-radius: 10px;
+  background: var(--sv-card);
+  text-align: center;
+}
+.sv-node__t { font-weight: 700; font-size: 1.05em; }
+.sv-node__s { margin-top: 4px; font-size: 0.78em; color: var(--sv-dim); }
+.sv-node--accent { border-color: var(--sv-b); box-shadow: 0 0 0 1px rgba(251, 191, 36, 0.25), 0 0 28px rgba(251, 191, 36, 0.12); }
+.sv-node--live { border-color: var(--sv-a); }
+.sv-node--accent.sv-node--live { border-color: var(--sv-b); }
+.sv-node--files { text-align: left; }
+.sv-node--run .sv-node__s { color: var(--sv-a); }
+
+/* 連線與封包 */
+.sv-track {
+  position: relative;
+  flex: 1;
+  min-width: 120px;
+  height: 2px;
+  margin: 0 6px;
+  background: var(--sv-line);
+}
+.sv-packet {
+  position: absolute;
+  top: -4px;
+  left: 0;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--sv-a);
+  box-shadow: 0 0 10px var(--sv-a);
+  opacity: 0;
+  animation: sv-go 2.6s linear infinite;
+}
+.sv-packet--back {
+  background: var(--sv-b);
+  box-shadow: 0 0 10px var(--sv-b);
+  animation-name: sv-back;
+  animation-delay: 1.3s;
+}
+.sv-packet--file {
+  width: 14px;
+  height: 14px;
+  top: -6px;
+  border-radius: 3px;
+  animation-duration: 2.2s;
+}
+.sv-d1 { animation-delay: 0.45s; }
+.sv-d2 { animation-delay: 0.9s; }
+.sv-packet--back.sv-d1 { animation-delay: 1.75s; }
+
+@keyframes sv-go {
+  0%   { left: 0; opacity: 0; }
+  12%  { opacity: 1; }
+  88%  { opacity: 1; }
+  100% { left: calc(100% - 10px); opacity: 0; }
+}
+@keyframes sv-back {
+  0%   { left: calc(100% - 10px); opacity: 0; }
+  12%  { opacity: 1; }
+  88%  { opacity: 1; }
+  100% { left: 0; opacity: 0; }
+}
+
+.sv-lbl {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  font-size: 0.74em;
+  font-family: var(--slidev-code-font-family, monospace);
+  color: var(--sv-a);
+}
+.sv-lbl--up { top: -26px; }
+.sv-lbl--down { top: 12px; }
+.sv-lbl--b { color: var(--sv-b); }
+
+/* 常駐指示燈 */
+.sv-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  margin-right: 7px;
+  border-radius: 50%;
+  background: var(--sv-a);
+  animation: sv-pulse 1.6s ease-in-out infinite;
+}
+.sv-node--accent .sv-dot { background: var(--sv-b); }
+@keyframes sv-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(94, 234, 212, 0.55); }
+  50%      { box-shadow: 0 0 0 7px rgba(94, 234, 212, 0); }
+}
+
+/* 伺服器「煮」的動作 */
+.sv-cook { color: var(--sv-b); animation: sv-blink 2.6s steps(1) infinite; }
+@keyframes sv-blink {
+  0%, 38%   { opacity: 0.35; }
+  40%, 100% { opacity: 1; }
+}
+
+/* 檔案晶片 */
+.sv-files { display: flex; flex-direction: column; gap: 6px; margin-top: 8px; }
+.sv-file {
+  padding: 3px 10px;
+  border-radius: 4px;
+  background: rgba(94, 234, 212, 0.1);
+  border: 1px solid rgba(94, 234, 212, 0.3);
+  font-size: 0.74em;
+  font-family: var(--slidev-code-font-family, monospace);
+}
+
+/* 卡片 */
+.sv-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.sv-card {
+  padding: 14px 18px;
+  border-radius: 10px;
+  background: var(--sv-card);
+  border-left: 3px solid var(--sv-a);
+}
+.sv-card--b { border-left-color: var(--sv-b); }
+.sv-card__t { font-weight: 700; }
+.sv-card__b { margin-top: 5px; font-size: 0.82em; line-height: 1.6; color: var(--sv-dim); }
+
+/* 步驟 */
+.sv-steps { display: flex; flex-direction: column; gap: 8px; }
+.sv-step {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.92em;
+}
+.sv-step b {
+  flex: none;
+  width: 26px;
+  height: 26px;
+  line-height: 26px;
+  text-align: center;
+  border-radius: 50%;
+  background: var(--sv-b);
+  color: #1a1a1a;
+}
+.sv code, .sv-card code, .tc-note code {
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.08);
+  font-size: 0.9em;
+}
+
+/* 對照表 */
+.sv-vs {
+  display: grid;
+  grid-template-columns: 150px 1fr 1fr;
+  gap: 8px;
+  font-size: 0.86em;
+}
+.sv-vs__h { padding: 8px 14px; font-weight: 700; border-bottom: 2px solid var(--sv-line); }
+.sv-vs__h--a { border-bottom-color: var(--sv-a); color: var(--sv-a); }
+.sv-vs__h--b { border-bottom-color: var(--sv-b); color: var(--sv-b); }
+.sv-vs__k { padding: 9px 4px; color: var(--sv-dim); }
+.sv-vs__v { padding: 9px 14px; border-radius: 8px; background: var(--sv-card); }
+
+/* 終端機區塊 */
+.sv-term { font-size: 0.92em; }
+
+/* 偏好減少動態的使用者 */
+@media (prefers-reduced-motion: reduce) {
+  .sv-packet, .sv-dot, .sv-cook { animation: none; opacity: 1; }
+}

@@ -1,478 +1,678 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref } from 'vue'
-import { createTimeline, stagger } from 'animejs'
+import { computed, onMounted, onUnmounted, reactive, ref } from 'vue'
+import { animate } from 'animejs'
 
-// 「從瀏覽器到伺服器」5 步驟自動播放：頂部三節點拓撲（瀏覽器 ⇄ DNS ⇄ 伺服器）
-// 封包按步驟在節點間飛行（只用固定 viewBox 座標的 translateX + opacity），
-// 拓撲帶下方單行「傳送字幕」同步顯示當下誰傳了什麼給誰，被飛行方向對應的連線同步亮起，
-// 下方 5 步驟清單同步高亮；載入失敗或 reduced-motion 時降級為靜態終態。
-// 5 步驟文案、飛行路徑與時序沿用原文，一字未改。
+// 「從瀏覽器到伺服器」互動版：
+// - 上方 5 步驟 stepper 可點擊跳轉；下方可暫停 / 上一步 / 下一步 / 重播
+// - 中間拓撲：瀏覽器、DNS、伺服器三個節點，封包是帶文字的小膠囊，沿軌道飛行
+// - 下方左卡說明這一步在做什麼，右卡顯示這一步真正傳的內容（網址列、DNS 紀錄、握手、HTTP 原文）
+// - 不再用單一條 9 秒的 timeline，而是「狀態機 + 逐步播放」，所以可以隨時暫停、跳步、重播
+// - 投影片實際出現在畫面上才開始播放（IntersectionObserver），離開時回到待機
+// - prefers-reduced-motion / 列印：直接顯示第 5 步終態
 
 const props = withDefaults(defineProps<{ autoplay?: boolean }>(), { autoplay: true })
 
-type RjTimeline = ReturnType<typeof createTimeline>
+type NodeId = 'browser' | 'dns' | 'server'
+type Tone = 'req' | 'ok'
+interface Flight { from: NodeId; to: NodeId; label: string; tone: Tone }
+interface StepDef { title: string; nodes: NodeId[]; links: Array<'bd' | 'ds'>; flights: Flight[] }
+
+const URL_TEXT = 'lucashsu.dev'
+const totalSteps = 5
+
+// 拓撲固定座標（viewBox 900x132）
+const NODE_X: Record<NodeId, number> = { browser: 110, dns: 450, server: 790 }
+const TRACK_Y = 98
+
+const NODES: Array<{ id: NodeId; name: string; sub: string }> = [
+  { id: 'browser', name: '瀏覽器', sub: '你的電腦' },
+  { id: 'dns', name: 'DNS', sub: '查 IP 的服務' },
+  { id: 'server', name: '伺服器', sub: '提供網頁的機器' },
+]
+
+const STEPS: StepDef[] = [
+  { title: '輸入網址', nodes: ['browser'], links: [], flights: [] },
+  {
+    title: 'DNS 查詢',
+    nodes: ['browser', 'dns'],
+    links: ['bd'],
+    flights: [
+      { from: 'browser', to: 'dns', label: 'A? lucashsu.dev', tone: 'req' },
+      { from: 'dns', to: 'browser', label: '140.82.121.4', tone: 'ok' },
+    ],
+  },
+  {
+    title: '連線',
+    nodes: ['browser', 'server'],
+    links: ['bd', 'ds'],
+    flights: [
+      { from: 'browser', to: 'server', label: 'SYN', tone: 'req' },
+      { from: 'server', to: 'browser', label: 'SYN+ACK', tone: 'ok' },
+      { from: 'browser', to: 'server', label: 'ACK', tone: 'req' },
+    ],
+  },
+  {
+    title: '送請求',
+    nodes: ['browser', 'server'],
+    links: ['bd', 'ds'],
+    flights: [{ from: 'browser', to: 'server', label: 'GET /index.html', tone: 'req' }],
+  },
+  {
+    title: '收回應',
+    nodes: ['browser', 'server'],
+    links: ['bd', 'ds'],
+    flights: [{ from: 'server', to: 'browser', label: '200 OK + HTML', tone: 'ok' }],
+  },
+]
 
 const root = ref<HTMLElement | null>(null)
-const currentStep = ref(0)
-const totalSteps = 5
-let tl: RjTimeline | null = null
+const pktEl = ref<SVGGElement | null>(null)
 
-// 傳送字幕：隨封包飛行同步切換（單行、JS 字串集中定義方便改詞）
-// 索引：0 step1；1 step2 去程；2 step2 回程；3-5 step3 三腿；6 step4；7 step5
-const STEPS_CAPTIONS = [
-  '01 · 你在瀏覽器輸入網址，按 Enter',
-  '02 · 瀏覽器 → DNS：請問「lucashsu.dev」的 IP？',
-  '02 · DNS → 瀏覽器：是 140.82.121.4',
-  '03 · 瀏覽器 → 伺服器：SYN（可以連嗎）',
-  '03 · 伺服器 → 瀏覽器：SYN+ACK（可以）',
-  '03 · 瀏覽器 → 伺服器：ACK（好，連上了）',
-  '04 · 瀏覽器 → 伺服器：GET /index.html',
-  '05 · 伺服器 → 瀏覽器：200 OK + HTML',
-] as const
-const captionIdx = ref(0)
-// 方向線高亮只動 opacity：dim 維持、hi 提到 1；字幕淡入淡出只動 opacity 150ms
-const LINK_DIM = 0.35
-const LINK_HI = 1
-const CAP_FADE = 150
+const step = ref(0) // 0 = 待機，1..5 = 目前步驟
+const legs = ref(0) // 目前步驟已出發的封包數，用來逐行顯示右卡內容
+const typed = ref(0) // 網址列已打出的字數
+const landed = ref(false) // 目前步驟的封包是否已抵達
+const pulse = ref(false)
+const playing = ref(false)
+const pkt = reactive({ label: '', tone: 'req' as Tone, vis: false })
 
-// 拓撲固定座標（viewBox 600x112）：三節點中心 x，不逐幀量測、不追蹤 DOM
-const NODE_X = { browser: 85, dns: 300, server: 515 }
-const DX_DNS = NODE_X.dns - NODE_X.browser // 215
-const DX_SERVER = NODE_X.server - NODE_X.browser // 430
+let runId = 0
+let cur: ReturnType<typeof animate> | null = null
+let settleCur: (() => void) | null = null
+let animateOK = true
+let io: IntersectionObserver | null = null
 
-function reduceMotion(): boolean {
+const activeNodes = computed<NodeId[]>(() => (step.value > 0 ? STEPS[step.value - 1].nodes : []))
+const activeLinks = computed(() => (step.value > 0 ? STEPS[step.value - 1].links : []))
+const progress = computed(() => step.value / totalSteps)
+
+const sleep = (ms: number) => new Promise<void>((r) => setTimeout(r, ms))
+
+function skipMotion(): boolean {
+  if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') return false
   return (
-    typeof window !== 'undefined' &&
-    typeof window.matchMedia === 'function' &&
-    window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
+    window.matchMedia('print').matches
   )
 }
 
-// 靜態終態：全部步驟 + 三節點高亮 + 5/5（.is-static 把 wash / node-hi 顯示、封包隱藏）
-// reduced-motion / print 一律停在 step5 字幕
-function showStatic() {
-  currentStep.value = totalSteps
-  captionIdx.value = STEPS_CAPTIONS.length - 1
-  root.value?.classList.add('is-static')
+// 停掉目前飛行中的封包；先讓 runId 失效，等待中的 async 流程醒來後會自行退出
+function halt(): number {
+  runId += 1
+  try {
+    cur?.pause()
+  } catch {
+    // 忽略
+  }
+  cur = null
+  settleCur?.()
+  settleCur = null
+  return runId
 }
 
-function buildTimeline(): RjTimeline | null {
-  const packet = root.value?.querySelector<SVGGElement>('.rj-pkt')
-  const pktA = root.value?.querySelector<SVGCircleElement>('.pkt-a')
-  const pktB = root.value?.querySelector<SVGCircleElement>('.pkt-b')
-  const hiBrowser = root.value?.querySelector<SVGRectElement>('.rj-node[data-node="browser"] .rj-node-hi')
-  const hiDns = root.value?.querySelector<SVGRectElement>('.rj-node[data-node="dns"] .rj-node-hi')
-  const hiServer = root.value?.querySelector<SVGRectElement>('.rj-node[data-node="server"] .rj-node-hi')
-  const steps = root.value ? Array.from(root.value.querySelectorAll<HTMLElement>('.tc-step')) : []
-  const washes = steps.map((el) => el.querySelector('.rj-wash'))
-  const capEl = root.value?.querySelector<HTMLElement>('.rj-cap__t')
-  const linkEls = root.value ? Array.from(root.value.querySelectorAll<SVGLineElement>('.rj-link')) : []
-  if (!packet || !pktA || !pktB || !hiBrowser || !hiDns || !hiServer) return null
-  if (steps.length !== totalSteps || washes.some((w) => !w)) return null
-  if (!capEl || linkEls.length !== 2) return null
-  const wash = washes as Element[]
-  const [linkBD, linkDS] = linkEls
-  // 節點高亮只用 opacity；封包只用 transform（translateX / scale）+ opacity；ease 沿用 outExpo
-  const timeline = createTimeline({ defaults: { ease: 'outExpo', duration: 500 }, autoplay: false })
-  // 字幕切換 + 方向線高亮：只動 opacity，時間錨點為絕對 ms（推導表見 CAP_ANCHORS）
-  function setCap(i: number) {
-    captionIdx.value = i
+// 不播動畫，直接顯示第 n 步完成後的樣子
+function settle(n: number) {
+  const def = STEPS[n - 1]
+  step.value = n
+  legs.value = def.flights.length
+  typed.value = URL_TEXT.length
+  pulse.value = false
+  landed.value = true
+  const last = def.flights[def.flights.length - 1]
+  if (last && pktEl.value) {
+    pkt.label = last.label
+    pkt.tone = last.tone
+    pkt.vis = true
+    pktEl.value.style.transform = `translateX(${NODE_X[last.to]}px)`
+  } else {
+    pkt.vis = false
   }
-  // i=0 為起手字幕且不做淡入：autoplay=false 或 seek(0) 時字幕仍需可見
-  function capAt(i: number, at: number) {
-    timeline.call(() => setCap(i), at)
-    if (i === 0) return
-    timeline.add(capEl as Element, { opacity: [0, 1], duration: CAP_FADE, ease: 'outExpo' }, at)
-  }
-  function linksAt(bd: number, ds: number, at: number) {
-    timeline.add(linkBD, { opacity: [bd, bd], duration: 300, ease: 'outExpo' }, at)
-    timeline.add(linkDS, { opacity: [ds, ds], duration: 300, ease: 'outExpo' }, at)
-  }
+}
 
-  // step 1 輸入網址：封包在「瀏覽器」節點內 pulse（scale / opacity）
-  timeline.add(wash[0], { opacity: [0, 1], duration: 500, ease: 'outExpo', delay: stagger(70) }, 0)
-  timeline.add(hiBrowser, { opacity: [0, 1], duration: 400, ease: 'outExpo' }, '<')
-  timeline.add(packet, { scale: [1, 1.6], duration: 280, ease: 'outExpo' }, '<')
-  timeline.add(packet, { scale: [1.6, 1], duration: 260, ease: 'outExpo' })
-  timeline.call(() => {
-    currentStep.value = 1
-  })
-
-  // step 2 DNS 查詢：去程 450ms → 停一拍 → 回程 450ms
-  timeline.add(wash[1], { opacity: [0, 1], duration: 500, ease: 'outExpo', delay: stagger(70) }, '+=200')
-  timeline.add(hiDns, { opacity: [0, 1], duration: 400, ease: 'outExpo' }, '<')
-  timeline.add(packet, { translateX: [0, DX_DNS], duration: 450, ease: 'outExpo' }, '<')
-  timeline.add(packet, { translateX: [DX_DNS, 0], duration: 450, ease: 'outExpo' }, '+=300')
-  timeline.call(() => {
-    currentStep.value = 2
-  })
-
-  // step 3 連線：瀏覽器 ↔ 伺服器快速來回 3 次（模擬三次握手，每腿 200ms）
-  timeline.add(wash[2], { opacity: [0, 1], duration: 500, ease: 'outExpo', delay: stagger(70) }, '+=200')
-  timeline.add(hiServer, { opacity: [0, 1], duration: 400, ease: 'outExpo' }, '<')
-  let pos = 0
-  const legs = [DX_SERVER, 0, DX_SERVER, 0, DX_SERVER, 0]
-  legs.forEach((to, idx) => {
-    const from = pos
-    pos = to
-    // 首腿與節點高亮並行，其餘腿依序銜接
-    if (idx === 0) {
-      timeline.add(packet, { translateX: [from, to], duration: 200, ease: 'outExpo' }, '<')
-    } else {
-      timeline.add(packet, { translateX: [from, to], duration: 200, ease: 'outExpo' })
+function fly(f: Flight): Promise<void> {
+  return new Promise<void>((resolve) => {
+    const el = pktEl.value
+    pkt.label = f.label
+    pkt.tone = f.tone
+    pkt.vis = true
+    if (!el) {
+      resolve()
+      return
     }
+    settleCur = resolve
+    const dist = Math.abs(NODE_X[f.to] - NODE_X[f.from])
+    cur = animate(el, {
+      translateX: [NODE_X[f.from], NODE_X[f.to]],
+      duration: Math.max(420, dist * 1.9),
+      ease: 'inOutQuad',
+      onComplete: () => {
+        settleCur = null
+        resolve()
+      },
+    })
   })
-  timeline.call(() => {
-    currentStep.value = 3
-  })
+}
 
-  // step 4 送請求：封包瀏覽器 → 伺服器（去程 450ms）
-  timeline.add(wash[3], { opacity: [0, 1], duration: 500, ease: 'outExpo', delay: stagger(70) }, '+=200')
-  timeline.add(packet, { translateX: [0, DX_SERVER], duration: 450, ease: 'outExpo' }, '<')
-  timeline.call(() => {
-    currentStep.value = 4
-  })
+async function playStep(n: number, id: number) {
+  const def = STEPS[n - 1]
+  step.value = n
+  legs.value = 0
+  landed.value = false
+  pulse.value = false
+  pkt.vis = false
+  typed.value = n === 1 ? 0 : URL_TEXT.length
 
-  // step 5 收回應：封包伺服器 → 瀏覽器（回程 450ms，換 ok 色）+ 瀏覽器節點閃一下
-  timeline.add(wash[4], { opacity: [0, 1], duration: 500, ease: 'outExpo', delay: stagger(70) }, '+=200')
-  timeline.add(pktB, { opacity: [0, 1], duration: 300, ease: 'outExpo' }, '<')
-  timeline.add(pktA, { opacity: [1, 0.25], duration: 300, ease: 'outExpo' }, '<')
-  timeline.add(packet, { translateX: [DX_SERVER, 0], duration: 450, ease: 'outExpo' }, '<')
-  timeline.add(hiBrowser, { opacity: [1, 0.25], duration: 120, ease: 'outExpo' })
-  timeline.add(hiBrowser, { opacity: [0.25, 1], duration: 180, ease: 'outExpo' })
-  timeline.call(() => {
-    currentStep.value = 5
-  })
-  timeline.call(() => {
-    currentStep.value = totalSteps
-  })
-
-  // 字幕 / 方向線錨點：at = 對應既有封包 add 解析後的實際起點（ms）
-  //   0 = step1 起手 · 2540 = step2 去程 · 3290 = step2 回程
-  //   4840 / 5040 / 5240 = step3 三腿 · 6740 = step4 · 8490 = step5
-  // 注意：anime v4 的 '<' 是「上一個 child 的結束」（v3 才是開始），故時序為序列化，
-  // 實測總長 9240ms。以上數字由 node + animejs 4.5.0 逐一 seek 量測，非手推。
-  // bd = 瀏覽器⇄DNS 線、ds = DNS⇄伺服器線；只有 step2 是單段飛行，故只有它把另一段留在 dim，
-  // step3 之後封包橫跨整條拓撲，兩段同時亮
-  const CAP_ANCHORS = [
-    { at: 0, i: 0, bd: LINK_DIM, ds: LINK_DIM },
-    { at: 2540, i: 1, bd: LINK_HI, ds: LINK_DIM },
-    { at: 3290, i: 2, bd: LINK_HI, ds: LINK_DIM },
-    { at: 4840, i: 3, bd: LINK_HI, ds: LINK_HI },
-    { at: 5040, i: 4, bd: LINK_HI, ds: LINK_HI },
-    { at: 5240, i: 5, bd: LINK_HI, ds: LINK_HI },
-    { at: 6740, i: 6, bd: LINK_HI, ds: LINK_HI },
-    { at: 8490, i: 7, bd: LINK_HI, ds: LINK_HI },
-  ]
-  // 一律追加在既有 add 之後：anime v4 的相對 position 於 add 當下即解析，
-  // 事後追加的子動畫只帶絕對位置，故完全不影響上方既有時序與總長（仍為 4940ms）。
-  for (const a of CAP_ANCHORS) {
-    capAt(a.i, a.at)
-    linksAt(a.bd, a.ds, a.at)
+  if (!animateOK) {
+    settle(n)
+    return
   }
-  return timeline
+
+  if (n === 1) {
+    pulse.value = true
+    for (let i = 1; i <= URL_TEXT.length; i += 1) {
+      typed.value = i
+      await sleep(55)
+      if (id !== runId) return
+    }
+    await sleep(350)
+    if (id !== runId) return
+    pulse.value = false
+    landed.value = true
+    return
+  }
+
+  for (let i = 0; i < def.flights.length; i += 1) {
+    legs.value = i + 1
+    await fly(def.flights[i])
+    if (id !== runId) return
+    if (i < def.flights.length - 1) {
+      await sleep(180)
+      if (id !== runId) return
+    }
+  }
+  landed.value = true
+}
+
+async function play(from?: number) {
+  const id = halt()
+  playing.value = true
+  let n = from ?? (step.value === 0 || step.value >= totalSteps ? 1 : step.value)
+  for (; n <= totalSteps; n += 1) {
+    await playStep(n, id)
+    if (id !== runId) return
+    await sleep(animateOK ? 750 : 1400)
+    if (id !== runId) return
+  }
+  playing.value = false
+}
+
+function pause() {
+  halt()
+  playing.value = false
+  if (step.value > 0) settle(step.value)
+}
+
+async function goTo(n: number) {
+  const target = Math.min(totalSteps, Math.max(1, n))
+  const id = halt()
+  playing.value = false
+  await playStep(target, id)
+}
+
+function toggle() {
+  if (playing.value) pause()
+  else void play()
 }
 
 function replay() {
-  if (!tl) return
-  try {
-    currentStep.value = 0
-    captionIdx.value = 0
-    tl.restart()
-  } catch {
-    try {
-      tl.revert()
-    } catch {
-      // 降級：忽略 revert 失敗，保持靜態終態
-    }
-    tl = null
-    showStatic()
-  }
+  void play(1)
+}
+
+function resetIdle() {
+  halt()
+  playing.value = false
+  step.value = 0
+  legs.value = 0
+  typed.value = 0
+  landed.value = false
+  pulse.value = false
+  pkt.vis = false
 }
 
 onMounted(() => {
-  // 尊重 prefers-reduced-motion：直接顯示終態
-  if (reduceMotion()) {
-    showStatic()
+  if (skipMotion()) {
+    animateOK = false
+    settle(totalSteps)
     return
   }
-  try {
-    tl = buildTimeline()
-    if (!tl) {
-      showStatic()
-      return
-    }
-    // timeline 初始化即套用起始影格（不經 CSS 隱藏，避免動畫被抑制時空白）
-    tl.seek(0)
-    if (props.autoplay) tl.play()
-  } catch {
-    try {
-      tl?.revert()
-    } catch {
-      // 降級：忽略 revert 失敗，保持靜態終態
-    }
-    tl = null
-    showStatic()
+  if (typeof IntersectionObserver === 'undefined' || !root.value) {
+    if (props.autoplay) replay()
+    return
   }
+  // Slidev 會預先掛載相鄰頁面；只有真的看得到才開始播，離開就回到待機
+  io = new IntersectionObserver(
+    (entries) => {
+      const visible = entries.some((e) => e.isIntersecting)
+      if (visible) {
+        if (props.autoplay) replay()
+      } else {
+        resetIdle()
+      }
+    },
+    { threshold: 0.5 },
+  )
+  io.observe(root.value)
 })
 
 onUnmounted(() => {
-  try {
-    tl?.revert()
-  } catch {
-    // 降級：忽略 revert 失敗
-  }
-  tl = null
+  io?.disconnect()
+  io = null
+  halt()
 })
 </script>
 
 <template>
-  <div ref="root" class="rj">
-    <div class="rj-topo">
-      <svg viewBox="0 0 600 112" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="rj-topo-title rj-topo-desc">
-        <title id="rj-topo-title">請求旅程拓撲：瀏覽器、DNS、伺服器</title>
-        <desc id="rj-topo-desc">封包從瀏覽器出發，經 DNS 查到 IP、與伺服器握手連線、送出請求，最後收回伺服器的回應。</desc>
-        <!-- 節點間連線 -->
-        <line x1="85" y1="70" x2="300" y2="70" class="rj-link" />
-        <line x1="300" y1="70" x2="515" y2="70" class="rj-link" />
-        <!-- 節點到軌道的短垂線 -->
-        <line x1="85" y1="38" x2="85" y2="70" class="rj-drop" />
-        <line x1="300" y1="38" x2="300" y2="70" class="rj-drop" />
-        <line x1="515" y1="38" x2="515" y2="70" class="rj-drop" />
-        <!-- 三節點 pills -->
-        <g class="rj-node rj-node--acc" data-node="browser">
-          <rect class="rj-pill" x="30" y="12" width="110" height="26" rx="13" />
-          <rect class="rj-node-hi" x="30" y="12" width="110" height="26" rx="13" />
-          <text x="85" y="29">瀏覽器</text>
+  <div ref="root" class="jr">
+    <!-- 步驟列 -->
+    <div class="jr-steps" role="tablist" aria-label="請求旅程的五個步驟">
+      <button
+        v-for="(s, i) in STEPS"
+        :key="s.title"
+        type="button"
+        role="tab"
+        class="jr-chip"
+        :class="{ 'is-cur': step === i + 1, 'is-done': step > i + 1 }"
+        :aria-selected="step === i + 1"
+        @click="goTo(i + 1)"
+      >
+        <span class="jr-chip__n">{{ i + 1 }}</span>
+        <span class="jr-chip__t">{{ s.title }}</span>
+      </button>
+    </div>
+    <div class="jr-bar" aria-hidden="true"><i :style="{ transform: `scaleX(${progress})` }" /></div>
+
+    <!-- 拓撲 -->
+    <div class="jr-stage">
+      <svg viewBox="0 0 900 132" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="jr-t jr-d">
+        <title id="jr-t">請求旅程拓撲：瀏覽器、DNS、伺服器</title>
+        <desc id="jr-d">封包從瀏覽器出發，經 DNS 查到 IP、與伺服器握手連線、送出請求，最後收回伺服器的回應。</desc>
+
+        <line :x1="NODE_X.browser" :y1="TRACK_Y" :x2="NODE_X.dns" :y2="TRACK_Y" class="jr-link" :class="{ 'is-hi': activeLinks.includes('bd') }" />
+        <line :x1="NODE_X.dns" :y1="TRACK_Y" :x2="NODE_X.server" :y2="TRACK_Y" class="jr-link" :class="{ 'is-hi': activeLinks.includes('ds') }" />
+
+        <g v-for="n in NODES" :key="n.id" class="jr-node" :class="{ 'is-on': activeNodes.includes(n.id), 'is-pulse': pulse && n.id === 'browser' }">
+          <line :x1="NODE_X[n.id]" y1="62" :x2="NODE_X[n.id]" :y2="TRACK_Y" class="jr-drop" />
+          <circle :cx="NODE_X[n.id]" :cy="TRACK_Y" r="3.5" class="jr-dot" />
+          <rect class="jr-card-bg" :x="NODE_X[n.id] - 84" y="6" width="168" height="56" rx="10" />
+          <g :transform="`translate(${NODE_X[n.id] - 66} 23)`" class="jr-ico">
+            <template v-if="n.id === 'browser'">
+              <rect x="0" y="0" width="22" height="17" rx="3" />
+              <line x1="0" y1="5" x2="22" y2="5" />
+              <circle cx="3.5" cy="2.5" r="0.8" />
+            </template>
+            <template v-else-if="n.id === 'dns'">
+              <circle cx="11" cy="9" r="8" />
+              <ellipse cx="11" cy="9" rx="3.6" ry="8" />
+              <line x1="3" y1="9" x2="19" y2="9" />
+            </template>
+            <template v-else>
+              <rect x="0" y="0" width="22" height="7" rx="1.8" />
+              <rect x="0" y="10" width="22" height="7" rx="1.8" />
+              <circle cx="4.5" cy="3.5" r="1" />
+              <circle cx="4.5" cy="13.5" r="1" />
+            </template>
+          </g>
+          <text :x="NODE_X[n.id] - 30" y="30" class="jr-node__t">{{ n.name }}</text>
+          <text :x="NODE_X[n.id] - 30" y="47" class="jr-node__s">{{ n.sub }}</text>
         </g>
-        <g class="rj-node" data-node="dns">
-          <rect class="rj-pill" x="245" y="12" width="110" height="26" rx="13" />
-          <rect class="rj-node-hi" x="245" y="12" width="110" height="26" rx="13" />
-          <text x="300" y="29">DNS</text>
-        </g>
-        <g class="rj-node" data-node="server">
-          <rect class="rj-pill" x="460" y="12" width="110" height="26" rx="13" />
-          <rect class="rj-node-hi" x="460" y="12" width="110" height="26" rx="13" />
-          <text x="515" y="29">伺服器</text>
-        </g>
-        <!-- 封包：只用 transform（translateX / scale）+ opacity 移動 -->
-        <g class="rj-pkt">
-          <circle class="pkt-halo" cx="85" cy="70" r="9" />
-          <circle class="pkt-a" cx="85" cy="70" r="5" />
-          <circle class="pkt-b" cx="85" cy="70" r="5" />
+
+        <!-- 封包：外層 g 只交給 anime 動 transform，內層 g 由 Vue 控制顯示 -->
+        <g ref="pktEl" class="jr-pkt">
+          <g class="jr-pkt__in" :class="[pkt.tone === 'ok' ? 'is-ok' : 'is-req', { 'is-vis': pkt.vis }]">
+            <rect x="-66" :y="TRACK_Y - 13" width="132" height="26" rx="13" />
+            <text x="0" :y="TRACK_Y + 4">{{ pkt.label }}</text>
+          </g>
         </g>
       </svg>
     </div>
-    <div class="rj-cap tc-xs">
-      <span class="rj-cap__t">{{ STEPS_CAPTIONS[captionIdx] }}</span>
-      <span class="rj-cap__p">{{ STEPS_CAPTIONS[STEPS_CAPTIONS.length - 1] }}</span>
-    </div>
-    <div class="rj-body">
-      <div class="tc-steps">
-        <div class="tc-step" data-step="1"><span class="rj-wash" aria-hidden="true" /><div class="tc-step__b">
-          <div class="tc-step__t">輸入網址</div>
-          <div class="tc-step__d">你在瀏覽器打 <code>lucashsu.dev</code>，按 Enter</div>
-        </div></div>
-        <div class="tc-step" data-step="2"><span class="rj-wash" aria-hidden="true" /><div class="tc-step__b">
-          <div class="tc-step__t">DNS 查詢</div>
-          <div class="tc-step__d">問 DNS 伺服器：「<code>lucashsu.dev</code> 的 IP 是多少？」→ <code>140.82.121.4</code></div>
-        </div></div>
-        <div class="tc-step" data-step="3"><span class="rj-wash" aria-hidden="true" /><div class="tc-step__b">
-          <div class="tc-step__t">連線</div>
-          <div class="tc-step__d">TCP 三次握手，建立到 <code>140.82.121.4:443</code> 的連線</div>
-        </div></div>
-        <div class="tc-step" data-step="4"><span class="rj-wash" aria-hidden="true" /><div class="tc-step__b">
-          <div class="tc-step__t">送請求</div>
-          <div class="tc-step__d">送出 HTTP 請求：<code>GET /index.html HTTP/1.1</code></div>
-        </div></div>
-        <div class="tc-step" data-step="5"><span class="rj-wash" aria-hidden="true" /><div class="tc-step__b">
-          <div class="tc-step__t">收回應</div>
-          <div class="tc-step__d">伺服器回 <code class="tc-ok">200 OK</code> + HTML，瀏覽器畫出來</div>
-        </div></div>
+
+    <!-- 說明與內容 -->
+    <div class="jr-cards">
+      <div class="jr-card">
+        <div class="jr-card__k">這一步在做什麼</div>
+        <div v-if="step === 0" class="jr-desc">看一個請求從瀏覽器出發、到收到網頁的完整旅程。<span class="jr-mute">按「播放」，或直接點上面的步驟。</span></div>
+        <div v-else-if="step === 1" class="jr-desc">
+          你在瀏覽器打 <code>lucashsu.dev</code>，按 Enter
+          <span class="jr-mute">像在手機通訊錄裡輸入朋友的名字。</span>
+        </div>
+        <div v-else-if="step === 2" class="jr-desc">
+          問 DNS 伺服器：「<code>lucashsu.dev</code> 的 IP 是多少？」→ <code>140.82.121.4</code>
+          <span class="jr-mute">名字換成電話號碼。</span>
+        </div>
+        <div v-else-if="step === 3" class="jr-desc">
+          TCP 三次握手，建立到 <code>140.82.121.4:443</code> 的連線
+          <span class="jr-mute">先確認對方有接電話：喂？有。好。</span>
+          <span class="jr-mute">443 是 HTTPS，實際上後面還會多一輪 TLS 加密握手，這裡先略過。</span>
+        </div>
+        <div v-else-if="step === 4" class="jr-desc">
+          送出 HTTP 請求：<code>GET /index.html HTTP/1.1</code>
+          <span class="jr-mute">連上之後，開口說你要什麼。</span>
+        </div>
+        <div v-else class="jr-desc">
+          伺服器回 <code class="jr-ok">200 OK</code> + HTML，瀏覽器畫出來
+          <span class="jr-mute">對方把東西遞過來，你拆開看。</span>
+        </div>
+      </div>
+
+      <div class="jr-card">
+        <div class="jr-card__k">這一步真正傳的內容</div>
+        <div :key="step" class="jr-code">
+          <template v-if="step === 0">
+            <div class="jr-ln on"><span class="jr-dim">// 還沒開始</span></div>
+          </template>
+
+          <template v-else-if="step === 1">
+            <div class="jr-ln on"><span class="jr-k">網址列</span><span>https://{{ URL_TEXT.slice(0, typed) }}<i v-if="pulse" class="jr-caret" /></span></div>
+            <div class="jr-ln" :class="{ on: typed >= URL_TEXT.length }"><span class="jr-k">狀態</span><span>還沒有任何封包離開你的電腦</span></div>
+          </template>
+
+          <template v-else-if="step === 2">
+            <div class="jr-ln" :class="{ on: legs >= 1 }"><span class="jr-k jr-k--req">問</span><span>lucashsu.dev 的 A 紀錄是？</span></div>
+            <div class="jr-ln" :class="{ on: legs >= 2 }"><span class="jr-k jr-k--ok">答</span><span>140.82.121.4</span></div>
+          </template>
+
+          <template v-else-if="step === 3">
+            <div class="jr-ln" :class="{ on: legs >= 1 }"><span class="jr-k jr-k--req">SYN</span><span>瀏覽器 → 伺服器　可以連嗎</span></div>
+            <div class="jr-ln" :class="{ on: legs >= 2 }"><span class="jr-k jr-k--ok">SYN+ACK</span><span>伺服器 → 瀏覽器　可以</span></div>
+            <div class="jr-ln" :class="{ on: legs >= 3 }"><span class="jr-k jr-k--req">ACK</span><span>瀏覽器 → 伺服器　好，連上了</span></div>
+          </template>
+
+          <template v-else-if="step === 4">
+            <div class="jr-ln" :class="{ on: legs >= 1 }" style="--d: 0ms"><span class="jr-m">GET /index.html HTTP/1.1</span></div>
+            <div class="jr-ln" :class="{ on: legs >= 1 }" style="--d: 120ms"><span class="jr-m">Host: lucashsu.dev</span></div>
+            <div class="jr-ln" :class="{ on: legs >= 1 }" style="--d: 240ms"><span class="jr-m">Accept: text/html</span></div>
+          </template>
+
+          <template v-else>
+            <div class="jr-resp">
+              <div class="jr-resp__raw">
+                <div class="jr-ln" :class="{ on: legs >= 1 }" style="--d: 0ms"><span class="jr-m jr-ok">HTTP/1.1 200 OK</span></div>
+                <div class="jr-ln" :class="{ on: legs >= 1 }" style="--d: 120ms"><span class="jr-m">Content-Type: text/html</span></div>
+                <div class="jr-ln" :class="{ on: landed }" style="--d: 0ms"><span class="jr-m">&lt;html&gt; ... &lt;/html&gt;</span></div>
+              </div>
+              <div class="jr-page" :class="{ on: landed }" aria-hidden="true">
+                <i class="jr-page__bar" />
+                <i class="jr-page__h" />
+                <i class="jr-page__l" />
+                <i class="jr-page__l" />
+                <i class="jr-page__l jr-page__l--s" />
+              </div>
+            </div>
+          </template>
+        </div>
       </div>
     </div>
-    <div class="seq-controls tc-xs">
-      <button type="button" class="seq-replay" @click="replay">重播</button>
-      <span class="seq-progress" aria-live="polite">步驟 {{ currentStep }}/{{ totalSteps }}</span>
+
+    <!-- 控制 -->
+    <div class="jr-ctl tc-xs">
+      <button type="button" class="jr-btn" :disabled="step <= 1" @click="goTo(step - 1)">上一步</button>
+      <button type="button" class="jr-btn jr-btn--main" @click="toggle">{{ playing ? '暫停' : '播放' }}</button>
+      <button type="button" class="jr-btn" :disabled="step >= totalSteps" @click="goTo(step + 1)">下一步</button>
+      <button type="button" class="jr-btn" @click="replay">重播</button>
+      <span class="jr-progress" aria-live="polite">步驟 {{ step }}/{{ totalSteps }}</span>
     </div>
   </div>
 </template>
 
 <style scoped>
-.rj {
-  width: 100%;
-}
-
-.rj-body {
-  position: relative;
-}
-
-/* 頂部拓撲帶：viewBox 600x112，全寬 600px 等比縮放，約 110px 高（維持原設定，未因字幕而壓縮） */
-.rj-topo {
+.jr {
   display: flex;
-  justify-content: center;
-  width: 100%;
-}
-
-.rj-topo svg {
-  width: 600px;
-  max-width: 100%;
-  height: auto;
-  aspect-ratio: 600 / 112;
-  display: block;
-}
-
-.rj-topo text {
-  font-family: var(--font-mono);
-}
-
-/* 傳送字幕：拓撲帶與步驟列之間的單行 caption（mono / tc-xs / accent-2，上下 --line hairline）
-   只動 opacity 淡入，不動任何 layout 屬性 */
-.rj-cap {
-  display: flex;
-  align-items: center;
-  width: 100%;
-  padding: 2px 0;
-  border-top: 1px solid var(--line);
-  border-bottom: 1px solid var(--line);
-  font-family: var(--font-mono);
-  color: var(--accent-2);
-}
-
-.rj-cap__t {
-  min-width: 0;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
-
-/* 僅供列印 / PDF：固定顯示 step5 字幕，不受動畫時間影響 */
-.rj-cap__p {
-  display: none;
-}
-
-/* 節點間連線與垂線：1px hairline，只用既有 --line */
-.rj-link,
-.rj-drop {
-  stroke: var(--line);
-  stroke-width: 1;
-}
-
-/* 連線預設 dim；被飛行方向對應的那一段由 timeline 提到 1 */
-.rj-link {
-  opacity: 0.35;
-}
-
-/* 節點 pills：accent / neutral 配色（只用 --accent / --line / --accent-wash） */
-.rj-node .rj-pill {
-  fill: none;
-  stroke: var(--line);
-  stroke-width: 1;
-}
-
-.rj-node--acc .rj-pill {
-  stroke: var(--accent);
-  fill: var(--accent-wash);
-}
-
-.rj-node text {
-  fill: var(--accent);
-  opacity: 0.6;
-  font-size: 12px;
-  font-weight: 500;
-  text-anchor: middle;
-  letter-spacing: 0.01em;
-}
-
-.rj-node--acc text {
-  fill: var(--accent);
-  opacity: 1;
-}
-
-/* 節點高亮：只動 opacity 的 accent wash 疊層 */
-.rj-node-hi {
-  fill: var(--accent-wash);
-  stroke: var(--accent);
-  stroke-width: 1;
-  opacity: 0;
-}
-
-/* 封包：請求 accent 色、回應 ok 色（只用 opacity 交叉淡入淡出）；靜態 halo 不參演 */
-.rj-pkt {
-  transform-box: fill-box;
-  transform-origin: center;
-}
-
-.pkt-a {
-  fill: var(--accent);
-}
-
-.pkt-b {
-  fill: var(--ok);
-  opacity: 0;
-}
-
-.pkt-halo {
-  fill: none;
-  stroke: var(--accent);
-  stroke-width: 1;
-  opacity: 0.3;
-}
-
-/* 步驟列：padding 只降不加（7px → 4px），標題與說明併為同一列，壓住垂直預算 */
-.rj .tc-step {
-  padding-top: 4px;
-  padding-bottom: 4px;
-}
-
-.tc-step__b {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  column-gap: 8px;
-  row-gap: 2px;
-  min-width: 0;
-}
-
-.tc-step__b .tc-step__t {
-  white-space: nowrap;
-}
-
-/* 步驟高亮：與 .tc-rowline:hover 同系的左側 accent wash，只動 opacity */
-.rj-wash {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(90deg, var(--accent-wash), transparent 62%);
-  opacity: 0;
-  pointer-events: none;
-}
-
-/* 靜態終態（降級 / reduced-motion）：全部高亮（三節點全亮），封包隱藏 */
-.rj.is-static .rj-wash,
-.rj.is-static .rj-node-hi {
-  opacity: 1;
-}
-
-/* 降級路徑可能已寫入 inline opacity，字幕一律拉回可見（文案已由 showStatic 設為 step5） */
-.rj.is-static .rj-cap__t {
-  opacity: 1;
-}
-
-.rj.is-static .rj-pkt {
-  display: none;
-}
-
-/* 播放控制：沿用 SequenceDiagram.vue 的 .seq-controls 模式，僅用既有 tokens */
-.seq-controls {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-direction: column;
   gap: 10px;
-  margin-top: 8px;
+  width: 100%;
+  max-width: 880px;
+  margin: 0 auto;
+}
+
+/* 步驟列 */
+.jr-steps {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+}
+
+.jr-chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  font: inherit;
+  font-size: 12.5px;
+  color: var(--fg-3);
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: color 0.25s, border-color 0.25s, background 0.25s;
+}
+
+.jr-chip:hover { border-color: var(--line-2); }
+.jr-chip:focus-visible { outline: 1px solid var(--accent); outline-offset: 2px; }
+
+.jr-chip__n {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 18px;
+  height: 18px;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+}
+
+.jr-chip__t { white-space: nowrap; }
+.jr-chip.is-done { color: var(--fg-2); border-color: var(--accent-line); }
+.jr-chip.is-cur { color: var(--accent-2); border-color: var(--accent); background: var(--accent-wash); }
+
+.jr-bar {
+  height: 2px;
+  background: var(--line);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.jr-bar i {
+  display: block;
+  height: 100%;
+  background: var(--accent);
+  transform-origin: left;
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* 拓撲 */
+.jr-stage svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 900 / 132;
+}
+
+.jr-link {
+  stroke: var(--line-2);
+  stroke-width: 1.2;
+  stroke-dasharray: 3 6;
+  transition: stroke 0.3s, opacity 0.3s;
+  opacity: 0.55;
+}
+.jr-link.is-hi { stroke: var(--accent); opacity: 0.9; }
+
+.jr-drop { stroke: var(--line); stroke-width: 1; }
+.jr-dot { fill: var(--line-2); transition: fill 0.3s; }
+
+.jr-card-bg {
+  fill: rgba(255, 255, 255, 0.025);
+  stroke: var(--line);
+  stroke-width: 1;
+  transition: fill 0.3s, stroke 0.3s;
+}
+
+.jr-ico {
+  fill: none;
+  stroke: var(--fg-3);
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  transition: stroke 0.3s;
+}
+.jr-ico circle { fill: var(--fg-3); stroke: none; }
+.jr-ico ellipse, .jr-ico line, .jr-ico rect { fill: none; }
+.jr-ico circle:first-child:not(:last-child) { fill: none; stroke: inherit; }
+
+.jr-node__t {
+  fill: var(--fg-3);
+  font-size: 14px;
+  font-weight: 600;
+  transition: fill 0.3s;
+}
+.jr-node__s {
+  fill: var(--fg-3);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  opacity: 0.8;
+}
+
+.jr-node.is-on .jr-card-bg { fill: var(--accent-wash); stroke: var(--accent); }
+.jr-node.is-on .jr-ico { stroke: var(--accent-2); }
+.jr-node.is-on .jr-ico circle { fill: var(--accent-2); }
+.jr-node.is-on .jr-node__t { fill: var(--accent-2); }
+.jr-node.is-on .jr-dot { fill: var(--accent); }
+
+.jr-node.is-pulse .jr-card-bg { animation: jr-pulse 0.9s ease-in-out infinite; }
+@keyframes jr-pulse {
+  0%, 100% { stroke-width: 1; }
+  50% { stroke-width: 3; }
+}
+
+/* 封包 */
+.jr-pkt__in { opacity: 0; transition: opacity 0.2s; }
+.jr-pkt__in.is-vis { opacity: 1; }
+.jr-pkt__in rect { stroke-width: 1.2; }
+.jr-pkt__in text {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-anchor: middle;
+}
+.jr-pkt__in.is-req rect { fill: var(--accent-wash); stroke: var(--accent); }
+.jr-pkt__in.is-req text { fill: var(--accent-2); }
+.jr-pkt__in.is-ok rect { fill: var(--ok-wash); stroke: var(--ok); }
+.jr-pkt__in.is-ok text { fill: var(--ok); }
+
+/* 兩張卡 */
+.jr-cards {
+  display: grid;
+  grid-template-columns: 5fr 7fr;
+  gap: 10px;
+}
+
+.jr-card {
+  height: 142px;
+  padding: 12px 16px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+
+.jr-card__k {
+  margin-bottom: 8px;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  color: var(--fg-3);
+}
+
+.jr-desc { font-size: 13.5px; line-height: 1.65; color: var(--fg-2); }
+.jr-mute { display: block; margin-top: 4px; font-size: 12px; line-height: 1.55; color: var(--fg-3); }
+.jr-ok { color: var(--ok); }
+
+.jr code {
+  padding: 1px 6px;
+  font-family: var(--font-mono);
+  font-size: 0.92em;
+  background: rgba(255, 255, 255, 0.07);
+  border-radius: 4px;
+}
+
+/* 右卡：逐行出現 */
+.jr-code { display: flex; flex-direction: column; gap: 6px; font-size: 13px; color: var(--fg-2); }
+.jr-ln {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 0.35s ease var(--d, 0ms), transform 0.35s ease var(--d, 0ms);
+}
+.jr-ln.on { opacity: 1; transform: none; }
+.jr-k {
+  flex: none;
+  min-width: 64px;
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  color: var(--fg-3);
+}
+.jr-k--req { color: var(--accent-2); }
+.jr-k--ok { color: var(--ok); }
+.jr-m { font-family: var(--font-mono); font-size: 12.5px; }
+.jr-dim { font-family: var(--font-mono); color: var(--fg-3); }
+
+.jr-caret {
+  display: inline-block;
+  width: 7px;
+  height: 14px;
+  margin-left: 2px;
+  vertical-align: -2px;
+  background: var(--accent);
+  animation: jr-blink 0.8s steps(1) infinite;
+}
+@keyframes jr-blink { 50% { opacity: 0; } }
+
+/* 第 5 步：原文 + 縮圖頁面 */
+.jr-resp { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; }
+.jr-resp__raw { display: flex; flex-direction: column; gap: 6px; }
+
+.jr-page {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  gap: 5px;
+  width: 112px;
+  padding: 8px;
+  border: 1px solid var(--line-2);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.04);
+  opacity: 0.35;
+  transition: opacity 0.5s ease 0.1s;
+}
+.jr-page.on { opacity: 1; }
+.jr-page i { display: block; height: 4px; border-radius: 2px; background: var(--line-2); }
+.jr-page__bar { height: 6px !important; margin-bottom: 2px; background: var(--accent-line) !important; }
+.jr-page__h { width: 62%; height: 7px !important; background: var(--accent) !important; opacity: 0; transition: opacity 0.4s ease 0.35s; }
+.jr-page__l { opacity: 0; transition: opacity 0.4s ease 0.55s; }
+.jr-page__l--s { width: 70%; transition-delay: 0.7s; }
+.jr-page.on .jr-page__h, .jr-page.on .jr-page__l { opacity: 1; }
+
+/* 控制列 */
+.jr-ctl {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   font-family: var(--font-mono);
 }
 
-.seq-replay {
+.jr-btn {
+  padding: 2px 14px;
   font-family: var(--font-mono);
   font-size: inherit;
   line-height: inherit;
@@ -480,38 +680,23 @@ onUnmounted(() => {
   background: transparent;
   border: 1px solid var(--line);
   border-radius: 999px;
-  padding: 2px 12px;
   cursor: pointer;
 }
+.jr-btn:hover:not(:disabled) { border-color: var(--accent); }
+.jr-btn:focus-visible { outline: 1px solid var(--accent); outline-offset: 2px; }
+.jr-btn:disabled { color: var(--fg-3); cursor: default; opacity: 0.5; }
+.jr-btn--main { background: var(--accent-wash); border-color: var(--accent-line); }
 
-.seq-replay:hover {
-  border-color: var(--accent);
+.jr-progress { margin-left: 6px; font-variant-numeric: tabular-nums; color: var(--fg-3); }
+
+@media (prefers-reduced-motion: reduce) {
+  .jr-ln, .jr-page, .jr-page i, .jr-bar i, .jr-pkt__in { transition: none; }
+  .jr-caret, .jr-node.is-pulse .jr-card-bg { animation: none; }
 }
 
-.seq-replay:focus-visible {
-  outline: 1px solid var(--accent);
-  outline-offset: 2px;
-}
-
-.seq-progress {
-  font-variant-numeric: tabular-nums;
-}
-
-/* PDF 匯出 / 列印：一律顯示完整終態（三節點全亮、封包隱藏），隱藏播放控制 */
+/* PDF 匯出 / 列印：顯示第 5 步終態，隱藏控制列 */
 @media print {
-  .seq-controls,
-  .rj-pkt,
-  .rj-cap__t {
-    display: none;
-  }
-  .rj-cap__p {
-    display: block;
-  }
-  .rj .tc-step,
-  .rj-wash,
-  .rj-node-hi {
-    opacity: 1 !important;
-    transform: none !important;
-  }
+  .jr-ctl { display: none; }
+  .jr-ln, .jr-page, .jr-page i { opacity: 1 !important; transform: none !important; }
 }
 </style>
