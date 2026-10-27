@@ -2,3 +2,8 @@ allowBuilds:
   esbuild: true
   playwright-chromium: true
   vue-demi: true
+
+# pele 是本站唯一的 diagram 渲染器（主動選用的相依），
+# 排除其 minimumReleaseAge 檢查，避免新版本發布後 24h 內 deploy 被擋。
+minimumReleaseAgeExclude:
+  - "pele"
