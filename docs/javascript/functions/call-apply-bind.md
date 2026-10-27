@@ -60,7 +60,7 @@ graph TB
     
     C --> C1[立即執行 ✅]
     C --> C2[陣列傳參]
-    C --> C3[語法: fn.apply this, [args]]
+    C --> C3["語法: fn.apply this, [args]"]
     
     D --> D1[不立即執行 ❌]
     D --> D2[回傳新函式]

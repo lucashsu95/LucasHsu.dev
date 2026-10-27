@@ -198,10 +198,10 @@ graph LR
 ```mermaid
 graph LR
     subgraph 索引檔案 idx_user_email
-        I1[ming@email.com → Row 1]
-        I2[hua@email.com → Row 2]
-        I3[mei@email.com → Row 3]
-        I4[qiang@email.com → Row 4]
+        I1["ming@email.com → Row 1"]
+        I2["hua@email.com → Row 2"]
+        I3["mei@email.com → Row 3"]
+        I4["qiang@email.com → Row 4"]
     end
     
     subgraph 資料表 users

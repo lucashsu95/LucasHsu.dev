@@ -448,9 +448,9 @@ graph LR
     end
 
     subgraph "非同步處理"
-        L1 -->|@Async| EMAIL[發送 Email]
-        L2 -->|@Async| LOGISTICS[通知物流]
-        L3 -->|@Async| POINT[贈送紅利點數]
+        L1 -->|"@Async"| EMAIL[發送 Email]
+        L2 -->|"@Async"| LOGISTICS[通知物流]
+        L3 -->|"@Async"| POINT[贈送紅利點數]
     end
 ```
 
