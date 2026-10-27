@@ -135,3 +135,27 @@
 .medium-zoom--opened .medium-zoom-overlay {
   opacity: 0.9 !important;
 }
+
+/* pele（Mermaid 圖表渲染器）：對齊 VitePress 亮/暗主題變數，
+   主題切換時自動變色、不需重繪 */
+.pele-mermaid {
+  --pele-bg: transparent;
+  --pele-fg: var(--vp-c-text-1);
+  --pele-muted: var(--vp-c-text-2);
+  --pele-line: var(--vp-c-text-1);
+  --pele-surface: var(--vp-c-bg-soft);
+  --pele-surface-alt: var(--vp-c-bg-mute);
+  --pele-border: var(--vp-c-border);
+  --pele-accent: var(--vp-c-brand-1);
+  --pele-critical: var(--vp-c-danger-1);
+  --pele-error: var(--vp-c-danger-1);
+  --pele-font: var(--vp-font-family-base);
+  --pele-font-mono: var(--vp-font-family-mono);
+  --pele-radius: 4px;
+  text-align: center;
+}
+
+.pele-mermaid .pele {
+  max-width: 100%;
+  height: auto;
+}

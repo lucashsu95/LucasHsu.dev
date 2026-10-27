@@ -21,7 +21,7 @@ import { InlineLinkPreviewElementTransform } from "@nolebase/vitepress-plugin-in
 //   GitChangelog,
 //   GitChangelogMarkdownSection,
 // } from '@nolebase/vitepress-plugin-git-changelog/vite'
-import { MermaidMarkdown, MermaidPlugin } from "vitepress-plugin-mermaid";
+import { PeleMermaidMarkdown } from "./theme/pele-markdown.mjs";
 import { awardsPhotosPlugin } from "../../scripts/awards-scan.mjs";
 
 const env = loadEnv("", process.cwd());
@@ -37,7 +37,6 @@ export default defineConfig({
         external: ["fsevents"],
         output: {
           manualChunks: {
-            mermaid: ["mermaid"],
             nolebase: [
               "@nolebase/vitepress-plugin-enhanced-readabilities",
               "@nolebase/vitepress-plugin-inline-link-preview",
@@ -47,7 +46,6 @@ export default defineConfig({
       },
     },
     optimizeDeps: {
-      include: ["mermaid"],
       exclude: [
         "@nolebase/vitepress-plugin-enhanced-readabilities/client",
         "vitepress",
@@ -61,7 +59,6 @@ export default defineConfig({
         "@nolebase/vitepress-plugin-enhanced-readabilities",
         "@nolebase/ui",
         "@nolebase/vitepress-plugin-inline-link-preview",
-        "mermaid",
       ]
     },
     plugins: [
@@ -69,8 +66,7 @@ export default defineConfig({
       //   repoURL: () => 'https://github.com/lucashsu95/LucasHsu.dev',
       // }),
       // GitChangelogMarkdownSection(),
-      awardsPhotosPlugin(),
-      MermaidPlugin()
+      awardsPhotosPlugin()
     ],
   },
   base: "/LucasHsu.dev/",
@@ -125,7 +121,7 @@ export default defineConfig({
     math: true,
     config: (md) => {
       md.use(InlineLinkPreviewElementTransform);
-      md.use(MermaidMarkdown);
+      md.use(PeleMermaidMarkdown);
     },
   },
   sitemap: {

@@ -1,8 +1,9 @@
 // Import necessary modules and components
 import { h, onMounted, watch, nextTick } from "vue";
 import DefaultTheme from "vitepress/theme";
-import { useRoute } from "vitepress";
+import { useRoute, onContentUpdated } from "vitepress";
 import mediumZoom from "medium-zoom";
+import { mountPeleDiagrams } from "./pele-diagrams";
 
 // Import custom components
 import GtmScript from "./components/GtmScript.vue";
@@ -138,6 +139,10 @@ export default {
   setup() {
     vitepressLifeProgress();
     const route = useRoute();
+    // pele：內容更新（初始＋路由切換）時掛載 Mermaid 圖表
+    onContentUpdated(() => {
+      mountPeleDiagrams().catch((e) => console.error("pele mount:", e));
+    });
     const initZoom = () => {
       mediumZoom(".main img", { background: "var(--vp-c-bg)" });
     };
