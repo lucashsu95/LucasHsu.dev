@@ -159,3 +159,17 @@
   max-width: 100%;
   height: auto;
 }
+
+/* pele sequenceDiagram 的 Note（`Note over A,B: ...`）：
+   底色與文字走 pele 內部變數，fallback 是淺灰底，
+   黑夜模式下會變成淺灰底 + 白字，幾乎看不見（反白）。
+   這裡用 VitePress 主題變數強制覆蓋，保證亮/暗模式都有對照度。
+   :not(.pele-node) 排除 class / usecase 等其他圖型的名叫 note 的節點 */
+.pele-mermaid .pele-note:not(.pele-node) rect {
+  fill: var(--vp-c-bg-mute);
+  stroke: var(--vp-c-border);
+}
+.pele-mermaid .pele-note:not(.pele-node) .pele-label,
+.pele-mermaid .pele-note:not(.pele-node) .pele-label tspan {
+  fill: var(--vp-c-text-1);
+}
