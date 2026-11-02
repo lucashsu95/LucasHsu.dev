@@ -113,6 +113,14 @@ sequenceDiagram
     B-->>A: 返回回應
 ```
 
+<!--
+  圖表渲染說明（給寫文章的人看，讀者看不到）：
+  - 本站 ```mermaid 圖表由 pele 渲染（docs/.vitepress/theme/pele-markdown.mjs、pele-diagrams.js）
+  - 主題色已全站對齊亮/暗模式，含 sequenceDiagram 的 Note
+    （變數定義在 docs/.vitepress/theme/style.css 的 .pele-mermaid 區塊）
+  - 文章內不需要、也不要為圖表寫 inline style 或 %%{init: theme}%%，會蓋掉主題配色
+-->
+
 :::tip 視覺化工具
 你可以使用 [工具名稱](網址) 來練習或產生類似的圖表。
 :::
