@@ -51,7 +51,7 @@ layout: default
   <div class="paper-card"><b>終端機　Claude Code</b><small>Anthropic 官方；終端機 agent 標竿，教學用它最多</small></div>
   <div class="paper-card"><b>終端機　Codex</b><small>OpenAI 官方 CLI（也有雲端版）；GPT 家族、沙箱化</small></div>
   <div class="paper-card"><b>開源　opencode</b><small>開源終端機 TUI；接任何模型、build／plan 雙模式</small></div>
-  <div class="paper-card"><b>開源　pi</b><small>極簡輕量、可擴充；API key、訂閱、本地模型都能跑</small></div>
+  <div class="paper-card"><b>開源　DeepSeek Harness</b><small>DeepSeek 官方開源；「一切皆插件」架構、獨立配置與沙箱、會話可回放</small></div>
   <div class="paper-card"><b>開源　omo</b><small>多模型編排：任務拆給多個模型／子任務協調執行</small></div>
   <div class="paper-card"><b>IDE　Antigravity</b><small>Google 的 agentic IDE；多 agent 並行、內建瀏覽器</small></div>
   <div class="paper-card"><b>助理型　Hermes</b><small>自改進型：經驗沉澱成技能、有持久記憶</small></div>
@@ -126,7 +126,7 @@ layout: default
 
 # 前導題目：借出＋歸還——<mark>第一次，直接實作</mark>
 
-<div class="two-cols">
+<div class="two-cols practice-brief">
 <div>
 <p class="lead">正式考 9 個 API，今天只做 2 個</p>
 
@@ -159,7 +159,7 @@ layout: default
 
 # 15 分鐘上手：<mark>不管你用哪個 agent</mark>
 
-<div class="two-cols wide-left">
+<div class="two-cols wide-left onboarding-steps">
 <ol class="step-list">
   <li><b>開</b><span>在 <code>practice_pkg/</code>（專案根目錄）啟動 agent。</span></li>
   <li><b>下指令</b><span>給<strong>有明確完成條件</strong>的小任務：「列出專案裡的例外類別」。別丟一句模糊的「幫我看看專案」。</span></li>
@@ -289,7 +289,7 @@ layout: default
 
 # 第二次實作：<mark>新專案、同一題</mark>
 
-<div class="two-cols">
+<div class="two-cols second-implementation">
 <div class="stack">
   <div class="paper-card"><strong>開一個全新的 practice_pkg</strong>，再實作一次借出＋歸還——這次 SPEC 寫好了、AGENTS.md 寫好了、verify 備好了。</div>
   <div class="dark-callout"><b>看跟第一次差在哪</b>　有文件＋驗證，agent 少問、你少追、<strong>verify 當場抓</strong>。</div>
@@ -314,7 +314,7 @@ layout: default
 
 # 審計：<mark>複跑＋記錄</mark>
 
-<div class="two-cols">
+<div class="two-cols audit-layout">
 <div class="paper-card ordered-card">
   <p><b>① verify 全套複跑</b><br><small>評審會抽跑，先練一次</small></p>
   <p><b>② 寫 audit.md</b><br><small>1 筆，四要素齊全</small></p>
@@ -380,7 +380,7 @@ layout: default
 
 # 機器人問答 <code>/chat</code>：<mark>怎麼串 BIRC-LLM</mark>
 
-<div class="two-cols">
+<div class="two-cols llm-layout">
 <div class="paper-card">
 <b>BIRC-LLM＝中心提供的 OpenAI 相容端點</b>
 
