@@ -9,42 +9,42 @@
 :root {
   /* seriph themes h1 with this; keep it on-brand instead of fighting
      the theme on specificity */
-  --slidev-theme-primary: #1f2d52;
+  --slidev-theme-primary: #2563eb;
 
   /* Substrate — warm-neutral charcoal, never #000 */
-  --ink: #faf8f3;
-  --ink-2: #f3f1ea;
+  --ink: #f6f7f9;
+  --ink-2: #eef1f5;
   --surface: #ffffff;
-  --surface-2: #f3f1ea;
-  --surface-3: #ebe8df;
+  --surface-2: #f2f4f8;
+  --surface-3: #e7ebf1;
 
   /* Hairlines carry all structure; cards are the exception */
-  --line: rgba(23,33,58,0.14);
-  --line-2: rgba(23,33,58,0.24);
-  --line-3: rgba(23,33,58,0.36);
+  --line: #e6e9ef;
+  --line-2: #d8dce4;
+  --line-3: #c2c9d5;
 
   /* Ink on substrate */
-  --fg: #17213a;
-  --fg-2: #3a3a44;
-  --fg-3: #6a6670;
+  --fg: #1b2230;
+  --fg-2: #414a5e;
+  --fg-3: #6b7589;
 
   /* Single accent — desaturated azure */
-  --accent: #1f2d52;
-  --accent-2: #a5502f;
-  --accent-wash: rgba(31,45,82,0.10);
-  --accent-line: rgba(31,45,82,0.42);
+  --accent: #2563eb;
+  --accent-2: #2563eb;
+  --accent-wash: rgba(37,99,235,0.10);
+  --accent-line: rgba(37,99,235,0.42);
 
   /* Muted semantics — small area, status meaning only */
-  --ok: #2f8f5b;
-  --ok-wash: rgba(63, 185, 138, 0.11);
-  --warn: #b07d1e;
-  --warn-wash: rgba(217, 160, 60, 0.11);
-  --err: #c0432f;
-  --err-wash: rgba(224, 82, 82, 0.11);
+  --ok: #15803d;
+  --ok-wash: rgba(21,128,61,0.11);
+  --warn: #b45309;
+  --warn-wash: rgba(180,83,9,0.11);
+  --err: #dc2626;
+  --err-wash: rgba(220,38,38,0.10);
 
   /* Terminal */
-  --term-bg: #f0ebe1;
-  --term-green: #d4a04a;
+  --term-bg: #eef1f5;
+  --term-green: #4ade80;
 
   /* Type */
   --font-sans: "Outfit", "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
@@ -177,7 +177,7 @@
   font-family: var(--font-mono);
   font-size: 9px;
   letter-spacing: 0.18em;
-  color: rgba(255, 255, 255, 0.24);
+  color: #98a2b6;
   position: absolute;
   right: var(--pad-x);
   bottom: 8px;
@@ -196,11 +196,11 @@
   background: transparent;
 }
 .slidev-layout.scroll-y::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.16);
+  background: rgba(27,34,48,0.18);
   border-radius: 99px;
 }
 .slidev-layout.scroll-y::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.3);
+  background: rgba(27,34,48,0.32);
 }
 
 /* ── Type scale ─────────────────────────────────────────────────────────── */
@@ -575,7 +575,7 @@
 .tc-tag--solid {
   background: var(--accent);
   border-color: var(--accent);
-  color: #061021;
+  color: #ffffff;
   font-weight: 600;
 }
 
@@ -851,7 +851,7 @@
 }
 
 .slidev-layout tbody tr:hover {
-  background: rgba(255, 255, 255, 0.022);
+  background: rgba(27,34,48,0.03);
 }
 
 .slidev-layout td code {
@@ -1289,16 +1289,18 @@
   }
 }
 
-/* ── W1 Editorial Serif (warm paper) + light-contrast fixes ── */
-.slidev-layout{background:radial-gradient(1200px 700px at 88% -14%, rgba(165,80,47,0.06), transparent 60%), #faf8f3 !important}
-.slidev-layout h1,.slidev-layout h2,.slidev-layout h3,.slidev-layout h4,.slidev-layout .tc-display,.slidev-layout .tc-display--sm,.slidev-layout .tc-display--lg,.slidev-layout .tc-display--ok,.slidev-layout .tc-display--warn,.slidev-layout .tc-h1,.slidev-layout .tc-h2,.slidev-layout .tc-h3,.slidev-layout .tc-h4{font-family:Georgia,'Times New Roman','Songti TC','Noto Serif TC',serif !important;color:#17213a !important;line-height:1.05}
-.slidev-layout .tc-display em,.slidev-layout h1 em,.slidev-layout h2 em{color:#a5502f !important;font-style:italic}
-.slidev-layout .tc-note__t,.slidev-layout .tc-step__t,.slidev-layout .tc-stat__v,.slidev-layout .tc-rowline__v b,.slidev-layout .tc-list__i b,.slidev-layout .tc-white{color:#17213a !important}
-.slidev-layout b,.slidev-layout strong{color:#17213a !important}
-.slidev-layout .tc-tag,.slidev-layout .tc-eyebrow,.slidev-layout .tc-label{letter-spacing:0.14em;text-transform:uppercase;color:#5a5560}
-.slidev-layout .slidev-slidev-page-number,.slidev-layout::after,.slidev-layout .tc-rail__label{color:#9a95a2 !important}
+/* ── ECC light multi-hue (cool paper, blue primary, dark-ink sans hierarchy) ── */
+.slidev-layout{background:radial-gradient(1200px 700px at 88% -14%, rgba(37,99,235,0.05), transparent 60%), #f6f7f9 !important}
+.slidev-layout h1,.slidev-layout h2,.slidev-layout h3,.slidev-layout h4,.slidev-layout .tc-display,.slidev-layout .tc-display--sm,.slidev-layout .tc-display--lg,.slidev-layout .tc-display--ok,.slidev-layout .tc-display--warn,.slidev-layout .tc-h1,.slidev-layout .tc-h2,.slidev-layout .tc-h3,.slidev-layout .tc-h4{font-family:var(--font-sans) !important;color:#1b2230 !important;line-height:1.08}
+.slidev-layout h1.tc-h1{font-weight:800 !important;letter-spacing:-0.03em}
+.slidev-layout .tc-h2{font-weight:700 !important}
+.slidev-layout .tc-display em,.slidev-layout h1 em,.slidev-layout h2 em{color:#2563eb !important;font-style:normal;font-weight:800}
+.slidev-layout .tc-note__t,.slidev-layout .tc-step__t{color:#1b2230 !important;font-weight:700}
+.slidev-layout .tc-stat__v,.slidev-layout .tc-rowline__v b,.slidev-layout .tc-list__i b,.slidev-layout .tc-white,.slidev-layout b,.slidev-layout strong{color:#1b2230 !important}
+.slidev-layout .tc-tag,.slidev-layout .tc-eyebrow,.slidev-layout .tc-label{letter-spacing:0.14em;text-transform:uppercase;color:#6b7589}
+.slidev-layout .slidev-slidev-page-number,.slidev-layout::after,.slidev-layout .tc-rail__label{color:#98a2b6 !important}
 .slidev-layout .tc-term,.slidev-layout .tc-grid,.slidev-layout .tc-matrix,.slidev-layout .tc-steps,.slidev-layout .tc-stat,.slidev-layout .tc-cards,.slidev-layout .tc-flow,.slidev-layout .tc-fig,.slidev-layout .tc-rows,.slidev-layout .tc-callout{border-radius:3px !important;box-shadow:none !important}
-.slidev-layout .tc-term b,.slidev-layout .tc-term strong{color:#17213a !important}
+.slidev-layout .tc-term b,.slidev-layout .tc-term strong{color:#1b2230 !important}
 
 /* ── SequenceDiagram: has its own dark bg — keep text/lines light ── */
 .slidev-layout .d-pill text{fill:#aab2be !important}
