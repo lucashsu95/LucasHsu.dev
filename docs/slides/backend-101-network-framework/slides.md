@@ -10,7 +10,7 @@ comark: true
 download: true
 lineNumbers: true
 routerMode: hash
-colorSchema: dark
+colorSchema: light
 fonts:
   sans: "Outfit"
   mono: "JetBrains Mono"
@@ -263,7 +263,7 @@ layout: default
   <div class="tc-rowline" style="grid-template-columns:78px 1fr;padding:11px 0">
     <div><div class="tc-rowline__k tc-mute" style="font-size:17px">L1</div><div class="tc-xs tc-mute">網路存取層</div></div>
     <div>
-      <p class="tc-rowline__v tc-sm"><b>Network Access</b> — 網路線、Wi-Fi、网卡。負責「在這條線上正確地傳位元組」</p>
+      <p class="tc-rowline__v tc-sm"><b>Network Access</b> — 網路線、Wi-Fi、網卡。負責「在這條線上正確地傳位元組」</p>
     </div>
   </div>
 </div>
@@ -1150,7 +1150,7 @@ class: scroll-y
 
 <div class="tc-note tc-note--warn" style="margin-top:14px">
   <div class="tc-note__t">回到第 7 點的問題：為什麼要有框架？</div>
-  <div class="tc-note__b">不是因為框架比較聰明。是因為<b>那些麻煩事（序列化、路由、連線、序列化 JSON）每一個專案都會遇到，而且解法都一樣。</b>把重複的解法抽出來，就是框架。<br>框架的價值不是「少寫幾行」，是<b>「不用每次都重新想一次」</b>。</div>
+  <div class="tc-note__b">不是因為框架比較聰明。是因為<b>那些麻煩事（序列化、路由、連線、JSON）每一個專案都會遇到，而且解法都一樣。</b>把重複的解法抽出來，就是框架。<br>框架的價值不是「少寫幾行」，是<b>「不用每次都重新想一次」</b>。</div>
 </div>
 
 <div class="tc-note tc-note--accent" style="margin-top:10px">

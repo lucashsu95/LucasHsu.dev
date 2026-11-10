@@ -9,42 +9,42 @@
 :root {
   /* seriph themes h1 with this; keep it on-brand instead of fighting
      the theme on specificity */
-  --slidev-theme-primary: #f4f6f8;
+  --slidev-theme-primary: #1f2d52;
 
   /* Substrate — warm-neutral charcoal, never #000 */
-  --ink: #0a0b0d;
-  --ink-2: #0e1013;
-  --surface: #121519;
-  --surface-2: #171a20;
-  --surface-3: #1d2128;
+  --ink: #faf8f3;
+  --ink-2: #f3f1ea;
+  --surface: #ffffff;
+  --surface-2: #f3f1ea;
+  --surface-3: #ebe8df;
 
   /* Hairlines carry all structure; cards are the exception */
-  --line: rgba(255, 255, 255, 0.085);
-  --line-2: rgba(255, 255, 255, 0.16);
-  --line-3: rgba(255, 255, 255, 0.28);
+  --line: rgba(23,33,58,0.14);
+  --line-2: rgba(23,33,58,0.24);
+  --line-3: rgba(23,33,58,0.36);
 
   /* Ink on substrate */
-  --fg: #eceef1;
-  --fg-2: #9aa2ae;
-  --fg-3: #79828f;
+  --fg: #17213a;
+  --fg-2: #3a3a44;
+  --fg-3: #6a6670;
 
   /* Single accent — desaturated azure */
-  --accent: #4a88f5;
-  --accent-2: #8bb2fb;
-  --accent-wash: rgba(74, 136, 245, 0.12);
-  --accent-line: rgba(74, 136, 245, 0.42);
+  --accent: #1f2d52;
+  --accent-2: #a5502f;
+  --accent-wash: rgba(31,45,82,0.10);
+  --accent-line: rgba(31,45,82,0.42);
 
   /* Muted semantics — small area, status meaning only */
-  --ok: #3fb98a;
+  --ok: #2f8f5b;
   --ok-wash: rgba(63, 185, 138, 0.11);
-  --warn: #d9a03c;
+  --warn: #b07d1e;
   --warn-wash: rgba(217, 160, 60, 0.11);
-  --err: #e05252;
+  --err: #c0432f;
   --err-wash: rgba(224, 82, 82, 0.11);
 
   /* Terminal */
-  --term-bg: #0d1117;
-  --term-green: #7ee787;
+  --term-bg: #f0ebe1;
+  --term-green: #d4a04a;
 
   /* Type */
   --font-sans: "Outfit", "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
@@ -79,7 +79,7 @@
   color: var(--fg);
   letter-spacing: 0.005em;
   background:
-    radial-gradient(1100px 620px at 88% -12%, rgba(74, 136, 245, 0.055), transparent 62%),
+    radial-gradient(1200px 700px at 88% -14%, rgba(165,80,47,0.06), transparent 60%),
     var(--ink);
   padding: var(--pad-y) var(--pad-x) 38px;
   overflow: hidden;
@@ -1288,3 +1288,33 @@
     opacity: 1 !important;
   }
 }
+
+/* ── W1 Editorial Serif (warm paper) + light-contrast fixes ── */
+.slidev-layout{background:radial-gradient(1200px 700px at 88% -14%, rgba(165,80,47,0.06), transparent 60%), #faf8f3 !important}
+.slidev-layout h1,.slidev-layout h2,.slidev-layout h3,.slidev-layout h4,.slidev-layout .tc-display,.slidev-layout .tc-display--sm,.slidev-layout .tc-display--lg,.slidev-layout .tc-display--ok,.slidev-layout .tc-display--warn,.slidev-layout .tc-h1,.slidev-layout .tc-h2,.slidev-layout .tc-h3,.slidev-layout .tc-h4{font-family:Georgia,'Times New Roman','Songti TC','Noto Serif TC',serif !important;color:#17213a !important;line-height:1.05}
+.slidev-layout .tc-display em,.slidev-layout h1 em,.slidev-layout h2 em{color:#a5502f !important;font-style:italic}
+.slidev-layout .tc-note__t,.slidev-layout .tc-step__t,.slidev-layout .tc-stat__v,.slidev-layout .tc-rowline__v b,.slidev-layout .tc-list__i b,.slidev-layout .tc-white{color:#17213a !important}
+.slidev-layout b,.slidev-layout strong{color:#17213a !important}
+.slidev-layout .tc-tag,.slidev-layout .tc-eyebrow,.slidev-layout .tc-label{letter-spacing:0.14em;text-transform:uppercase;color:#5a5560}
+.slidev-layout .slidev-slidev-page-number,.slidev-layout::after,.slidev-layout .tc-rail__label{color:#9a95a2 !important}
+.slidev-layout .tc-term,.slidev-layout .tc-grid,.slidev-layout .tc-matrix,.slidev-layout .tc-steps,.slidev-layout .tc-stat,.slidev-layout .tc-cards,.slidev-layout .tc-flow,.slidev-layout .tc-fig,.slidev-layout .tc-rows,.slidev-layout .tc-callout{border-radius:3px !important;box-shadow:none !important}
+.slidev-layout .tc-term b,.slidev-layout .tc-term strong{color:#17213a !important}
+
+/* ── SequenceDiagram: has its own dark bg — keep text/lines light ── */
+.slidev-layout .d-pill text{fill:#aab2be !important}
+.slidev-layout .d-lbl{fill:#98a1ae !important}
+.slidev-layout .d-res{stroke:#98a1ae !important}
+.slidev-layout .d-req{stroke:#6f9df0 !important}
+.slidev-layout .d-pill--acc text{fill:#e0a088 !important}
+.slidev-layout .d-lbl--acc{fill:#e0a088 !important}
+
+/* ── SequenceDiagram (new, has dark #0e1013 bg): W1 darkened --ok/--err/--fg-3
+   for the light slide bg, but the diagram stays dark -> force bright/light. ── */
+.slidev-layout .d-pill--ok text{fill:#3fb98a !important}
+.slidev-layout .d-res--ok{stroke:#3fb98a !important}
+.slidev-layout .d-lbl--ok{fill:#3fb98a !important}
+.slidev-layout .d-cond--ok{fill:#3fb98a !important}
+.slidev-layout .d-res--err{stroke:#e05252 !important}
+.slidev-layout .d-lbl--err{fill:#e05252 !important}
+.slidev-layout .d-cond--err{fill:#e05252 !important}
+.slidev-layout .d-alt-tag{fill:#98a1ae !important}
