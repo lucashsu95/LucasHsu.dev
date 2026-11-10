@@ -1,11 +1,11 @@
 /* ===== server-intro：附加到 style.css 最後面 ===== */
 
 .sv {
-  --sv-a: #5eead4;
-  --sv-b: #fbbf24;
-  --sv-line: rgba(255, 255, 255, 0.16);
-  --sv-dim: rgba(255, 255, 255, 0.62);
-  --sv-card: rgba(255, 255, 255, 0.045);
+  --sv-a: #1f2d52;
+  --sv-b: #a5502f;
+  --sv-line: rgba(31, 45, 82, 0.20);
+  --sv-dim: rgba(23, 33, 58, 0.66);
+  --sv-card: rgba(31, 45, 82, 0.05);
   display: flex;
   flex-direction: column;
   gap: 18px;
@@ -33,7 +33,7 @@
 }
 .sv-node__t { font-weight: 700; font-size: 1.05em; }
 .sv-node__s { margin-top: 4px; font-size: 0.78em; color: var(--sv-dim); }
-.sv-node--accent { border-color: var(--sv-b); box-shadow: 0 0 0 1px rgba(251, 191, 36, 0.25), 0 0 28px rgba(251, 191, 36, 0.12); }
+.sv-node--accent { border-color: var(--sv-b); box-shadow: 0 0 0 1px rgba(165, 80, 47, 0.25), 0 0 28px rgba(165, 80, 47, 0.12); }
 .sv-node--live { border-color: var(--sv-a); }
 .sv-node--accent.sv-node--live { border-color: var(--sv-b); }
 .sv-node--files { text-align: left; }
@@ -115,8 +115,8 @@
 }
 .sv-node--accent .sv-dot { background: var(--sv-b); }
 @keyframes sv-pulse {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(94, 234, 212, 0.55); }
-  50%      { box-shadow: 0 0 0 7px rgba(94, 234, 212, 0); }
+  0%, 100% { box-shadow: 0 0 0 0 rgba(31, 45, 82, 0.40); }
+  50%      { box-shadow: 0 0 0 7px rgba(31, 45, 82, 0); }
 }
 
 /* 伺服器「煮」的動作 */
@@ -131,8 +131,8 @@
 .sv-file {
   padding: 3px 10px;
   border-radius: 4px;
-  background: rgba(94, 234, 212, 0.1);
-  border: 1px solid rgba(94, 234, 212, 0.3);
+  background: rgba(31, 45, 82, 0.08);
+  border: 1px solid rgba(31, 45, 82, 0.28);
   font-size: 0.74em;
   font-family: var(--slidev-code-font-family, monospace);
 }
@@ -170,7 +170,7 @@
 .sv code, .sv-card code, .tc-note code {
   padding: 1px 6px;
   border-radius: 4px;
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(31, 45, 82, 0.06);
   font-size: 0.9em;
 }
 
