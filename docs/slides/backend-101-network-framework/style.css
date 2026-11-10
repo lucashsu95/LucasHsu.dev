@@ -573,9 +573,9 @@
 .tc-tag--err { border-color: rgba(224, 82, 82, 0.4); color: var(--err); background: var(--err-wash); }
 
 .tc-tag--solid {
-  background: var(--accent);
-  border-color: var(--accent);
-  color: #061021;
+  background: var(--surface);
+  border-color: var(--line-2);
+  color: var(--fg);
   font-weight: 600;
 }
 
@@ -1268,7 +1268,6 @@
   .slidev-layout { overflow: hidden !important; }
   .slidev-layout::before,
   .slidev-layout::after { display: none; }
-  [v-click] { opacity: 1 !important; visibility: visible !important; }
   .tc-grain, .tc-ambient { display: none; }
   .tc-in > *, .tc-in--fade > * { opacity: 1 !important; animation: none !important; }
   .tc-sheen::after { display: none; }
@@ -1344,6 +1343,56 @@
 }
 .sv-flow--end { padding: 6px 8px 0; }
 .sv-flow--3 .sv-track { min-width: 70px; }
+.sv-insight-flow { padding: 10px 8px 18px; }
+.sv-insight-node { min-width: 132px; padding: 12px 14px; }
+.sv-insight-node .ic { margin-bottom: 5px; }
+.sv-insight-node .sv-node__t { font-size: 0.96em; }
+.sv-insight-node .sv-node__s { line-height: 1.35; }
+.sv-request {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  padding: 14px 16px;
+  border: 1px solid var(--sv-line);
+  border-radius: 10px;
+  background: var(--sv-card);
+}
+.sv-request__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--sv-line);
+  font-weight: 700;
+}
+.sv-request__lane {
+  display: grid;
+  grid-template-columns: 58px 1fr 22px 1fr 22px 1fr;
+  align-items: center;
+  gap: 8px;
+}
+.sv-request__lane--ssr .sv-request__who { color: var(--sv-b); }
+.sv-request__who {
+  font-family: var(--font-mono);
+  font-size: 0.78em;
+  font-weight: 700;
+  color: var(--sv-a);
+}
+.sv-request__step {
+  padding: 8px 10px;
+  border: 1px solid var(--sv-line);
+  border-radius: 6px;
+  background: var(--surface);
+  font-size: 0.8em;
+  text-align: center;
+}
+.sv-request__lane--ssr .sv-request__step:last-child {
+  border-color: var(--sv-b);
+}
+.sv-request__arrow {
+  color: var(--sv-dim);
+  text-align: center;
+}
 
 .sv-node {
   flex: none;
@@ -1488,7 +1537,7 @@
   text-align: center;
   border-radius: 50%;
   background: var(--sv-b);
-  color: #1a1a1a;
+  color: #fff !important;
 }
 .sv code, .sv-card code, .tc-note code {
   padding: 1px 6px;
