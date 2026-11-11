@@ -90,7 +90,7 @@ layout: default
   <h1 class="tc-h1">不要只學框架，<em>了解五層</em></h1>
 </div>
 
-<div class="tc-grid tc-grid--split" style="gap:16px 26px">
+<div class="tc-grid tc-grid--split" style="gap:16px 26px;grid-template-columns:1.3fr 1fr">
   <div class="tc-col tc-in" style="gap:10px">
     <div class="tc-panel" style="--i:0">
       <div class="tc-panel__label">DUMB DEVELOPER</div>
@@ -1127,7 +1127,7 @@ layout: default
   <h1 class="tc-h1">你現在站在<em>哪一層</em>？</h1>
 </div>
 
-<div class="tc-grid tc-grid--split" style="gap:16px 26px">
+<div class="tc-grid tc-grid--split" style="gap:16px 26px;grid-template-columns:1.3fr 1fr">
   <div class="tc-col tc-in" style="gap:10px">
     <div class="tc-panel" style="--i:0">
       <div class="tc-panel__label">今天帶走的</div>
