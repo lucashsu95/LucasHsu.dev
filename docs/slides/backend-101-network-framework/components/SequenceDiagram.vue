@@ -200,7 +200,7 @@ onUnmounted(() => {
 
         <defs>
           <pattern id="b101-dots" width="24" height="24" patternUnits="userSpaceOnUse">
-            <circle cx="1" cy="1" r="0.8" fill="rgba(255,255,255,0.07)"/>
+            <circle cx="1" cy="1" r="0.8" fill="rgba(23,33,58,0.06)"/>
           </pattern>
           <marker id="b101-arrow" markerWidth="9" markerHeight="6.5" refX="8" refY="3.25" orient="auto">
             <polygon points="0 0, 9 3.25, 0 6.5" fill="var(--fg-3)"/>
@@ -364,11 +364,11 @@ onUnmounted(() => {
   font-variant-numeric: tabular-nums;
 }
 
-.d-bg { fill: #0e1013; }
+.d-bg { fill: var(--ink-2); }
 
 /* participants */
 .d-pill rect {
-  fill: rgba(255, 255, 255, 0.028);
+  fill: var(--surface);
   stroke: var(--line-2);
   stroke-width: 1;
 }
@@ -391,18 +391,18 @@ onUnmounted(() => {
   stroke-dasharray: 2 5;
 }
 .d-act {
-  fill: rgba(255, 255, 255, 0.09);
+  fill: rgba(23, 33, 58, 0.16);
   stroke: var(--line-2);
   stroke-width: 1;
 }
 .d-rule { stroke: var(--line); stroke-width: 1; }
 .d-rule--dashed { stroke-dasharray: 4 4; }
 .d-alt {
-  fill: rgba(255, 255, 255, 0.022);
+  fill: rgba(23, 33, 58, 0.03);
   stroke: var(--line-2);
   stroke-width: 1;
 }
-.d-alt-tab { fill: #0e1013; stroke: var(--line-2); stroke-width: 1; }
+.d-alt-tab { fill: var(--ink-2); stroke: var(--line-2); stroke-width: 1; }
 
 /* messages */
 .d-req { stroke: var(--accent); stroke-width: 1.5; }
@@ -421,7 +421,7 @@ onUnmounted(() => {
 .d-lbl--err { fill: var(--err); }
 
 .d-phase {
-  fill: rgba(255, 255, 255, 0.32);
+  fill: rgba(23, 33, 58, 0.42);
   font-family: "JetBrains Mono", "PingFang TC", monospace;
   font-size: 9.5px;
   letter-spacing: 0.16em;
