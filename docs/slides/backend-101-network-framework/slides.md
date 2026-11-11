@@ -85,6 +85,52 @@ transition: slide-left
 layout: default
 ---
 
+<div class="tc-head tc-head--tight">
+  <div class="tc-kicker">03 · 後端的地圖</div>
+  <h1 class="tc-h1">不要只學框架，<em>了解五層</em></h1>
+</div>
+
+<div class="tc-grid tc-grid--split" style="gap:16px 26px">
+  <div class="tc-col tc-in" style="gap:10px">
+    <div class="tc-panel" style="--i:0">
+      <div class="tc-panel__label">DUMB DEVELOPER</div>
+      <div class="tc-rows tc-rows--dense">
+        <div class="tc-rowline tc-rowline--auto"><span class="tc-mono tc-mute">Learns</span><b>Spring Boot / Express / Django</b></div>
+        <div class="tc-rowline tc-rowline--auto"><span class="tc-mono tc-mute">Learns</span><b>NestJS / FastAPI / 下一個框架</b></div>
+      </div>
+      <p class="tc-sm tc-mute">框架兩三年換一輪，教材跟著換。</p>
+    </div>
+    <div class="tc-panel tc-panel--accent" style="--i:1">
+      <div class="tc-panel__label">SMART DEVELOPER</div>
+      <div class="tc-rows tc-rows--dense">
+        <div class="tc-rowline tc-rowline--auto"><span class="tc-mono tc-accent">Understands</span><b>OS · 語言與 runtime</b></div>
+        <div class="tc-rowline tc-rowline--auto"><span class="tc-mono tc-accent">Understands</span><b>網路 · 資料庫</b></div>
+        <div class="tc-rowline tc-rowline--auto"><span class="tc-mono tc-accent">Understands</span><b>並行與狀態 · 軟體怎麼運作</b></div>
+      </div>
+      <p class="tc-sm tc-mute">這五層不會換，只會越懂越深。</p>
+    </div>
+  </div>
+  <div class="tc-col tc-in" style="gap:10px">
+    <div class="tc-panel__label" style="--i:0">後端的五層 · 由下往上</div>
+    <div class="tl-stack" style="--i:1">
+      <div class="tl-layer"><span class="tl-layer__n">L5</span><div><div class="tl-layer__t">並行與狀態</div><div class="tl-layer__d">佇列 · 冪等 · 一致性 · 快取</div></div><span class="tc-tag">路線圖</span></div>
+      <div class="tl-layer"><span class="tl-layer__n">L4</span><div><div class="tl-layer__t">資料庫</div><div class="tl-layer__d">索引 · 交易 · 鎖 · query plan</div></div><span class="tc-tag">之後會碰</span></div>
+      <div class="tl-layer tl-layer--now"><span class="tl-layer__n">L3</span><div><div class="tl-layer__t">網路</div><div class="tl-layer__d">TCP · HTTP · 狀態碼 · Port</div></div><span class="tc-tag tc-tag--accent">本堂主戰場</span></div>
+      <div class="tl-layer"><span class="tl-layer__n">L2</span><div><div class="tl-layer__t">語言與 runtime</div><div class="tl-layer__d">JVM · GC · 執行緒 · 事件迴圈</div></div><span class="tc-tag">路線圖</span></div>
+      <div class="tl-layer"><span class="tl-layer__n">L1</span><div><div class="tl-layer__t">OS</div><div class="tl-layer__d">行程 · fd · 記憶體 · 磁碟</div></div><span class="tc-tag">路線圖</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="tc-note tc-note--accent" style="margin-top:14px">
+  <div class="tc-note__t">這 50 分鐘，我們把 L3（網路）走透。</div>
+  <div class="tc-note__b">L4（資料庫）是之後營的題目；L1 / L2 / L5 是你下課後的自我學習路線圖。</div>
+</div>
+
+---
+layout: default
+---
+
 <div class="tc-head">
   <div class="tc-kicker">03 · 五大面向</div>
   <h1 class="tc-h1">你每天用的網站，拆開長這樣</h1>
@@ -1070,6 +1116,45 @@ class: scroll-y
 <div class="tc-note tc-note--accent" style="margin-top:10px">
   <div class="tc-note__t">所以框架的前提是：你已經知道它在做什麼。</div>
   <div class="tc-note__b">今天這堂課的順序（先原生、再框架）不是巧合。</div>
+</div>
+
+---
+layout: default
+---
+
+<div class="tc-head tc-head--tight">
+  <div class="tc-kicker">11 · 全景</div>
+  <h1 class="tc-h1">你現在站在<em>哪一層</em>？</h1>
+</div>
+
+<div class="tc-grid tc-grid--split" style="gap:16px 26px">
+  <div class="tc-col tc-in" style="gap:10px">
+    <div class="tc-panel" style="--i:0">
+      <div class="tc-panel__label">今天帶走的</div>
+      <div class="tc-rows tc-rows--dense">
+        <div class="tc-rowline tc-rowline--auto"><span class="tc-mono tc-mute">TCP/IP</span><b>四層：線 · 路 · 包 · 話 ＋ DNS 名字 → IP</b></div>
+        <div class="tc-rowline tc-rowline--auto"><span class="tc-mono tc-mute">HTTP</span><b>request / response、無狀態</b></div>
+        <div class="tc-rowline tc-rowline--auto"><span class="tc-mono tc-mute">狀態碼</span><b>2xx 成功 / 4xx 你的問題 / 5xx 我的問題</b></div>
+        <div class="tc-rowline tc-rowline--auto"><span class="tc-mono tc-mute">Port</span><b>0~65535、撞號 → BindException</b></div>
+        <div class="tc-rowline tc-rowline--auto"><span class="tc-mono tc-mute">框架</span><b>它呼叫你、約定優於配置、189 → 66 行</b></div>
+      </div>
+    </div>
+  </div>
+  <div class="tc-col tc-in" style="gap:10px">
+    <div class="tc-panel__label" style="--i:0">回到那張地圖</div>
+    <div class="tl-stack" style="--i:1">
+      <div class="tl-layer"><span class="tl-layer__n">L5</span><div><div class="tl-layer__t">並行與狀態</div><div class="tl-layer__d">佇列 · 冪等 · 一致性 · 快取</div></div><span class="tc-tag">路線圖</span></div>
+      <div class="tl-layer"><span class="tl-layer__n">L4</span><div><div class="tl-layer__t">資料庫</div><div class="tl-layer__d">索引 · 交易 · 鎖 · query plan</div></div><span class="tc-tag tc-tag--warn">下一營</span></div>
+      <div class="tl-layer tl-layer--ok"><span class="tl-layer__n">L3</span><div><div class="tl-layer__t">網路</div><div class="tl-layer__d">TCP · HTTP · 狀態碼 · Port</div></div><span class="tc-tag tc-tag--ok">已拿下</span></div>
+      <div class="tl-layer"><span class="tl-layer__n">L2</span><div><div class="tl-layer__t">語言與 runtime</div><div class="tl-layer__d">JVM · GC · 執行緒 · 事件迴圈</div></div><span class="tc-tag">路線圖</span></div>
+      <div class="tl-layer"><span class="tl-layer__n">L1</span><div><div class="tl-layer__t">OS</div><div class="tl-layer__d">行程 · fd · 記憶體 · 磁碟</div></div><span class="tc-tag">路線圖</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="tc-note tc-note--accent" style="margin-top:14px">
+  <div class="tc-note__t">Spring Boot 只是把這五層包起來的糖——</div>
+  <div class="tc-note__b">你現在知道糖下面有什麼了。這就是「了解」和「會學」的差距。</div>
 </div>
 
 ---

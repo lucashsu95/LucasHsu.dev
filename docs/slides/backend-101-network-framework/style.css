@@ -1566,3 +1566,54 @@
 @media (prefers-reduced-motion: reduce) {
   .sv-packet, .sv-dot, .sv-cook { animation: none; opacity: 1; }
 }
+
+/* ── 五層地圖 — 03 後端的地圖 / 11 你現在站在哪一層 ───────────────────────── */
+.tl-stack {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--line-2);
+}
+
+.tl-layer {
+  display: grid;
+  grid-template-columns: 40px 1fr auto;
+  align-items: center;
+  gap: 12px;
+  padding: 5px 12px;
+  border-bottom: 1px solid var(--line);
+}
+
+.tl-layer__n {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  color: var(--fg-3);
+}
+
+.tl-layer__t {
+  font-size: var(--fs-body);
+  font-weight: 600;
+  color: var(--fg);
+}
+
+.tl-layer__d {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--fg-3);
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tl-layer--now {
+  background: var(--accent-wash);
+  box-shadow: inset 2px 0 0 var(--accent);
+}
+.tl-layer--now .tl-layer__n { color: var(--accent-2); font-weight: 700; }
+
+.tl-layer--ok {
+  background: var(--ok-wash);
+  box-shadow: inset 2px 0 0 var(--ok);
+}
+.tl-layer--ok .tl-layer__n { color: var(--ok); font-weight: 700; }
