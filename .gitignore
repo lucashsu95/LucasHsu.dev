@@ -169,3 +169,6 @@ target/
 .classpath
 .project
 .settings/
+
+# graft's local graph cache — regenerable, not committed (run `graft build`).
+/graft/

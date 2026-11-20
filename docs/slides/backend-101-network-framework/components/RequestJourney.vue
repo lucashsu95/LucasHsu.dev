@@ -329,6 +329,8 @@ onUnmounted(() => {
         <!-- 封包：外層 g 只交給 anime 動 transform，內層 g 由 Vue 控制顯示 -->
         <g ref="pktEl" class="jr-pkt">
           <g class="jr-pkt__in" :class="[pkt.tone === 'ok' ? 'is-ok' : 'is-req', { 'is-vis': pkt.vis }]">
+            <!-- 不透明底：wash 色只有 10% 透明度，不墊底的話虛線與節點的點會從文字後面透出來 -->
+            <rect class="jr-pkt__bg" x="-66" :y="TRACK_Y - 13" width="132" height="26" rx="13" />
             <rect x="-66" :y="TRACK_Y - 13" width="132" height="26" rx="13" />
             <text x="0" :y="TRACK_Y + 4">{{ pkt.label }}</text>
           </g>
@@ -562,6 +564,8 @@ onUnmounted(() => {
   font-size: 11px;
   text-anchor: middle;
 }
+.jr-pkt__in.is-req rect.jr-pkt__bg,
+.jr-pkt__in.is-ok rect.jr-pkt__bg { fill: var(--ink); stroke: none; }
 .jr-pkt__in.is-req rect { fill: var(--accent-wash); stroke: var(--accent); }
 .jr-pkt__in.is-req text { fill: var(--accent-2); }
 .jr-pkt__in.is-ok rect { fill: var(--ok-wash); stroke: var(--ok); }

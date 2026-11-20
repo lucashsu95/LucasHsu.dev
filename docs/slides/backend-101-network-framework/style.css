@@ -110,8 +110,8 @@
   transition: color 0.22s var(--ease), border-color 0.22s var(--ease);
 }
 .slidev-layout a:hover {
-  color: #b9d0fd;
-  border-color: var(--accent-2);
+  color: var(--accent);
+  border-color: var(--accent);
 }
 
 .slidev-layout b,

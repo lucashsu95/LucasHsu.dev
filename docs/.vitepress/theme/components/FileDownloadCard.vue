@@ -111,8 +111,8 @@ onMounted(() => {
   display: flex;
   align-items: center;
   width: 100%;
-  max-width: 400px;
-  padding: 16px;
+  max-width: 600px;
+  padding: 12px;
   background-color: var(--vp-c-bg);
   border: 1px solid var(--vp-c-border);
   border-radius: 8px;
@@ -140,7 +140,7 @@ onMounted(() => {
   justify-content: center;
   width: 40px;
   height: 40px;
-  margin-right: 16px;
+  margin-right: 8px;
   flex-shrink: 0;
   color: var(--vp-c-brand-1);
 }
@@ -151,7 +151,7 @@ onMounted(() => {
 }
 
 .file-name {
-  margin: 0 0 4px;
+  margin: 0 0 2px;
   font-size: 1rem;
   font-weight: 500;
   line-height: 1.4;

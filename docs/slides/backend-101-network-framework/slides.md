@@ -24,7 +24,7 @@ selectable: true
 record: user
 seoMeta:
   ogTitle: 後端 101 — 網路是怎麼運作的，以及框架到底解決了什麼
-  description: 從瀏覽器到伺服器、TCP/IP 四層模型、HTTP 狀態碼、Port 號，到「什麼是框架」與 Spring Boot 的配置魔法
+  description: 從瀏覽器到伺服器、HTTP 狀態碼、Port 號，到「什麼是框架」與 Spring Boot 的配置魔法
 exportFilename: backend-101-network-framework
 ---
 <div class="tc-ambient"></div>
@@ -39,7 +39,7 @@ exportFilename: backend-101-network-framework
     <p class="tc-lead" style="--i:3;margin-top:20px">推動校園數位人才培育</p>
   </div>
   <div class="tc-stage__aside" style="align-self:center;width:100%">
-    <span class="tc-tag tc-tag--solid" style="--i:4;margin-bottom:12px">2026 後端群體驗營</span>
+    <span class="tc-tag tc-tag--solid" style="--i:4;margin-bottom:12px">2026 後端群集訓</span>
     <div class="tc-rows tc-in" style="width:100%">
       <div class="tc-rowline" style="grid-template-columns:52px 1fr;--i:5"><span class="tc-rowline__n">時長</span><span class="tc-rowline__v tc-sm">50 分鐘</span></div>
       <div class="tc-rowline" style="grid-template-columns:52px 1fr;--i:6"><span class="tc-rowline__n">範圍</span><span class="tc-rowline__v tc-sm">網路 · 狀態碼 · Port · 框架</span></div>
@@ -48,9 +48,6 @@ exportFilename: backend-101-network-framework
 </div>
 <div class="tc-grain"></div>
 
----
-src: ./server-intro.md
----
 ---
 layout: cover
 transition: slide-left
@@ -124,8 +121,40 @@ layout: default
 
 <div class="tc-note tc-note--accent" style="margin-top:14px">
   <div class="tc-note__t">這 50 分鐘，我們把 L3（網路）走透。</div>
-  <div class="tc-note__b">L4（資料庫）是之後營的題目；L1 / L2 / L5 是你下課後的自我學習路線圖。</div>
+  <div class="tc-note__b">L4（資料庫）是之後課程的題目；L1 / L2 / L5 是你下課後的自我學習路線圖。</div>
 </div>
+
+---
+layout: default
+---
+
+<div class="tc-head">
+  <div class="tc-kicker">開場 · 先猜猜看</div>
+  <h1 class="tc-h1">按下 Enter 之後，到底發生了什麼事？</h1>
+</div>
+
+<div class="tc-panel tc-panel--inset" style="padding:16px 20px">
+  <p class="tc-mono" style="font-size:18px">https://jsonplaceholder.typicode.com/posts/1 <span class="tc-accent">⏎</span></p>
+</div>
+
+<div class="tc-rows" style="margin-top:14px">
+  <div class="tc-rowline" style="grid-template-columns:44px 1fr;padding:12px 0"><span class="tc-rowline__k tc-accent">01</span><span class="tc-rowline__v">瀏覽器只認得名字，<b>誰幫它找到那台電腦？</b></span></div>
+  <div class="tc-rowline" style="grid-template-columns:44px 1fr;padding:12px 0"><span class="tc-rowline__k tc-accent">02</span><span class="tc-rowline__v">資料<b>怎麼在網路上一路送到、又送回來？</b></span></div>
+  <div class="tc-rowline" style="grid-template-columns:44px 1fr;padding:12px 0"><span class="tc-rowline__k tc-accent">03</span><span class="tc-rowline__v">伺服器<b>怎麼知道你要什麼</b>，又怎麼告訴你結果？</span></div>
+</div>
+
+<div class="tc-note tc-note--accent" style="margin-top:14px">
+  <div class="tc-note__t">先在心裡猜一個答案</div>
+  <div class="tc-note__b">接下來 50 分鐘，這三題會一題一題揭曉。</div>
+</div>
+
+<p class="tc-sm" style="margin-top:12px"><i class="ic ic-net ic--sm tc-accent"></i> 一次請求的完整旅程（動畫）：<a href="https://designed-to-scale.vercel.app/#/request-lifecycle/1" target="_blank">designed-to-scale.vercel.app/#/request-lifecycle/1</a></p>
+
+<!--
+停 10–15 秒，讓學員先猜，不要急著講答案。
+下方連結是動畫版的請求旅程，可以邊點邊講。
+01 = DNS　02 = TCP/IP　03 = HTTP（含狀態碼）。
+-->
 
 ---
 layout: default
@@ -147,7 +176,7 @@ layout: default
     <div class="tc-col" style="align-items:center;gap:5px;flex:none;width:150px">
       <i class="ic ic-server ic--xl tc-accent"></i>
       <b class="tc-sm">後端伺服器</b>
-      <span class="tc-xs tc-mute" style="text-align:center">收請求 · 執行邏輯</span>
+      <span class="tc-xs tc-mute" style="text-align:center">常駐程式 · 收請求、執行邏輯</span>
     </div>
     <i class="ic ic-exchange ic--lg tc-mute"></i>
     <div class="tc-col" style="align-items:center;gap:5px;flex:none;width:150px">
@@ -191,50 +220,6 @@ class: scroll-y no
 
 ---
 layout: default
----
-
-<div class="tc-head">
-  <div class="tc-kicker">04 · TCP/IP 四層模型</div>
-  <h1 class="tc-h1">TCP/IP 四層模型</h1>
-  <div class="tc-head__meta">由下往上 — <b>線 · 路 · 包 · 話</b></div>
-</div>
-
-<div class="tc-rows tc-sheen">
-  <div class="tc-rowline" style="grid-template-columns:78px 1fr;padding:11px 0">
-    <div><div class="tc-rowline__k tc-accent" style="font-size:17px">L4</div><div class="tc-xs tc-mute">應用層</div></div>
-    <div>
-      <p class="tc-rowline__v tc-sm"><b>Application</b> — HTTP、HTTPS、DNS、SMTP、FTP、SSH，定義「訊息長什麼樣、怎麼問怎麼答」</p>
-      <p class="tc-xs tc-accent" style="margin-top:3px">你寫的程式在這層 · <b>今天上課的每一行 Java 程式碼都在這裡</b></p>
-    </div>
-  </div>
-  <div class="tc-rowline" style="grid-template-columns:78px 1fr;padding:11px 0">
-    <div><div class="tc-rowline__k tc-white" style="font-size:17px">L3</div><div class="tc-xs tc-mute">傳輸層</div></div>
-    <div>
-      <p class="tc-rowline__v tc-sm"><b>Transport</b> — TCP（可靠、慢、要握手）、UDP（不可靠、快）。<code>80</code>、<code>443</code>、<code>3306</code>、<code>8080</code> 都是這層的門牌</p>
-      <p class="tc-xs tc-dim" style="margin-top:3px">用 Port 號分流 · <b>第 6 點講的 Port 號在這裡</b></p>
-    </div>
-  </div>
-  <div class="tc-rowline" style="grid-template-columns:78px 1fr;padding:11px 0">
-    <div><div class="tc-rowline__k tc-dim" style="font-size:17px">L2</div><div class="tc-xs tc-mute">網際網路層</div></div>
-    <div>
-      <p class="tc-rowline__v tc-sm"><b>Internet</b> — IP 協定。負責「把封包送到全世界的正確地址」。<code>140.82.121.4</code> 就是 IP</p>
-    </div>
-  </div>
-  <div class="tc-rowline" style="grid-template-columns:78px 1fr;padding:11px 0">
-    <div><div class="tc-rowline__k tc-mute" style="font-size:17px">L1</div><div class="tc-xs tc-mute">網路存取層</div></div>
-    <div>
-      <p class="tc-rowline__v tc-sm"><b>Network Access</b> — 網路線、Wi-Fi、網卡。負責「在這條線上正確地傳位元組」</p>
-    </div>
-  </div>
-</div>
-
-<div class="tc-note tc-note--accent" style="margin-top:16px">
-  <div class="tc-note__t">記憶法：從下往上 — 「線、路、包、話」</div>
-  <div class="tc-note__b">網線 → IP 找到路 → TCP 找對門 → HTTP 說對話</div>
-</div>
-
----
-layout: default
 class: scroll-y no
 ---
 
@@ -268,28 +253,36 @@ Content-Length: 252
 ```
 
 
-<div class="tc-row tc-row--center" style="gap:8px;margin-top:12px">
-  <i class="ic ic-flask ic--sm tc-accent"></i>
-  <span class="tc-h2">現在就試</span>
-  <span class="tc-xs tc-mute">打開終端機貼上這行 — 不用等第 9 節</span>
-</div>
+<p class="tc-sm tc-accent" style="margin-top:14px">光看圖不過癮 — 下一頁，我們直接對真的伺服器發一個請求。</p>
 
-```bash
-curl -i --http1.1 https://jsonplaceholder.typicode.com/posts/1
-```
-
-<p class="tc-xs tc-mute" style="margin-top:6px">Windows PowerShell 請打 <code>curl.exe</code> — PowerShell 的 <code>curl</code> 是別名，會報錯；Mac / Linux 照打即可。</p>
-
-<div class="tc-grid tc-grid--even" style="margin-top:10px">
-  <div class="tc-note tc-note--ok">
-    <div class="tc-note__t">你會看到三段</div>
-    <div class="tc-note__b"><code>HTTP/1.1 200 OK</code>（狀態行）→ 一堆 Header → 空一行 → JSON 資料。和上面兩張圖對照，一模一樣。</div>
+---
+layout: section
+---
+<div class="tc-ambient"></div>
+<div class="tc-stage">
+  <div class="tc-stage__main tc-in">
+    <div class="tc-kicker tc-kicker--cmd" style="--i:0">$ curl -i --http1.1 https://jsonplaceholder.typicode.com/posts/1<span class="tc-caret"></span></div>
+    <h1 class="tc-display" style="--i:1;margin-top:14px"><em>Live</em> Demo 01</h1>
+    <div class="tc-stage__rule" style="--i:2"></div>
+    <p class="tc-lead tc-mono" style="--i:3;margin-top:20px">// 打開終端機，看 HTTP 的原始樣子</p>
   </div>
-  <div class="tc-note tc-note--accent">
-    <div class="tc-note__t">第 9 節回來換自己的</div>
-    <div class="tc-note__b">跑起 <code>NativeApiServer</code> 後，把網址換成 <code>http://localhost:8080/api/products</code> 再打一次 — 同樣的形狀，資料變成你的。</div>
+  <div class="tc-stage__aside" style="align-self:center;width:100%">
+    <span class="tc-panel__label" style="--i:4">注意看這三段</span>
+    <div class="tc-rows tc-in">
+      <div class="tc-rowline tc-rowline--auto" style="--i:5"><b>狀態行</b><span class="tc-rowline__n" style="justify-self:end">HTTP/1.1 200 OK</span></div>
+      <div class="tc-rowline tc-rowline--auto" style="--i:6"><b>Header</b><span class="tc-rowline__n" style="justify-self:end">Content-Type …</span></div>
+      <div class="tc-rowline tc-rowline--auto" style="--i:7"><b>空一行 + Body</b><span class="tc-rowline__n" style="justify-self:end">真正的 JSON 資料</span></div>
+    </div>
+    <p class="tc-xs tc-mute" style="--i:8;margin-top:10px">Windows PowerShell 請打 <code>curl.exe</code></p>
+    <div style="--i:9;margin-top:14px;width:100%"><DownloadBtn file="http-demo.sh" /></div>
   </div>
 </div>
+<div class="tc-grain"></div>
+
+<!--
+Demo 1：對照前一頁的 Request / Response 兩張圖，讓學員確認「一模一樣」。
+先問：你覺得會看到幾段？再執行。
+-->
 
 ---
 layout: default
@@ -301,166 +294,108 @@ class: scroll-y
   <h1 class="tc-h1">檢查點 1 — 網路與 HTTP</h1>
 </div>
 
-<div class="tc-grid tc-grid--wide">
-  <div class="tc-col">
+<div class="tc-grid tc-grid--even" style="gap:24px;align-items:start">
+  <div class="tc-panel tc-panel--inset" style="padding:22px 26px">
+    <div class="tc-row tc-row--center" style="gap:10px;margin-bottom:10px"><i class="ic ic-check ic--sm tc-ok"></i><b class="tc-h2">我能說出</b></div>
     <div class="tc-checks">
-      <div class="tc-row tc-row--center" style="gap:8px"><i class="ic ic-check ic--sm tc-ok"></i><b class="tc-h2">我能說出</b></div>
-      <div class="tc-checks__i">DNS 做的事</div>
-      <div class="tc-checks__i">TCP/IP 四層由下往上是什麼</div>
-      <div class="tc-checks__i">HTTP 請求有哪幾個部分</div>
-      <div class="tc-checks__i">「無狀態」的意思</div>
-    </div>
-    <div class="tc-checks" style="margin-top:10px">
-      <div class="tc-row tc-row--center" style="gap:8px"><i class="ic ic-question ic--sm tc-warn"></i><b class="tc-h2">我還不太確定</b></div>
-      <div class="tc-checks__i tc-checks__i--q">TCP 和 UDP 差在哪</div>
-      <div class="tc-checks__i tc-checks__i--q">為什麼要有四層，不會太多嗎</div>
-      <div class="tc-checks__i tc-checks__i--q">三次握手在幹嘛</div>
+      <div class="tc-checks__i" style="font-size:19px;padding:11px 0">DNS 做的事</div>
+      <div class="tc-checks__i" style="font-size:19px;padding:11px 0">請求旅程的四個步驟</div>
+      <div class="tc-checks__i" style="font-size:19px;padding:11px 0">HTTP 請求有哪幾個部分</div>
     </div>
   </div>
-  <div class="tc-col">
-    <div class="tc-note tc-note--warn">
-      <div class="tc-note__t">馬上複習</div>
-      <div class="tc-note__b">回到「TCP/IP 四層模型」，用「線、路、包、話」重念一次。</div>
+  <div class="tc-panel tc-panel--inset" style="padding:22px 26px">
+    <div class="tc-row tc-row--center" style="gap:10px;margin-bottom:10px"><i class="ic ic-question ic--sm tc-warn"></i><b class="tc-h2">我還不太確定</b></div>
+    <div class="tc-checks">
+      <div class="tc-checks__i tc-checks__i--q" style="font-size:19px;padding:11px 0">TCP 和 UDP 差在哪</div>
+      <div class="tc-checks__i tc-checks__i--q" style="font-size:19px;padding:11px 0">三次握手在幹嘛</div>
     </div>
   </div>
+</div>
+
+<div class="tc-note tc-note--warn" style="margin-top:24px">
+  <div class="tc-note__t">馬上複習</div>
+  <div class="tc-note__b">回到「從瀏覽器到伺服器」，用 DNS → 握手 → 請求 → 回應重走一次。</div>
 </div>
 
 ---
 layout: default
----
-
-<div class="tc-head">
-  <div class="tc-kicker">05 · HTTP 狀態碼</div>
-  <h1 class="tc-h1">2xx 成功</h1>
-  <div class="tc-head__meta">伺服器成功處理了你的請求，而且沒有出錯</div>
-</div>
-
-<div class="tc-rows">
-  <div class="tc-rowline" style="grid-template-columns:78px 1fr;padding:14px 0">
-    <div><div class="tc-num tc-ok">200</div><div class="tc-xs tc-mute">OK</div></div>
-    <div>
-      <p class="tc-rowline__v"><b>成功，東西在這裡</b> — 最常見。GET 成功、POST 成功都回這個。<code>GET /api/products</code> 回的就是 200</p>
-      <p class="tc-xs tc-ok" style="margin-top:4px">前端怎麼處理：<code>response.json()</code> 直接用</p>
-    </div>
-  </div>
-  <div class="tc-rowline" style="grid-template-columns:78px 1fr;padding:14px 0">
-    <div><div class="tc-num tc-ok">201</div><div class="tc-xs tc-mute">Created</div></div>
-    <div>
-      <p class="tc-rowline__v"><b>成功，而且「建立了東西」</b> — 跟 200 的差別：201 表示<b>伺服器新建立了一筆資源</b>。例如註冊新帳號、新增一筆訂單</p>
-      <p class="tc-xs tc-ok" style="margin-top:4px">很多實務上會混用 200 代替 201，但嚴格來說「新增」該用 201</p>
-    </div>
-  </div>
-  <div class="tc-rowline" style="grid-template-columns:78px 1fr;padding:14px 0">
-    <div><div class="tc-num tc-ok">204</div><div class="tc-xs tc-mute">No Content</div></div>
-    <div>
-      <p class="tc-rowline__v"><b>成功，但「沒有東西要給你」</b> — 事情做完了，body 是空的。典型是 <code>DELETE</code>：刪除成功不回傳任何資料</p>
-      <p class="tc-xs tc-warn" style="margin-top:4px">前端陷阱：<code>response.json()</code> 會直接報錯 — body 根本沒有東西可以 parse</p>
-    </div>
-  </div>
-</div>
-
-<div class="tc-note tc-note--ok" style="margin-top:16px">
-  <div class="tc-note__t">2xx 的共同點：伺服器成功處理了你的請求，而且沒有出錯。</div>
-  <div class="tc-note__b">前端可以放心把資料當成有效值用。</div>
-</div>
-
----
-layout: default
-class: scroll-y
----
-
-<div class="tc-head">
-  <div class="tc-kicker">05 · HTTP 狀態碼</div>
-  <h1 class="tc-h1">4xx 是「你的問題」</h1>
-</div>
-
-<div class="tc-rows">
-  <div class="tc-rowline" style="grid-template-columns:60px 1fr;padding:10px 0">
-    <div class="tc-num tc-warn">400</div>
-    <div>
-      <p class="tc-rowline__v"><b>Bad Request — 你的請求格式不對</b> — 送出 <code>productId=abc</code>（應該是數字）。<b>伺服器看不懂就拒絕。</b></p>
-      <p class="tc-xs tc-warn" style="margin-top:3px">我們的程式：<code>NumberFormatException → 400</code> <i class="ic ic-check ic--sm"></i></p>
-    </div>
-  </div>
-  <div class="tc-rowline" style="grid-template-columns:60px 1fr;padding:10px 0">
-    <div class="tc-num tc-warn">401</div>
-    <div>
-      <p class="tc-rowline__v"><b>Unauthorized — 你「是誰」我還不知道</b> — 沒登入、token 過期、根本沒帶 token。<b>認不出你是誰</b></p>
-      <p class="tc-xs tc-dim" style="margin-top:3px">前端：導向登入頁面</p>
-    </div>
-  </div>
-  <div class="tc-rowline" style="grid-template-columns:60px 1fr;padding:10px 0">
-    <div class="tc-num tc-warn">403</div>
-    <div>
-      <p class="tc-rowline__v"><b>Forbidden — 我知道你是誰，但你不可以</b> — 已登入了，但這筆訂單不是你的。<b>401 和 403 的差別就在這裡</b></p>
-      <p class="tc-xs tc-dim" style="margin-top:3px">前端：顯示「沒有權限」，不要登出</p>
-    </div>
-  </div>
-  <div class="tc-rowline" style="grid-template-columns:60px 1fr;padding:10px 0">
-    <div class="tc-num tc-warn">404</div>
-    <div>
-      <p class="tc-rowline__v"><b>Not Found — 你找的東西不在這裡</b> — 網址打錯、路徑不存在、資源被刪了。<b>最常見的 4xx</b></p>
-      <p class="tc-xs tc-warn" style="margin-top:3px">我們的程式：<code>GET /nope → 404</code> <i class="ic ic-check ic--sm"></i></p>
-    </div>
-  </div>
-  <div class="tc-rowline" style="grid-template-columns:60px 1fr;padding:10px 0">
-    <div class="tc-num tc-warn">415</div>
-    <div>
-      <p class="tc-rowline__v"><b>Unsupported Media Type — 你的格式我不收</b> — 後端要 JSON，你卻送 <code>application/x-www-form-urlencoded</code>（表單格式）。<b>這是 body 格式錯，不是內容錯。</b></p>
-      <p class="tc-xs tc-dim" style="margin-top:3px">我們的程式：Day 2 手拆 form；Spring 版的 <code>@RequestBody</code> 只收 JSON — <b>同一個 API，兩邊接受的格式不同</b></p>
-    </div>
-  </div>
-</div>
-
-<div class="tc-note tc-note--warn" style="margin-top:14px">
-  <div class="tc-note__t">401 vs 403 這組最容易混 — 面試愛問</div>
-  <div class="tc-note__b">401 = 「你是誰？」　403 = 「你不能。」</div>
-</div>
-
----
-layout: default
-class: scroll-y
+class: scroll-y no
 ---
 
 <div class="tc-head tc-head--tight">
   <div class="tc-kicker">05 · HTTP 狀態碼</div>
-  <h1 class="tc-h1">5xx 是「我的問題」</h1>
+  <h1 class="tc-h1">看第一個數字，就知道是誰的問題</h1>
+  <div class="tc-head__meta">2xx 成功 · 4xx 你的問題 · 5xx 我的問題</div>
 </div>
 
 <div class="tc-rows">
-  <div class="tc-rowline" style="grid-template-columns:78px 1fr;padding:12px 0">
-    <div><div class="tc-num tc-err">500</div><div class="tc-xs tc-mute">Internal Server Error</div></div>
+  <div class="tc-rowline" style="grid-template-columns:86px 1fr;padding:9px 0">
+    <div><div class="tc-num tc-ok">200</div><div class="tc-xs tc-mute">OK</div></div>
     <div>
-      <p class="tc-rowline__v"><b>我壞掉了</b> — 伺服器裡發生了你預期外的錯誤：程式 exception、資料庫連不上、寫炸了</p>
-      <p class="tc-xs tc-err" style="margin-top:3px">我們的程式：<code>catch (Exception) → 500</code> <i class="ic ic-check ic--sm"></i></p>
+      <p class="tc-rowline__v tc-sm"><b>成功，東西在這裡</b> — 最常見。<code>GET /api/products</code> 回的就是 200</p>
+      <p class="tc-xs tc-ok" style="margin-top:2px">前端：<code>response.json()</code> 直接用</p>
+    </div>
+  </div>
+  <div class="tc-rowline" style="grid-template-columns:86px 1fr;padding:9px 0">
+    <div><div class="tc-num tc-warn">400</div><div class="tc-xs tc-mute">Bad Request</div></div>
+    <div>
+      <p class="tc-rowline__v tc-sm"><b>你的請求格式不對</b> — 送出 <code>productId=abc</code>（應該是數字），伺服器看不懂就拒絕</p>
+      <p class="tc-xs tc-warn" style="margin-top:2px">我們的程式：<code>NumberFormatException → 400</code></p>
+    </div>
+  </div>
+  <div class="tc-rowline" style="grid-template-columns:86px 1fr;padding:9px 0">
+    <div><div class="tc-num tc-warn">401·403</div><div class="tc-xs tc-mute">最容易混</div></div>
+    <div>
+      <p class="tc-rowline__v tc-sm"><b>401 = 我不知道你是誰</b>（沒登入、token 過期）。<b>403 = 我知道你是誰，但你不可以</b>（這筆訂單不是你的）</p>
+      <p class="tc-xs tc-dim" style="margin-top:2px">前端：401 導向登入頁；403 顯示「沒有權限」，不要登出</p>
+    </div>
+  </div>
+  <div class="tc-rowline" style="grid-template-columns:86px 1fr;padding:9px 0">
+    <div><div class="tc-num tc-warn">404</div><div class="tc-xs tc-mute">Not Found</div></div>
+    <div>
+      <p class="tc-rowline__v tc-sm"><b>你找的東西不在這裡</b> — 網址打錯、路徑不存在、資源被刪了。最常見的 4xx</p>
+      <p class="tc-xs tc-warn" style="margin-top:2px">我們的程式：<code>GET /nope → 404</code></p>
+    </div>
+  </div>
+  <div class="tc-rowline" style="grid-template-columns:86px 1fr;padding:9px 0">
+    <div><div class="tc-num tc-err">500</div><div class="tc-xs tc-mute">Server Error</div></div>
+    <div>
+      <p class="tc-rowline__v tc-sm"><b>我壞掉了</b> — 程式 exception、資料庫連不上、寫炸了</p>
+      <p class="tc-xs tc-err" style="margin-top:2px">我們的程式：<code>catch (Exception) → 500</code></p>
     </div>
   </div>
 </div>
 
-<div class="tc-grid tc-grid--even" style="margin-top:12px">
+<div class="tc-grid tc-grid--even" style="margin-top:10px">
   <div class="tc-note tc-note--warn">
     <div class="tc-note__t tc-warn">4xx — 客戶端的問題</div>
-    <div class="tc-note__b">你傳錯了、少帶東西、想看不存在的東西。<b>改前端或改請求就能解決。</b></div>
+    <div class="tc-note__b">改前端或改請求就能解決。</div>
   </div>
   <div class="tc-note tc-note--err">
     <div class="tc-note__t tc-err">5xx — 伺服器的問題</div>
-    <div class="tc-note__b">程式炸了、服務掛了。<b>使用者改什麼都沒用，要去修後端。</b></div>
+    <div class="tc-note__b">使用者改什麼都沒用，要去修後端。</div>
   </div>
 </div>
 
-<span class="tc-panel__label" style="margin-top:14px">同一份程式碼，狀態碼是這樣決定的</span>
+---
+layout: default
+---
 
-```java
-if (方法不對)              → 405  我不接這種請求
-if (參數不是正整數)         → 400  你送壞了
-if (找不到這筆商品)         → 400  你送壞了
-if (庫存 < 購買數量)        → 409  請求合理但跟現況衝突
-if (扣減成功)              → 200  成了
-if (沒接住的 Exception)    → 500  我壞了
-```
+<div class="tc-head tc-head--tight">
+  <div class="tc-kicker">05 · HTTP 狀態碼</div>
+  <h1 class="tc-h1">同一份程式碼，狀態碼是這樣決定的</h1>
+</div>
 
-<div class="tc-note tc-note--accent" style="margin-top:12px">
-  <div class="tc-note__t">409 我們在 Day 2 沒講過，但它超常用</div>
+<div class="tc-rows">
+  <div class="tc-rowline" style="grid-template-columns:1fr 110px 1.2fr;padding:18px 0;align-items:center"><span class="tc-rowline__v"><code>if</code> 參數不是正整數</span><span class="tc-num tc-warn">→ 400</span><span class="tc-rowline__v">你送壞了</span></div>
+  <div class="tc-rowline" style="grid-template-columns:1fr 110px 1.2fr;padding:18px 0;align-items:center"><span class="tc-rowline__v"><code>if</code> 找不到這筆商品</span><span class="tc-num tc-warn">→ 400</span><span class="tc-rowline__v">你送壞了</span></div>
+  <div class="tc-rowline" style="grid-template-columns:1fr 110px 1.2fr;padding:18px 0;align-items:center"><span class="tc-rowline__v"><code>if</code> 庫存 &lt; 購買數量</span><span class="tc-num tc-warn">→ 409</span><span class="tc-rowline__v">請求合理，但跟現況衝突</span></div>
+  <div class="tc-rowline" style="grid-template-columns:1fr 110px 1.2fr;padding:18px 0;align-items:center"><span class="tc-rowline__v"><code>if</code> 扣減成功</span><span class="tc-num tc-ok">→ 200</span><span class="tc-rowline__v">成了</span></div>
+  <div class="tc-rowline" style="grid-template-columns:1fr 110px 1.2fr;padding:18px 0;align-items:center"><span class="tc-rowline__v"><code>if</code> 沒接住的 Exception</span><span class="tc-num tc-err">→ 500</span><span class="tc-rowline__v">我壞了</span></div>
+</div>
+
+<div class="tc-note tc-note--accent" style="margin-top:22px">
+  <div class="tc-note__t">409 很少被教到，但它超常用</div>
   <div class="tc-note__b">「庫存剛好被別人買完」就是最典型的 409 Conflict。</div>
 </div>
 
@@ -468,63 +403,30 @@ if (沒接住的 Exception)    → 500  我壞了
 layout: default
 ---
 
-<div class="tc-head">
+<div class="tc-head tc-head--tight">
   <div class="tc-kicker">06 · PORT</div>
   <h1 class="tc-h1">Port 號是什麼</h1>
+  <div class="tc-head__meta">先靠 IP 找到大樓，再靠 Port 找到<b>該走哪一扇門</b></div>
 </div>
 
-<div class="tc-note tc-note--accent">
-  <div class="tc-note__t">先建立一個畫面</div>
-  <div class="tc-note__b">一棟大樓裡有幾百家公司。(find 你的名字 → IP)，接著要找到<b>該走哪一扇門</b> → Port。</div>
-</div>
-
-<div class="tc-grid tc-grid--even" style="margin-top:14px">
+<div class="tc-grid tc-grid--even">
   <div class="tc-note tc-note--accent">
-    <div class="tc-note__t"><i class="ic ic-pin ic--sm"></i> IP 網址 = 大樓的地址</div>
+    <div class="tc-note__t"><i class="ic ic-pin ic--sm"></i> IP = 大樓的地址</div>
     <div class="tc-note__b">全網路唯一。<code>140.82.121.4</code><br>由 DNS 幫你從域名查出來</div>
   </div>
   <div class="tc-note tc-note--warn">
-    <div class="tc-note__t"><i class="ic ic-door ic--sm"></i> Port 號 = 大樓裡的門牌</div>
+    <div class="tc-note__t"><i class="ic ic-door ic--sm"></i> Port = 大樓裡的門牌</div>
     <div class="tc-note__b">一台機器上唯一。<code>8080</code><br>由程式啟動時自己指定</div>
   </div>
 </div>
 
-<div style="margin-top:14px">
-  <span class="tc-panel__label">技術上：Port 是 16 位元的無號整數</span>
-  <div class="tc-rows tc-rows--dense">
-    <div class="tc-rowline" style="grid-template-columns:132px 1fr"><code class="tc-rowline__k">0 ~ 65535</code><span class="tc-rowline__v tc-sm">共 65536 個</span></div>
-    <div class="tc-rowline" style="grid-template-columns:132px 1fr"><code class="tc-rowline__k">0 ~ 1023</code><span class="tc-rowline__v tc-sm">「保留區」，要系統權限才能用（<code>80</code>、<code>443</code>、<code>22</code> 都在這）</span></div>
-    <div class="tc-rowline" style="grid-template-columns:132px 1fr"><code class="tc-rowline__k">1024 ~ 49151</code><span class="tc-rowline__v tc-sm">「註冊 port」，要向 IANA 登記</span></div>
-    <div class="tc-rowline" style="grid-template-columns:132px 1fr"><code class="tc-rowline__k">49152 ~ 65535</code><span class="tc-rowline__v tc-sm">「動態 port」，作業系統隨機指派給客戶端連線</span></div>
-  </div>
-</div>
+<p class="tc-sm" style="margin-top:12px">Port 是 16 位元整數，<code>0 ~ 65535</code>。<b>0~1023 是保留區</b>（<code>80</code>、<code>443</code> 在這），在 Linux 等系統綁定它們要管理員權限（<code>sudo</code>）。所以開發時用 <b>1024 以上</b>，不用為了跑程式提權。</p>
 
-<div class="tc-note tc-note--warn" style="margin-top:14px">
-  <div class="tc-note__t">Port 是傳輸層（TCP/UDP）的概念，不是 IP 的。</div>
-  <div class="tc-note__b">同一個 IP 可以同時跑幾十個 port，各自服務不同的程式。</div>
-</div>
-
----
-layout: default
----
-
-<div class="tc-head">
-  <div class="tc-kicker">06 · PORT</div>
-  <h1 class="tc-h1">你會一直遇到的 Port 號</h1>
-</div>
-
-<div class="tc-rows">
-  <div class="tc-rowline" style="grid-template-columns:74px 1fr 190px"><span class="tc-num tc-accent">3306</span><span class="tc-rowline__v tc-sm"><b>MySQL</b> <span class="tc-mute">— 資料庫預設連線埠</span></span><code class="tc-rowline__n" style="text-align:right">mysql -u root -P 3306</code></div>
-  <div class="tc-rowline" style="grid-template-columns:74px 1fr 190px"><span class="tc-num tc-accent">5432</span><span class="tc-rowline__v tc-sm"><b>PostgreSQL</b> <span class="tc-mute">— MySQL 的對手，開源社群常用</span></span><code class="tc-rowline__n" style="text-align:right">psql -p 5432</code></div>
-  <div class="tc-rowline" style="grid-template-columns:74px 1fr 190px"><span class="tc-num tc-accent">6379</span><span class="tc-rowline__v tc-sm"><b>Redis</b> <span class="tc-mute">— 記憶體快取</span></span><code class="tc-rowline__n" style="text-align:right">redis-cli -p 6379</code></div>
-  <div class="tc-rowline" style="grid-template-columns:74px 1fr 190px"><span class="tc-num tc-accent">27017</span><span class="tc-rowline__v tc-sm"><b>MongoDB</b> <span class="tc-mute">— 沒有 schema 的資料庫</span></span><code class="tc-rowline__n" style="text-align:right">mongod --port 27017</code></div>
-  <div class="tc-rowline tc-rowline--hi" style="grid-template-columns:74px 1fr 190px"><span class="tc-num tc-warn">8080</span><span class="tc-rowline__v tc-sm"><b>HTTP 替代 port</b> <span class="tc-warn">— 本課的示範 port</span></span><code class="tc-rowline__n tc-warn" style="text-align:right">http://localhost:8080</code></div>
-  <div class="tc-rowline" style="grid-template-columns:74px 1fr 190px"><span class="tc-num tc-accent">80 / 443</span><span class="tc-rowline__v tc-sm"><b>HTTP / HTTPS</b> <span class="tc-mute">— 保留區，要權限才能綁</span></span><code class="tc-rowline__n" style="text-align:right">不用打，直接省略</code></div>
-</div>
-
-<div class="tc-note tc-note--warn" style="margin-top:16px">
-  <div class="tc-note__t">為什麼 Spring Boot 預設 8080、Express 預設 3000？</div>
-  <div class="tc-note__b">因為 80/443 要管理員權限，開發時用 1024 以上的 port 最省事。</div>
+<div class="tc-rows" style="margin-top:8px">
+  <div class="tc-rowline" style="grid-template-columns:74px 1fr 190px;padding:9px 0"><span class="tc-num tc-accent">3306</span><span class="tc-rowline__v tc-sm"><b>MySQL</b> <span class="tc-mute">— 資料庫</span></span><code class="tc-rowline__n" style="text-align:right">mysql -u root -P 3306</code></div>
+  <div class="tc-rowline" style="grid-template-columns:74px 1fr 190px;padding:9px 0"><span class="tc-num tc-accent">6379</span><span class="tc-rowline__v tc-sm"><b>Redis</b> <span class="tc-mute">— 記憶體快取</span></span><code class="tc-rowline__n" style="text-align:right">redis-cli -p 6379</code></div>
+  <div class="tc-rowline tc-rowline--hi" style="grid-template-columns:74px 1fr 190px;padding:9px 0"><span class="tc-num tc-warn">8080</span><span class="tc-rowline__v tc-sm"><b>HTTP 替代 port</b> <span class="tc-warn">— 本課示範（Spring Boot 預設；Express 是 3000）</span></span><code class="tc-rowline__n tc-warn" style="text-align:right">http://localhost:8080</code></div>
+  <div class="tc-rowline" style="grid-template-columns:74px 1fr 190px;padding:9px 0"><span class="tc-num tc-accent">80 / 443</span><span class="tc-rowline__v tc-sm"><b>HTTP / HTTPS</b> <span class="tc-mute">— 保留區，要權限才能綁</span></span><code class="tc-rowline__n" style="text-align:right">網址不用打，直接省略</code></div>
 </div>
 
 ---
@@ -537,14 +439,14 @@ class: scroll-y no
   <h1 class="tc-h1">Port 號會撞 — 到底發生什麼事</h1>
 </div>
 
-<p class="tc-sm">我們的 Day 2 程式裡這一行：</p>
+<p class="tc-sm">原生版伺服器裡這一行：</p>
 
 ```java
 HttpServer server = HttpServer.create(new InetSocketAddress(8080), 0);
 //                                              ↑ 門牌 8080
 ```
 
-<p class="tc-sm" style="margin-top:8px">如果 <b>8080 已經被別的程式占用</b>（你忘了關掉昨天開的那個），<b class="tc-err">這行直接丟例外，伺服器根本開不起來</b>：</p>
+<p class="tc-sm" style="margin-top:8px">如果 <b>8080 已經被別的程式占用</b>（你忘了關掉先前開的那個），<b class="tc-err">這行直接丟例外，伺服器根本開不起來</b>：</p>
 
 ```bash
 Exception in thread "main" java.net.BindException:
@@ -577,8 +479,41 @@ netstat -ano | findstr :8080
 
 <div class="tc-note tc-note--accent" style="margin-top:12px">
   <div class="tc-note__t">本機 127.0.0.1:8080 的 8080，和別人電腦的 8080 是同一個嗎？</div>
-  <div class="tc-note__b"><b>不是。</b>Port 的「唯一性」是<b class="tc-warn">在同一個 IP 上面</b>。你在自己電腦用 8080，教室同學在自己電腦用 8080，<b>完全不衝突</b> —— 因為它們是不同的 IP。只有當兩個人試著<b class="tc-err">從同一台機器連同一個 port</b> 才會撞。</div>
+  <div class="tc-note__b"><b>不是。</b>Port 的「唯一性」是<b class="tc-warn">在同一個 IP 上面</b>。你在自己電腦用 8080，教室同學在自己電腦用 8080，<b>完全不衝突</b> —— 因為它們是不同的 IP。只有當<b class="tc-err">同一台機器上有兩個程式要監聽同一個 port</b> 才會撞。</div>
 </div>
+
+---
+layout: section
+---
+<div class="tc-ambient"></div>
+<div class="tc-stage">
+  <div class="tc-stage__main tc-in">
+    <div class="tc-kicker tc-kicker--cmd" style="--i:0">$ java NativeApiServer<span class="tc-caret"></span></div>
+    <h1 class="tc-display" style="--i:1;margin-top:14px"><em>Live</em> Demo 02</h1>
+    <div class="tc-stage__rule" style="--i:2"></div>
+    <p class="tc-lead tc-mono" style="--i:3;margin-top:20px">// 故意撞 port，親眼看 Address already in use</p>
+  </div>
+  <div class="tc-stage__aside" style="align-self:center;width:100%">
+    <span class="tc-panel__label" style="--i:4">四個步驟</span>
+    <div class="tc-rows tc-in">
+      <div class="tc-rowline tc-rowline--auto" style="--i:5"><b>終端機 A</b><span class="tc-rowline__n" style="justify-self:end"><code>java NativeApiServer</code></span></div>
+      <div class="tc-rowline tc-rowline--auto" style="--i:6"><b>終端機 B</b><span class="tc-rowline__n" style="justify-self:end"><code>curl -i localhost:8080/api/products</code></span></div>
+      <div class="tc-rowline tc-rowline--auto" style="--i:7"><b>終端機 C</b><span class="tc-rowline__n" style="justify-self:end">再啟動一次 → <code class="tc-err">BindException</code></span></div>
+      <div class="tc-rowline tc-rowline--auto" style="--i:8"><b>找兇手</b><span class="tc-rowline__n" style="justify-self:end"><code>lsof -i :8080</code></span></div>
+    </div>
+    <div style="--i:9;margin-top:16px;display:flex;flex-direction:column;gap:10px;width:100%">
+      <DownloadBtn file="NativeApiServer.java" />
+      <DownloadBtn file="shop.html" />
+    </div>
+  </div>
+</div>
+<div class="tc-grain"></div>
+
+<!--
+Demo 2：先在 demo/ 資料夾 javac NativeApiServer.java，上課前務必先試跑過。
+步驟 B 就是第 4 點 curl 的「換成自己的 localhost:8080」。
+撞號之後帶出：解法一 kill、解法二換 port。
+-->
 
 ---
 layout: section
@@ -594,9 +529,9 @@ layout: section
   </div>
   <div class="tc-stage__aside" style="align-self:center;width:100%">
     <div class="tc-rows tc-in">
-      <div class="tc-rowline tc-rowline--auto" style="--i:4"><b>怎樣才算框架</b><span class="tc-rowline__n" style="justify-self:end">先有清楚的定義</span></div>
-      <div class="tc-rowline tc-rowline--auto" style="--i:5"><b>為什麼要有</b><span class="tc-rowline__n" style="justify-self:end">從你寫過的痛講起</span></div>
-      <div class="tc-rowline tc-rowline--auto" style="--i:6"><b>跟 Day2 差在哪</b><span class="tc-rowline__n" style="justify-self:end">同一件事，兩種寫法</span></div>
+      <div class="tc-rowline tc-rowline--auto" style="--i:4"><b>先感受痛</b><span class="tc-rowline__n" style="justify-self:end">原生版要自己做的事</span></div>
+      <div class="tc-rowline tc-rowline--auto" style="--i:5"><b>再給它名字</b><span class="tc-rowline__n" style="justify-self:end">誰掌握整個流程</span></div>
+      <div class="tc-rowline tc-rowline--auto" style="--i:6"><b>看框架的魔法</b><span class="tc-rowline__n" style="justify-self:end">同一件事，兩種寫法</span></div>
     </div>
   </div>
 </div>
@@ -604,11 +539,45 @@ layout: section
 
 ---
 layout: default
+class: scroll-y no
 ---
 
 <div class="tc-head tc-head--tight">
-  <div class="tc-kicker">07 · 什麼是框架</div>
-  <h1 class="tc-h1">框架替你安排程式怎麼運作</h1>
+  <div class="tc-kicker">07 · 先感受痛</div>
+  <h1 class="tc-h1">原生版：每個 API 都要自己做這麼多事</h1>
+</div>
+
+```java
+// 綁 port、決定生命週期
+HttpServer server = HttpServer.create(new InetSocketAddress(8080), 0);
+// 手動註冊每一條路由
+server.createContext("/api/products", NativeApiServer::handleProducts);
+server.createContext("/api/buy", NativeApiServer::handleBuy);
+server.createContext("/", NativeApiServer::serveFrontend);
+server.start();  // ← 忘了這行就不會跑
+
+// 手刻 JSON：字串拼接 + 跳脫字元
+StringBuilder json = new StringBuilder("[");
+json.append("{\"id\":").append(p[0])
+    .append(",\"name\":\"").append(jsonEscape(p[1]))
+    .append("\",\"price\":").append(p[2]).append('}');
+// 手動設 header 和狀態碼
+exchange.getResponseHeaders().set("Content-Type", "application/json; charset=UTF-8");
+exchange.sendResponseHeaders(200, content.length);
+try (OutputStream out = exchange.getResponseBody()) { out.write(content); }
+```
+
+<div class="tc-note tc-note--warn" style="margin-top:12px">
+  <div class="tc-note__t">這還只是兩個 API。每多一個，這些事就再抄一次。</div>
+  <div class="tc-note__b">整份 <code>NativeApiServer.java</code> 是 189 行。想一下：你有沒有覺得「這些不該每次都自己寫」？</div>
+</div>
+---
+layout: default
+---
+
+<div class="tc-head tc-head--tight">
+  <div class="tc-kicker">07 · 給它一個名字</div>
+  <h1 class="tc-h1">把重複的事接手過去，就叫框架</h1>
 </div>
 
 <div class="tc-note tc-note--warn">
@@ -634,7 +603,7 @@ layout: default
 
 <div class="tc-grid tc-grid--even" style="margin-top:12px">
   <div class="tc-panel tc-panel--inset" style="padding:11px 14px">
-    <b class="tc-sm">沒有框架時（Day 2 的寫法）</b>
+    <b class="tc-sm">沒有框架時（原生版）</b>
     <p class="tc-xs tc-mono tc-dim">main() → new → 註冊 → start()</p>
     <p class="tc-xs">你的程式掌握啟動與執行順序</p>
   </div>
@@ -650,8 +619,37 @@ layout: default
 ---
 
 <div class="tc-head tc-head--tight">
-  <div class="tc-kicker">07 · 什麼是框架</div>
-  <h1 class="tc-h1">框架幫你蓋了什麼</h1>
+  <div class="tc-kicker">07 · 看框架的魔法</div>
+  <h1 class="tc-h1">同一件事，框架版長這樣</h1>
+  <div class="tc-head__meta">對照上一頁：沒有 <code>start()</code>、沒有 <code>createContext</code>、沒有 <code>StringBuilder</code></div>
+</div>
+
+```java
+@RestController
+@RequestMapping("/api")
+public class ProductController {
+    // 宣告就是註冊，沒有 start() 要記
+    @GetMapping("/products")
+    public List<Product> products() { return products; }
+
+    @PostMapping("/buy")
+    public synchronized ResponseEntity<?> buy(@RequestBody BuyRequest req) {
+        return ResponseEntity.ok(new MessageResponse("購買成功"));
+    }
+}
+```
+
+<div class="tc-note tc-note--accent" style="margin-top:12px">
+  <div class="tc-note__t">189 行 → 66 行，API 完全相同</div>
+  <div class="tc-note__b">少掉的不是功能，是「每個專案都要重寫一遍」的那些事。下一頁逐項對照。</div>
+</div>
+---
+layout: default
+---
+
+<div class="tc-head tc-head--tight">
+  <div class="tc-kicker">07 · 看框架的魔法</div>
+  <h1 class="tc-h1">每一件痛，框架怎麼收掉</h1>
 </div>
 
 <div class="tc-grid tc-grid--even">
@@ -690,61 +688,12 @@ layout: default
 
 ---
 layout: default
-class: scroll-y no
 ---
 
 <div class="tc-head tc-head--tight">
-  <div class="tc-kicker">07 · 用程式碼證明</div>
-  <h1 class="tc-h1">框架省了多少</h1>
-</div>
-
-<div class="tc-row tc-row--center" style="gap:8px"><i class="ic ic-cross ic--sm tc-err"></i><span class="tc-h2">原生版</span></div>
-
-```java
-// 綁 port、決定生命週期
-HttpServer server = HttpServer.create(new InetSocketAddress(8080), 0);
-// 手動註冊每一條路由
-server.createContext("/api/products", NativeApiServer::handleProducts);
-server.createContext("/api/buy", NativeApiServer::handleBuy);
-server.createContext("/", NativeApiServer::serveFrontend);
-server.start();  // ← 忘了這行就不會跑
-
-// 手刻 JSON：字串拼接 + 跳脫字元
-StringBuilder json = new StringBuilder("[");
-json.append("{\"id\":").append(p[0])
-    .append(",\"name\":\"").append(jsonEscape(p[1]))
-    .append("\",\"price\":").append(p[2]).append('}');
-// 手動設 header 和狀態碼
-exchange.getResponseHeaders().set("Content-Type", "application/json; charset=UTF-8");
-exchange.sendResponseHeaders(200, content.length);
-try (OutputStream out = exchange.getResponseBody()) { out.write(content); }
-```
-
-<div class="tc-row tc-row--center" style="gap:8px;margin-top:8px"><i class="ic ic-check ic--sm tc-ok"></i><span class="tc-h2">框架版</span></div>
-
-```java
-@RestController
-@RequestMapping("/api")
-public class ProductController {
-    // 宣告就是註冊，沒有 start() 要記
-    @GetMapping("/products")
-    public List<Product> products() { return products; }
-
-    @PostMapping("/buy")
-    public synchronized ResponseEntity<?> buy(@RequestBody BuyRequest req) {
-        return ResponseEntity.ok(new MessageResponse("購買成功"));
-    }
-}
-```
-
----
-layout: default
----
-
-<div class="tc-head tc-head--tight">
-  <div class="tc-kicker">07 · 三大支柱</div>
-  <h1 class="tc-h1">框架怎麼接手你的程式</h1>
-  <div class="tc-head__meta">先看三種機制，第 10 點再看它們一起運作</div>
+  <div class="tc-kicker">07 · 兩大支柱</div>
+  <h1 class="tc-h1">魔法背後的兩個機制</h1>
+  <div class="tc-head__meta">先看兩種機制，第 10 點再看它們一起運作</div>
 </div>
 
 <div class="tc-rows tc-rows--dense">
@@ -754,14 +703,6 @@ layout: default
       <b>約定優於配置</b> <code class="tc-xs">Conventions over Configuration</code>
       <p class="tc-sm">框架先替你規定常見的放法。檔案位置、類別名稱符合規則時，<b>少寫設定也能得到預設行為</b>。</p>
       <p class="tc-xs tc-mute" style="margin-top:2px">不是沒有配置，而是先使用框架的預設配置</p>
-    </div>
-  </div>
-  <div class="tc-rowline" style="grid-template-columns:30px 1fr">
-    <i class="ic ic-chip ic--lg tc-accent"></i>
-    <div>
-      <b>依賴注入</b> <code class="tc-xs">Dependency Injection</code>
-      <p class="tc-sm">你的類別只宣告「我需要什麼」，不負責到處 <code>new</code>。<b>框架建立物件，再把它傳進建構子</b>。</p>
-      <p class="tc-xs tc-mute" style="margin-top:2px"><code>ProductQueryController(seed)</code>：seed 由框架準備</p>
     </div>
   </div>
   <div class="tc-rowline" style="grid-template-columns:30px 1fr">
@@ -775,10 +716,9 @@ layout: default
 </div>
 
 <div class="tc-note tc-note--accent" style="margin-top:14px">
-  <div class="tc-note__t">第 10 點會看到三件事同時發生</div>
-  <div class="tc-note__b">類別放進框架會掃描的位置，框架就能找到它；標記告訴框架它的角色；需要的物件則由框架建立並傳入。</div>
+  <div class="tc-note__t">第 10 點會看到兩件事同時發生</div>
+  <div class="tc-note__b">類別放進框架會掃描的位置，框架就能找到它；標記告訴框架它的角色與路由。</div>
 </div>
-
 ---
 layout: default
 ---
@@ -873,10 +813,10 @@ public List<Product> products() {
       <div class="tc-note__b"><code>response.ok === true</code><br>狀態碼 <b>200 ~ 299</b><br>→ 可以放心 <code>response.json()</code></div>
     </div>
     <div class="tc-note tc-note--err">
-      <div class="tc-note__b"><code>response.ok === false</code><br>狀態碼 <b>400 以上</b>（含 3xx 跳轉）<br>→ <b>body 是錯誤訊息，不要當資料用</b></div>
+      <div class="tc-note__b"><code>response.ok === false</code><br>狀態碼<b>不在 200 ~ 299</b><br>→ <b>body 是錯誤訊息，不要當資料用</b></div>
     </div>
   </div>
-  <p class="tc-xs tc-mute" style="margin-top:8px">這一行，就是第 5 點講的狀態碼在實務上「唯一重要」的用法。</p>
+  <p class="tc-xs tc-mute" style="margin-top:8px">這一行，就是第 5 點講的狀態碼在實務上最重要的用法。</p>
 </div>
 
 <div class="tc-note tc-note--warn" style="margin-top:10px">
@@ -927,7 +867,7 @@ class: scroll-y no
 </div>
 
 <div class="tc-note tc-note--warn" style="margin-top:10px">
-  <div class="tc-note__t">順帶一提：Day 2 的 Spring Boot 版是 JSON body，本課原生版是 form-urlencoded。</div>
+  <div class="tc-note__t">順帶一提：Spring Boot 版是 JSON body，原生版是 form-urlencoded。</div>
   <div class="tc-note__b">格式不同，但<b>前端程式碼只有一行差異</b>（<code>body: data</code> vs <code>body: JSON.stringify(...)</code>）。這就是為什麼要先搞懂「格式」。</div>
 </div>
 
@@ -965,51 +905,9 @@ class: scroll-y no
 ---
 
 <div class="tc-head tc-head--tight">
-  <div class="tc-kicker">10 · Spring Boot</div>
-  <h1 class="tc-h1">Spring Boot 怎麼啟動</h1>
-</div>
-
-<div class="tc-row tc-row--center" style="gap:8px"><span class="tc-rowline__k">01</span><span class="tc-h2">前提：裝好 JDK 17 以上 + Maven</span></div>
-
-```bash
-java -version    # 需要 17+
-mvn -version     # 需要 3.8+
-```
-
-<p class="tc-xs tc-mute">沒裝 Maven？<a href="https://maven.apache.org/download.cgi" target="_blank">從官網抓 binary 壓縮檔</a>解壓後把 <code>bin</code> 加到 PATH。</p>
-
-<div class="tc-row tc-row--center" style="gap:8px;margin-top:10px"><span class="tc-rowline__k">02</span><span class="tc-h2">啟動</span></div>
-
-```bash
-cd springboot
-
-# 一行，會先下載依賴再啟動
-mvn spring-boot:run
-```
-
-<p class="tc-xs tc-mute">第一次會比較慢（下載 jar）。看到 <code>Started Backend101Application</code> 就是好了。</p>
-
-<div class="tc-row tc-row--center" style="gap:8px;margin-top:10px"><span class="tc-rowline__k">03</span><span class="tc-h2">想打包成 jar 檔再跑？</span></div>
-
-```bash
-mvn package
-java -jar target/backend-101-1.0.0.jar
-```
-
-<div class="tc-note tc-note--warn" style="margin-top:12px">
-  <div class="tc-note__t">記得先關掉上一個原生版伺服器</div>
-  <div class="tc-note__b">兩個都佔 <code>8080</code> → 第二個會直接 <code class="tc-err">Address already in use</code>。這就是第 6 點講的撞號。</div>
-</div>
-
----
-layout: default
-class: scroll-y no
----
-
-<div class="tc-head tc-head--tight">
   <div class="tc-kicker">10 · 魔法在哪</div>
   <h1 class="tc-h1">整份 Controller</h1>
-  <div class="tc-head__meta"><b>ProductController.java · 66 行</b> — Day 2 的 BuyProductApi.java 是 189 行</div>
+  <div class="tc-head__meta"><b>ProductController.java · 66 行</b> — 原生版 NativeApiServer.java 是 189 行</div>
 </div>
 
 ```java
@@ -1057,7 +955,7 @@ class: scroll-y
 <div class="tc-rows">
   <div class="tc-rowline" style="grid-template-columns:200px 1fr;padding:10px 0">
     <code class="tc-rowline__k tc-xs">package + 資料夾結構</code>
-    <span class="tc-rowline__v tc-xs">編譯器與類別載入器的慣例：<b>套件名必須對應資料夾</b>。所以 <code>com.birc.backend101</code> 必須在 <code>com/birc/backend101/</code> — Spring 靠它自動掃描。放錯就找不到。</span>
+    <span class="tc-rowline__v tc-xs">編譯器與類別載入器的慣例：<b>套件名必須對應資料夾</b>。所以 <code>com.birc.backend101</code> 必須在 <code>com/birc/backend101/</code>。Spring 會從啟動類別所在的 package 往下掃描，放在這個範圍外就找不到。</span>
   </div>
   <div class="tc-rowline" style="grid-template-columns:200px 1fr;padding:10px 0">
     <code class="tc-rowline__k tc-xs">@RestController</code>
@@ -1120,45 +1018,6 @@ class: scroll-y
 
 ---
 layout: default
----
-
-<div class="tc-head tc-head--tight">
-  <div class="tc-kicker">11 · 全景</div>
-  <h1 class="tc-h1">你現在站在<em>哪一層</em>？</h1>
-</div>
-
-<div class="tc-grid tc-grid--split" style="gap:16px 26px;grid-template-columns:1.3fr 1fr">
-  <div class="tc-col tc-in" style="gap:10px">
-    <div class="tc-panel" style="--i:0">
-      <div class="tc-panel__label">今天帶走的</div>
-      <div class="tc-rows tc-rows--dense">
-        <div class="tc-rowline tc-rowline--auto"><span class="tc-mono tc-mute">TCP/IP</span><b>四層：線 · 路 · 包 · 話 ＋ DNS 名字 → IP</b></div>
-        <div class="tc-rowline tc-rowline--auto"><span class="tc-mono tc-mute">HTTP</span><b>request / response、無狀態</b></div>
-        <div class="tc-rowline tc-rowline--auto"><span class="tc-mono tc-mute">狀態碼</span><b>2xx 成功 / 4xx 你的問題 / 5xx 我的問題</b></div>
-        <div class="tc-rowline tc-rowline--auto"><span class="tc-mono tc-mute">Port</span><b>0~65535、撞號 → BindException</b></div>
-        <div class="tc-rowline tc-rowline--auto"><span class="tc-mono tc-mute">框架</span><b>它呼叫你、約定優於配置、189 → 66 行</b></div>
-      </div>
-    </div>
-  </div>
-  <div class="tc-col tc-in" style="gap:10px">
-    <div class="tc-panel__label" style="--i:0">回到那張地圖</div>
-    <div class="tl-stack" style="--i:1">
-      <div class="tl-layer"><span class="tl-layer__n">L5</span><div><div class="tl-layer__t">並行與狀態</div><div class="tl-layer__d">佇列 · 冪等 · 一致性 · 快取</div></div><span class="tc-tag">路線圖</span></div>
-      <div class="tl-layer"><span class="tl-layer__n">L4</span><div><div class="tl-layer__t">資料庫</div><div class="tl-layer__d">索引 · 交易 · 鎖 · query plan</div></div><span class="tc-tag tc-tag--warn">下一營</span></div>
-      <div class="tl-layer tl-layer--ok"><span class="tl-layer__n">L3</span><div><div class="tl-layer__t">網路</div><div class="tl-layer__d">TCP · HTTP · 狀態碼 · Port</div></div><span class="tc-tag tc-tag--ok">已拿下</span></div>
-      <div class="tl-layer"><span class="tl-layer__n">L2</span><div><div class="tl-layer__t">語言與 runtime</div><div class="tl-layer__d">JVM · GC · 執行緒 · 事件迴圈</div></div><span class="tc-tag">路線圖</span></div>
-      <div class="tl-layer"><span class="tl-layer__n">L1</span><div><div class="tl-layer__t">OS</div><div class="tl-layer__d">行程 · fd · 記憶體 · 磁碟</div></div><span class="tc-tag">路線圖</span></div>
-    </div>
-  </div>
-</div>
-
-<div class="tc-note tc-note--accent" style="margin-top:14px">
-  <div class="tc-note__t">Spring Boot 只是把這五層包起來的糖——</div>
-  <div class="tc-note__b">你現在知道糖下面有什麼了。這就是「了解」和「會學」的差距。</div>
-</div>
-
----
-layout: default
 class: scroll-y
 ---
 
@@ -1171,16 +1030,15 @@ class: scroll-y
   <div class="tc-col">
     <div class="tc-row tc-row--center" style="gap:7px;padding-bottom:5px;border-bottom:1px solid var(--line)"><i class="ic ic-net ic--sm tc-accent"></i><b class="tc-sm">網路</b></div>
     <div class="tc-list">
-      <div class="tc-list__i">TCP/IP 四層：線路包話</div>
+      <div class="tc-list__i">請求旅程：DNS → 握手 → 請求 → 回應</div>
       <div class="tc-list__i">DNS：名字 → IP</div>
       <div class="tc-list__i">HTTP：request / response</div>
-      <div class="tc-list__i">無狀態的意思</div>
     </div>
   </div>
   <div class="tc-col">
     <div class="tc-row tc-row--center" style="gap:7px;padding-bottom:5px;border-bottom:1px solid var(--line)"><i class="ic ic-signal ic--sm tc-accent"></i><b class="tc-sm">狀態碼</b></div>
     <div class="tc-list">
-      <div class="tc-list__i">200 成功 / 201 建立了東西</div>
+      <div class="tc-list__i">200 成功 / 409 跟現況衝突</div>
       <div class="tc-list__i">400 請求壞了</div>
       <div class="tc-list__i">401 不知道你是誰</div>
       <div class="tc-list__i">403 知道但你不能</div>
@@ -1201,9 +1059,8 @@ class: scroll-y
     <div class="tc-row tc-row--center" style="gap:7px;padding-bottom:5px;border-bottom:1px solid var(--line)"><i class="ic ic-tool ic--sm tc-accent"></i><b class="tc-sm">框架</b></div>
     <div class="tc-list">
       <div class="tc-list__i">它呼叫你，不是你呼叫它</div>
-      <div class="tc-list__i">控制反轉（IoC）— 說明這個現象的原則</div>
       <div class="tc-list__i">約定優於配置</div>
-      <div class="tc-list__i">135 → 46 行</div>
+      <div class="tc-list__i">189 → 66 行</div>
     </div>
   </div>
   <div class="tc-col">
@@ -1235,7 +1092,7 @@ layout: center
     <div class="tc-rows" style="--i:4;margin-top:26px;max-width:460px">
       <div class="tc-rowline" style="grid-template-columns:78px 1fr"><span class="tc-rowline__n">回家複習</span><span class="tc-rowline__v tc-sm"><code>localhost:8080</code> 的 Port 那一頁</span></div>
     </div>
-    <p class="tc-xs tc-mute" style="--i:5;margin-top:22px">LucasHsu.dev — 2026 商智中心後端群體驗營</p>
+    <p class="tc-xs tc-mute" style="--i:5;margin-top:22px">LucasHsu.dev — 2026 商智中心後端群集訓</p>
   </div>
 </div>
 <div class="tc-grain"></div>
