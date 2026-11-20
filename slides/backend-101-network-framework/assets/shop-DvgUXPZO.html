@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Campus Mart | 後端 101</title>
+    <style>
+      :root {
+        --ink: #182230;
+        --muted: #687386;
+        --paper: #f7f4ed;
+        --card: #fffdf8;
+        --blue: #2563eb;
+        --green: #16856a;
+        --line: #d9d5ca;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        color: var(--ink);
+        background: radial-gradient(circle at top right, #dce8ff, transparent 34%), var(--paper);
+        font-family: Georgia, "Noto Serif TC", serif;
+      }
+      main {
+        width: min(1080px, calc(100% - 32px));
+        margin: 0 auto;
+        padding: 40px 0 56px;
+      }
+      header { margin-bottom: 28px; }
+      .eyebrow {
+        color: var(--blue);
+        font: 700 12px/1.2 ui-monospace, monospace;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+      }
+      h1 {
+        margin: 8px 0 0;
+        font-size: clamp(2.2rem, 6vw, 4rem);
+        line-height: 0.98;
+        letter-spacing: -0.05em;
+      }
+      .intro { max-width: 520px; color: var(--muted); line-height: 1.7; margin-top: 10px; }
+      .layout {
+        display: grid;
+        grid-template-columns: 1.5fr 0.9fr;
+        gap: 24px;
+        align-items: start;
+      }
+      .products {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+      }
+      .product, .side {
+        background: color-mix(in srgb, var(--card) 88%, transparent);
+        border: 1px solid var(--line);
+        border-radius: 4px;
+      }
+      .product {
+        padding: 20px;
+        min-height: 158px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+      .product h2 { margin: 0; font-size: 1.5rem; }
+      .meta { color: var(--muted); margin: 8px 0 18px; }
+      .buy-row { display: flex; gap: 8px; }
+      input {
+        width: 68px;
+        border: 1px solid var(--line);
+        border-radius: 3px;
+        padding: 9px;
+        font: inherit;
+      }
+      button {
+        border: 0;
+        border-radius: 3px;
+        padding: 9px 14px;
+        color: white;
+        background: var(--blue);
+        cursor: pointer;
+        font: 700 14px ui-monospace, monospace;
+      }
+      button:disabled { opacity: 0.45; cursor: not-allowed; }
+      .side { padding: 22px; position: sticky; top: 20px; }
+      .side h2 { margin: 0 0 14px; font-size: 1.5rem; }
+      .status { min-height: 44px; color: var(--muted); line-height: 1.5; }
+      .status.success { color: var(--green); }
+      .status.error { color: #b42318; }
+      /* 這塊是本頁的教學重點：把 HTTP status code 顯示出來 */
+      .reslog {
+        margin-top: 18px;
+        padding-top: 14px;
+        border-top: 1px solid var(--line);
+        font: 12px/1.7 ui-monospace, monospace;
+        color: var(--muted);
+        white-space: pre-wrap;
+        word-break: break-all;
+      }
+      .empty { grid-column: 1 / -1; color: var(--muted); }
+      @media (max-width: 760px) {
+        main { padding-top: 28px; }
+        .layout { grid-template-columns: 1fr; display: grid; }
+        .products { grid-template-columns: 1fr; }
+        .side { position: static; }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <div class="eyebrow">Backend 101 / HTTP / Fetch</div>
+        <h1>今天吃點什麼？</h1>
+        <p class="intro">
+          這個頁面沒有框架、沒有套件，只用瀏覽器內建的
+          <code>fetch()</code> 呼叫昨天寫的 Java API。注意右下角的「最近一次回應」——
+          那就是 HTTP 狀態碼。
+        </p>
+      </header>
+      <section class="layout">
+        <div id="products" class="products" aria-live="polite"></div>
+        <aside class="side">
+          <h2>訂單狀態</h2>
+          <div id="status" class="status">正在載入商品…</div>
+          <div id="reslog" class="reslog">尚未送出任何請求</div>
+        </aside>
+      </section>
+    </main>
+    <script>
+      const productsEl = document.querySelector("#products");
+      const statusEl = document.querySelector("#status");
+      const reslogEl = document.querySelector("#reslog");
+
+      function showStatus(message, type = "") {
+        statusEl.textContent = message;
+        statusEl.className = `status ${type}`;
+      }
+
+      // 把「這次請求的方法、路徑、狀態碼、body」記錄下來 ——
+      // 這就是前後端溝通最小的可觀測單位。
+      function logResponse(method, path, response, body) {
+        reslogEl.textContent =
+          `${method} ${path}\n` +
+          `→ HTTP ${response.status} ${response.statusText}\n` +
+          `← ${body}`;
+      }
+
+      async function loadProducts() {
+        try {
+          const response = await fetch("/api/products");
+          const text = await response.text();
+          logResponse("GET", "/api/products", response, text);
+          if (!response.ok) throw new Error(`HTTP ${response.status} 讀取失敗`);
+
+          const products = JSON.parse(text);
+          productsEl.innerHTML = products.length
+            ? products
+                .map(
+                  (p) => `
+          <article class="product">
+            <div>
+              <h2>${p.name}</h2>
+              <div class="meta">NT$ ${p.price} · 庫存 ${p.stock} 件</div>
+            </div>
+            <form class="buy-row" data-product-id="${p.id}">
+              <input name="quantity" type="number" min="1" value="1" ${p.stock === 0 ? "disabled" : ""}>
+              <button type="submit" ${p.stock === 0 ? "disabled" : ""}>${p.stock === 0 ? "已售完" : "下單"}</button>
+            </form>
+          </article>
+        `,
+                )
+                .join("")
+            : '<p class="empty">目前沒有商品。</p>';
+
+          document.querySelectorAll("form[data-product-id]").forEach((form) => {
+            form.addEventListener("submit", buyProduct);
+          });
+        } catch (error) {
+          showStatus(error.message, "error");
+        }
+      }
+
+      async function buyProduct(event) {
+        event.preventDefault();
+        const form = event.currentTarget;
+        const button = form.querySelector("button");
+        button.disabled = true;
+
+        const data = new URLSearchParams({
+          productId: form.dataset.productId,
+          quantity: form.quantity.value,
+        });
+
+        try {
+          const response = await fetch("/api/buy", { method: "POST", body: data });
+          const text = await response.text();
+          logResponse("POST", "/api/buy", response, text);
+
+          if (!response.ok) {
+            // 4xx / 5xx：不是「壞掉」，而是伺服器明確告訴你結果。
+            const result = JSON.parse(text);
+            throw new Error(`HTTP ${response.status} — ${result.error}`);
+          }
+
+          showStatus("購買成功，庫存已更新。", "success");
+          await loadProducts();
+        } catch (error) {
+          showStatus(error.message, "error");
+          button.disabled = false;
+        }
+      }
+
+      loadProducts();
+    </script>
+  </body>
+</html>
